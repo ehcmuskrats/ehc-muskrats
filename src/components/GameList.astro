@@ -36,7 +36,15 @@ const parts = (iso: string) => {
       const p = g.date && !noDate ? parts(g.date) : null;
       const Row = linkable ? 'a' : 'div';
       return (
-        <li data-status={played ? 'played' : 'upcoming'} data-venue={s} data-phase={g.playoff ? 'playoffs' : String(g.divisionId)}>
+        <li
+          data-status={played ? 'played' : 'upcoming'}
+          data-venue={s}
+          data-phase={g.playoff ? 'playoffs' : String(g.divisionId)}
+          data-opp={String(opp.id)}
+          data-res={r ? resultClass(r) : undefined}
+          data-gf={played && us != null ? String(us) : undefined}
+          data-ga={played && them != null ? String(them) : undefined}
+        >
           <Row class={`row ${played ? 'played' : ''}`} href={linkable ? href(lang, `games/${g.id}/`) : undefined}>
             <span class="when">
               {p ? (

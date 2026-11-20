@@ -35,6 +35,10 @@ const [seasonParam, phaseParam] = (Astro.params.season ?? '').split('/');
 const seasonId = allTime || !seasonParam ? currentSeasonId : seasonParam;
 const phase: Phase = phaseParam === 'regular' || phaseParam === 'playoffs' ? phaseParam : 'all';
 const t = useT(lang);
+
+// Player links carry the season when it isn't the current one, so the profile opens in that season.
+const playerHref = (slug: string) =>
+  href(lang, `players/${slug}/${seasonId !== currentSeasonId ? `?${lang === 'de' ? 'saison' : 'season'}=${seasonId}` : ''}`);
 const cols = columns(seasonId);
 const s = getSeason(seasonId);
 const seasonHasPlayoffs = hasPlayoffs(seasonId);
@@ -198,7 +202,7 @@ const tabs = [
                       <tr>
                         <td class="num dim">{l.number ?? '–'}</td>
                         <td class="sticky-col">
-                          <a href={href(lang, `players/${p.slug}/`)}>
+                          <a href={playerHref(p.slug)}>
                             {p.first.charAt(0)}. {p.last}
                           </a>
                         </td>
@@ -244,7 +248,7 @@ const tabs = [
                       <tr>
                         <td class="num dim">{l.number ?? '–'}</td>
                         <td class="sticky-col">
-                          <a href={href(lang, `players/${p.slug}/`)}>
+                          <a href={playerHref(p.slug)}>
                             {p.first.charAt(0)}. {p.last}
                           </a>
                         </td>
@@ -283,7 +287,7 @@ const tabs = [
                       <tr>
                         <td class="sticky-col">
                           {slugOf(r.player.id) ? (
-                            <a href={href(lang, `players/${slugOf(r.player.id)}/`)}>
+                            <a href={playerHref(slugOf(r.player.id)!)}>
                               {r.player.first.charAt(0)}. {r.player.last}
                             </a>
                           ) : (
@@ -454,7 +458,7 @@ const tabs = [
                 <ol class="rows leaders">
                   {list.map((p, i) => (
                     <li>
-                      <a href={href(lang, `players/${p.slug}/`)} class={i === 0 ? 'first' : undefined}>
+                      <a href={playerHref(p.slug)} class={i === 0 ? 'first' : undefined}>
                         <span class="rk tnum">{i + 1}</span>
                         <span class="nm">
                           <span class="fn">{p.first}</span>
@@ -482,7 +486,7 @@ const tabs = [
               <ol class="rows leaders">
                 {topPlayoffs.map((p, i) => (
                   <li>
-                    <a href={href(lang, `players/${p.slug}/`)} class={i === 0 ? 'first' : undefined}>
+                    <a href={playerHref(p.slug)} class={i === 0 ? 'first' : undefined}>
                       <span class="rk tnum">{i + 1}</span>
                       <span class="nm">
                         <span class="fn">{p.first}</span>
@@ -601,6 +605,7 @@ const tabs = [
   }
   .ln {
     font: 800 1.15rem/1.05 var(--display);
+    padding-top: 0.12em; /* room for Ü/Ö/Ä */
     text-transform: uppercase;
     overflow: hidden;
     text-overflow: ellipsis;

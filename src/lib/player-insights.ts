@@ -41,15 +41,25 @@ export function nextOpponentGame(): GameSummary | undefined {
   return sortByDate(ourGames()).find((g) => g.status === 'scheduled' && g.timestamp != null && g.timestamp > now);
 }
 
-export function playerInsights(p: PlayerProfile, lang: Lang) {
+/**
+ * @param sid Season to focus tiles, "last 10" chart and split cards on (default: player's latest season).
+ *            Career chart and fun facts are always career-wide.
+ */
+export function playerInsights(p: PlayerProfile, lang: Lang, sid?: string) {
   const de = lang === 'de';
   const L = (d: string, e: string) => (de ? d : e);
   const fmt = (n: number | null, d = 2) => formatNumber(lang, n, d);
+  const latestSid = p.seasons[0]?.season;
+  const focus = sid ?? latestSid;
+  const isLatest = focus === latestSid;
 
   // Games with a report, oldest → newest. Goalie games use the goalie line.
-  const log = [...p.games].filter((g) => g.date).sort((a, b) => (a.date! < b.date! ? -1 : 1));
+  const fullLog = [...p.games].filter((g) => g.date).sort((a, b) => (a.date! < b.date! ? -1 : 1));
+  const log = isLatest ? fullLog : fullLog.filter((g) => g.season === focus);
   const skaterLog = log.filter((g) => !g.goalie);
   const goalieLog = log.filter((g) => g.goalie && g.goalie.toi > 0);
+  const careerSkaterLog = fullLog.filter((g) => !g.goalie);
+  const careerGoalieLog = fullLog.filter((g) => g.goalie && g.goalie.toi > 0);
   const isGoalie = p.isGoalie;
 
   // ---------- chart: last 10 games ----------
@@ -74,7 +84,7 @@ export function playerInsights(p: PlayerProfile, lang: Lang) {
     }));
 
   // ---------- tiles ----------
-  const cur = p.seasons.find((s) => s.season === currentSeasonId) ?? p.seasons[0];
+  const cur = p.seasons.find((s) => s.season === focus) ?? p.seasons.find((s) => s.season === currentSeasonId) ?? p.seasons[0];
   const last5 = skaterLog.slice(-5);
   const last10 = skaterLog.slice(-10);
   const sum = (list: PlayerGameLine[], f: (g: PlayerGameLine) => number) => list.reduce((n, g) => n + f(g), 0);
@@ -99,7 +109,9 @@ export function playerInsights(p: PlayerProfile, lang: Lang) {
   // ---------- split cards ----------
   const splits: SplitCard[] = [];
   if (!isGoalie) {
-    const seasonsDesc = [...p.seasons].filter((s) => s.gp > 0).sort((a, b) => b.season.localeCompare(a.season));
+    const seasonsDesc = [...p.seasons]
+      .filter((s) => s.gp > 0 && s.season <= (focus ?? '9999'))
+      .sort((a, b) => b.season.localeCompare(a.season));
     const [thisS, lastS] = seasonsDesc;
     if (thisS) {
       const a = thisS.p / thisS.gp;
@@ -140,10 +152,10 @@ export function playerInsights(p: PlayerProfile, lang: Lang) {
       });
     }
   }
-  const next = nextOpponentGame();
+  const next = isLatest ? nextOpponentGame() : undefined;
   if (next) {
     const opp = opponent(next);
-    const vs = (isGoalie ? goalieLog : skaterLog).filter((g) => g.opponent.id === opp.id);
+    const vs = (isGoalie ? careerGoalieLog : careerSkaterLog).filter((g) => g.opponent.id === opp.id);
     const detail = vs.length
       ? isGoalie
         ? `${vs.length} GP · ${vs.reduce((n, g) => n + g.goalie!.ga, 0)} GA`
@@ -163,7 +175,7 @@ export function playerInsights(p: PlayerProfile, lang: Lang) {
   const facts: Fact[] = [];
   const goals = p.goals;
   const byOpp = new Map<number, { team: TeamRef; g: number; pts: number; gp: number }>();
-  for (const g of skaterLog) {
+  for (const g of careerSkaterLog) {
     const e = byOpp.get(g.opponent.id) ?? { team: g.opponent, g: 0, pts: 0, gp: 0 };
     e.g += g.g;
     e.pts += pts(g);
@@ -210,7 +222,7 @@ export function playerInsights(p: PlayerProfile, lang: Lang) {
     });
   }
   // Best game
-  const best = [...skaterLog].sort((a, b) => pts(b) - pts(a) || b.g - a.g)[0];
+  const best = [...careerSkaterLog].sort((a, b) => pts(b) - pts(a) || b.g - a.g)[0];
   if (best && pts(best) >= 3) {
     facts.push({
       weight: 8,
@@ -223,7 +235,7 @@ export function playerInsights(p: PlayerProfile, lang: Lang) {
     });
   }
   // Hat tricks
-  const hats = skaterLog.filter((g) => g.g >= 3).length;
+  const hats = careerSkaterLog.filter((g) => g.g >= 3).length;
   if (hats > 0) {
     facts.push({
       weight: 9,
@@ -264,7 +276,7 @@ export function playerInsights(p: PlayerProfile, lang: Lang) {
   // Longest point streak
   let longest = 0;
   let run = 0;
-  for (const g of skaterLog) {
+  for (const g of careerSkaterLog) {
     run = pts(g) > 0 ? run + 1 : 0;
     longest = Math.max(longest, run);
   }
@@ -323,7 +335,7 @@ export function playerInsights(p: PlayerProfile, lang: Lang) {
     });
   }
   // Team record with him in the lineup
-  const decided = log.filter((g) => g.result);
+  const decided = fullLog.filter((g) => g.result);
   if (decided.length >= 5) {
     const w = decided.filter((g) => g.result === 'W' || g.result === 'OTW').length;
     facts.push({
@@ -337,7 +349,7 @@ export function playerInsights(p: PlayerProfile, lang: Lang) {
     });
   }
   // Most PIM in one game
-  const pimGame = [...skaterLog].sort((a, b) => b.pim - a.pim)[0];
+  const pimGame = [...careerSkaterLog].sort((a, b) => b.pim - a.pim)[0];
   if (pimGame && pimGame.pim >= 9) {
     facts.push({
       weight: 4,
@@ -347,8 +359,8 @@ export function playerInsights(p: PlayerProfile, lang: Lang) {
     });
   }
   // Goalie facts
-  if (isGoalie && goalieLog.length) {
-    const bestG = [...goalieLog].sort((a, b) => a.goalie!.ga - b.goalie!.ga)[0];
+  if (isGoalie && careerGoalieLog.length) {
+    const bestG = [...careerGoalieLog].sort((a, b) => a.goalie!.ga - b.goalie!.ga)[0];
     facts.push({
       weight: 7,
       icon: 'shield',
@@ -358,12 +370,12 @@ export function playerInsights(p: PlayerProfile, lang: Lang) {
         `Only ${bestG.goalie!.ga} goal${bestG.goalie!.ga === 1 ? '' : 's'} against vs ${teamName(bestG.opponent)} on ${formatDate(lang, bestG.date)}.`,
       ),
     });
-    const wins = goalieLog.filter((g) => g.result === 'W' || g.result === 'OTW').length;
+    const wins = careerGoalieLog.filter((g) => g.result === 'W' || g.result === 'OTW').length;
     facts.push({
       weight: 6,
       icon: 'trophy',
       title: L('Siege im Tor', 'Wins in net'),
-      text: L(`${wins} Siege in ${goalieLog.length} Spielen im Tor.`, `${wins} wins in ${goalieLog.length} games in net.`),
+      text: L(`${wins} Siege in ${careerGoalieLog.length} Spielen im Tor.`, `${wins} wins in ${careerGoalieLog.length} games in net.`),
     });
   }
 

@@ -9,7 +9,17 @@ interface Props {
 }
 const { lang, p } = Astro.props;
 const de = lang === 'de';
-const ins = playerInsights(p, lang);
+// One view per season the player played (newest first); the picker switches between them.
+// Career chart and Fun Facts are career-wide, so they come from the default (latest) view.
+const seasonIds = p.seasons.filter((s) => s.gp > 0 || s.goalieGp > 0).map((s) => s.season);
+const views = (seasonIds.length ? seasonIds : [undefined]).map((sid) => ({ sid, ins: playerInsights(p, lang, sid) }));
+const ins = views[0].ins;
+const datasetsFor = (v: (typeof views)[number]) =>
+  [
+    { scope: 'recent', bars: v.ins.recent, label: de ? 'Letzte 10' : 'Last 10' },
+    { scope: 'career', bars: ins.seasonBars, label: de ? 'Karriere' : 'Career' },
+  ] as const;
+const seasonLabel = (sid?: string) => (sid ? sid.replace('-', '/') : '');
 const metrics: { k: Metric; label: string }[] = ins.isGoalie
   ? [{ k: 'ga', label: 'GA' }]
   : [
@@ -28,10 +38,6 @@ const avgPos = (bars: ChartBar[], m: Metric) => {
   const max = Math.max(1, ...bars.map((b) => b.values[m] ?? 0));
   return (avg(bars, m) / max) * 100;
 };
-const datasets = [
-  { scope: 'recent', bars: ins.recent, label: de ? 'Letzte 10' : 'Last 10' },
-  { scope: 'career', bars: ins.seasonBars, label: de ? 'Karriere' : 'Career' },
-] as const;
 const iconPaths: Record<string, string> = {
   target: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM12 12h.01',
   clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2',
@@ -45,20 +51,37 @@ const iconPaths: Record<string, string> = {
 ---
 
 <section class="dash" aria-label={de ? 'Leistungsübersicht' : 'Performance overview'}>
-  <div class="tiles">
-    {
-      ins.tiles.map((tile) => (
-        <div class={`tile ${tile.accent ? 'accent' : ''}`}>
-          <span class="tk">{tile.k}</span>
-          <span class="tv tnum">{tile.v}</span>
-          <span class="ts">{tile.sub}</span>
-        </div>
-      ))
-    }
-  </div>
-
   <div class="dash-grid">
     <div class="main-col">
+      {
+        views.length > 1 && (
+          <div class="season-bar">
+            <label for={`dash-season-${p.id}`} class="visually-hidden">
+              {t(lang, 'common.seasonPicker')}
+            </label>
+            <select id={`dash-season-${p.id}`} data-dash-season>
+              {views.map((v, i) => (
+                <option value={v.sid} selected={i === 0}>
+                  {t(lang, 'common.season')} {seasonLabel(v.sid)}
+                </option>
+              ))}
+            </select>
+          </div>
+        )
+      }
+      {views.map((v, vi) => {
+        const datasets = datasetsFor(v);
+        return (
+      <div class="season-view" data-season-view={v.sid} hidden={vi > 0}>
+      <div class="tiles">
+        {v.ins.tiles.map((tile) => (
+          <div class={`tile ${tile.accent ? 'accent' : ''}`}>
+            <span class="tk">{tile.k}</span>
+            <span class="tv tnum">{tile.v}</span>
+            <span class="ts">{tile.sub}</span>
+          </div>
+        ))}
+      </div>
       <div class="panel chart-panel" data-chart data-metric={defaultMetric} data-scope="recent">
         <div class="chart-head">
           <div class="seg metric-seg" role="group" aria-label={de ? 'Statistik' : 'Stat'}>
@@ -88,7 +111,16 @@ const iconPaths: Record<string, string> = {
             <div class="chart" data-dataset={d.scope} hidden={d.scope !== 'recent'}>
               <p class="chart-title">
                 <span data-chart-title>
-                  {metrics[0].label} · {d.scope === 'recent' ? (de ? 'letzte 10 Spiele' : 'last 10 games') : de ? 'pro Saison' : 'per season'}
+                  {metrics[0].label} ·{' '}
+                  {d.scope === 'recent'
+                    ? vi === 0
+                      ? de
+                        ? 'letzte 10 Spiele'
+                        : 'last 10 games'
+                      : `${de ? 'Saison' : 'season'} ${seasonLabel(v.sid)}`
+                    : de
+                      ? 'pro Saison'
+                      : 'per season'}
                 </span>
                 <span class="avg-label">
                   Ø <b data-avg>{avg(d.bars, defaultMetric).toFixed(1)}</b>
@@ -130,21 +162,22 @@ const iconPaths: Record<string, string> = {
         }
       </div>
 
-      {
-        ins.splits.length > 0 && (
-          <div class="splits">
-            {ins.splits.map((s) => (
-              <div class={`split ${s.tone}`}>
-                <span class="st">{s.title}</span>
-                <span class="sm tnum">
-                  {s.main} <small>{s.unit}</small>
-                </span>
-                <span class="sd">{s.detail}</span>
-              </div>
-            ))}
-          </div>
-        )
-      }
+      {v.ins.splits.length > 0 && (
+        <div class="splits">
+          {v.ins.splits.map((s) => (
+            <div class={`split ${s.tone}`}>
+              <span class="st">{s.title}</span>
+              <span class="sm tnum">
+                {s.main} <small>{s.unit}</small>
+              </span>
+              <span class="sd">{s.detail}</span>
+            </div>
+          ))}
+        </div>
+      )}
+      </div>
+        );
+      })}
     </div>
 
     {
@@ -178,6 +211,16 @@ const iconPaths: Record<string, string> = {
 </section>
 
 <script>
+  // Season picker: show that season's tiles, chart and split cards.
+  document.querySelectorAll<HTMLSelectElement>('[data-dash-season]').forEach((sel) => {
+    const dash = sel.closest('.dash')!;
+    sel.addEventListener('change', () => {
+      dash.querySelectorAll<HTMLElement>('[data-season-view]').forEach((v) => {
+        v.hidden = v.dataset.seasonView !== sel.value;
+      });
+    });
+  });
+
   // Chart: switch metric (PTS/G/A/PIM) and range (last 10 / career); bars rescale to the dataset's max.
   document.querySelectorAll<HTMLElement>('[data-chart]').forEach((root) => {
     const labels: Record<string, string> = { p: 'PTS', g: 'G', a: 'A', pim: 'PIM', ga: 'GA' };
@@ -294,6 +337,17 @@ const iconPaths: Record<string, string> = {
     gap: 12px;
     min-width: 0;
   }
+  .season-view {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+  }
+  .season-view[hidden] {
+    display: none;
+  }
+  .season-bar select {
+    min-height: 40px;
+  }
 
   /* ---------- chart ---------- */
   .chart-head {
@@ -378,8 +432,9 @@ const iconPaths: Record<string, string> = {
     position: relative;
     width: min(100%, 38px);
     border-radius: 6px 6px 2px 2px;
-    background: linear-gradient(180deg, var(--orange-hi), var(--orange));
-    box-shadow: 0 0 18px -6px rgba(247, 122, 26, 0.7);
+    /* Jersey blue for data; orange stays reserved for "selected / ours" (the toggles). */
+    background: linear-gradient(180deg, #3d8bff, var(--blue));
+    box-shadow: 0 0 18px -6px rgba(24, 112, 224, 0.75);
     transition: height 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
   .bar.zero {

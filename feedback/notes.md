@@ -6,6 +6,70 @@ Collected while reviewing the site. Fixed together when the user says "go".
 - DONE: all 11 notes, including all parts of 3 (schedule phase switch + section headers + playoff series with score,
   stats Gesamt / Grunddurchgang / Playoffs switch, playoff table on player profiles, all-time playoff points leaderboard).
 
+## Round 4 — DONE (24–31). 31 = "Meister 2024/25" banner with sheen above the won final series.
+## OPEN: SITE.impressum.name in src/config/site.ts must be filled before going live.
+
+24. **Player chart bars: blue instead of orange** (player dashboard `.bars .bar`)
+    - Now: bars are orange, and so is the active "Letzte 10 / Karriere" toggle, so they compete.
+    - Design-system check: orange = "selected / ours" across the site (active phase switches on schedule + stats,
+      tab-bar marker, Muskrats rows/goals). Jersey blue = secondary brand colour, already used as a data accent
+      (penalty markers, rink blue lines). So the toggle stays orange (consistent with every other phase switch) and
+      the bars become jersey blue.
+    - Plan: bars = blue gradient (#3d8bff → #1870E0) with a soft blue glow; zero-value stubs stay grey; value labels
+      stay white; dashed average line unchanged. Goalie GA bars the same blue.
+
+25. **Player page should open in the season you came from** (e.g. Team 2023/24 → Naukkarinen shows 2026/27 first)
+    - Best practice (ESPN, NHL.com, Elite Prospects): the profile's default is always the latest season (so shared
+      links are stable), but they offer a season selector on the player page, and team/stat pages for a past season
+      link into the player with that season pre-selected / highlighted.
+    - Plan: keep the default = latest season. Add a season picker to the dashboard ("Saison 2023/24 ▾") that switches
+      the tiles, the "Letzte 10" chart (→ that season's games), and the split cards to that season; career chart and
+      Fun Facts stay career-wide. Links from Team, Stats and game pages of a past season add `?saison=2023-24`
+      (EN `?season=`), which pre-selects it; the season's row in "Saison für Saison" is highlighted and scrolled into
+      view on request. No new pages (all client-side on the existing static page).
+
+26. **Player hero: umlauts collide with the first name** (`section.hero h1 .ln`, e.g. "FRÜHWIRTH" dots touch "EDWIN")
+    - Cause: the last name uses line-height 0.92, so accents on capitals (Ü, Ö, Ä, É…) rise above the line box into the
+      first name above.
+    - Plan: give the last name enough line-height/top space for accented capitals (≈ line-height 1.05 or padding-top
+      ~0.12em) and a small gap under the first name, so names with and without umlauts look the same. Check other
+      places with big uppercase display names (roster "ln", leaderboards, game page codes) for the same issue.
+
+27. **Player page "Spiele" and "Tore" lists: show last 5, then expand/collapse** (all player pages)
+    - Now: "Spiele" lists every game (e.g. 79 rows); "Tore" is either fully open (≤8) or hidden behind
+      "Alle Tore anzeigen", which can't be collapsed again.
+    - Plan: both lists show the 5 most recent rows, then a toggle button "Alle 79 Spiele anzeigen" / "Alle 24 Tore
+      anzeigen" that expands the full list and turns into "Weniger anzeigen" to collapse it again (EN "Show all 79
+      games" / "Show less"). Accessible button with aria-expanded; no button when there are ≤5 rows. Works on phone
+      and desktop; collapsing scrolls back to the section heading so you don't get lost.
+
+28. **Schedule: drop the Heim/Auswärts toggle** (`main .controls [data-filter=venue]`)
+    - Reason: nobody filters by home/away; wastes space. Home/away labels on each game row stay.
+    - Plan: replace it with an **opponent picker** ("Gegner: Alle ▾" → VIHC, Teifl 2, …, only teams played that season),
+      which answers a real question ("how did we do against VIHC this year?"). When an opponent is picked, show a
+      one-line head-to-head summary above the list (e.g. "vs VIHC: 2 W · 1 L · 14:11"). Same compact select style as
+      the season picker, so the controls get shorter, not longer. If the user would rather have nothing: just remove.
+    - User: "Let's see how it looks" (many past opponents) → build it, keep list to that season's opponents, sorted A–Z.
+
+29. **GDPR / cookies** (site-wide)
+    - Facts: the site sets no cookies and uses no analytics; fonts, logos and YouTube thumbnails are self-hosted;
+      YouTube (youtube-nocookie) loads only after a click with a notice. So there's nothing a cookie banner would ask
+      consent for — a banner isn't required and would only add friction. What IS needed in Austria/EU:
+      a **Datenschutzerklärung** (privacy policy: GitHub Pages hosting/server logs, YouTube on click, WEHV data,
+      Facebook link, no cookies) and an **Impressum / Offenlegung** (§25 MedienG; ECG §5 if applicable).
+    - Plan: add both pages (DE + EN), linked in the footer; make the YouTube click-to-load the explicit consent step
+      ("Mit Klick … Datenschutzerklärung") with a link; optional "always load videos" remembered only if user wants.
+      Needs from user: who is responsible (name / club or association name, city, contact) for the Impressum.
+      Not legal advice — suggest the club reviews the text.
+
+30. **Sync at midnight + late corrections + Rob's delayed highlights** (.github/workflows/sync-and-deploy.yml, sync)
+    - Change nightly run from 04:17 to ~00:17 Vienna (crons 22:17 + 23:17 UTC, gate on Vienna hour 00).
+    - Late WEHV corrections: today a final game report is never re-fetched. Re-fetch reports of games that went final
+      in the last 3 days (cheap: usually 1–2 pages).
+    - Highlights: videos already get re-checked every night and matched to the game played before upload, so a video
+      posted 1–2 days later still lands on the right game. Add a cheap extra highlights-only run (YouTube API only,
+      no wehv.at) e.g. at 12:17 and 18:17 Vienna so new videos appear within hours, not next midnight.
+
 ## Round 3 — DONE: 22 (Fun Facts), 23 (center-ice hero texture; mockup page removed)
 
 22. **"Fakten" → "Fun Facts"** in both languages (player dashboard facts panel heading, `player.facts`).

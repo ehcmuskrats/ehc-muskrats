@@ -22,6 +22,11 @@ const goalieSeasons = p.seasons.filter((s) => s.goalieGp > 0);
 const showPm = p.seasons.some((s) => columns(s.season).plusMinus);
 const c = p.career;
 const po = p.playoffs;
+// Goals and game log: show the 5 most recent, the rest behind an expand/collapse button.
+const SHOW = 5;
+const moreLabel = (kind: 'goals' | 'games', n: number) =>
+  lang === 'de' ? `Alle ${n} ${kind === 'goals' ? 'Tore' : 'Spiele'} anzeigen` : `Show all ${n} ${kind === 'goals' ? 'goals' : 'games'}`;
+const lessLabel = lang === 'de' ? 'Weniger anzeigen' : 'Show less';
 const situation = (s: string) => {
   const k = `situation.${s}`;
   const v = t(k);
@@ -84,7 +89,7 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
             </thead>
             <tbody>
               {skaterSeasons.map((s) => (
-                <tr>
+                <tr data-season-row={s.season}>
                   <td class="sticky-col">
                     <a href={href(lang, `stats/${s.season}/`)}>{s.season.replace('-', '/')}</a>
                   </td>
@@ -147,7 +152,7 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
                 { label: t('player.career'), season: '', s: po.career, total: true },
               ].map(
                 ({ label, season, s, total }) => (
-                  <tr class={total ? 'ours total' : undefined}>
+                  <tr class={total ? 'ours total' : undefined} data-season-row={total ? undefined : season}>
                     {total ? (
                       <th class="sticky-col" scope="row">
                         {label}
@@ -194,7 +199,7 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
             </thead>
             <tbody>
               {goalieSeasons.map((s) => (
-                <tr>
+                <tr data-season-row={s.season}>
                   <td class="sticky-col">{s.season.replace('-', '/')}</td>
                   <td class="num">{s.goalieGp}</td>
                   <td class="num">{s.toi ? mmss(s.toi) : '–'}</td>
@@ -223,11 +228,10 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
     </div>
     {
       p.goals.length ? (
-        <details class="more" open={p.goals.length <= 8}>
-          <summary>{p.goals.length > 8 ? (lang === 'de' ? 'Alle Tore anzeigen' : 'Show all goals') : t('player.goals')}</summary>
+        <div class="collapsible" data-collapsible>
           <ol class="rows goals">
-            {p.goals.map((g) => (
-              <li>
+            {p.goals.map((g, i) => (
+              <li class={i >= SHOW ? 'extra' : undefined}>
                 <a href={href(lang, `games/${g.gameId}/`)}>
                   <span class="gd small dim">{formatDate(lang, g.date)}</span>
                   <Team team={g.opponent} short size={22} />
@@ -242,7 +246,12 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
               </li>
             ))}
           </ol>
-        </details>
+          {p.goals.length > SHOW && (
+            <button type="button" class="more-btn" aria-expanded="false" data-more={moreLabel('goals', p.goals.length)} data-less={lessLabel}>
+              {moreLabel('goals', p.goals.length)}
+            </button>
+          )}
+        </div>
       ) : (
         <p class="muted">{t('player.noGoals')}</p>
       )
@@ -256,6 +265,7 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
     </div>
     {
       p.games.length ? (
+        <div class="collapsible" data-collapsible>
         <div class="table-wrap">
           <table>
             <thead>
@@ -270,8 +280,8 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
               </tr>
             </thead>
             <tbody>
-              {p.games.map((g) => (
-                <tr>
+              {p.games.map((g, i) => (
+                <tr class={i >= SHOW ? 'extra' : undefined}>
                   <td class="sticky-col">
                     <a href={href(lang, `games/${g.gameId}/`)} class="tnum">
                       {formatDate(lang, g.date)}
@@ -297,6 +307,12 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
             </tbody>
           </table>
         </div>
+        {p.games.length > SHOW && (
+          <button type="button" class="more-btn" aria-expanded="false" data-more={moreLabel('games', p.games.length)} data-less={lessLabel}>
+            {moreLabel('games', p.games.length)}
+          </button>
+        )}
+        </div>
       ) : (
         <p class="muted">{t('player.noGames')}</p>
       )
@@ -305,6 +321,33 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
 
   <DataCredit lang={lang} />
 </Base>
+
+<script>
+  // Expand / collapse the goals list and the game log.
+  document.querySelectorAll<HTMLElement>('[data-collapsible]').forEach((box) => {
+    const btn = box.querySelector<HTMLButtonElement>('.more-btn');
+    btn?.addEventListener('click', () => {
+      const open = !box.classList.contains('open');
+      box.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', String(open));
+      btn.textContent = open ? btn.dataset.less! : btn.dataset.more!;
+      if (!open) box.closest('section')?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    });
+  });
+
+  // Season deep link (?saison=2023-24 / ?season=2023-24): pre-select that season in the dashboard
+  // and highlight its row in the season tables.
+  const params = new URLSearchParams(location.search);
+  const wanted = params.get('saison') ?? params.get('season');
+  if (wanted && /^\d{4}-\d{2}$/.test(wanted)) {
+    const sel = document.querySelector<HTMLSelectElement>('[data-dash-season]');
+    if (sel && [...sel.options].some((o) => o.value === wanted)) {
+      sel.value = wanted;
+      sel.dispatchEvent(new Event('change'));
+    }
+    document.querySelectorAll<HTMLElement>(`[data-season-row="${wanted}"]`).forEach((r) => r.classList.add('picked'));
+  }
+</script>
 
 <style>
   .hero {
@@ -363,6 +406,8 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
   h1 .ln {
     display: block;
     font-size: clamp(2.8rem, 13vw, 4.6rem);
+    /* room for accents on capitals (Ü, Ö, Ä, É) so they never touch the first name */
+    padding-top: 0.14em;
   }
   .sub {
     margin: 0;
@@ -394,16 +439,45 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
-  .more summary {
+  /* Season arrived at via ?saison= is highlighted in the season tables. */
+  tr.picked > * {
+    background: rgba(247, 122, 26, 0.14);
+  }
+  tr.picked > :first-child {
+    box-shadow: inset 3px 0 0 var(--orange);
+  }
+  /* 5 most recent visible; the rest appear when the list is expanded. */
+  .collapsible:not(.open) .extra {
+    display: none;
+  }
+  .more-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: 46px;
+    margin-top: 8px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--panel);
+    box-shadow: var(--highlight);
+    color: var(--text);
     cursor: pointer;
-    font: 700 0.9rem/1 var(--display);
+    font: 700 0.95rem/1 var(--display);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--link);
-    padding: 0.4rem 0 0.8rem;
   }
-  .more[open] summary {
-    display: none;
+  .more-btn::after {
+    content: '▾';
+    color: var(--orange);
+    transition: transform 0.2s;
+  }
+  .more-btn[aria-expanded='true']::after {
+    transform: rotate(180deg);
+  }
+  .more-btn:hover {
+    background: var(--panel-2);
   }
   .goals a {
     display: grid;

@@ -6,6 +6,14 @@ export const SITE = {
     season: '2026/27',
     feeEur: 700,
   },
+  /**
+   * Impressum / Offenlegung (§ 25 MedienG): the person responsible for the site.
+   * REQUIRED before going live: name and town/city (no street address needed for a private site).
+   */
+  impressum: {
+    name: '',
+    city: 'Wien',
+  },
   /** Leave empty to hide every email reference. When set, it is shown next to the Facebook button. */
   contactEmail: '',
   homeRink: 'neuro.io arena',

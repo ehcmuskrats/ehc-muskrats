@@ -8,7 +8,9 @@ Bilingual (German by default, with English) static website for **EHC Muskrats**,
 ## Folder structure
 
 ```
-.github/workflows/sync-and-deploy.yml   nightly sync (04:17 Vienna time) + build + deploy
+.github/workflows/sync-and-deploy.yml   full sync at 00:17 Vienna time (games of the last 3 days are
+                                        re-checked for WEHV corrections), YouTube-only checks at 12:17
+                                        and 18:17, then build + deploy
 data/                     synced data (committed, so the site always builds)
   seasons/<2026-27>.json  all league games, standings, playoff bracket, league stats per season
   games/<uuid>.json       full game reports for Muskrats games

@@ -2,10 +2,16 @@ name: Nightly sync & deploy
 
 on:
   schedule:
-    # 04:17 Vienna time. GitHub cron runs in UTC, and Vienna switches between UTC+1 and UTC+2,
-    # so we trigger at both 02:17 and 03:17 UTC and skip the one that isn't 04:xx in Vienna.
-    - cron: '17 2 * * *'
-    - cron: '17 3 * * *'
+    # GitHub cron runs in UTC and Vienna switches between UTC+1 and UTC+2, so every slot is listed
+    # twice and the gate below keeps only the one that matches Vienna time.
+    # 00:17 Vienna — full sync (wehv.at results are online right after the games).
+    - cron: '17 22 * * *'
+    - cron: '17 23 * * *'
+    # 12:17 and 18:17 Vienna — highlights only (YouTube API, no wehv.at), so new videos show up within hours.
+    - cron: '17 10 * * *'
+    - cron: '17 11 * * *'
+    - cron: '17 16 * * *'
+    - cron: '17 17 * * *'
   workflow_dispatch:
     inputs:
       full:
@@ -34,13 +40,21 @@ jobs:
       skipped: ${{ steps.gate.outputs.skip }}
     steps:
       - id: gate
-        name: Run only at 04:xx Vienna time (scheduled runs)
+        name: Decide what to run (by Vienna time for scheduled runs)
         run: |
-          if [ "${{ github.event_name }}" = "schedule" ] && [ "$(TZ=Europe/Vienna date +%H)" != "04" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
+          H=$(TZ=Europe/Vienna date +%H)
+          MODE=full
+          SKIP=false
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            case "$H" in
+              00) MODE=full ;;
+              12|18) MODE=highlights ;;
+              *) SKIP=true ;;
+            esac
           fi
+          echo "Vienna hour $H -> mode=$MODE skip=$SKIP"
+          echo "skip=$SKIP" >> "$GITHUB_OUTPUT"
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
 
       - uses: actions/checkout@v4
         if: steps.gate.outputs.skip != 'true' && github.event_name != 'push'
@@ -56,7 +70,7 @@ jobs:
         run: npm ci
 
       - name: Install Playwright Chromium
-        if: steps.gate.outputs.skip != 'true' && github.event_name != 'push'
+        if: steps.gate.outputs.skip != 'true' && github.event_name != 'push' && steps.gate.outputs.mode == 'full'
         run: npx playwright install --with-deps chromium
 
       - name: Sync data from wehv.at and YouTube
@@ -68,6 +82,7 @@ jobs:
         run: |
           set -o pipefail
           ARGS=""
+          if [ "${{ steps.gate.outputs.mode }}" = "highlights" ]; then ARGS="--highlights-only"; fi
           if [ "${{ inputs.full }}" = "true" ]; then ARGS="--full"; fi
           npx tsx scripts/sync-data.ts $ARGS 2>&1 | tee sync.log
 

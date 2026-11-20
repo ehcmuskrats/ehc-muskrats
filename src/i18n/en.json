@@ -106,7 +106,7 @@
   "game.timeSH": "Time short-handed",
   "game.started": "Face-off",
   "game.watch": "Play video",
-  "game.consent": "Playing loads the video from YouTube (youtube-nocookie.com).",
+  "game.consent": "The video only loads from YouTube (youtube-nocookie.com) when you click; this sends data to Google.",
   "game.periodLength": "Period length",
   "situation.EQ": "Even strength",
   "situation.PP1": "Power play",

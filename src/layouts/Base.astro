@@ -113,6 +113,8 @@ const moreActive = secondary.some(([, key]) => key === active);
           {leagueData && <a href="https://www.wehv.at/" rel="noopener">{t('credit.data')}</a>}
           <a href={TEAM.facebookUrl} rel="noopener">Facebook</a>
           <a href={TEAM.youtube.channelUrl} rel="noopener">YouTube</a>
+          <a href={href(lang, 'imprint/')}>{lang === 'de' ? 'Impressum' : 'Imprint'}</a>
+          <a href={href(lang, 'privacy/')}>{lang === 'de' ? 'Datenschutz' : 'Privacy'}</a>
           {lastUpdate && <span class="dim">{t('footer.lastUpdate')}: {formatDate(lang, lastUpdate)}</span>}
         </div>
       </div>

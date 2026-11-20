@@ -1,0 +1,127 @@
+---
+// Impressum / Offenlegung gemäß § 25 MedienG. Name and city come from src/config/site.ts (SITE.impressum).
+import Base from '../../layouts/Base.astro';
+import { type Lang, langPaths, href } from '../../i18n/index.ts';
+import { TEAM } from '../../config/team.ts';
+import { SITE } from '../../config/site.ts';
+
+export const getStaticPaths = langPaths;
+const lang = Astro.params.lang as Lang;
+const de = lang === 'de';
+const owner = SITE.impressum.name.trim();
+if (!owner) console.warn('[imprint] SITE.impressum.name is empty — fill it in src/config/site.ts before going live.');
+---
+
+<Base lang={lang} title={de ? 'Impressum' : 'Imprint'} path="imprint/">
+  <article class="prose legal">
+    <header class="page-head">
+      <h1>{de ? 'Impressum' : 'Imprint'}</h1>
+      <p class="sub">{de ? 'Offenlegung gemäß § 25 Mediengesetz' : 'Disclosure under § 25 of the Austrian Media Act'}</p>
+    </header>
+
+    <dl class="facts">
+      <div>
+        <dt>{de ? 'Medieninhaber und Betreiber' : 'Owner and operator'}</dt>
+        <dd>
+          {owner || <span class="missing">{de ? '[Name eintragen]' : '[name missing]'}</span>}
+          <br />
+          {SITE.impressum.city}, {de ? 'Österreich' : 'Austria'}
+        </dd>
+      </div>
+      <div>
+        <dt>{de ? 'Kontakt' : 'Contact'}</dt>
+        <dd>
+          <a href={TEAM.facebookUrl} rel="noopener">facebook.com/ehcmuskrats</a>
+          {SITE.contactEmail && (
+            <>
+              <br />
+              <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>
+            </>
+          )}
+        </dd>
+      </div>
+      <div>
+        <dt>{de ? 'Grundlegende Richtung' : 'Purpose'}</dt>
+        <dd>
+          {
+            de
+              ? `Informationen über das Amateur-Eishockeyteam ${TEAM.displayName} in der ${TEAM.leagueName}: Spiele, Ergebnisse, Statistiken, Videos und Neuigkeiten.`
+              : `Information about the amateur ice hockey team ${TEAM.displayName} in the ${TEAM.leagueName}: games, results, statistics, videos and news.`
+          }
+        </dd>
+      </div>
+    </dl>
+
+    {
+      de ? (
+        <>
+          <h2>Quellen</h2>
+          <p>
+            Spieldaten: Wiener Eishockeyverband (WEHV),{' '}
+            <a href="https://www.wehv.at/" rel="noopener">
+              wehv.at
+            </a>
+            , mit dessen Zustimmung. Highlight-Videos: Rob Kona (YouTube).
+          </p>
+          <h2>Haftung</h2>
+          <p>
+            Wir bemühen uns, die Informationen aktuell und richtig zu halten, übernehmen aber keine Gewähr für Aktualität, Richtigkeit und
+            Vollständigkeit. Die Spieldaten werden automatisch von der Liga übernommen. Für Inhalte externer Links sind ausschließlich deren Betreiber
+            verantwortlich.
+          </p>
+          <h2>Urheberrecht</h2>
+          <p>
+            Logo und Inhalte dieser Website gehören dem {TEAM.displayName} bzw. den jeweiligen Rechteinhabern. Vereinslogos anderer Teams werden nur zur
+            Kennzeichnung der Gegner verwendet. Zum Datenschutz siehe <a href={href(lang, 'privacy/')}>Datenschutz</a>.
+          </p>
+        </>
+      ) : (
+        <>
+          <h2>Sources</h2>
+          <p>
+            Game data: Vienna Ice Hockey Association (WEHV),{' '}
+            <a href="https://www.wehv.at/" rel="noopener">
+              wehv.at
+            </a>
+            , with its permission. Highlight videos: Rob Kona (YouTube).
+          </p>
+          <h2>Liability</h2>
+          <p>
+            We try to keep the information current and correct but give no guarantee of accuracy or completeness. Game data is taken automatically from
+            the league. The operators of linked websites are solely responsible for their content.
+          </p>
+          <h2>Copyright</h2>
+          <p>
+            The logo and content of this website belong to {TEAM.displayName} or the respective rights holders. Other teams' logos are only used to
+            identify opponents. For data protection see <a href={href(lang, 'privacy/')}>Privacy</a>.
+          </p>
+        </>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  .facts {
+    display: grid;
+    gap: 1rem;
+    margin: 1rem 0 0;
+  }
+  .facts dt {
+    font: 700 0.75rem/1 var(--display);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 0.3rem;
+  }
+  .facts dd {
+    margin: 0;
+  }
+  .legal h2 {
+    margin-top: 1.8em;
+    font-size: 1.35rem;
+  }
+  .legal p {
+    color: var(--muted);
+  }
+</style>

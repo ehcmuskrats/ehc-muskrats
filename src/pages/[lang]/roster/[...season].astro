@@ -17,6 +17,10 @@ const lang = Astro.params.lang as Lang;
 const seasonId = Astro.params.season ?? currentSeasonId;
 const t = useT(lang);
 
+// Player links carry the season when it isn't the current one, so the profile opens in that season.
+const playerHref = (slug: string) =>
+  href(lang, `players/${slug}/${seasonId !== currentSeasonId ? `?${lang === 'de' ? 'saison' : 'season'}=${seasonId}` : ''}`);
+
 type Row = { p: PlayerProfile; l: PlayerSeasonLine };
 const rows: Row[] = derived.players
   .map((p) => ({ p, l: p.seasons.find((s) => s.season === seasonId)! }))
@@ -57,7 +61,7 @@ const groups = (['forwards', 'defense', 'goalies', 'other'] as const)
         <ul class="rows roster">
           {list.map(({ p, l }) => (
             <li>
-              <a href={href(lang, `players/${p.slug}/`)}>
+              <a href={playerHref(p.slug)}>
                 <span class="jn tnum">{l.number ?? '–'}</span>
                 <span class="nm">
                   <span class="fn">{p.first}</span>
@@ -152,6 +156,7 @@ const groups = (['forwards', 'defense', 'goalies', 'other'] as const)
   }
   .ln {
     font: 800 1.35rem/1.05 var(--display);
+    padding-top: 0.12em; /* room for Ü/Ö/Ä */
     text-transform: uppercase;
     overflow: hidden;
     text-overflow: ellipsis;

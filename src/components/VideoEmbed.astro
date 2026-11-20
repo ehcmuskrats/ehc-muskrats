@@ -3,7 +3,7 @@
 // the thumbnail is served from our own site (downloaded during sync), and the iframe
 // uses youtube-nocookie.com.
 import { existsSync } from 'node:fs';
-import { type Lang, t, url } from '../i18n/index.ts';
+import { type Lang, t, url, href } from '../i18n/index.ts';
 import { TEAM } from '../config/team.ts';
 import type { Video } from '../types/models.ts';
 interface Props {
@@ -32,7 +32,7 @@ const hasThumb = existsSync(`public/thumbs/${video.id}.jpg`);
       <figcaption>
         <span class="title">{video.title}</span>
         <span class="note">
-          {t(lang, 'game.consent')} ·{' '}
+          {t(lang, 'game.consent')} <a href={href(lang, 'privacy/')}>{lang === 'de' ? 'Datenschutz' : 'Privacy'}</a> ·{' '}
           <a href={TEAM.youtube.channelUrl} rel="noopener">
             {t(lang, 'credit.video', { name: TEAM.youtube.creditName })}
           </a>

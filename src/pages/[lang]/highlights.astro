@@ -82,7 +82,7 @@ const [introBefore, introAfter = ''] = t('highlights.intro').split('{name}');
       );
     })
   }
-  <p class="small dim consent">{t('game.consent')}</p>
+  <p class="small dim consent">{t('game.consent')} <a href={href(lang, 'privacy/')}>{lang === 'de' ? 'Datenschutz' : 'Privacy'}</a></p>
   <DataCredit lang={lang} video />
 </Base>
 

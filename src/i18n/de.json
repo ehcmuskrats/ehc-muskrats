@@ -106,7 +106,7 @@
   "game.timeSH": "Zeit in Unterzahl",
   "game.started": "Spielbeginn",
   "game.watch": "Video abspielen",
-  "game.consent": "Beim Abspielen wird das Video von YouTube (youtube-nocookie.com) geladen.",
+  "game.consent": "Erst beim Klick wird das Video von YouTube (youtube-nocookie.com) geladen; dabei werden Daten an Google übertragen.",
   "game.periodLength": "Drittellänge",
   "situation.EQ": "Gleichzahl",
   "situation.PP1": "Powerplay",

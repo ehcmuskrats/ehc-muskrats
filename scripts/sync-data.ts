@@ -213,7 +213,10 @@ async function scrapeGameReports(source: DataSource, teams: TeamRegistry) {
       if (!(isOurTeam(g.home) || isOurTeam(g.away))) continue;
       if (g.status !== 'final' && g.status !== 'live') continue;
       const existing = readJson<Game | null>(gameFile(g.id), null);
-      if (existing && existing.status === 'final') {
+      // Games from the last 3 days are re-checked even when final: WEHV sometimes corrects
+      // scorers or penalties the day after a game.
+      const recent = g.timestamp != null && g.timestamp > Date.now() - 3 * 86400_000;
+      if (existing && existing.status === 'final' && !recent) {
         if (!g.hasReport) {
           g.hasReport = true;
           changed = true;
