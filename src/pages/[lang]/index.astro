@@ -7,7 +7,7 @@ import DataCredit from '../../components/DataCredit.astro';
 import Abbr from '../../components/Abbr.astro';
 import { type Lang, langPaths, useT, href, url, formatDate } from '../../i18n/index.ts';
 import { TEAM, isOurTeam } from '../../config/team.ts';
-import { currentSeasonId, season, ourGames, sortByDate, highlights, derived, teamName, ourScore, resultCode, resultClass } from '../../lib/data.ts';
+import { currentSeasonId, season, ourGames, sortByDate, highlights, derived, teamName, ourScore, resultCode, resultClass, games, side } from '../../lib/data.ts';
 import { newsFor, newsSlug } from '../../lib/news.ts';
 
 export const getStaticPaths = langPaths;
@@ -29,6 +29,10 @@ const top = derived.players
   .sort((a, b) => b.l!.p - a.l!.p || b.l!.g - a.l!.g)
   .slice(0, 5);
 const last = lastResult ? { ...ourScore(lastResult), r: resultCode(lastResult) } : null;
+// Goal summary for the last result (shown on desktop only).
+const lastReport = lastResult ? games.get(lastResult.id) : undefined;
+const lastGoals = lastReport?.goals ?? [];
+const lastSide = lastResult ? side(lastResult) : 'home';
 const seasonLabel = currentSeasonId.replace('-', '/');
 ---
 
@@ -114,7 +118,7 @@ const seasonLabel = currentSeasonId.replace('-', '/');
   }
 
   <!-- LAST RESULT big + highlight -->
-  <div class="duo">
+  <div class="duo stretch">
     {
       lastResult && last && (
         <a class="panel last" href={href(lang, `games/${lastResult.id}/`)}>
@@ -132,6 +136,36 @@ const seasonLabel = currentSeasonId.replace('-', '/');
             {teamName(lastResult.home)} <span class="dim">vs</span> {teamName(lastResult.away)}
           </p>
           {last.r && <span class={`res res-${resultClass(last.r)}`}>{last.r}</span>}
+          {lastGoals.length > 0 && (
+            <div class="goal-sum" aria-label={t('game.goals')}>
+              <ol>
+                {lastGoals.map((goal, i) => (
+                  <>
+                    {(i === 0 || lastGoals[i - 1].period !== goal.period) && (
+                      <li class="per">{/^\d+$/.test(goal.period) ? `${goal.period}. ${t('common.period')}` : goal.period}</li>
+                    )}
+                    <li class={goal.team === lastSide ? 'us' : 'them'}>
+                      <span class="gt tnum">{goal.timeLabel}</span>
+                      <span class="gw">
+                        <span class="gn">{goal.scorer ? `${goal.scorer.first.charAt(0)}. ${goal.scorer.last}` : '–'}</span>
+                        {goal.assists.length > 0 && (
+                          <span class="ga2">{goal.assists.map((a) => `${a.first.charAt(0)}. ${a.last}`).join(', ')}</span>
+                        )}
+                        {(goal.situation !== 'EQ' || goal.gwg) && (
+                          <span class="gtags">
+                            {goal.situation !== 'EQ' && <span class="gtag">{t(`situation.${goal.situation}`)}</span>}
+                            {goal.gwg && <span class="gtag gwg">{t('game.gwg')}</span>}
+                          </span>
+                        )}
+                      </span>
+                      <span class="gs tnum">{goal.score}</span>
+                    </li>
+                  </>
+                ))}
+              </ol>
+              <span class="goal-more">{t('game.title')} →</span>
+            </div>
+          )}
         </a>
       )
     }
@@ -534,6 +568,109 @@ const seasonLabel = currentSeasonId.replace('-', '/');
   }
   .media {
     margin-top: 1rem;
+  }
+  /* Goal summary inside the last-result card: desktop only (no room on phones). */
+  .goal-sum {
+    display: none;
+  }
+  @media (min-width: 900px) {
+    .goal-sum {
+      display: block;
+      position: relative;
+      align-self: stretch;
+      flex: 1 1 auto;
+      min-height: 160px;
+      margin-top: 1rem;
+      overflow: hidden;
+      text-align: left;
+    }
+    /* Absolutely positioned so the list fills the free space but never makes the card taller than the video next to it. */
+    .goal-sum ol {
+      position: absolute;
+      inset: 0 0 1.6rem 0;
+      overflow: hidden;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      mask-image: linear-gradient(180deg, #000 80%, transparent);
+    }
+    .duo.stretch {
+      align-items: stretch;
+    }
+    .goal-sum li {
+      display: grid;
+      grid-template-columns: 3.2rem 1fr auto;
+      gap: 0.6rem;
+      align-items: center;
+      padding: 0.4rem 0.2rem;
+      border-top: 1px solid var(--line);
+      font-size: 0.88rem;
+    }
+    .goal-sum li.per {
+      display: block;
+      border: 0;
+      padding: 0.7rem 0 0.15rem;
+      font: 700 0.72rem/1 var(--display);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .goal-sum li.us {
+      box-shadow: inset 3px 0 0 var(--orange);
+      padding-left: 0.6rem;
+    }
+    .goal-sum li.us .gn {
+      color: var(--orange);
+    }
+    .gt {
+      font: 800 0.95rem/1 var(--display);
+      color: var(--muted);
+    }
+    .gw {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.15rem 0.5rem;
+      min-width: 0;
+    }
+    .gn {
+      font-weight: 700;
+      color: #fff;
+    }
+    .ga2 {
+      font-size: 0.78rem;
+      color: var(--dim);
+    }
+    .gtags {
+      display: inline-flex;
+      gap: 4px;
+    }
+    .gtag {
+      font: 700 0.62rem/1 var(--display);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 6px;
+      border-radius: 4px;
+      background: rgba(90, 162, 255, 0.16);
+      color: var(--blue-hi);
+    }
+    .gtag.gwg {
+      background: var(--orange);
+      color: var(--ink);
+    }
+    .gs {
+      font: 800 1.05rem/1 var(--display);
+      color: #fff;
+    }
+    .goal-more {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      font: 700 0.85rem/1 var(--display);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--link);
+    }
   }
   .media-link {
     margin: 0.6rem 0 0;
