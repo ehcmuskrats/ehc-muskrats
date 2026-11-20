@@ -305,12 +305,14 @@ const moreActive = secondary.some(([, key]) => key === active);
       color: #fff;
     }
     .desk-nav a[aria-current='page']::after {
+      /* Sits under the word with a clear gap above the stripe ribbon. */
       content: '';
       position: absolute;
       left: 0.75rem;
       right: 0.75rem;
-      bottom: 0;
-      height: 3px;
+      bottom: 11px;
+      height: 2px;
+      border-radius: 2px;
       background: var(--orange);
       box-shadow: var(--glow-orange);
     }

@@ -47,6 +47,13 @@ export function abbr(lang: Lang, k: AbbrKey) {
   return { short: a.short, full: a[lang] };
 }
 
+/** League position codes → English hockey codes for display (LF/RF come from German "Flügel"). Data keeps the league codes. */
+const POS_DISPLAY: Record<string, string> = { LF: 'LW', RF: 'RW' };
+export function posCode(code: string | null | undefined): string {
+  if (!code) return '–';
+  return POS_DISPLAY[code] ?? code;
+}
+
 /** Result codes W / L / OTW / OTL / T are English in both languages, like the league sites. */
 export const RESULT_FULL: Record<string, { de: string; en: string }> = {
   W: { de: 'Sieg', en: 'Win' },

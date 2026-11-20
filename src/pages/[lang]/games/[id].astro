@@ -6,7 +6,7 @@ import DataCredit from '../../../components/DataCredit.astro';
 import PlayerName from '../../../components/PlayerName.astro';
 import Abbr from '../../../components/Abbr.astro';
 import { type Lang, LANGS, useT, href, formatDate, formatNumber, mmss } from '../../../i18n/index.ts';
-import { RESULT_FULL, abbr } from '../../../i18n/abbr.ts';
+import { RESULT_FULL, abbr, posCode } from '../../../i18n/abbr.ts';
 import { ourGames, games, side, teamName, highlightFor, columns, resultCode, resultClass } from '../../../lib/data.ts';
 import { recapForGame, newsSlug } from '../../../lib/news.ts';
 import { penaltyLabel } from '../../../config/penalties.ts';
@@ -263,7 +263,19 @@ const sections = game
             <div class="lineup" role="tabpanel" id={`panel-${s}`} aria-labelledby={`tab-${s}`}>
               <p class="eyebrow lineup-team">{teamName(sideTeam(s))}</p>
               <div class="table-wrap">
-                <table data-sortable>
+                <table data-sortable class="lineup-table">
+                  {/* Same fixed column widths for both teams, so headers don't move when switching tabs. */}
+                  <colgroup>
+                    <col class="c-no" />
+                    <col />
+                    <col class="c-pos" />
+                    <col class="c-n" />
+                    <col class="c-n" />
+                    <col class="c-n" />
+                    {cols.plusMinus && <col class="c-n" />}
+                    <col class="c-n" />
+                    {cols.sog && <col class="c-n" />}
+                  </colgroup>
                   <thead>
                     <tr>
                       <th class="num" scope="col" data-sort="num"><button type="button"><Abbr lang={lang} k="no" /></button></th>
@@ -287,7 +299,7 @@ const sections = game
                             <PlayerName lang={lang} p={sk.player} ours={isOurTeam(sideTeam(s))} />
                           </td>
                           <td>
-                            <abbr title={t(`pos.${sk.position}`)}>{sk.position}</abbr>
+                            <abbr title={t(`pos.${sk.position}`)}>{posCode(sk.position)}</abbr>
                           </td>
                           <td class="num">{sk.g}</td>
                           <td class="num">{sk.a}</td>
@@ -638,6 +650,11 @@ const sections = game
     background: var(--orange);
     box-shadow: var(--glow-orange);
   }
+  /* Penalties use the jersey blue so they're easy to tell apart from goals (orange). */
+  #penalties .events li.us::before {
+    background: var(--blue);
+    box-shadow: 0 0 22px -3px rgba(24, 112, 224, 0.75);
+  }
   .time {
     font: 800 1.05rem/1 var(--display);
     color: var(--muted);
@@ -723,6 +740,24 @@ const sections = game
   }
 
   /* ---------- Lineups ---------- */
+  .lineup-table {
+    table-layout: fixed;
+    min-width: 30rem; /* on phones the table scrolls; the name column stays sticky */
+  }
+  .lineup-table .c-no {
+    width: 3rem;
+  }
+  .lineup-table .c-pos {
+    width: 3.6rem;
+  }
+  .lineup-table .c-n {
+    width: 3.3rem;
+  }
+  .lineup-table td.sticky-col {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   #lineups .seg {
     max-width: 320px;
     margin-bottom: 0.9rem;

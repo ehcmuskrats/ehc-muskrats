@@ -519,6 +519,33 @@ const seasonLabel = currentSeasonId.replace('-', '/');
   .ticker::-webkit-scrollbar {
     display: none;
   }
+  /* Tablet/desktop: a fixed row that ends with the content — no overflow, no scrolling. */
+  @media (min-width: 720px) {
+    .ticker {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      overflow: visible;
+      margin: 0;
+      padding: 2px 0 0;
+    }
+    .ticker > :global(.bug) {
+      min-width: 0;
+    }
+    .ticker > :global(.bug:nth-child(n + 5)) {
+      display: none;
+    }
+  }
+  @media (min-width: 1000px) {
+    .ticker {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .ticker > :global(.bug:nth-child(n + 5)) {
+      display: flex;
+    }
+    .ticker > :global(.bug:nth-child(n + 7)) {
+      display: none;
+    }
+  }
 
   /* ---------- Duo blocks ---------- */
   .duo {

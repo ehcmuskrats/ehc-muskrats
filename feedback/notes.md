@@ -6,6 +6,71 @@ Collected while reviewing the site. Fixed together when the user says "go".
 - DONE: all 11 notes, including all parts of 3 (schedule phase switch + section headers + playoff series with score,
   stats Gesamt / Grunddurchgang / Playoffs switch, playoff table on player profiles, all-time playoff points leaderboard).
 
+## Round 2 (collecting — wait for "go")
+
+12. **Home results ticker runs off the side on desktop** (`main section .ticker`)
+    - Now: on desktop the strip of score bugs bleeds past the right edge (last card cut off: "08.03. MU… DU…").
+    - Wanted: on desktop it should stop where the content ends — fixed, no overflow. On mobile, horizontal scrolling is fine.
+    - Plan: from 900px up, show only as many score bugs as fit in the content width as an even grid (e.g. 6 across,
+      no scrolling, no negative margins); below that keep the swipeable strip.
+
+13. **Footer: drop the "Spieldaten …" sentence** (`footer .foot-brand p`, all pages)
+    - Reason: the footer links already say "Daten: WEHV".
+    - Plan: DE "© 2026 Website des EHC Muskrats." / EN "© 2026 Website of EHC Muskrats." (year stays automatic).
+      The "Daten: WEHV" link stays where it is.
+
+14. **Game page "Strafen": blue accent instead of orange** (`section#penalties ol.rows li.us`, every game page)
+    - Wanted: the left accent bar on penalty rows uses the jersey blue (#1870E0, from the stripe) instead of orange, so
+      penalties are visually distinct from goals (goals keep orange).
+    - Plan: in the penalties timeline only, `li.us::before` → jersey blue with a soft blue glow; the period eyebrow stripes stay.
+      Apply on all game pages (shared template). Check the blue bar is clearly visible on #171717 at phone width.
+
+15. **Game page lineups: columns jump when switching MUS ⇄ opponent tab** (`section#lineups table`, every game page)
+    - Now: each team's table sizes its columns to its own content (longest name, number widths), so #, Spieler, POS,
+      G/A/PTS/PIM headers shift sideways when toggling tabs.
+    - Wanted: column headers stay in exactly the same place for both teams.
+    - Plan: `table-layout: fixed` with explicit column widths shared by both tables (# / Spieler flexible / POS / G / A / PTS /
+      (+/-) / PIM / (SOG)); long names truncate with ellipsis instead of widening the column. Same treatment for the goalie rows.
+      Test: several games with different opponents (short vs long names, 1- vs 2-digit numbers), toggle tabs at desktop
+      and 375px mobile; also check the sticky name column still works when the table scrolls on mobile.
+
+16. **"Torhüter" → "Goalie" everywhere (German)** (player hero subtitle, and site-wide)
+    - Reason: nobody says Torhüter; in the games they say Goalie.
+    - Plan: replace every German "Torhüter"/"Torhüterwechsel" in src/i18n/de.json and abbr.ts: pos.G "Goalie",
+      roster/stats/game headings "Goalies", "Goaliewechsel" (game page), tab "Goalies". Grep src/ for any hard-coded
+      "Torhüter" too. English already says Goalie(s).
+
+17. **Rename "Kader" in the menu (and page title)** (`header nav a[href*=roster]`, tabbar/sheet, roster page h1)
+    - User doesn't like "Kader"; suggests "Team".
+    - Plan: at "go", check what German-language hockey club sites use for their roster page (Austrian ICEHL clubs,
+      DEL clubs, local Vienna amateur teams) and pick the most natural word — likely "Team" (also matches the
+      English-leaning hockey vocabulary the user prefers). Apply to nav, More-sheet, page heading, page title, "nav.roster"
+      key in de.json, plus any "Kader" text elsewhere (e.g. "roster.none"). URL stays /roster/.
+
+18. **Position codes: use English hockey codes** (player hero tag "#41 · LF", and everywhere codes are shown)
+    - Now: league codes LF / RF (from German "Flügel").
+    - Wanted: LW (left wing), RW (right wing), C, LD, RD, G.
+    - Plan: display-only mapping LF→LW, RF→RW (F→F, D→D unchanged), applied in both languages like the other stat
+      abbreviations (ICEHL style); data files keep the league's codes. Places: player hero tag, lineups POS column,
+      stats POS column, any tooltips. Full-name tooltips stay localized (DE "Linker Flügel" → maybe "Left Wing"? keep DE
+      full names unless user says otherwise).
+
+19. **Desktop nav: active underline sits on the stripe ribbon** (`header nav.desk-nav a[aria-current]::after`)
+    - Now: the orange underline is at the very bottom of the nav (bottom: 0), so it touches/merges with the
+      blue-white-orange ribbon below the header and looks messy.
+    - Wanted: move it up so it underlines the word itself, with a clear gap to the ribbon (user likes the ribbon).
+    - Plan: position the underline just below the text (e.g. ~6px under the baseline, well above the ribbon), match the
+      word's width, slightly rounded; keep the hover/active colours. Desktop nav only (phones use the bottom tab bar).
+
+20. **Highlights intro wording** (`/highlights/` page-head `.sub`)
+    - Now: "Spielvideos von unserem Teamkollegen Kona · YouTube" — awkward.
+    - Wanted: something like "Our highlights are filmed by Rob", with "Rob" linking to his profile; keep "· YouTube".
+    - Plan: DE "Unsere Highlights werden von Rob gefilmt · YouTube", EN "Our highlights are filmed by Rob · YouTube".
+      "Rob" → /players/127960-robert-kona/. Add a `creditFirstName: 'Rob'` next to creditName in team.ts.
+      (Video credits under each video stay "Video: Kona" unless the user wants "Rob" there too.)
+
+## Round 1 (done)
+
 1. **Footer text** (`footer .foot-brand p`, all pages)
    - Now: "Fan-Website des EHC Muskrats. Spieldaten mit freundlicher Genehmigung des WEHV."
    - Wanted: "Website des EHC Muskrats", with a copyright symbol.

@@ -20,6 +20,8 @@ export const TEAM = {
     channelName: 'hockeyyy',
     /** Shown as the video credit on the site (the teammate who films the games). */
     creditName: 'Kona',
+    /** First name used in the highlights intro ("filmed by Rob"). */
+    creditFirstName: 'Rob',
     /** League player id of the video creator, to link the credit to his profile. */
     creditPlayerId: 127960,
     channelUrl: 'https://www.youtube.com/@hoooockeyyy',

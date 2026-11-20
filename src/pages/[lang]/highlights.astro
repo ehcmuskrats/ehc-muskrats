@@ -22,6 +22,7 @@ for (const h of visible) {
 const seasonKeys = [...bySeason.keys()].sort((a, b) => (a === 'other' ? 1 : b === 'other' ? -1 : b.localeCompare(a)));
 const [feature] = visible;
 const creditSlug = playerSlug(TEAM.youtube.creditPlayerId) ?? '';
+const [introBefore, introAfter = ''] = t('highlights.intro').split('{name}');
 ---
 
 <Base lang={lang} title={t('highlights.title')} path="highlights/" active="nav.highlights">
@@ -29,7 +30,7 @@ const creditSlug = playerSlug(TEAM.youtube.creditPlayerId) ?? '';
     <span class="tag">{visible.length} Videos</span>
     <h1>{t('highlights.title')}</h1>
     <p class="sub">
-      {t('highlights.intro')} <a href={href(lang, `players/${creditSlug}/`)}>{TEAM.youtube.creditName}</a> ·
+      {introBefore}<a href={href(lang, `players/${creditSlug}/`)}>{TEAM.youtube.creditFirstName}</a>{introAfter} ·
       <a href={TEAM.youtube.channelUrl} rel="noopener">YouTube</a>
     </p>
   </header>

@@ -5,7 +5,7 @@ import SeasonPicker from '../../../components/SeasonPicker.astro';
 import DataCredit from '../../../components/DataCredit.astro';
 import Abbr from '../../../components/Abbr.astro';
 import { type Lang, LANGS, useT, href, formatNumber, formatDate, mmss } from '../../../i18n/index.ts';
-import { abbr } from '../../../i18n/abbr.ts';
+import { abbr, posCode } from '../../../i18n/abbr.ts';
 import { ourSeasons, currentSeasonId, derived, season as getSeason, columns } from '../../../lib/data.ts';
 import { TEAM, isOurTeam } from '../../../config/team.ts';
 import type { LeaderPenalty, TeamSeasonStats } from '../../../types/models.ts';
@@ -212,7 +212,7 @@ const tabs = [
                         <td class="num">{l.gwg}</td>
                         {cols.plusMinus && <td class="num">{l.plusMinus}</td>}
                         {cols.sog && <td class="num">{l.sog}</td>}
-                        <td class="dim">{l.position ?? '–'}</td>
+                        <td class="dim">{posCode(l.position)}</td>
                       </tr>
                     ))}
                   </tbody>
