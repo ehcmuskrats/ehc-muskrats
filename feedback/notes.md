@@ -26,6 +26,15 @@ Collected while reviewing the site. Fixed together when the user says "go".
       highlighted; optional team view (each team's goalie GA/GP side by side). Season picker reuses the dashboard's.
     - Mobile: compact list (rank, team logo + code, GAA), full table on desktop.
 
+37. **"Aleksei Moskalenko" → "Aleksei Moskalenko Jr." everywhere** (distinguish from Andrei Moskalenko)
+    - Same text in DE and EN: "Jr." with a period is fine in German too (Duden accepts "jr."/"Jr."; "jun." is the
+      older form) — keep one spelling site-wide.
+    - Must apply EVERYWHERE, not just the profile: data/player-aliases.json `names` only renames derived profiles;
+      game-page goal logs, lineups, penalties, stats tables and leader lists read names straight from the league
+      data. Plan: a single display-name override (player id → { last: "Moskalenko Jr." }) applied at normalization/
+      derive time to every PlayerRef (game reports, leader lists, goals/assists) so all pages pick it up; check he
+      isn't split across ids (auto-merge by name) and that the slug/URL stays stable.
+
 ## Round 5 (collecting)
 32. Opponent picker removed again (too crowded on mobile) — DONE, not committed yet.
 33. Impressum name set: Christopher Bright, Wien — DONE, not committed yet.
