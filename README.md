@@ -47,6 +47,9 @@ npm run build        # builds into dist/
 
 ## How do I…
 
+> **Always pull first.** The site commits fresh data by itself several times a day, so before you change
+> anything run `git pull`, and if a push is rejected, run `git pull --rebase` and push again.
+
 ### …add a recap or news post?
 
 1. Copy `src/content/news/de/_vorlage-spielbericht.md` (German) or `src/content/news/en/_template-recap.md` (English) into the same folder under a new name, for example `2026-11-16-sieg-gegen-transistor.md`. The file name becomes the URL.
