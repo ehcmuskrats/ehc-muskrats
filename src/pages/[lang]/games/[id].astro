@@ -31,7 +31,7 @@ const r = resultCode(g);
 const nPeriods = game?.numberOfPeriods ?? 3;
 const periodName = (p: string) => {
   if (/^\d+$/.test(p)) return lang === 'de' ? `${p}. Drittel` : `${['1st', '2nd', '3rd'][Number(p) - 1] ?? p + 'th'} period`;
-  return p === 'OT' ? (lang === 'de' ? 'Verlängerung' : 'Overtime') : p === 'SO' ? (lang === 'de' ? 'Penaltyschießen' : 'Shootout') : p;
+  return p === 'OT' ? 'Overtime' : p === 'SO' ? 'Shootout' : p;
 };
 const periodShort = (i: number) => (i < nPeriods ? String(i + 1) : i === nPeriods ? t('common.ot') : t('common.so'));
 const name = (p: PersonName | null) => (p ? `${p.first} ${p.last}`.trim() : null);

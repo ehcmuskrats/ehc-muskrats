@@ -59,7 +59,8 @@ const lines = derived.players
   })
   .filter((x) => x.l);
 const skaters = lines.filter((x) => x.l.gp > 0).sort((a, b) => b.l.p - a.l.p || b.l.g - a.l.g);
-const goalies = lines.filter((x) => x.l.goalieGp > 0).sort((a, b) => b.l.goalieGp - a.l.goalieGp);
+// Includes backups who were on the sheet but haven't played yet (GP 0), so every goalie is listed.
+const goalies = lines.filter((x) => x.l.goalieGp > 0 || x.l.dressed > 0).sort((a, b) => b.l.goalieGp - a.l.goalieGp);
 const penMap = new Map<number, LeaderPenalty>();
 for (const st of (s?.stats ?? []).filter((x) => divInPhase(x.divisionId))) {
   for (const r of st.penalties.filter((x) => x.teamId === TEAM.leagueTeamId)) {
@@ -84,11 +85,30 @@ const leader = skaters[0];
 
 // ----- All-time view -----
 const career = derived.players.filter((p) => p.career.gp > 0 || p.career.goalieGp > 0);
+// "Games" counts every game played, as a skater or in net (otherwise goalies never appear).
+const careerValue = (p: (typeof career)[number], key: 'p' | 'gp' | 'g' | 'pim') =>
+  key === 'gp' ? p.career.gp + p.career.goalieGp : p.career[key];
 const top = (key: 'p' | 'gp' | 'g' | 'pim') =>
   [...career]
-    .filter((p) => p.career[key] > 0)
-    .sort((a, b) => b.career[key] - a.career[key] || b.career.g - a.career.g)
+    .filter((p) => careerValue(p, key) > 0)
+    .sort((a, b) => careerValue(b, key) - careerValue(a, key) || b.career.g - a.career.g)
     .slice(0, 10);
+// All-time goalies: games in net, wins, goals against, GA per game, shutouts (from the game log).
+const goalieBoard = derived.players
+  .filter((p) => p.career.goalieGp > 0)
+  .map((p) => {
+    const inNet = p.games.filter((g) => g.goalie && g.goalie.toi > 0);
+    return {
+      p,
+      gp: p.career.goalieGp,
+      w: inNet.filter((g) => g.result === 'W' || g.result === 'OTW').length,
+      ga: p.career.ga,
+      gaa: p.career.gaa,
+      so: inNet.filter((g) => g.goalie!.ga === 0).length,
+    };
+  })
+  .sort((a, b) => b.gp - a.gp)
+  .slice(0, 10);
 const topPlayoffs = derived.players
   .filter((p) => p.playoffs.career.p > 0)
   .sort((a, b) => b.playoffs.career.p - a.playoffs.career.p || b.playoffs.career.g - a.playoffs.career.g)
@@ -468,7 +488,7 @@ const tabs = [
                           {p.seasons.length} {t('player.seasons')}
                         </span>
                         <span class="pt tnum">
-                          {p.career[key]}
+                          {careerValue(p, key)}
                           <small>{abbr(lang, key).short}</small>
                         </span>
                       </a>
@@ -478,6 +498,45 @@ const tabs = [
               </section>
             );
           })}
+          {goalieBoard.length > 0 && (
+            <section class="goalie-board">
+              <div class="sec-head">
+                <h2>{t('stats.goalies')}</h2>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="num" scope="col">#</th>
+                      <th class="sticky-col" scope="col">{t('common.player')}</th>
+                      <th class="num" scope="col"><Abbr lang={lang} k="gp" /></th>
+                      <th class="num" scope="col"><Abbr lang={lang} k="w" /></th>
+                      <th class="num" scope="col"><Abbr lang={lang} k="ga" /></th>
+                      <th class="num" scope="col"><Abbr lang={lang} k="gaa" /></th>
+                      <th class="num" scope="col"><Abbr lang={lang} k="so" /></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {goalieBoard.map((r, i) => (
+                      <tr>
+                        <td class="num dim">{i + 1}</td>
+                        <td class="sticky-col">
+                          <a href={playerHref(r.p.slug)}>
+                            {r.p.first} {r.p.last}
+                          </a>
+                        </td>
+                        <td class="num big">{r.gp}</td>
+                        <td class="num">{r.w}</td>
+                        <td class="num">{r.ga}</td>
+                        <td class="num">{formatNumber(lang, r.gaa, 2)}</td>
+                        <td class="num">{r.so}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
           {topPlayoffs.length > 0 && (
             <section>
               <div class="sec-head">

@@ -68,6 +68,7 @@ const emptyLine = (season: SeasonId): PlayerSeasonLine => ({
   gaa: null,
   shotsAgainst: 0,
   saves: 0,
+  dressed: 0,
 });
 
 const addUnique = <T>(arr: T[], v: T | null | undefined) => {
@@ -78,7 +79,47 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
   const seasons = loadSeasons();
   const games = loadGames();
   const aliases = loadPlayerAliases();
-  const canon = (id: number) => aliases.merge[String(id)] ?? id;
+
+  // Same person, several league ids: WEHV re-issued ids (2016/17, 2017/18, 2021/22), splitting careers.
+  // Our players with the same full name are merged onto the id used most recently, so current
+  // profile URLs stay stable. Manual "merge" entries win; "keepSeparate" opts ids out.
+  const normName = (p: PlayerRef) =>
+    `${p.first} ${p.last}`.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+  const lastSeenById = new Map<number, { name: string; season: SeasonId }>();
+  const seen = (p: PlayerRef | null | undefined, season: SeasonId) => {
+    if (!p || !p.first || !p.last) return;
+    const prev = lastSeenById.get(p.id);
+    if (!prev || season > prev.season) lastSeenById.set(p.id, { name: normName(p), season });
+  };
+  for (const s of seasons) {
+    for (const st of s.stats) {
+      for (const r of [...st.skaters, ...st.goalies]) if (r.teamId === TEAM.leagueTeamId) seen(r.player, s.info.id);
+    }
+  }
+  for (const g of games.values()) {
+    const side = ourSide(g);
+    if (!side) continue;
+    for (const x of [...g.skaters[side], ...g.goalies[side]]) seen(x.player, g.season);
+    for (const gl of g.goals.filter((x) => x.team === side)) {
+      seen(gl.scorer, g.season);
+      for (const a of gl.assists) seen(a, g.season);
+    }
+  }
+  const byName = new Map<string, { id: number; season: SeasonId }[]>();
+  for (const [id, v] of lastSeenById) {
+    if (aliases.keepSeparate.includes(id)) continue;
+    if (!byName.has(v.name)) byName.set(v.name, []);
+    byName.get(v.name)!.push({ id, season: v.season });
+  }
+  const autoMerge = new Map<number, number>();
+  let mergedPeople = 0;
+  for (const list of byName.values()) {
+    if (list.length < 2) continue;
+    mergedPeople++;
+    const keep = [...list].sort((a, b) => b.season.localeCompare(a.season) || b.id - a.id)[0].id;
+    for (const x of list) if (x.id !== keep) autoMerge.set(x.id, keep);
+  }
+  const canon = (id: number) => aliases.merge[String(id)] ?? autoMerge.get(id) ?? id;
 
   interface Acc {
     id: number;
@@ -237,7 +278,11 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
       addUnique(a.positions, 'G');
       const gLines = linesFor(a, g.season, po);
       for (const l of gLines) addUnique(l.positions, 'G');
-      if (gl.toi <= 0) continue; // dressed but didn't play
+      if (gl.toi <= 0) {
+        // On the sheet as backup but didn't play: still part of that season's team.
+        for (const l of gLines) l.dressed += 1;
+        continue;
+      }
       a.goalieGames++;
       if (useBox) {
         for (const l of gLines) {
@@ -309,7 +354,7 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
     // Most recent game first: it decides the number/position the site shows (history stays in numbers/positions).
     const gamesDesc = [...a.games].sort((x, y) => (y.date ?? '').localeCompare(x.date ?? ''));
     const finalize = (list: PlayerSeasonLine[], gameFilter: (x: PlayerGameLine) => boolean) => {
-      const lines = list.filter((l) => l.gp > 0 || l.goalieGp > 0).sort((x, y) => y.season.localeCompare(x.season));
+      const lines = list.filter((l) => l.gp > 0 || l.goalieGp > 0 || l.dressed > 0).sort((x, y) => y.season.localeCompare(x.season));
       for (const l of lines) {
         // GAA normalised to a 60-minute game would be wrong here (75-minute games), so GAA = GA per game played.
         l.gaa = l.goalieGp > 0 ? Math.round((l.ga / l.goalieGp) * 100) / 100 : null;
@@ -369,7 +414,7 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
     records: teamRecords(seasons),
     columnAvailability: columnAvailability(seasons, games),
   };
-  log(`Derived: ${profiles.length} players, ${ourGames.length} game reports.`);
+  log(`Derived: ${profiles.length} players (${mergedPeople} merged across league ids), ${ourGames.length} game reports.`);
   return derived;
 }
 

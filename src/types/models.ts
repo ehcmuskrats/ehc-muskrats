@@ -328,6 +328,8 @@ export interface PlayerSeasonLine {
   gaa: number | null;
   shotsAgainst: number;
   saves: number;
+  /** Games on the sheet as backup goalie without playing (e.g. a second goalie who dressed). */
+  dressed: number;
 }
 
 export type CareerLine = Omit<PlayerSeasonLine, 'season' | 'numbers' | 'positions' | 'number' | 'position'>;

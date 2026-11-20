@@ -52,5 +52,7 @@ export const PENALTY_LABELS: Record<string, { de: string; en: string }> = {
 
 export function penaltyLabel(code: string, lang: 'de' | 'en'): string {
   const k = code.trim().toUpperCase();
-  return PENALTY_LABELS[k]?.[lang] ?? code;
+  // Hockey terms are English on both language versions (as players actually say them).
+  void lang;
+  return PENALTY_LABELS[k]?.en ?? code;
 }

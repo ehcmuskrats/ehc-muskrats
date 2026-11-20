@@ -250,8 +250,8 @@ export function playerInsights(p: PlayerProfile, lang: Lang, sid?: string) {
     facts.push({
       weight: gwg >= 3 ? 8 : 5,
       icon: 'trophy',
-      title: L('Matchwinner', 'Clutch'),
-      text: L(`${gwg}× das Siegtor geschossen.`, `Scored the game-winner ${gwg} time${gwg === 1 ? '' : 's'}.`),
+      title: L('Game Winner', 'Game winner'),
+      text: L(`${gwg} Game Winning ${gwg === 1 ? 'Goal' : 'Goals'} (GWG).`, `${gwg} game-winning goal${gwg === 1 ? '' : 's'} (GWG).`),
     });
   }
   // Special teams
@@ -261,16 +261,16 @@ export function playerInsights(p: PlayerProfile, lang: Lang, sid?: string) {
     facts.push({
       weight: 7,
       icon: 'shield',
-      title: L('Unterzahl-Gefahr', 'Short-handed threat'),
-      text: L(`${shg} ${shg === 1 ? 'Tor' : 'Tore'} in Unterzahl.`, `${shg} short-handed goal${shg === 1 ? '' : 's'}.`),
+      title: L('Shorthanded-Gefahr', 'Shorthanded threat'),
+      text: L(`${shg} Shorthanded ${shg === 1 ? 'Goal' : 'Goals'}.`, `${shg} shorthanded goal${shg === 1 ? '' : 's'}.`),
     });
   }
   if (ppg >= 2) {
     facts.push({
       weight: 5,
       icon: 'bolt',
-      title: 'Powerplay',
-      text: L(`${ppg} Powerplay-Tore – ${Math.round((ppg / goals.length) * 100)} % seiner Tore.`, `${ppg} power-play goals – ${Math.round((ppg / goals.length) * 100)}% of his goals.`),
+      title: 'Power Play',
+      text: L(`${ppg} Power Play Goals – ${Math.round((ppg / goals.length) * 100)} % seiner Tore.`, `${ppg} power-play goals – ${Math.round((ppg / goals.length) * 100)}% of his goals.`),
     });
   }
   // Longest point streak

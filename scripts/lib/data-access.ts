@@ -23,9 +23,15 @@ export interface PlayerAliases {
   merge: Record<string, number>;
   /** Fix names: { "<id>": { "first": "...", "last": "..." } } */
   names: Record<string, { first?: string; last?: string }>;
+  /**
+   * WEHV re-issued player ids several times, so the same person can have 2–3 ids. Players of our
+   * team with the same full name are merged automatically; list ids here to keep them separate
+   * (only needed if two different people ever share a name).
+   */
+  keepSeparate: number[];
 }
 
 export function loadPlayerAliases(): PlayerAliases {
   const a = readJson<Partial<PlayerAliases>>('data/player-aliases.json', {});
-  return { merge: a.merge ?? {}, names: a.names ?? {} };
+  return { merge: a.merge ?? {}, names: a.names ?? {}, keepSeparate: a.keepSeparate ?? [] };
 }
