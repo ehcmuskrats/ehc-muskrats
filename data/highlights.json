@@ -1,0 +1,746 @@
+{
+ "fetchedAt": "2026-11-20T13:34:04.807Z",
+ "channelId": "UCojaNKQ53iGc_0SJsc4aXgw",
+ "items": [
+  {
+   "video": {
+    "id": "HnKs8kUef1A",
+    "title": "EHC Muskrats vs HC Transistor (J4L 26/27)",
+    "publishedAt": "2026-11-17T11:22:29Z",
+    "thumbnail": "https://i.ytimg.com/vi/HnKs8kUef1A/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "HC Transistor",
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2026-27",
+    "isGame": true
+   },
+   "season": "2026-27",
+   "gameId": "ee28cd83-f812-4418-b0da-433232e84b9c",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "hpZbWS1_9GM",
+    "title": "EHC Muskrats vs EHC Donaufeld Dragons (J4L 26/27)",
+    "publishedAt": "2026-11-15T10:19:00Z",
+    "thumbnail": "https://i.ytimg.com/vi/hpZbWS1_9GM/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EHC Donaufeld Dragons",
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2026-27",
+    "isGame": true
+   },
+   "season": "2026-27",
+   "gameId": "f087bd27-023b-4141-82ba-a18448de64eb",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "Os1xtVqdbLI",
+    "title": "EHC Muskrats vs Wiener Sport-Club 2 (J4L 26/27)",
+    "publishedAt": "2026-11-03T12:01:18Z",
+    "thumbnail": "https://i.ytimg.com/vi/Os1xtVqdbLI/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "Wiener Sport-Club 2",
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2026-27",
+    "isGame": true
+   },
+   "season": "2026-27",
+   "gameId": "be0d2fbc-8d78-4c86-a6e4-268769d8c910",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "1b2JLDwg-B0",
+    "title": "EHC Muskrats vs VIHC | FINAL2 (J4L 25/26)",
+    "publishedAt": "2026-03-30T14:50:07Z",
+    "thumbnail": "https://i.ytimg.com/vi/1b2JLDwg-B0/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "VIHC",
+    "round": "final",
+    "gameNumber": 2,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "ce189cac-7c72-4ac0-a1bd-8db312b3a553",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "qRM6FGwlZac",
+    "title": "EHC Muskrats vs VIHC | FINAL1 (J4L 25/26)",
+    "publishedAt": "2026-03-28T11:13:44Z",
+    "thumbnail": "https://i.ytimg.com/vi/qRM6FGwlZac/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "VIHC",
+    "round": "final",
+    "gameNumber": 1,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "c84e8017-2b16-4e0f-ab41-2ac228a8df96",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "kmBFk0vzGr8",
+    "title": "EHC Muskrats vs EHV Vienna Eagles | SEMIFINAL 2 (J4L 25/26)",
+    "publishedAt": "2026-03-22T15:56:19Z",
+    "thumbnail": "https://i.ytimg.com/vi/kmBFk0vzGr8/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EHV Vienna Eagles",
+    "round": "semifinal",
+    "gameNumber": 2,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "4e9fae1f-90d0-448a-b610-de2dd90c89a9",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "fCTSgITs70A",
+    "title": "EHC Muskrats vs EHV Vienna Eagles | SEMIFINAL 1 (J4L 25/26)",
+    "publishedAt": "2026-03-22T15:30:51Z",
+    "thumbnail": "https://i.ytimg.com/vi/fCTSgITs70A/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EHV Vienna Eagles",
+    "round": "semifinal",
+    "gameNumber": 1,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "429b8ec7-47eb-4ff2-9e0c-d4f392df5992",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "WsqW0ezDFxw",
+    "title": "EHC Muskrats vs EHC Vienna Ducks | QUARTERFINAL (J4L 25/26)",
+    "publishedAt": "2026-03-09T11:51:24Z",
+    "thumbnail": "https://i.ytimg.com/vi/WsqW0ezDFxw/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EHC Vienna Ducks",
+    "round": "quarterfinal",
+    "gameNumber": null,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "ca0a8b19-7300-425c-97a1-f27695a593b4",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "zFRuGGXhnho",
+    "title": "EHC Muskrats vs VIHC (J4L 25/26)",
+    "publishedAt": "2026-02-24T17:24:20Z",
+    "thumbnail": "https://i.ytimg.com/vi/zFRuGGXhnho/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "VIHC",
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "82b591f0-c971-46e5-b37c-82eadaab3c8a",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "rQ70pXZRUkk",
+    "title": "EHC Muskrats vs EHV Vienna Eagles (J4L 25/26)",
+    "publishedAt": "2026-02-01T11:57:28Z",
+    "thumbnail": "https://i.ytimg.com/vi/rQ70pXZRUkk/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EHV Vienna Eagles",
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "61764342-f5ad-43a3-a292-e7d227840593",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "H69zTM8futQ",
+    "title": "EHC Muskrats vs Wiener Sport-Club 2 (J4L 25/26)",
+    "publishedAt": "2026-01-25T21:17:02Z",
+    "thumbnail": "https://i.ytimg.com/vi/H69zTM8futQ/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "Wiener Sport-Club 2",
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "911af5ed-2b78-41ba-b01f-8c3e3d3e0cda",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "WkSwvmph75I",
+    "title": "EHC Muskrats vs EHC Vienna Rangers (J4L 25/26)",
+    "publishedAt": "2026-01-18T10:11:29Z",
+    "thumbnail": "https://i.ytimg.com/vi/WkSwvmph75I/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EHC Vienna Rangers",
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "e38f42a8-84e5-4c3a-90ea-d39cc6051729",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "ebJznPe2RmA",
+    "title": "EHC Muskrats vs EHC Donaufeld Dragons (J4L 25/26)",
+    "publishedAt": "2026-01-11T12:42:45Z",
+    "thumbnail": "https://i.ytimg.com/vi/ebJznPe2RmA/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EHC Donaufeld Dragons",
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "06d90f85-c82a-4ef6-8b9a-47413cf779b0",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "HudA9kHxqoE",
+    "title": "EHC Muskrats vs HC Transistor (J4L 25/26)",
+    "publishedAt": "2025-12-04T10:53:15Z",
+    "thumbnail": "https://i.ytimg.com/vi/HudA9kHxqoE/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "HC Transistor",
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "3d5dd523-256a-47ac-a2f0-85d2422817fb",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "jrtKd9ftuho",
+    "title": "EHC Muskrats vs Wiener Sport-Club 2 (J4L 25/26)",
+    "publishedAt": "2025-11-25T18:33:36Z",
+    "thumbnail": "https://i.ytimg.com/vi/jrtKd9ftuho/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "Wiener Sport-Club 2",
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "6103077c-6b80-424b-ae91-3f7d47149506",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "lWkPZXEIuZc",
+    "title": "EHC Muskrats vs VIHC (J4L 25/26)",
+    "publishedAt": "2025-11-21T13:02:02Z",
+    "thumbnail": "https://i.ytimg.com/vi/lWkPZXEIuZc/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "VIHC",
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "d8465f71-2465-4cfe-8787-e201f0b39820",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "6QvhYbNMHog",
+    "title": "EHC Muskrats vs EHC Vienna Ducks (J4L 25/26)",
+    "publishedAt": "2025-11-07T22:51:59Z",
+    "thumbnail": "https://i.ytimg.com/vi/6QvhYbNMHog/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EHC Vienna Ducks",
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "18a699d7-0b00-40be-9530-c8ec238c32a4",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "cceUywQCrjA",
+    "title": "EHC Muskrats vs EHV Vienna Eagles (J4L 25/26)",
+    "publishedAt": "2025-10-27T09:42:50Z",
+    "thumbnail": "https://i.ytimg.com/vi/cceUywQCrjA/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EHV Vienna Eagles",
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "117e3fb8-32c2-49c7-931c-b73c23ee2b03",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "6rChPdQMl6w",
+    "title": "EHC Muskrats vs EC Carinthian Seahawks (J4L 25/26)",
+    "publishedAt": "2025-10-20T10:15:49Z",
+    "thumbnail": "https://i.ytimg.com/vi/6rChPdQMl6w/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EC Carinthian Seahawks",
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2025-26",
+    "isGame": true
+   },
+   "season": "2025-26",
+   "gameId": "8eecd81d-4721-4e1e-998b-69064564658f",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "63RnLKzkfIM",
+    "title": "MUSKRATS 24/25 Champions Aftermovie",
+    "publishedAt": "2025-05-18T10:21:33Z",
+    "thumbnail": "https://i.ytimg.com/vi/63RnLKzkfIM/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": null,
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": "2024-25",
+    "isGame": false
+   },
+   "season": "2024-25",
+   "gameId": null,
+   "status": "not-a-game",
+   "note": "title is not a game pattern"
+  },
+  {
+   "video": {
+    "id": "Cnymu2RGaKk",
+    "title": "EHC Muskrats vs Teifl 2 | FINAL 3 (J4L 06.04.2025)",
+    "publishedAt": "2025-04-07T13:29:43Z",
+    "thumbnail": "https://i.ytimg.com/vi/Cnymu2RGaKk/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "Teifl 2",
+    "round": "final",
+    "gameNumber": 3,
+    "date": "2025-04-06",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "aa6f4b16-cbb0-499b-98ec-fae910e5202a",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "dIyXVuvSEkY",
+    "title": "EHC Muskrats vs Teifl 2 | FINAL 2 (J4L 29.03.2025)",
+    "publishedAt": "2025-04-07T13:04:07Z",
+    "thumbnail": "https://i.ytimg.com/vi/dIyXVuvSEkY/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "Teifl 2",
+    "round": "final",
+    "gameNumber": 2,
+    "date": "2025-03-29",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "b3d57a21-284f-4bb0-b685-5f2f476c66be",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "Dd3jA-peIsM",
+    "title": "EHC Muskrats vs Teifl 2 | FINAL 1 (J4L 26.03.2025)",
+    "publishedAt": "2025-04-07T13:04:05Z",
+    "thumbnail": "https://i.ytimg.com/vi/Dd3jA-peIsM/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "Teifl 2",
+    "round": "final",
+    "gameNumber": 1,
+    "date": "2025-03-26",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "62c1b1ab-cf5e-4dde-9be2-eee8319ff7ce",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "XICl83_3ue4",
+    "title": "EHC Muskrats vs VIHC | SEMIFINAL 2 (J4L 22.03.2025)",
+    "publishedAt": "2025-03-22T20:48:53Z",
+    "thumbnail": "https://i.ytimg.com/vi/XICl83_3ue4/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "VIHC",
+    "round": "semifinal",
+    "gameNumber": 2,
+    "date": "2025-03-22",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "3b2a13d8-9d0a-4ab4-831a-0e7b2006ce1d",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "HQg9cQ_AKfA",
+    "title": "EHC Muskrats vs VIHC | SEMIFINAL 1 (J4L 15.03.2025)",
+    "publishedAt": "2025-03-16T15:32:13Z",
+    "thumbnail": "https://i.ytimg.com/vi/HQg9cQ_AKfA/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "VIHC",
+    "round": "semifinal",
+    "gameNumber": 1,
+    "date": "2025-03-15",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "021d1983-6a76-482a-8e7f-3468eb333965",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "d3XhnZfCH2w",
+    "title": "EHC Muskrats vs EHV Vienna Eagles | QUARTERFINAL (J4L 08.03.2025)",
+    "publishedAt": "2025-03-08T19:33:07Z",
+    "thumbnail": "https://i.ytimg.com/vi/d3XhnZfCH2w/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EHV Vienna Eagles",
+    "round": "quarterfinal",
+    "gameNumber": null,
+    "date": "2025-03-08",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "40b07b50-4037-49cf-8b48-7df928b0e875",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "koNMsd-VFco",
+    "title": "EHC Muskrats vs EHC Vienna Ducks (J4L 28.2.2025)",
+    "publishedAt": "2025-03-03T13:10:59Z",
+    "thumbnail": "https://i.ytimg.com/vi/koNMsd-VFco/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EHC Vienna Ducks",
+    "round": null,
+    "gameNumber": null,
+    "date": "2025-02-28",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "7b26534e-97aa-44b0-8834-a6b3dc154688",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "0SCfYzLf4Jw",
+    "title": "EHC Muskrats vs VIHC (J4L 15.2.2025)",
+    "publishedAt": "2025-02-16T12:09:55Z",
+    "thumbnail": "https://i.ytimg.com/vi/0SCfYzLf4Jw/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "VIHC",
+    "round": null,
+    "gameNumber": null,
+    "date": "2025-02-15",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "73fe503f-bc0f-4c41-a4eb-2d92283c41b7",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "yKpwOYJxpNE",
+    "title": "EHC Muskrats vs Teifl 2 (J4L 13.1.2025)",
+    "publishedAt": "2025-01-14T08:59:48Z",
+    "thumbnail": "https://i.ytimg.com/vi/yKpwOYJxpNE/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "Teifl 2",
+    "round": null,
+    "gameNumber": null,
+    "date": "2025-01-13",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "3a526dbb-1eff-4ff9-88f8-e8276b69f43b",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "FlnQfjLnMfQ",
+    "title": "EHC Muskrats vs EHC Vienna Ducks (J4L 6.1.2025)",
+    "publishedAt": "2025-01-11T11:42:31Z",
+    "thumbnail": "https://i.ytimg.com/vi/FlnQfjLnMfQ/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EHC Vienna Ducks",
+    "round": null,
+    "gameNumber": null,
+    "date": "2025-01-06",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "75535ab8-2b64-42a5-a7f4-022265e52353",
+   "status": "override",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "FYLX7SH_BzE",
+    "title": "EHC Muskrats vs Wiener Sport-Club 2 (J4L 13.12.2024)",
+    "publishedAt": "2024-12-14T11:24:58Z",
+    "thumbnail": "https://i.ytimg.com/vi/FYLX7SH_BzE/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "Wiener Sport-Club 2",
+    "round": null,
+    "gameNumber": null,
+    "date": "2024-12-13",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "c54e493f-3522-4a6d-9c6c-fb13a761426e",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "xH0lNAuJ0fo",
+    "title": "EHC Muskrats vs EHC Vienna Rangers (J4L 8.12.2024)",
+    "publishedAt": "2024-12-09T13:56:18Z",
+    "thumbnail": "https://i.ytimg.com/vi/xH0lNAuJ0fo/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EHC Vienna Rangers",
+    "round": null,
+    "gameNumber": null,
+    "date": "2024-12-08",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "b74bc500-4c6e-4ffd-816b-c7d9a8c59f30",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "lLbi07EG9Tk",
+    "title": "EHC Muskrats vs EC Carinthian Seahawks (J4L 1.12.2024)",
+    "publishedAt": "2024-12-02T12:57:46Z",
+    "thumbnail": "https://i.ytimg.com/vi/lLbi07EG9Tk/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EC Carinthian Seahawks",
+    "round": null,
+    "gameNumber": null,
+    "date": "2024-12-01",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "3e11123a-4ca2-4c01-a47e-c78e4a94c510",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "42042VFX-MI",
+    "title": "EHC Muskrats vs EHV Vienna Eagles (J4L 17.11.2024)",
+    "publishedAt": "2024-11-17T16:53:46Z",
+    "thumbnail": "https://i.ytimg.com/vi/42042VFX-MI/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "EHV Vienna Eagles",
+    "round": null,
+    "gameNumber": null,
+    "date": "2024-11-17",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "48bc3ce8-500f-4a8d-ad74-563531501fb5",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "kT9UlKYf1mw",
+    "title": "EHC Muskrats vs VIHC (J4L 27.10.2024)",
+    "publishedAt": "2024-10-28T10:20:48Z",
+    "thumbnail": "https://i.ytimg.com/vi/kT9UlKYf1mw/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "VIHC",
+    "round": null,
+    "gameNumber": null,
+    "date": "2024-10-27",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "dc704d21-22b3-410c-84d5-9866d786627f",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "j6vxeaIM5CA",
+    "title": "EHC Muskrats vs HC Transistor (J4L 16.10.2024)",
+    "publishedAt": "2024-10-17T11:01:43Z",
+    "thumbnail": "https://i.ytimg.com/vi/j6vxeaIM5CA/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": "HC Transistor",
+    "round": null,
+    "gameNumber": null,
+    "date": "2024-10-16",
+    "season": "2024-25",
+    "isGame": true
+   },
+   "season": "2024-25",
+   "gameId": "5f64823f-d3d2-4199-90d5-0639f99196d5",
+   "status": "matched",
+   "note": null
+  },
+  {
+   "video": {
+    "id": "bM1CGas4nk0",
+    "title": "EHC Muskrats Hockey Camp Loeben 2024 🎄",
+    "publishedAt": "2024-10-13T17:05:45Z",
+    "thumbnail": "https://i.ytimg.com/vi/bM1CGas4nk0/hqdefault.jpg"
+   },
+   "parsed": {
+    "opponent": null,
+    "round": null,
+    "gameNumber": null,
+    "date": null,
+    "season": null,
+    "isGame": false
+   },
+   "season": null,
+   "gameId": null,
+   "status": "not-a-game",
+   "note": "title is not a game pattern"
+  }
+ ]
+}
