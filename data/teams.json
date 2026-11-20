@@ -1,0 +1,260 @@
+[
+ {
+  "id": 26647,
+  "short": "1. Halbfinale Team 1",
+  "name": "1. Halbfinale Team 1",
+  "logo": "logos/26647.png"
+ },
+ {
+  "id": 26648,
+  "short": "1. Halbfinale Team 2",
+  "name": "1. Halbfinale Team 2",
+  "logo": "logos/26648.png"
+ },
+ {
+  "id": 26649,
+  "short": "2. Halbfinale Team 1",
+  "name": "2. Halbfinale Team 1",
+  "logo": "logos/26649.png"
+ },
+ {
+  "id": 26650,
+  "short": "2. Halbfinale Team 2",
+  "name": "2. Halbfinale Team 2",
+  "logo": "logos/26650.png"
+ },
+ {
+  "id": 35332,
+  "short": "CSH",
+  "name": "EC Carinthian Seahawks",
+  "logo": "logos/35332.png"
+ },
+ {
+  "id": 1086,
+  "short": "RAC",
+  "name": "EC Henkel Racoons",
+  "logo": "logos/1086.png"
+ },
+ {
+  "id": 65662,
+  "short": "DRA",
+  "name": "EHC Donaufeld Dragons",
+  "logo": "logos/65662.png"
+ },
+ {
+  "id": 35325,
+  "short": "MUS",
+  "name": "EHC Muscrats",
+  "logo": "logos/35325.png"
+ },
+ {
+  "id": 1089,
+  "short": "MUS",
+  "name": "EHC Muscrats",
+  "logo": "logos/1089.png"
+ },
+ {
+  "id": 1090,
+  "short": "RAB",
+  "name": "EHC Schwarze Raben",
+  "logo": "logos/1090.png"
+ },
+ {
+  "id": 1087,
+  "short": "SÜD 2",
+  "name": "EHC Südtirol 2",
+  "logo": "logos/1087.png"
+ },
+ {
+  "id": 1095,
+  "short": "UTD",
+  "name": "EHC United",
+  "logo": "logos/1095.png"
+ },
+ {
+  "id": 35319,
+  "short": "DUK",
+  "name": "EHC Vienna Ducks",
+  "logo": "logos/35319.png"
+ },
+ {
+  "id": 1060,
+  "short": "DUK",
+  "name": "EHC Vienna Ducks",
+  "logo": "logos/1060.png"
+ },
+ {
+  "id": 35333,
+  "short": "RAN",
+  "name": "EHC Vienna Rangers",
+  "logo": "logos/35333.png"
+ },
+ {
+  "id": 4417,
+  "short": "RAN",
+  "name": "EHC Vienna Rangers",
+  "logo": "logos/4417.png"
+ },
+ {
+  "id": 35337,
+  "short": "RAN2",
+  "name": "EHC Vienna Rangers 2",
+  "logo": "logos/35337.png"
+ },
+ {
+  "id": 23113,
+  "short": "RAN2",
+  "name": "EHC Vienna Rangers 2",
+  "logo": "logos/23113.png"
+ },
+ {
+  "id": 1091,
+  "short": "WOF",
+  "name": "EHC Wolfersberg",
+  "logo": "logos/1091.png"
+ },
+ {
+  "id": 35336,
+  "short": "SBL",
+  "name": "EHV SunBLOCKERs",
+  "logo": "logos/35336.png"
+ },
+ {
+  "id": 15343,
+  "short": "SBL",
+  "name": "EHV SunBLOCKERs",
+  "logo": "logos/15343.png"
+ },
+ {
+  "id": 41346,
+  "short": "EVE",
+  "name": "EHV Vienna Eagles",
+  "logo": "logos/41346.png"
+ },
+ {
+  "id": 26653,
+  "short": "Finale Team 1",
+  "name": "Finale Team 1",
+  "logo": "logos/26653.png"
+ },
+ {
+  "id": 18586,
+  "short": "Finale Team 1",
+  "name": "Finale Team 1",
+  "logo": "logos/18586.png"
+ },
+ {
+  "id": 11127,
+  "short": "Finale Team 1",
+  "name": "Finale Team 1",
+  "logo": "logos/11127.png"
+ },
+ {
+  "id": 26654,
+  "short": "Finale Team 2",
+  "name": "Finale Team 2",
+  "logo": "logos/26654.png"
+ },
+ {
+  "id": 18587,
+  "short": "Finale Team 2",
+  "name": "Finale Team 2",
+  "logo": "logos/18587.png"
+ },
+ {
+  "id": 11128,
+  "short": "Finale Team 2",
+  "name": "Finale Team 2",
+  "logo": "logos/11128.png"
+ },
+ {
+  "id": 60373,
+  "short": "Halbfinal-Spiele Team 3",
+  "name": "Halbfinal-Spiele Team 3",
+  "logo": null
+ },
+ {
+  "id": 60374,
+  "short": "Halbfinal-Spiele Team 4",
+  "name": "Halbfinal-Spiele Team 4",
+  "logo": null
+ },
+ {
+  "id": 35328,
+  "short": "TST",
+  "name": "HC Transistor Josifgrad",
+  "logo": "logos/35328.png"
+ },
+ {
+  "id": 1092,
+  "short": "TST",
+  "name": "HC Transistor Josifgrad",
+  "logo": "logos/1092.png"
+ },
+ {
+  "id": 35360,
+  "short": "SCO",
+  "name": "Stockerauer Eissport Verein 2",
+  "logo": "logos/35360.png"
+ },
+ {
+  "id": 41233,
+  "short": "TFL2",
+  "name": "Teifl 2",
+  "logo": "logos/41233.png"
+ },
+ {
+  "id": 35329,
+  "short": "UNO",
+  "name": "Vienna International Hockey Club",
+  "logo": "logos/35329.png"
+ },
+ {
+  "id": 1093,
+  "short": "UNO",
+  "name": "Vienna International Hockey Club",
+  "logo": "logos/1093.png"
+ },
+ {
+  "id": 35324,
+  "short": "TOK3",
+  "name": "Vienna University Totonka 3",
+  "logo": "logos/35324.png"
+ },
+ {
+  "id": 1088,
+  "short": "TOK 3",
+  "name": "Vienna University Totonka 3",
+  "logo": "logos/1088.png"
+ },
+ {
+  "id": 35330,
+  "short": "HZB",
+  "name": "Wiener Heizbären Hockey Club",
+  "logo": "logos/35330.png"
+ },
+ {
+  "id": 1094,
+  "short": "HZB",
+  "name": "Wiener Heizbären Hockey Club",
+  "logo": "logos/1094.png"
+ },
+ {
+  "id": 35338,
+  "short": "WSC2",
+  "name": "Wiener Sport-Club 2",
+  "logo": "logos/35338.png"
+ },
+ {
+  "id": 23114,
+  "short": "WSC2",
+  "name": "Wiener Sport-Club 2",
+  "logo": "logos/23114.png"
+ },
+ {
+  "id": 816,
+  "short": "WIZ",
+  "name": "Wizards",
+  "logo": "logos/816.png"
+ }
+]

@@ -1,0 +1,916 @@
+{
+ "id": "c54e493f-3522-4a6d-9c6c-fb13a761426e",
+ "season": "2024-25",
+ "divisionId": 16641,
+ "divisionName": "Grunddurchgang",
+ "name": "J4L SP23",
+ "date": "2024-12-13",
+ "time": "21:15",
+ "timestamp": 1734120900000,
+ "venue": "Wien - Wiener Stadthalle C",
+ "home": {
+  "id": 35325,
+  "short": "MUS",
+  "name": "EHC Muscrats",
+  "logo": "logos/35325.png"
+ },
+ "away": {
+  "id": 35338,
+  "short": "WSC2",
+  "name": "Wiener Sport-Club 2",
+  "logo": "logos/35338.png"
+ },
+ "homeScore": 7,
+ "awayScore": 2,
+ "periods": [
+  [
+   0,
+   1
+  ],
+  [
+   2,
+   1
+  ],
+  [
+   5,
+   0
+  ]
+ ],
+ "overtime": false,
+ "shootout": false,
+ "status": "final",
+ "playoff": null,
+ "hasReport": true,
+ "attendance": null,
+ "startTime": "21:17",
+ "endTime": "22:38",
+ "periodLength": 1500,
+ "numberOfPeriods": 3,
+ "referees": [
+  {
+   "first": "Sebastian",
+   "last": "BACKNECHT"
+  },
+  {
+   "first": "Christian",
+   "last": "MEURERS"
+  }
+ ],
+ "linesmen": [],
+ "headCoaches": {
+  "home": null,
+  "away": {
+   "first": "Stephen",
+   "last": "MATHEWSON"
+  }
+ },
+ "goals": [
+  {
+   "period": "1",
+   "time": 272,
+   "timeLabel": "04:32",
+   "score": "0:1",
+   "team": "away",
+   "scorer": {
+    "id": 94417,
+    "first": "Jörg",
+    "last": "Skornschek",
+    "number": 15
+   },
+   "assists": [
+    {
+     "id": 10913,
+     "first": "Tim",
+     "last": "Turk",
+     "number": 80
+    }
+   ],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "2",
+   "time": 1986,
+   "timeLabel": "33:06",
+   "score": "0:2",
+   "team": "away",
+   "scorer": {
+    "id": 94624,
+    "first": "Günter",
+    "last": "Spitaler",
+    "number": 8
+   },
+   "assists": [
+    {
+     "id": 94403,
+     "first": "Klaus",
+     "last": "Bauernfeind",
+     "number": 92
+    }
+   ],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "2",
+   "time": 2086,
+   "timeLabel": "34:46",
+   "score": "1:2",
+   "team": "home",
+   "scorer": {
+    "id": 10342,
+    "first": "Christoph",
+    "last": "Mayer",
+    "number": 46
+   },
+   "assists": [],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "2",
+   "time": 2585,
+   "timeLabel": "43:05",
+   "score": "2:2",
+   "team": "home",
+   "scorer": {
+    "id": 147829,
+    "first": "Andrei",
+    "last": "Moskalenko",
+    "number": 63
+   },
+   "assists": [
+    {
+     "id": 10342,
+     "first": "Christoph",
+     "last": "Mayer",
+     "number": 46
+    }
+   ],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "3",
+   "time": 3126,
+   "timeLabel": "52:06",
+   "score": "3:2",
+   "team": "home",
+   "scorer": {
+    "id": 16226,
+    "first": "Stefan",
+    "last": "Zemann",
+    "number": 74
+   },
+   "assists": [
+    {
+     "id": 10342,
+     "first": "Christoph",
+     "last": "Mayer",
+     "number": 46
+    }
+   ],
+   "situation": "PP1",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": true
+  },
+  {
+   "period": "3",
+   "time": 3262,
+   "timeLabel": "54:22",
+   "score": "4:2",
+   "team": "home",
+   "scorer": {
+    "id": 127960,
+    "first": "Robert",
+    "last": "Kona",
+    "number": 90
+   },
+   "assists": [
+    {
+     "id": 111830,
+     "first": "Benjamin",
+     "last": "Pfeifer",
+     "number": 11
+    }
+   ],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "3",
+   "time": 3601,
+   "timeLabel": "60:01",
+   "score": "5:2",
+   "team": "home",
+   "scorer": {
+    "id": 10342,
+    "first": "Christoph",
+    "last": "Mayer",
+    "number": 46
+   },
+   "assists": [
+    {
+     "id": 16226,
+     "first": "Stefan",
+     "last": "Zemann",
+     "number": 74
+    }
+   ],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "3",
+   "time": 4055,
+   "timeLabel": "67:35",
+   "score": "6:2",
+   "team": "home",
+   "scorer": {
+    "id": 10342,
+    "first": "Christoph",
+    "last": "Mayer",
+    "number": 46
+   },
+   "assists": [
+    {
+     "id": 16226,
+     "first": "Stefan",
+     "last": "Zemann",
+     "number": 74
+    }
+   ],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "3",
+   "time": 4356,
+   "timeLabel": "72:36",
+   "score": "7:2",
+   "team": "home",
+   "scorer": {
+    "id": 10342,
+    "first": "Christoph",
+    "last": "Mayer",
+    "number": 46
+   },
+   "assists": [],
+   "situation": "SH1",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  }
+ ],
+ "penalties": [
+  {
+   "period": "1",
+   "time": 1183,
+   "timeLabel": "19:43",
+   "team": "home",
+   "player": {
+    "id": 95016,
+    "first": "Daniel",
+    "last": "Moser",
+    "number": 65
+   },
+   "servedBy": null,
+   "minutes": 3,
+   "code": "TRIP"
+  },
+  {
+   "period": "2",
+   "time": 1793,
+   "timeLabel": "29:53",
+   "team": "home",
+   "player": {
+    "id": 95015,
+    "first": "Michael Ferry",
+    "last": "Kornfeind",
+    "number": 70
+   },
+   "servedBy": null,
+   "minutes": 3,
+   "code": "TRIP"
+  },
+  {
+   "period": "2",
+   "time": 2800,
+   "timeLabel": "46:40",
+   "team": "away",
+   "player": {
+    "id": 94407,
+    "first": "Georg",
+    "last": "Marschick",
+    "number": 70
+   },
+   "servedBy": null,
+   "minutes": 3,
+   "code": "HOLD"
+  },
+  {
+   "period": "3",
+   "time": 3092,
+   "timeLabel": "51:32",
+   "team": "away",
+   "player": {
+    "id": 94417,
+    "first": "Jörg",
+    "last": "Skornschek",
+    "number": 15
+   },
+   "servedBy": null,
+   "minutes": 3,
+   "code": "SLASH"
+  },
+  {
+   "period": "3",
+   "time": 3706,
+   "timeLabel": "61:46",
+   "team": "home",
+   "player": {
+    "id": 95015,
+    "first": "Michael Ferry",
+    "last": "Kornfeind",
+    "number": 70
+   },
+   "servedBy": null,
+   "minutes": 3,
+   "code": "HOOK"
+  },
+  {
+   "period": "3",
+   "time": 4314,
+   "timeLabel": "71:54",
+   "team": "home",
+   "player": {
+    "id": 147829,
+    "first": "Andrei",
+    "last": "Moskalenko",
+    "number": 63
+   },
+   "servedBy": null,
+   "minutes": 3,
+   "code": "SLASH"
+  }
+ ],
+ "teamStats": {
+  "home": {
+   "pim": 12,
+   "ppGoals": 1,
+   "ppChances": 2,
+   "pkKilled": 4,
+   "pkSituations": 4,
+   "timeLeading": 1374,
+   "timeTied": 813,
+   "timeTrailing": 2313,
+   "timeOnPP": 214,
+   "timeShorthanded": 720,
+   "sog": 0
+  },
+  "away": {
+   "pim": 6,
+   "ppGoals": 0,
+   "ppChances": 4,
+   "pkKilled": 1,
+   "pkSituations": 2,
+   "timeLeading": 2313,
+   "timeTied": 813,
+   "timeTrailing": 1374,
+   "timeOnPP": 720,
+   "timeShorthanded": 214,
+   "sog": 0
+  }
+ },
+ "skaters": {
+  "home": [
+   {
+    "player": {
+     "id": 17713,
+     "first": "Helmut",
+     "last": "Schaschl",
+     "number": 9
+    },
+    "position": "LF",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 111830,
+     "first": "Benjamin",
+     "last": "Pfeifer",
+     "number": 11
+    },
+    "position": "RF",
+    "g": 0,
+    "a": 1,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 9295,
+     "first": "Edwin",
+     "last": "Frühwirth",
+     "number": 17
+    },
+    "position": "RD",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 9296,
+     "first": "Andreas",
+     "last": "Isep",
+     "number": 27
+    },
+    "position": "C",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 10342,
+     "first": "Christoph",
+     "last": "Mayer",
+     "number": 46
+    },
+    "position": "RF",
+    "g": 4,
+    "a": 2,
+    "p": 6,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 95530,
+     "first": "Philipp",
+     "last": "Suppanz",
+     "number": 52
+    },
+    "position": "RD",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 147829,
+     "first": "Andrei",
+     "last": "Moskalenko",
+     "number": 63
+    },
+    "position": "C",
+    "g": 1,
+    "a": 0,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 3,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 95016,
+     "first": "Daniel",
+     "last": "Moser",
+     "number": 65
+    },
+    "position": "LD",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 3,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 95015,
+     "first": "Michael Ferry",
+     "last": "Kornfeind",
+     "number": 70
+    },
+    "position": "LD",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 6,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 111173,
+     "first": "Stefan",
+     "last": "Oblin",
+     "number": 72
+    },
+    "position": "RD",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 127839,
+     "first": "Armin",
+     "last": "Reautschnig",
+     "number": 73
+    },
+    "position": "LD",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 16226,
+     "first": "Stefan",
+     "last": "Zemann",
+     "number": 74
+    },
+    "position": "LF",
+    "g": 1,
+    "a": 2,
+    "p": 3,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 9305,
+     "first": "Thomas",
+     "last": "Preisinger",
+     "number": 87
+    },
+    "position": "C",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 127960,
+     "first": "Robert",
+     "last": "Kona",
+     "number": 90
+    },
+    "position": "LF",
+    "g": 1,
+    "a": 0,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 127949,
+     "first": "Pyry Verneri",
+     "last": "Naukkarinen",
+     "number": 95
+    },
+    "position": "RF",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   }
+  ],
+  "away": [
+   {
+    "player": {
+     "id": 146733,
+     "first": "David",
+     "last": "Andorfer",
+     "number": 2
+    },
+    "position": "LD",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 94416,
+     "first": "Martin",
+     "last": "Schulz",
+     "number": 4
+    },
+    "position": "RD",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 94624,
+     "first": "Günter",
+     "last": "Spitaler",
+     "number": 8
+    },
+    "position": "LD",
+    "g": 1,
+    "a": 0,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 94417,
+     "first": "Jörg",
+     "last": "Skornschek",
+     "number": 15
+    },
+    "position": "C",
+    "g": 1,
+    "a": 0,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 3,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 94418,
+     "first": "Alexander",
+     "last": "Straub",
+     "number": 22
+    },
+    "position": "RF",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 126848,
+     "first": "Mario",
+     "last": "Taschwer",
+     "number": 28
+    },
+    "position": "LF",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 94420,
+     "first": "Florian",
+     "last": "Winkler",
+     "number": 45
+    },
+    "position": "LD",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 94588,
+     "first": "Benedikt",
+     "last": "Tutzer",
+     "number": 53
+    },
+    "position": "RD",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 94407,
+     "first": "Georg",
+     "last": "Marschick",
+     "number": 70
+    },
+    "position": "LF",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 3,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 10913,
+     "first": "Tim",
+     "last": "Turk",
+     "number": 80
+    },
+    "position": "C",
+    "g": 0,
+    "a": 1,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 128829,
+     "first": "Maximilian",
+     "last": "Ederer",
+     "number": 86
+    },
+    "position": "C",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 94403,
+     "first": "Klaus",
+     "last": "Bauernfeind",
+     "number": 92
+    },
+    "position": "LF",
+    "g": 0,
+    "a": 1,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 95542,
+     "first": "Gregor",
+     "last": "Ehart",
+     "number": 97
+    },
+    "position": "RF",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   }
+  ]
+ },
+ "goalies": {
+  "home": [
+   {
+    "player": {
+     "id": 95026,
+     "first": "Peter",
+     "last": "Kotzan",
+     "number": 3
+    },
+    "shotsAgainst": 2,
+    "goalsAgainst": 2,
+    "gaa": 2,
+    "saves": 0,
+    "savePct": 0,
+    "toi": 4500,
+    "starter": true
+   }
+  ],
+  "away": [
+   {
+    "player": {
+     "id": 147856,
+     "first": "Thomas Martin",
+     "last": "Holub",
+     "number": 76
+    },
+    "shotsAgainst": 7,
+    "goalsAgainst": 7,
+    "gaa": 7,
+    "saves": 0,
+    "savePct": 0,
+    "toi": 4500,
+    "starter": true
+   }
+  ]
+ },
+ "goalieChanges": [
+  {
+   "team": "home",
+   "player": {
+    "id": 95026,
+    "first": "Peter",
+    "last": "Kotzan",
+    "number": 3
+   },
+   "action": "on",
+   "time": 0,
+   "timeLabel": "00:00",
+   "period": "1"
+  },
+  {
+   "team": "away",
+   "player": {
+    "id": 147856,
+    "first": "Thomas Martin",
+    "last": "Holub",
+    "number": 76
+   },
+   "action": "on",
+   "time": 0,
+   "timeLabel": "00:00",
+   "period": "1"
+  },
+  {
+   "team": "home",
+   "player": {
+    "id": 95026,
+    "first": "Peter",
+    "last": "Kotzan",
+    "number": 3
+   },
+   "action": "off",
+   "time": 4500,
+   "timeLabel": "75:00",
+   "period": "3"
+  },
+  {
+   "team": "away",
+   "player": {
+    "id": 147856,
+    "first": "Thomas Martin",
+    "last": "Holub",
+    "number": 76
+   },
+   "action": "off",
+   "time": 4500,
+   "timeLabel": "75:00",
+   "period": "3"
+  }
+ ]
+}

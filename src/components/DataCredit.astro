@@ -1,0 +1,23 @@
+---
+import { type Lang, t } from '../i18n/index.ts';
+import { TEAM } from '../config/team.ts';
+interface Props {
+  lang: Lang;
+  video?: boolean;
+}
+const { lang, video = false } = Astro.props;
+---
+
+<p class="credit">
+  <a href="https://www.wehv.at/" rel="noopener">{t(lang, 'credit.data')}</a>
+  {
+    video && (
+      <>
+        {' · '}
+        <a href={TEAM.youtube.channelUrl} rel="noopener">
+          {t(lang, 'credit.video')}
+        </a>
+      </>
+    )
+  }
+</p>

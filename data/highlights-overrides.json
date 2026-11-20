@@ -1,0 +1,5 @@
+{
+  "_comment": "Overrides always win. pin: { \"<youtubeVideoId>\": \"<gameUuid>\" }. notAGame: [\"<youtubeVideoId>\", ...]. See README.",
+  "pin": {},
+  "notAGame": []
+}

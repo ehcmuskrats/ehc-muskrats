@@ -1,0 +1,287 @@
+---
+import Base from '../../layouts/Base.astro';
+import Team from '../../components/Team.astro';
+import GameList from '../../components/GameList.astro';
+import VideoEmbed from '../../components/VideoEmbed.astro';
+import DataCredit from '../../components/DataCredit.astro';
+import { type Lang, langPaths, useT, href, url, formatDate } from '../../i18n/index.ts';
+import { TEAM, isOurTeam } from '../../config/team.ts';
+import { currentSeasonId, season, ourGames, sortByDate, highlights, derived } from '../../lib/data.ts';
+import { newsFor, newsSlug } from '../../lib/news.ts';
+
+export const getStaticPaths = langPaths;
+const lang = Astro.params.lang as Lang;
+const t = useT(lang);
+
+const all = sortByDate(ourGames());
+const upcoming = all.filter((g) => g.status === 'scheduled' && g.timestamp != null && g.timestamp > Date.now() - 3 * 3600_000).slice(0, 4);
+const lastResult = [...all].reverse().find((g) => g.status === 'final');
+// Newest video first (items are sorted by publish date).
+const latestVideo = highlights.items[0];
+const cur = season(currentSeasonId);
+const standings = cur ? [...cur.standings].reverse().find((s) => s.rows.some((r) => isOurTeam(r.team))) : undefined;
+const recap = (await newsFor(lang))[0];
+const top3 = derived.players
+  .map((p) => ({ p, l: p.seasons.find((s) => s.season === currentSeasonId) }))
+  .filter((x) => x.l && x.l.gp > 0)
+  .sort((a, b) => b.l!.p - a.l!.p || b.l!.g - a.l!.g)
+  .slice(0, 3);
+---
+
+<Base lang={lang} path="" active="nav.home" leagueData>
+  <section class="hero">
+    <img src={url('logo.png')} width="140" height="140" alt={`${TEAM.displayName} Logo`} />
+    <div>
+      <h1>{TEAM.displayName}</h1>
+      <p class="sub">{t('site.tagline')} · {t('common.season')} {currentSeasonId.replace('-', '/')}</p>
+    </div>
+  </section>
+
+  <div class="grid grid-2">
+    <section class="card next" aria-labelledby="h-next">
+      <h2 class="card-title" id="h-next">{t('home.nextGame')}</h2>
+      {
+        upcoming.length ? (
+          upcoming.map((g, i) => (
+            <div class="next-game" data-ts={g.timestamp} hidden={i > 0}>
+              <p class="matchup">
+                <Team team={g.home} /> <span class="vs">{t('common.vs')}</span> <Team team={g.away} />
+              </p>
+              <p class="when">
+                <strong>{formatDate(lang, g.date, { weekday: true })}</strong>, {g.time ?? t('common.tbd')}
+                <br />
+                <span class="muted">{g.venue}</span>
+              </p>
+              <p class="countdown" aria-live="off" data-countdown={g.timestamp}>
+                <span class="small muted">{t('home.countdown')}</span>
+                <span class="cd" data-labels={`${t('home.days')}|${t('home.hours')}|${t('home.minutes')}`} />
+              </p>
+            </div>
+          ))
+        ) : (
+          <p class="muted">{t('home.noNextGame')}</p>
+        )
+      }
+      <p class="no-next muted" hidden>{t('home.noNextGame')}</p>
+      <a href={href(lang, 'schedule/')}>{t('nav.schedule')} →</a>
+    </section>
+
+    <section class="card" aria-labelledby="h-last">
+      <h2 class="card-title" id="h-last">{t('home.lastResult')}</h2>
+      {lastResult ? <GameList lang={lang} games={[lastResult]} /> : <p class="missing">{t('common.missing')}</p>}
+    </section>
+  </div>
+
+  {
+    latestVideo && (
+      <section class="card" aria-labelledby="h-video">
+        <h2 class="card-title" id="h-video">{t('home.latestHighlight')}</h2>
+        <VideoEmbed lang={lang} video={latestVideo.video} />
+        {latestVideo.gameId && (
+          <p class="small">
+            <a href={href(lang, `games/${latestVideo.gameId}/`)}>{t('highlights.toGame')} →</a>
+          </p>
+        )}
+      </section>
+    )
+  }
+
+  <div class="grid grid-2">
+    <section class="card" aria-labelledby="h-table">
+      <h2 class="card-title" id="h-table">{t('home.standings')}{standings ? ` · ${standings.divisionName}` : ''}</h2>
+      {
+        standings ? (
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th class="num" scope="col">{t('standings.rank')}</th>
+                  <th scope="col">{t('common.team')}</th>
+                  <th class="num" scope="col">{t('standings.gp')}</th>
+                  <th class="num" scope="col">{t('standings.gd')}</th>
+                  <th class="num" scope="col">{t('standings.pts')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {standings.rows.map((r) => (
+                  <tr class={isOurTeam(r.team) ? 'ours' : undefined}>
+                    <td class="num">{r.rank}</td>
+                    <td>
+                      <Team team={r.team} />
+                    </td>
+                    <td class="num">{r.gp}</td>
+                    <td class="num">{r.gd > 0 ? `+${r.gd}` : r.gd}</td>
+                    <td class="num strong">{r.pts}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p class="missing">{t('common.missing')}</p>
+        )
+      }
+      <p class="small"><a href={href(lang, 'standings/')}>{t('home.fullTable')} →</a></p>
+    </section>
+
+    <div class="grid">
+      <section class="card" aria-labelledby="h-top">
+        <h2 class="card-title" id="h-top">{t('home.topScorers')}</h2>
+        {
+          top3.length ? (
+            <ol class="top3">
+              {top3.map(({ p, l }) => (
+                <li>
+                  <a href={href(lang, `players/${p.slug}/`)}>
+                    {p.first} {p.last}
+                  </a>
+                  <span class="pts">
+                    <strong>{l!.p}</strong> {t('col.p')} <span class="muted small">({l!.g} {t('col.g')} · {l!.a} {t('col.a')})</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p class="missing">{t('common.missing')}</p>
+          )
+        }
+        <p class="small"><a href={href(lang, 'stats/')}>{t('home.allStats')} →</a></p>
+      </section>
+
+      <section class="card" aria-labelledby="h-recap">
+        <h2 class="card-title" id="h-recap">{t('home.latestRecap')}</h2>
+        {
+          recap ? (
+            <>
+              <h3>
+                <a href={href(lang, `news/${newsSlug(recap)}/`)}>{recap.data.title}</a>
+              </h3>
+              <p class="small muted">{formatDate(lang, recap.data.date.toISOString())}</p>
+              {recap.data.summary && <p>{recap.data.summary}</p>}
+            </>
+          ) : (
+            <p class="muted">{t('news.none')}</p>
+          )
+        }
+      </section>
+    </div>
+  </div>
+
+  <section class="card join-cta">
+    <div>
+      <h2>{t('home.joinTitle')}</h2>
+      <p>{t('home.joinText')}</p>
+    </div>
+    <a class="btn btn-accent btn-lg" href={href(lang, 'join/')}>{t('nav.join')}</a>
+  </section>
+
+  <DataCredit lang={lang} video={!!latestVideo} />
+</Base>
+
+<script>
+  function tick() {
+    const now = Date.now();
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('.next-game'));
+    let shown = false;
+    for (const c of cards) {
+      const ts = Number(c.dataset.ts);
+      const show = !shown && ts > now - 3 * 3600_000;
+      c.hidden = !show;
+      if (show) shown = true;
+    }
+    const noNext = document.querySelector<HTMLElement>('.no-next');
+    if (noNext && cards.length) noNext.hidden = shown;
+    document.querySelectorAll<HTMLElement>('[data-countdown]').forEach((el) => {
+      const ts = Number(el.dataset.countdown);
+      const cd = el.querySelector<HTMLElement>('.cd');
+      if (!cd) return;
+      const [d, h, m] = (cd.dataset.labels ?? 'd|h|min').split('|');
+      const diff = ts - now;
+      if (diff <= 0) {
+        el.hidden = true;
+        return;
+      }
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      cd.textContent = ` ${days} ${d} ${hours} ${h} ${mins} ${m}`;
+    });
+  }
+  tick();
+  setInterval(tick, 30000);
+</script>
+
+<style>
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 0 0.5rem;
+  }
+  .hero img {
+    width: clamp(84px, 22vw, 140px);
+    height: auto;
+    flex: none;
+  }
+  .hero h1 {
+    margin: 0;
+  }
+  .hero .sub {
+    color: var(--muted);
+    margin: 0.25rem 0 0;
+  }
+  .matchup {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.6rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .vs {
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .countdown .cd {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--link);
+  }
+  .top3 {
+    margin: 0;
+    padding-left: 1.4rem;
+    display: grid;
+    gap: 0.4rem;
+  }
+  .top3 li {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .join-cta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background: linear-gradient(120deg, var(--surface) 60%, var(--surface-2));
+    border-left: 6px solid var(--orange);
+    margin-top: var(--gutter);
+  }
+  .join-cta h2 {
+    margin-bottom: 0.25rem;
+  }
+  .join-cta p {
+    margin: 0;
+  }
+  section.card {
+    margin: 0;
+  }
+  .grid + section,
+  section + .grid {
+    margin-top: var(--gutter);
+  }
+</style>

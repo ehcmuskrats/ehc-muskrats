@@ -1,0 +1,4 @@
+{
+  "_comment": "Optional extras per player id. photo: path under public/ (e.g. \"players/111830.jpg\"). bio: { de, en }. Only add what the player agreed to publish.",
+  "players": {}
+}

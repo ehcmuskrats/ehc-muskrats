@@ -1,0 +1,381 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Team from '../../../components/Team.astro';
+import SeasonPicker from '../../../components/SeasonPicker.astro';
+import DataCredit from '../../../components/DataCredit.astro';
+import { type Lang, LANGS, useT, href, formatNumber, formatDate, mmss } from '../../../i18n/index.ts';
+import { ourSeasons, currentSeasonId, derived, season as getSeason, columns } from '../../../lib/data.ts';
+import { TEAM, isOurTeam } from '../../../config/team.ts';
+import type { LeaderPenalty, TeamSeasonStats } from '../../../types/models.ts';
+
+export function getStaticPaths() {
+  return LANGS.flatMap((lang) => [
+    { params: { lang, season: undefined } },
+    { params: { lang, season: 'all-time' } },
+    ...ourSeasons.map((s) => ({ params: { lang, season: s.info.id } })),
+  ]);
+}
+const lang = Astro.params.lang as Lang;
+const allTime = Astro.params.season === 'all-time';
+const seasonId = allTime ? currentSeasonId : (Astro.params.season ?? currentSeasonId);
+const t = useT(lang);
+const cols = columns(seasonId);
+const s = getSeason(seasonId);
+
+// Season view
+const lines = derived.players
+  .map((p) => ({ p, l: p.seasons.find((x) => x.season === seasonId)! }))
+  .filter((x) => x.l);
+const skaters = lines.filter((x) => x.l.gp > 0).sort((a, b) => b.l.p - a.l.p || b.l.g - a.l.g);
+const goalies = lines.filter((x) => x.l.goalieGp > 0).sort((a, b) => b.l.goalieGp - a.l.goalieGp);
+const penMap = new Map<number, LeaderPenalty>();
+for (const st of s?.stats ?? []) {
+  for (const r of st.penalties.filter((x) => x.teamId === TEAM.leagueTeamId)) {
+    const e = penMap.get(r.player.id);
+    if (!e) penMap.set(r.player.id, { ...r });
+    else {
+      e.gp += r.gp;
+      e.pim += r.pim;
+      e.minors += r.minors;
+      e.majors += r.majors;
+      e.misconducts += r.misconducts + r.gameMisconducts + r.matchPenalties;
+    }
+  }
+}
+const penalties = [...penMap.values()].filter((r) => r.pim > 0).sort((a, b) => b.pim - a.pim);
+const slugOf = (id: number) => derived.players.find((p) => p.id === id)?.slug;
+const teamTables: { name: string; rows: TeamSeasonStats[] }[] = (s?.stats ?? [])
+  .filter((st) => st.teams.some((r) => isOurTeam(r.team)))
+  .map((st) => ({ name: s!.info.divisions.find((d) => d.id === st.divisionId)?.name ?? '', rows: st.teams }));
+
+// All-time view
+const career = derived.players.filter((p) => p.career.gp > 0 || p.career.goalieGp > 0);
+const top = (key: 'p' | 'gp' | 'g' | 'pim') =>
+  [...career]
+    .filter((p) => p.career[key] > 0)
+    .sort((a, b) => b.career[key] - a.career[key] || b.career.g - a.career.g)
+    .slice(0, 15);
+const rec = derived.records;
+const allTimeRecord = [rec.allTime.w + rec.allTime.otw, rec.allTime.l + rec.allTime.otl, ...(rec.allTime.ties > 0 ? [rec.allTime.ties] : [])].join('–');
+const pct = (n: number | null) => (n == null ? '–' : `${formatNumber(lang, n, 1)} %`);
+---
+
+<Base
+  lang={lang}
+  title={allTime ? t('stats.allTime') : `${t('stats.title')} ${seasonId.replace('-', '/')}`}
+  path={Astro.params.season ? `stats/${Astro.params.season}/` : 'stats/'}
+  active="nav.stats"
+  leagueData
+>
+  <header class="page-head">
+    <h1>{t('stats.title')}</h1>
+    <p class="sub">{allTime ? t('stats.allTime') : `${t('common.season')} ${seasonId.replace('-', '/')}`}</p>
+  </header>
+  <SeasonPicker
+    lang={lang}
+    section="stats"
+    seasons={ourSeasons.map((x) => x.info.id)}
+    current={allTime ? 'all-time' : seasonId}
+    extra={[{ value: 'all-time', label: t('stats.allTime') }]}
+  />
+
+  {
+    !allTime && (
+      <>
+        <p class="small muted">
+          {t('stats.source')} {!cols.sog && !cols.plusMinus && t('stats.hiddenCols')} {t('common.sortHint')}.
+        </p>
+
+        <section aria-labelledby="h-sc">
+          <h2 id="h-sc">{t('stats.scorers')}</h2>
+          {skaters.length ? (
+            <div class="table-wrap">
+              <table data-sortable>
+                <thead>
+                  <tr>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.no')}</button></th>
+                    <th class="sticky-col" scope="col" data-sort="text"><button type="button">{t('common.player')}</button></th>
+                    <th scope="col" data-sort="text"><button type="button">{t('col.pos')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.gp')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.g')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.a')}</button></th>
+                    <th class="num" scope="col" data-sort="num" aria-sort="descending"><button type="button">{t('col.p')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.pim')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button"><abbr title="Powerplay">{t('col.ppg')}</abbr></button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button"><abbr title="Shorthanded">{t('col.shg')}</abbr></button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button"><abbr title={t('game.gwg')}>{t('col.gwg')}</abbr></button></th>
+                    {cols.plusMinus && <th class="num" scope="col" data-sort="num"><button type="button">{t('col.pm')}</button></th>}
+                    {cols.sog && <th class="num" scope="col" data-sort="num"><button type="button">{t('col.sog')}</button></th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {skaters.map(({ p, l }) => (
+                    <tr>
+                      <td class="num">{l.numbers.join('/') || '–'}</td>
+                      <td class="sticky-col">
+                        <a href={href(lang, `players/${p.slug}/`)}>{p.first} {p.last}</a>
+                      </td>
+                      <td>{l.positions.join('/')}</td>
+                      <td class="num">{l.gp}</td>
+                      <td class="num">{l.g}</td>
+                      <td class="num">{l.a}</td>
+                      <td class="num strong">{l.p}</td>
+                      <td class="num">{l.pim}</td>
+                      <td class="num">{l.ppg}</td>
+                      <td class="num">{l.shg}</td>
+                      <td class="num">{l.gwg}</td>
+                      {cols.plusMinus && <td class="num">{l.plusMinus}</td>}
+                      {cols.sog && <td class="num">{l.sog}</td>}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p class="missing">{t('common.missing')}</p>
+          )}
+        </section>
+
+        <section aria-labelledby="h-go">
+          <h2 id="h-go">{t('stats.goalies')}</h2>
+          {goalies.length ? (
+            <div class="table-wrap">
+              <table data-sortable>
+                <thead>
+                  <tr>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.no')}</button></th>
+                    <th class="sticky-col" scope="col" data-sort="text"><button type="button">{t('common.player')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.gp')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.toi')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.ga')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.gaa')}</button></th>
+                    {cols.saves && <th class="num" scope="col" data-sort="num"><button type="button">{t('col.sa')}</button></th>}
+                    {cols.saves && <th class="num" scope="col" data-sort="num"><button type="button">{t('col.sv')}</button></th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {goalies.map(({ p, l }) => (
+                    <tr>
+                      <td class="num">{l.numbers.join('/') || '–'}</td>
+                      <td class="sticky-col">
+                        <a href={href(lang, `players/${p.slug}/`)}>{p.first} {p.last}</a>
+                      </td>
+                      <td class="num">{l.goalieGp}</td>
+                      <td class="num" data-v={l.toi}>{l.toi ? mmss(l.toi) : '–'}</td>
+                      <td class="num">{l.ga}</td>
+                      <td class="num" data-v={l.gaa ?? ''}>{formatNumber(lang, l.gaa, 2)}</td>
+                      {cols.saves && <td class="num">{l.shotsAgainst}</td>}
+                      {cols.saves && <td class="num">{l.saves}</td>}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p class="missing">{t('common.missing')}</p>
+          )}
+        </section>
+
+        <section aria-labelledby="h-pen">
+          <h2 id="h-pen">{t('stats.penalties')}</h2>
+          {penalties.length ? (
+            <div class="table-wrap">
+              <table data-sortable>
+                <thead>
+                  <tr>
+                    <th class="sticky-col" scope="col" data-sort="text"><button type="button">{t('common.player')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.gp')}</button></th>
+                    <th class="num" scope="col" data-sort="num" aria-sort="descending"><button type="button">{t('col.pim')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.minors')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.majors')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.misc')}</button></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {penalties.map((r) => (
+                    <tr>
+                      <td class="sticky-col">
+                        {slugOf(r.player.id) ? (
+                          <a href={href(lang, `players/${slugOf(r.player.id)}/`)}>{r.player.first} {r.player.last}</a>
+                        ) : (
+                          `${r.player.first} ${r.player.last}`
+                        )}
+                      </td>
+                      <td class="num">{r.gp}</td>
+                      <td class="num strong">{r.pim}</td>
+                      <td class="num">{r.minors}</td>
+                      <td class="num">{r.majors}</td>
+                      <td class="num">{r.misconducts + r.gameMisconducts + r.matchPenalties}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p class="missing">{t('common.missing')}</p>
+          )}
+        </section>
+
+        {teamTables.map((tt) => (
+          <section>
+            <h2>
+              {t('stats.teamStats')} · {tt.name}
+            </h2>
+            <div class="table-wrap">
+              <table data-sortable>
+                <thead>
+                  <tr>
+                    <th class="sticky-col" scope="col" data-sort="text"><button type="button">{t('common.team')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.gp')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.pp')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.pppct')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.pk')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.pkpct')}</button></th>
+                    <th class="num" scope="col" data-sort="num"><button type="button">{t('col.pim')}</button></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tt.rows.map((r) => (
+                    <tr class={isOurTeam(r.team) ? 'ours' : undefined}>
+                      <td class="sticky-col">
+                        <Team team={r.team} />
+                      </td>
+                      <td class="num">{r.gp}</td>
+                      <td class="num" data-v={r.ppGoals}>
+                        {r.ppGoals}/{r.ppChances}
+                      </td>
+                      <td class="num" data-v={r.ppPct ?? ''}>{pct(r.ppPct)}</td>
+                      <td class="num" data-v={r.pkSituations - r.ppGoalsAgainst}>
+                        {r.pkSituations - r.ppGoalsAgainst}/{r.pkSituations}
+                      </td>
+                      <td class="num" data-v={r.pkPct ?? ''}>{pct(r.pkPct)}</td>
+                      <td class="num">{r.pim}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        ))}
+      </>
+    )
+  }
+
+  {
+    allTime && (
+      <>
+        <section aria-labelledby="h-rec">
+          <h2 id="h-rec">{t('stats.teamRecords')}</h2>
+          <div class="grid grid-2">
+            <div class="card">
+              <h3 class="card-title">{t('stats.biggestWin')}</h3>
+              {rec.biggestWin ? (
+                <p>
+                  <a href={href(lang, `games/${rec.biggestWin.gameId}/`)} class="rec">
+                    {rec.biggestWin.score}
+                  </a>{' '}
+                  {t('common.vs')} <Team team={rec.biggestWin.opponent} />
+                  <br />
+                  <span class="small muted">{formatDate(lang, rec.biggestWin.date)}</span>
+                </p>
+              ) : (
+                <p class="missing">{t('common.missing')}</p>
+              )}
+            </div>
+            <div class="card">
+              <h3 class="card-title">{t('stats.mostGoals')}</h3>
+              {rec.mostGoals ? (
+                <p>
+                  <a href={href(lang, `games/${rec.mostGoals.gameId}/`)} class="rec">
+                    {rec.mostGoals.score}
+                  </a>{' '}
+                  {t('common.vs')} <Team team={rec.mostGoals.opponent} />
+                  <br />
+                  <span class="small muted">{formatDate(lang, rec.mostGoals.date)}</span>
+                </p>
+              ) : (
+                <p class="missing">{t('common.missing')}</p>
+              )}
+            </div>
+            <div class="card">
+              <h3 class="card-title">{t('stats.bestSeason')}</h3>
+              {rec.bestSeason ? (
+                <p>
+                  <a href={href(lang, `standings/${rec.bestSeason.season}/`)} class="rec">
+                    {rec.bestSeason.season.replace('-', '/')}
+                  </a>
+                  <br />
+                  <span class="small muted">
+                    {rec.bestSeason.divisionName}: {rec.bestSeason.pts} {t('standings.pts')} / {rec.bestSeason.gp} {t('standings.gp')} · {t('standings.rank')}{' '}
+                    {rec.bestSeason.rank}
+                  </span>
+                </p>
+              ) : (
+                <p class="missing">{t('common.missing')}</p>
+              )}
+            </div>
+            <div class="card">
+              <h3 class="card-title">{t('stats.allTimeRecord')}</h3>
+              <p>
+                <span class="rec">{allTimeRecord}</span>
+                <br />
+                <span class="small muted">
+                  {rec.allTime.ties > 0 ? (lang === 'de' ? 'S–N–U' : 'W–L–T') : lang === 'de' ? 'S–N' : 'W–L'} ·{' '}
+                  {rec.allTime.gp} {t('standings.gp')} · {rec.allTime.gf}:{rec.allTime.ga} {lang === 'de' ? 'Tore' : 'goals'}
+                </span>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <div class="grid grid-2">
+          {(
+            [
+              ['stats.careerPoints', 'p'],
+              ['stats.careerGames', 'gp'],
+              ['stats.careerGoals', 'g'],
+              ['stats.careerPim', 'pim'],
+            ] as const
+          ).map(([label, key]) => (
+            <section>
+              <h2>{t(label)}</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="num" scope="col">#</th>
+                      <th scope="col">{t('common.player')}</th>
+                      <th class="num" scope="col">{t(`col.${key}`)}</th>
+                      <th class="num" scope="col">{t('player.seasons')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {top(key).map((p, i) => (
+                      <tr>
+                        <td class="num">{i + 1}</td>
+                        <td>
+                          <a href={href(lang, `players/${p.slug}/`)}>{p.first} {p.last}</a>
+                        </td>
+                        <td class="num strong">{p.career[key]}</td>
+                        <td class="num">{p.seasons.length}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ))}
+        </div>
+      </>
+    )
+  }
+  <DataCredit lang={lang} />
+</Base>
+
+<style>
+  .rec {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 800;
+  }
+</style>

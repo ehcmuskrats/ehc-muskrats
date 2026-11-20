@@ -1,0 +1,5 @@
+{
+  "_comment": "merge: { \"<duplicatePlayerId>\": <canonicalPlayerId> } joins two league player ids into one profile. names: { \"<playerId>\": { \"first\": \"...\", \"last\": \"...\" } } fixes a displayed name. Player ids are in the profile URL (/de/players/<id>-name/).",
+  "merge": {},
+  "names": {}
+}

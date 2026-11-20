@@ -1,0 +1,145 @@
+---
+import type { GameSummary } from '../types/models.ts';
+import { type Lang, t, href, formatDate, formatTime } from '../i18n/index.ts';
+import { opponent, ourScore, resultOf, side, gamesWithHighlights } from '../lib/data.ts';
+import Team from './Team.astro';
+interface Props {
+  lang: Lang;
+  games: GameSummary[];
+  /** Hide date column (for TBD lists). */
+  noDate?: boolean;
+  filterable?: boolean;
+}
+const { lang, games, noDate = false, filterable = false } = Astro.props;
+---
+
+<ul class="games" data-games>
+  {
+    games.map((g) => {
+      const opp = opponent(g);
+      const s = side(g);
+      const { us, them } = ourScore(g);
+      const res = resultOf(g);
+      const linkable = g.status === 'final' || g.status === 'live' || g.hasReport;
+      const played = g.status === 'final' || g.status === 'live';
+      const extra = g.shootout ? t(lang, 'common.so') : g.overtime ? t(lang, 'common.ot') : '';
+      const inner = (
+        <>
+          <span class="when">
+            {!noDate && <span class="date">{formatDate(lang, g.date, { weekday: true })}</span>}
+            <span class="time small muted">{g.time ? formatTime(lang, g.time) : t(lang, 'common.tbd')}</span>
+          </span>
+          <span class="who">
+            <span class="ha small muted">{s === 'home' ? t(lang, 'common.home') : t(lang, 'common.away')}</span>
+            <Team team={opp} />
+            {g.playoff && <span class="po small">{g.playoff.encounter ?? g.playoff.roundLabel}</span>}
+            {g.venue && <span class="venue small muted">{g.venue.replace(/^Wien - /, '')}</span>}
+          </span>
+          <span class="score">
+            {played && us != null ? (
+              <>
+                {res && <span class={`res res-${res}`}>{res === 'W' ? (lang === 'de' ? 'S' : 'W') : res === 'L' ? (lang === 'de' ? 'N' : 'L') : (lang === 'de' ? 'U' : 'T')}</span>}
+                <strong>
+                  {us}:{them}
+                </strong>
+                {extra && <span class="small muted"> {extra}</span>}
+                {g.status === 'live' && <span class="small live"> {t(lang, 'common.live')}</span>}
+              </>
+            ) : (
+              <span class="muted">–:–</span>
+            )}
+            {gamesWithHighlights.has(g.id) && (
+              <svg class="play-icon" viewBox="0 0 24 24" role="img" aria-label={t(lang, 'schedule.hasHighlights')}>
+                <title>{t(lang, 'schedule.hasHighlights')}</title>
+                <circle cx="12" cy="12" r="11" fill="currentColor" />
+                <path d="M10 8l6 4-6 4z" fill="#111" />
+              </svg>
+            )}
+          </span>
+        </>
+      );
+      return (
+        <li data-status={played ? 'played' : 'upcoming'} data-venue={s}>
+          {linkable ? (
+            <a class="row" href={href(lang, `games/${g.id}/`)}>
+              {inner}
+            </a>
+          ) : (
+            <div class="row">{inner}</div>
+          )}
+        </li>
+      );
+    })
+  }
+</ul>
+{games.length === 0 && <p class="muted">{t(lang, 'common.noGames')}</p>}
+{filterable && <p class="muted small empty-msg" hidden>{t(lang, 'common.noGames')}</p>}
+
+<style>
+  .games {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 6.8rem 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.7rem 0.85rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    text-decoration: none;
+  }
+  a.row:hover {
+    border-color: var(--blue);
+  }
+  .when,
+  .who {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .date {
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .who :global(.team span) {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ha {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.72rem;
+  }
+  .po {
+    color: var(--brown-text);
+    font-weight: 600;
+  }
+  .score {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1.1rem;
+  }
+  .live {
+    color: var(--loss);
+    font-weight: 700;
+  }
+  @media (max-width: 420px) {
+    .row {
+      grid-template-columns: 5.6rem 1fr auto;
+      gap: 0.5rem;
+      padding: 0.6rem;
+    }
+    .venue {
+      display: none;
+    }
+  }
+</style>

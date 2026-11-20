@@ -1,0 +1,302 @@
+---
+import '../styles/global.css';
+import { TEAM } from '../config/team.ts';
+import { type Lang, useT, href, url, otherLang, formatDate } from '../i18n/index.ts';
+import { syncStatus } from '../lib/data.ts';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  /** Path of the same page without the language prefix, for the language switch, e.g. "schedule/2025-26/". */
+  path: string;
+  /** Show the "Daten: WEHV" credit in the footer. */
+  leagueData?: boolean;
+  active?: string;
+}
+const { lang, title, description, path, leagueData = false, active } = Astro.props;
+const t = useT(lang);
+const fullTitle = title ? `${title} · ${TEAM.displayName}` : `${TEAM.displayName} · ${TEAM.leagueName}`;
+const desc = description ?? t('site.tagline');
+const other = otherLang(lang);
+const nav = [
+  ['', 'nav.home'],
+  ['schedule/', 'nav.schedule'],
+  ['standings/', 'nav.standings'],
+  ['roster/', 'nav.roster'],
+  ['stats/', 'nav.stats'],
+  ['highlights/', 'nav.highlights'],
+  ['news/', 'nav.news'],
+  ['join/', 'nav.join'],
+] as const;
+const canonical = new URL(href(lang, path), Astro.site).toString();
+const lastUpdate = syncStatus?.lastRun ? syncStatus.lastRun.slice(0, 10) : null;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={lang} href={canonical} />
+    <link rel="alternate" hreflang={other} href={new URL(href(other, path), Astro.site).toString()} />
+    <link rel="icon" type="image/png" href={url('logo.png')} />
+    <meta name="theme-color" content="#1870E0" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:image" content={new URL(url('logo.png'), Astro.site).toString()} />
+    <meta property="og:locale" content={lang === 'de' ? 'de_AT' : 'en_GB'} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t('nav.skip')}</a>
+    <header class="site-header">
+      <div class="container bar">
+        <a class="brand" href={href(lang)} aria-label={`${TEAM.displayName} – ${t('nav.home')}`}>
+          <img src={url('logo.png')} width="48" height="48" alt="" />
+          <span class="brand-text">
+            <span class="brand-name">{TEAM.displayName}</span>
+            <span class="brand-league">{TEAM.leagueName}</span>
+          </span>
+        </a>
+        <div class="actions">
+          <a class="lang" href={href(other, path)} hreflang={other} lang={other} title={t('lang.switchLabel')}>
+            {other.toUpperCase()}<span class="visually-hidden"> – {t('lang.switch')}</span>
+          </a>
+          <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">
+            <span class="visually-hidden">{t('nav.menu')}</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"
+              ><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path></svg
+            >
+          </button>
+        </div>
+      </div>
+      <nav id="site-nav" class="site-nav" aria-label="Main">
+        <ul class="container">
+          {
+            nav.map(([p, key]) => (
+              <li>
+                <a href={href(lang, p)} aria-current={active === key ? 'page' : undefined}>
+                  {t(key)}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <div class="stripes" aria-hidden="true"></div>
+    </header>
+
+    <main id="main" class="container">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="stripes" aria-hidden="true"></div>
+      <div class="container foot">
+        <div>
+          <strong>{TEAM.displayName}</strong>
+          <p class="small">{t('footer.unofficial')}</p>
+        </div>
+        <div class="small">
+          {
+            leagueData && (
+              <p>
+                <a href="https://www.wehv.at/" rel="noopener">{t('credit.data')}</a>
+              </p>
+            )
+          }
+          {lastUpdate && <p>{t('footer.lastUpdate')}: {formatDate(lang, lastUpdate)}</p>}
+          <p>
+            <a href={TEAM.facebookUrl} rel="noopener">Facebook</a> ·
+            <a href={TEAM.youtube.channelUrl} rel="noopener">YouTube (hockeyyy)</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      const btn = document.querySelector<HTMLButtonElement>('.menu-btn');
+      const nav = document.getElementById('site-nav');
+      btn?.addEventListener('click', () => {
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+        nav?.classList.toggle('open', !open);
+      });
+
+      // Sortable tables: <table data-sortable> with <th data-sort="num|text"><button>..</button></th>
+      document.querySelectorAll<HTMLTableElement>('table[data-sortable]').forEach((table) => {
+        const ths = Array.from(table.querySelectorAll<HTMLTableCellElement>('thead th'));
+        ths.forEach((th, idx) => {
+          const kind = th.dataset.sort;
+          if (!kind) return;
+          th.querySelector('button')?.addEventListener('click', () => {
+            const asc = th.getAttribute('aria-sort') === 'descending';
+            ths.forEach((x) => x.removeAttribute('aria-sort'));
+            th.setAttribute('aria-sort', asc ? 'ascending' : 'descending');
+            const body = table.tBodies[0];
+            const rows = Array.from(body.rows);
+            const val = (r: HTMLTableRowElement) => {
+              const c = r.cells[idx];
+              const v = c?.dataset.v ?? c?.textContent ?? '';
+              return kind === 'num' ? Number(v.replace(',', '.').replace(/[^\d.-]/g, '')) || 0 : v.trim().toLowerCase();
+            };
+            rows.sort((a, b) => {
+              const x = val(a);
+              const y = val(b);
+              const cmp = x < y ? -1 : x > y ? 1 : 0;
+              return asc ? cmp : -cmp;
+            });
+            rows.forEach((r) => body.appendChild(r));
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  .site-header {
+    background: var(--blue);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 64px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #fff;
+    text-decoration: none;
+    min-width: 0;
+  }
+  .brand img {
+    width: 48px;
+    height: 48px;
+    flex: none;
+  }
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    min-width: 0;
+  }
+  .brand-name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .brand-league {
+    font-size: 0.8rem;
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .lang {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 999px;
+    padding: 0.3rem 0.65rem;
+    font-size: 0.85rem;
+  }
+  .lang:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+  .menu-btn {
+    background: transparent;
+    color: #fff;
+    border: 0;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  .site-nav {
+    display: none;
+    background: var(--blue-dark);
+  }
+  .site-nav.open {
+    display: block;
+  }
+  .site-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem var(--gutter) 0.75rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.15rem 1rem;
+  }
+  .site-nav a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.6rem 0;
+    font-weight: 600;
+  }
+  .site-nav a[aria-current='page'] {
+    /* orange text on blue fails contrast; use an orange marker instead */
+    box-shadow: inset 4px 0 0 var(--orange);
+    padding-left: 0.6rem;
+  }
+  @media (min-width: 900px) {
+    .menu-btn {
+      display: none;
+    }
+    .site-nav {
+      display: block;
+    }
+    .site-nav ul {
+      display: flex;
+      padding: 0 var(--gutter);
+      gap: 0.25rem;
+      overflow-x: auto;
+    }
+    .site-nav a {
+      padding: 0.6rem 0.75rem;
+      border-bottom: 3px solid transparent;
+    }
+    .site-nav a[aria-current='page'] {
+      border-bottom-color: var(--orange);
+      color: #fff;
+      box-shadow: none;
+      padding-left: 0.75rem;
+    }
+  }
+  .site-footer {
+    margin-top: 3rem;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+  .foot {
+    display: grid;
+    gap: 1rem;
+    padding-top: 1.25rem;
+    padding-bottom: 2rem;
+  }
+  @media (min-width: 720px) {
+    .foot {
+      grid-template-columns: 1fr auto;
+    }
+  }
+  .foot p {
+    margin: 0.25rem 0;
+  }
+</style>

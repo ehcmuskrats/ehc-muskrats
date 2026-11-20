@@ -1,0 +1,145 @@
+name: Nightly sync & deploy
+
+on:
+  schedule:
+    # 04:17 Vienna time. GitHub cron runs in UTC, and Vienna switches between UTC+1 and UTC+2,
+    # so we trigger at both 02:17 and 03:17 UTC and skip the one that isn't 04:xx in Vienna.
+    - cron: '17 2 * * *'
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+    inputs:
+      full:
+        description: 'Re-list all seasons and re-scrape every season that is not frozen'
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths-ignore: ['data/**', '**.md']
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  issues: write
+
+concurrency:
+  group: sync-and-deploy
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    outputs:
+      skipped: ${{ steps.gate.outputs.skip }}
+    steps:
+      - id: gate
+        name: Run only at 04:xx Vienna time (scheduled runs)
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$(TZ=Europe/Vienna date +%H)" != "04" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.gate.outputs.skip != 'true' && github.event_name != 'push'
+
+      - uses: actions/setup-node@v4
+        if: steps.gate.outputs.skip != 'true' && github.event_name != 'push'
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.gate.outputs.skip != 'true' && github.event_name != 'push'
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        if: steps.gate.outputs.skip != 'true' && github.event_name != 'push'
+        run: npx playwright install --with-deps chromium
+
+      - name: Sync data from wehv.at and YouTube
+        id: sync
+        if: steps.gate.outputs.skip != 'true' && github.event_name != 'push'
+        continue-on-error: true
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: |
+          set -o pipefail
+          ARGS=""
+          if [ "${{ inputs.full }}" = "true" ]; then ARGS="--full"; fi
+          npx tsx scripts/sync-data.ts $ARGS 2>&1 | tee sync.log
+
+      - name: Commit changed data (only good data is ever written)
+        if: steps.gate.outputs.skip != 'true' && github.event_name != 'push'
+        run: |
+          git config user.name "muskrats-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data src/config/divisions.json public/logos public/thumbs
+          if git diff --cached --quiet; then
+            echo "No data changes."
+          else
+            git commit -m "Nightly data sync $(TZ=Europe/Vienna date +%Y-%m-%d)"
+            git push
+          fi
+
+      - name: Open an issue if the sync failed
+        if: steps.sync.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TITLE="Nightly sync failed ($(TZ=Europe/Vienna date +%Y-%m-%d))"
+          {
+            echo "The nightly data sync failed. The site was still deployed with the last good data."
+            echo
+            echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo
+            echo '```'
+            tail -n 60 sync.log
+            echo '```'
+          } > issue.md
+          # Avoid duplicates: comment on an open sync-failure issue if there is one.
+          EXISTING=$(gh issue list --label sync-failure --state open --json number --jq '.[0].number' || true)
+          gh label create sync-failure --color B60205 --description "Nightly sync failed" 2>/dev/null || true
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body-file issue.md
+          else
+            gh issue create --title "$TITLE" --label sync-failure --body-file issue.md
+          fi
+
+  build:
+    needs: sync
+    if: needs.sync.outputs.skipped != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: Pull the data commit from the sync job
+        run: git pull --ff-only || true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - id: pages
+        uses: actions/configure-pages@v5
+      - name: Build
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}/
+        run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

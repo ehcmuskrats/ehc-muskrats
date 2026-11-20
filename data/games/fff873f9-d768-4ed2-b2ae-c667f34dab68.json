@@ -1,0 +1,942 @@
+{
+ "id": "fff873f9-d768-4ed2-b2ae-c667f34dab68",
+ "season": "2016-17",
+ "divisionId": 1086,
+ "divisionName": "Grunddurchgang",
+ "name": "Spiel 33",
+ "date": "2017-02-13",
+ "time": "19:10",
+ "timestamp": 1487009400000,
+ "venue": "Wien - neuro.io arena Halle 2",
+ "home": {
+  "id": 1089,
+  "short": "MUS",
+  "name": "EHC Muscrats",
+  "logo": "logos/1089.png"
+ },
+ "away": {
+  "id": 1094,
+  "short": "HZB",
+  "name": "Wiener Heizbären Hockey Club",
+  "logo": "logos/1094.png"
+ },
+ "homeScore": 4,
+ "awayScore": 7,
+ "periods": [
+  [
+   2,
+   2
+  ],
+  [
+   2,
+   5
+  ]
+ ],
+ "overtime": false,
+ "shootout": false,
+ "status": "final",
+ "playoff": null,
+ "hasReport": true,
+ "attendance": null,
+ "startTime": null,
+ "endTime": null,
+ "periodLength": 2400,
+ "numberOfPeriods": 2,
+ "referees": [
+  {
+   "first": "Smeibidlo",
+   "last": "Karl"
+  },
+  {
+   "first": "Weegh",
+   "last": "Harriet"
+  }
+ ],
+ "linesmen": [],
+ "headCoaches": {
+  "home": null,
+  "away": null
+ },
+ "goals": [
+  {
+   "period": "1",
+   "time": 620,
+   "timeLabel": "10:20",
+   "score": "1:0",
+   "team": "home",
+   "scorer": {
+    "id": 9304,
+    "first": "Lucas",
+    "last": "Crow",
+    "number": 13
+   },
+   "assists": [],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "1",
+   "time": 780,
+   "timeLabel": "13:00",
+   "score": "1:1",
+   "team": "away",
+   "scorer": {
+    "id": 8621,
+    "first": "Klaus",
+    "last": "Wegleitner",
+    "number": 97
+   },
+   "assists": [],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "1",
+   "time": 1420,
+   "timeLabel": "23:40",
+   "score": "1:2",
+   "team": "away",
+   "scorer": {
+    "id": 8615,
+    "first": "David",
+    "last": "Raab",
+    "number": 5
+   },
+   "assists": [
+    {
+     "id": 8621,
+     "first": "Klaus",
+     "last": "Wegleitner",
+     "number": 97
+    }
+   ],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "1",
+   "time": 1539,
+   "timeLabel": "25:39",
+   "score": "2:2",
+   "team": "home",
+   "scorer": {
+    "id": 9301,
+    "first": "Stefan",
+    "last": "Arneitz",
+    "number": 54
+   },
+   "assists": [
+    {
+     "id": 9302,
+     "first": "Alexander",
+     "last": "Lindner",
+     "number": 26
+    }
+   ],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "2",
+   "time": 2825,
+   "timeLabel": "47:05",
+   "score": "2:3",
+   "team": "away",
+   "scorer": {
+    "id": 8613,
+    "first": "Thomas",
+    "last": "Pinter",
+    "number": 87
+   },
+   "assists": [
+    {
+     "id": 8610,
+     "first": "Dominik",
+     "last": "Oberwalder",
+     "number": 84
+    }
+   ],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "2",
+   "time": 2933,
+   "timeLabel": "48:53",
+   "score": "3:3",
+   "team": "home",
+   "scorer": {
+    "id": 9301,
+    "first": "Stefan",
+    "last": "Arneitz",
+    "number": 54
+   },
+   "assists": [
+    {
+     "id": 9296,
+     "first": "Andreas",
+     "last": "Isep",
+     "number": 27
+    }
+   ],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "2",
+   "time": 3660,
+   "timeLabel": "61:00",
+   "score": "3:4",
+   "team": "away",
+   "scorer": {
+    "id": 8621,
+    "first": "Klaus",
+    "last": "Wegleitner",
+    "number": 97
+   },
+   "assists": [
+    {
+     "id": 8615,
+     "first": "David",
+     "last": "Raab",
+     "number": 5
+    },
+    {
+     "id": 16220,
+     "first": "Michael",
+     "last": "Maier",
+     "number": 66
+    }
+   ],
+   "situation": "PP1",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "2",
+   "time": 3939,
+   "timeLabel": "65:39",
+   "score": "4:4",
+   "team": "home",
+   "scorer": {
+    "id": 9314,
+    "first": "Thomas",
+    "last": "Millner",
+    "number": 25
+   },
+   "assists": [],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "2",
+   "time": 4120,
+   "timeLabel": "68:40",
+   "score": "4:5",
+   "team": "away",
+   "scorer": {
+    "id": 8622,
+    "first": "Bernhard",
+    "last": "Peczelt",
+    "number": 35
+   },
+   "assists": [
+    {
+     "id": 8612,
+     "first": "Rudolf",
+     "last": "Ogertschnig",
+     "number": 18
+    }
+   ],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": true
+  },
+  {
+   "period": "2",
+   "time": 4725,
+   "timeLabel": "78:45",
+   "score": "4:6",
+   "team": "away",
+   "scorer": {
+    "id": 11851,
+    "first": "Klaus",
+    "last": "Nadizar",
+    "number": 67
+   },
+   "assists": [],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  },
+  {
+   "period": "2",
+   "time": 4780,
+   "timeLabel": "79:40",
+   "score": "4:7",
+   "team": "away",
+   "scorer": {
+    "id": 16220,
+    "first": "Michael",
+    "last": "Maier",
+    "number": 66
+   },
+   "assists": [
+    {
+     "id": 11984,
+     "first": "Günther",
+     "last": "Gassler",
+     "number": 15
+    },
+    {
+     "id": 8613,
+     "first": "Thomas",
+     "last": "Pinter",
+     "number": 87
+    }
+   ],
+   "situation": "EQ",
+   "emptyNet": false,
+   "penaltyShot": false,
+   "gwg": false
+  }
+ ],
+ "penalties": [
+  {
+   "period": "1",
+   "time": 975,
+   "timeLabel": "16:15",
+   "team": "away",
+   "player": {
+    "id": 8612,
+    "first": "Rudolf",
+    "last": "Ogertschnig",
+    "number": 18
+   },
+   "servedBy": null,
+   "minutes": 3,
+   "code": "TOO-M"
+  },
+  {
+   "period": "1",
+   "time": 2125,
+   "timeLabel": "35:25",
+   "team": "away",
+   "player": {
+    "id": 16220,
+    "first": "Michael",
+    "last": "Maier",
+    "number": 66
+   },
+   "servedBy": null,
+   "minutes": 3,
+   "code": "HOOK"
+  },
+  {
+   "period": "2",
+   "time": 2580,
+   "timeLabel": "43:00",
+   "team": "home",
+   "player": {
+    "id": 9299,
+    "first": "Oliver",
+    "last": "Ladstätter",
+    "number": 20
+   },
+   "servedBy": null,
+   "minutes": 3,
+   "code": "ELBOW"
+  },
+  {
+   "period": "2",
+   "time": 3000,
+   "timeLabel": "50:00",
+   "team": "away",
+   "player": {
+    "id": 8615,
+    "first": "David",
+    "last": "Raab",
+    "number": 5
+   },
+   "servedBy": null,
+   "minutes": 3,
+   "code": "CHARG"
+  },
+  {
+   "period": "2",
+   "time": 3556,
+   "timeLabel": "59:16",
+   "team": "home",
+   "player": {
+    "id": 9302,
+    "first": "Alexander",
+    "last": "Lindner",
+    "number": 26
+   },
+   "servedBy": null,
+   "minutes": 3,
+   "code": "HOOK"
+  }
+ ],
+ "teamStats": {
+  "home": {
+   "pim": 6,
+   "ppGoals": 0,
+   "ppChances": 3,
+   "pkKilled": 1,
+   "pkSituations": 2,
+   "timeLeading": 160,
+   "timeTied": 3454,
+   "timeTrailing": 1186,
+   "timeOnPP": 540,
+   "timeShorthanded": 284,
+   "sog": 0
+  },
+  "away": {
+   "pim": 9,
+   "ppGoals": 1,
+   "ppChances": 2,
+   "pkKilled": 3,
+   "pkSituations": 3,
+   "timeLeading": 1186,
+   "timeTied": 3454,
+   "timeTrailing": 160,
+   "timeOnPP": 284,
+   "timeShorthanded": 540,
+   "sog": 0
+  }
+ },
+ "skaters": {
+  "home": [
+   {
+    "player": {
+     "id": 9297,
+     "first": "Florian",
+     "last": "Krautzer",
+     "number": 6
+    },
+    "position": "F",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 16227,
+     "first": "Stefan",
+     "last": "Wunderl",
+     "number": 10
+    },
+    "position": "F",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 9304,
+     "first": "Lucas",
+     "last": "Crow",
+     "number": 13
+    },
+    "position": "F",
+    "g": 1,
+    "a": 0,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 9313,
+     "first": "Fabian",
+     "last": "Malle",
+     "number": 16
+    },
+    "position": "F",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 9295,
+     "first": "Edwin",
+     "last": "Frühwirth",
+     "number": 17
+    },
+    "position": "F",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 9299,
+     "first": "Oliver",
+     "last": "Ladstätter",
+     "number": 20
+    },
+    "position": "F",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 3,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 9316,
+     "first": "Robert",
+     "last": "Bock",
+     "number": 24
+    },
+    "position": "F",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 9314,
+     "first": "Thomas",
+     "last": "Millner",
+     "number": 25
+    },
+    "position": "F",
+    "g": 1,
+    "a": 0,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 9302,
+     "first": "Alexander",
+     "last": "Lindner",
+     "number": 26
+    },
+    "position": "F",
+    "g": 0,
+    "a": 1,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 3,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 9296,
+     "first": "Andreas",
+     "last": "Isep",
+     "number": 27
+    },
+    "position": "F",
+    "g": 0,
+    "a": 1,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 9301,
+     "first": "Stefan",
+     "last": "Arneitz",
+     "number": 54
+    },
+    "position": "F",
+    "g": 2,
+    "a": 0,
+    "p": 2,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 16223,
+     "first": "Sebastian",
+     "last": "Isak",
+     "number": 56
+    },
+    "position": "F",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 16224,
+     "first": "Christoph",
+     "last": "Riedl",
+     "number": 61
+    },
+    "position": "F",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 9298,
+     "first": "Christoph",
+     "last": "Krenz",
+     "number": 69
+    },
+    "position": "F",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 16226,
+     "first": "Stefan",
+     "last": "Zemann",
+     "number": 74
+    },
+    "position": "F",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   }
+  ],
+  "away": [
+   {
+    "player": {
+     "id": 8615,
+     "first": "David",
+     "last": "Raab",
+     "number": 5
+    },
+    "position": "F",
+    "g": 1,
+    "a": 1,
+    "p": 2,
+    "plusMinus": 0,
+    "pim": 3,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 11984,
+     "first": "Günther",
+     "last": "Gassler",
+     "number": 15
+    },
+    "position": "D",
+    "g": 0,
+    "a": 1,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 8612,
+     "first": "Rudolf",
+     "last": "Ogertschnig",
+     "number": 18
+    },
+    "position": "F",
+    "g": 0,
+    "a": 1,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 8618,
+     "first": "Stefan",
+     "last": "Rieder",
+     "number": 23
+    },
+    "position": "D",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 8622,
+     "first": "Bernhard",
+     "last": "Peczelt",
+     "number": 35
+    },
+    "position": "D",
+    "g": 1,
+    "a": 0,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 16220,
+     "first": "Michael",
+     "last": "Maier",
+     "number": 66
+    },
+    "position": "F",
+    "g": 1,
+    "a": 1,
+    "p": 2,
+    "plusMinus": 0,
+    "pim": 3,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 11851,
+     "first": "Klaus",
+     "last": "Nadizar",
+     "number": 67
+    },
+    "position": "D",
+    "g": 1,
+    "a": 0,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 9881,
+     "first": "Andreas",
+     "last": "Redlein",
+     "number": 71
+    },
+    "position": "D",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 8614,
+     "first": "Gunther",
+     "last": "Prüger",
+     "number": 81
+    },
+    "position": "D",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 8610,
+     "first": "Dominik",
+     "last": "Oberwalder",
+     "number": 84
+    },
+    "position": "D",
+    "g": 0,
+    "a": 1,
+    "p": 1,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 8613,
+     "first": "Thomas",
+     "last": "Pinter",
+     "number": 87
+    },
+    "position": "F",
+    "g": 1,
+    "a": 1,
+    "p": 2,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 8621,
+     "first": "Klaus",
+     "last": "Wegleitner",
+     "number": 97
+    },
+    "position": "F",
+    "g": 2,
+    "a": 1,
+    "p": 3,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   },
+   {
+    "player": {
+     "id": 8607,
+     "first": "Bernhard",
+     "last": "Kall",
+     "number": 98
+    },
+    "position": "F",
+    "g": 0,
+    "a": 0,
+    "p": 0,
+    "plusMinus": 0,
+    "pim": 0,
+    "sog": 0
+   }
+  ]
+ },
+ "goalies": {
+  "home": [
+   {
+    "player": {
+     "id": 4485,
+     "first": "Thomas",
+     "last": "Georgi",
+     "number": 42
+    },
+    "shotsAgainst": 7,
+    "goalsAgainst": 7,
+    "gaa": 7,
+    "saves": 0,
+    "savePct": 0,
+    "toi": 4800,
+    "starter": false
+   }
+  ],
+  "away": [
+   {
+    "player": {
+     "id": 4050,
+     "first": "Walter",
+     "last": "Golubich",
+     "number": 31
+    },
+    "shotsAgainst": 4,
+    "goalsAgainst": 4,
+    "gaa": 4,
+    "saves": 0,
+    "savePct": 0,
+    "toi": 4800,
+    "starter": false
+   }
+  ]
+ },
+ "goalieChanges": [
+  {
+   "team": "home",
+   "player": {
+    "id": 4485,
+    "first": "Thomas",
+    "last": "Georgi",
+    "number": 42
+   },
+   "action": "on",
+   "time": 0,
+   "timeLabel": "00:00",
+   "period": "1"
+  },
+  {
+   "team": "away",
+   "player": {
+    "id": 4050,
+    "first": "Walter",
+    "last": "Golubich",
+    "number": 31
+   },
+   "action": "on",
+   "time": 0,
+   "timeLabel": "00:00",
+   "period": "1"
+  },
+  {
+   "team": "home",
+   "player": {
+    "id": 4485,
+    "first": "Thomas",
+    "last": "Georgi",
+    "number": 42
+   },
+   "action": "off",
+   "time": 4800,
+   "timeLabel": "80:00",
+   "period": "2"
+  },
+  {
+   "team": "away",
+   "player": {
+    "id": 4050,
+    "first": "Walter",
+    "last": "Golubich",
+    "number": 31
+   },
+   "action": "off",
+   "time": 4800,
+   "timeLabel": "80:00",
+   "period": "2"
+  }
+ ]
+}

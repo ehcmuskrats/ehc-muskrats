@@ -1,0 +1,118 @@
+---
+import Base from '../../../layouts/Base.astro';
+import GameList from '../../../components/GameList.astro';
+import SeasonPicker from '../../../components/SeasonPicker.astro';
+import DataCredit from '../../../components/DataCredit.astro';
+import VideoEmbed from '../../../components/VideoEmbed.astro';
+import { type Lang, LANGS, useT } from '../../../i18n/index.ts';
+import { ourSeasons, currentSeasonId, ourGames, sortByDate, highlights, season as getSeason } from '../../../lib/data.ts';
+
+export function getStaticPaths() {
+  return LANGS.flatMap((lang) => [
+    { params: { lang, season: undefined } },
+    ...ourSeasons.map((s) => ({ params: { lang, season: s.info.id } })),
+  ]);
+}
+const lang = Astro.params.lang as Lang;
+const seasonId = Astro.params.season ?? currentSeasonId;
+const t = useT(lang);
+const s = getSeason(seasonId);
+const games = sortByDate(ourGames(seasonId));
+const dated = games.filter((g) => g.date);
+const tbd = games.filter((g) => !g.date && g.status !== 'final');
+const seasonVideos = highlights.items.filter((h) => !h.gameId && h.status === 'not-a-game' && h.season === seasonId);
+---
+
+<Base lang={lang} title={`${t('schedule.title')} ${seasonId.replace('-', '/')}`} path={Astro.params.season ? `schedule/${seasonId}/` : 'schedule/'} active="nav.schedule" leagueData>
+  <header class="page-head">
+    <h1>{t('schedule.title')}</h1>
+    <p class="sub">{t('common.season')} {seasonId.replace('-', '/')}</p>
+  </header>
+
+  <SeasonPicker lang={lang} section="schedule" seasons={ourSeasons.map((x) => x.info.id)} current={seasonId} />
+
+  {
+    !s?.info.muskratsPlays ? (
+      <p class="muted">{t('common.notPlayed')}</p>
+    ) : (
+      <>
+        <div class="filters" role="group" aria-label={t('schedule.filterStatus')} data-filter="status">
+          <div class="chips">
+            <button class="chip" type="button" data-value="all" aria-pressed="true">{t('common.all')}</button>
+            <button class="chip" type="button" data-value="upcoming" aria-pressed="false">{t('common.upcoming')}</button>
+            <button class="chip" type="button" data-value="played" aria-pressed="false">{t('common.played')}</button>
+          </div>
+        </div>
+        <div class="filters" role="group" aria-label={t('schedule.filterVenue')} data-filter="venue">
+          <div class="chips">
+            <button class="chip" type="button" data-value="all" aria-pressed="true">{t('common.all')}</button>
+            <button class="chip" type="button" data-value="home" aria-pressed="false">{t('common.home')}</button>
+            <button class="chip" type="button" data-value="away" aria-pressed="false">{t('common.away')}</button>
+          </div>
+        </div>
+
+        <section aria-label={t('schedule.title')}>
+          <GameList lang={lang} games={dated} filterable />
+        </section>
+
+        {tbd.length > 0 && (
+          <section aria-labelledby="h-tbd" data-tbd>
+            <h2 id="h-tbd">{t('common.dateTbc')}</h2>
+            <p class="muted small">{t('common.dateTbcNote')}</p>
+            <GameList lang={lang} games={tbd} noDate />
+          </section>
+        )}
+      </>
+    )
+  }
+
+  {
+    seasonVideos.length > 0 && (
+      <section aria-labelledby="h-vids">
+        <div class="divider" aria-hidden="true" />
+        <h2 id="h-vids">{t('schedule.seasonVideos')}</h2>
+        <div class="grid grid-2">
+          {seasonVideos.map((h) => (
+            <VideoEmbed lang={lang} video={h.video} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <DataCredit lang={lang} video={seasonVideos.length > 0} />
+</Base>
+
+<script>
+  const state: Record<string, string> = { status: 'all', venue: 'all' };
+  function apply() {
+    let visible = 0;
+    document.querySelectorAll<HTMLElement>('[data-games] > li').forEach((li) => {
+      const ok =
+        (state.status === 'all' || li.dataset.status === state.status) && (state.venue === 'all' || li.dataset.venue === state.venue);
+      li.hidden = !ok;
+      if (ok && !li.closest('[data-tbd]')) visible++;
+    });
+    const tbd = document.querySelector<HTMLElement>('[data-tbd]');
+    if (tbd) tbd.hidden = state.status === 'played';
+    const empty = document.querySelector<HTMLElement>('.empty-msg');
+    if (empty) empty.hidden = visible > 0;
+  }
+  document.querySelectorAll<HTMLElement>('[data-filter]').forEach((group) => {
+    const key = group.dataset.filter!;
+    group.querySelectorAll<HTMLButtonElement>('button').forEach((b) =>
+      b.addEventListener('click', () => {
+        group.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        state[key] = b.dataset.value!;
+        apply();
+      }),
+    );
+  });
+</script>
+
+<style>
+  .filters {
+    display: inline-block;
+    margin-right: 1rem;
+  }
+</style>

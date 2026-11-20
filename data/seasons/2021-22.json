@@ -1,0 +1,7931 @@
+{
+ "info": {
+  "id": "2021-22",
+  "label": "2021/22",
+  "divisions": [
+   {
+    "id": 9453,
+    "name": "Grunddurchgang",
+    "kind": "regular"
+   }
+  ],
+  "muskratsPlays": true,
+  "frozen": true,
+  "lastSynced": "2026-11-20T13:16:37.982Z"
+ },
+ "games": [
+  {
+   "id": "27c47d97-e912-41d1-ba1b-747bb969399f",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 1",
+   "date": "2021-11-05",
+   "time": "19:35",
+   "timestamp": 1636137300000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35319,
+    "short": "DUK",
+    "name": "EHC Vienna Ducks",
+    "logo": "logos/35319.png"
+   },
+   "away": {
+    "id": 35328,
+    "short": "TST",
+    "name": "HC Transistor Josifgrad",
+    "logo": "logos/35328.png"
+   },
+   "homeScore": 1,
+   "awayScore": 1,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     1,
+     1
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "final",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "b3efef6f-df78-4a41-9ca8-0bd56dbc2335",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 5",
+   "date": "2021-11-07",
+   "time": "17:10",
+   "timestamp": 1636301400000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35338,
+    "short": "WSC2",
+    "name": "Wiener Sport-Club 2",
+    "logo": "logos/35338.png"
+   },
+   "away": {
+    "id": 35329,
+    "short": "UNO",
+    "name": "Vienna International Hockey Club",
+    "logo": "logos/35329.png"
+   },
+   "homeScore": 3,
+   "awayScore": 8,
+   "periods": [
+    [
+     0,
+     4
+    ],
+    [
+     1,
+     3
+    ],
+    [
+     2,
+     1
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "final",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "a3df3aa1-6c2f-49d9-9bb1-35968570095c",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 2",
+   "date": "2021-11-07",
+   "time": "20:40",
+   "timestamp": 1636314000000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35330,
+    "short": "HZB",
+    "name": "Wiener Heizbären Hockey Club",
+    "logo": "logos/35330.png"
+   },
+   "away": {
+    "id": 35325,
+    "short": "MUS",
+    "name": "EHC Muscrats",
+    "logo": "logos/35325.png"
+   },
+   "homeScore": 5,
+   "awayScore": 5,
+   "periods": [
+    [
+     2,
+     0
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     1,
+     3
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "final",
+   "playoff": null,
+   "hasReport": true
+  },
+  {
+   "id": "e2473f0d-1bd6-438f-8bca-4d2c81e4d3ca",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 6",
+   "date": "2021-11-15",
+   "time": "19:55",
+   "timestamp": 1637002500000,
+   "venue": null,
+   "home": {
+    "id": 35325,
+    "short": "MUS",
+    "name": "EHC Muscrats",
+    "logo": "logos/35325.png"
+   },
+   "away": {
+    "id": 35319,
+    "short": "DUK",
+    "name": "EHC Vienna Ducks",
+    "logo": "logos/35319.png"
+   },
+   "homeScore": 3,
+   "awayScore": 2,
+   "periods": [
+    [
+     1,
+     0
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "final",
+   "playoff": null,
+   "hasReport": true
+  },
+  {
+   "id": "96ff5419-20b4-41f3-ba29-50d36008542f",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 10",
+   "date": "2021-11-16",
+   "time": "20:10",
+   "timestamp": 1637089800000,
+   "venue": "Wien - neuro.io arena Haupthalle",
+   "home": {
+    "id": 35329,
+    "short": "UNO",
+    "name": "Vienna International Hockey Club",
+    "logo": "logos/35329.png"
+   },
+   "away": {
+    "id": 35330,
+    "short": "HZB",
+    "name": "Wiener Heizbären Hockey Club",
+    "logo": "logos/35330.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "ac18b075-38d1-4830-b8a2-d4fc52ae319f",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 7",
+   "date": "2021-11-16",
+   "time": "21:25",
+   "timestamp": 1637094300000,
+   "venue": "Wien - Eisring Süd",
+   "home": {
+    "id": 35336,
+    "short": "SBL",
+    "name": "EHV SunBLOCKERs",
+    "logo": "logos/35336.png"
+   },
+   "away": {
+    "id": 35338,
+    "short": "WSC2",
+    "name": "Wiener Sport-Club 2",
+    "logo": "logos/35338.png"
+   },
+   "homeScore": 4,
+   "awayScore": 8,
+   "periods": [
+    [
+     2,
+     3
+    ],
+    [
+     1,
+     4
+    ],
+    [
+     1,
+     1
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "final",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "964c953a-f06f-4201-95bd-4df13c1c800e",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 8",
+   "date": "2021-11-17",
+   "time": "19:45",
+   "timestamp": 1637174700000,
+   "venue": "Wien - Eisring Süd",
+   "home": {
+    "id": 35324,
+    "short": "TOK3",
+    "name": "Vienna University Totonka 3",
+    "logo": "logos/35324.png"
+   },
+   "away": {
+    "id": 35360,
+    "short": "SCO",
+    "name": "Stockerauer Eissport Verein 2",
+    "logo": "logos/35360.png"
+   },
+   "homeScore": 2,
+   "awayScore": 9,
+   "periods": [
+    [
+     1,
+     3
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     1,
+     4
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "final",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "4d0fcff6-eebe-4e31-8a7b-87e493a4226d",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 9",
+   "date": "2021-11-17",
+   "time": "21:15",
+   "timestamp": 1637180100000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35328,
+    "short": "TST",
+    "name": "HC Transistor Josifgrad",
+    "logo": "logos/35328.png"
+   },
+   "away": {
+    "id": 35337,
+    "short": "RAN2",
+    "name": "EHC Vienna Rangers 2",
+    "logo": "logos/35337.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "1c99f1f6-2a2a-4ada-b4b7-fd02b2ca14bf",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 13",
+   "date": "2021-11-18",
+   "time": "20:10",
+   "timestamp": 1637262600000,
+   "venue": "Wien - neuro.io arena Haupthalle",
+   "home": {
+    "id": 35337,
+    "short": "RAN2",
+    "name": "EHC Vienna Rangers 2",
+    "logo": "logos/35337.png"
+   },
+   "away": {
+    "id": 35325,
+    "short": "MUS",
+    "name": "EHC Muscrats",
+    "logo": "logos/35325.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "c92a1929-22bb-4ef0-a200-2360df1d0d79",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 12",
+   "date": "2021-11-21",
+   "time": "19:10",
+   "timestamp": 1637518200000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35330,
+    "short": "HZB",
+    "name": "Wiener Heizbären Hockey Club",
+    "logo": "logos/35330.png"
+   },
+   "away": {
+    "id": 35336,
+    "short": "SBL",
+    "name": "EHV SunBLOCKERs",
+    "logo": "logos/35336.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "0b23ef0c-f368-437e-9c62-3ca5a2b2dc44",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 11",
+   "date": "2021-11-26",
+   "time": "19:35",
+   "timestamp": 1637951700000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35319,
+    "short": "DUK",
+    "name": "EHC Vienna Ducks",
+    "logo": "logos/35319.png"
+   },
+   "away": {
+    "id": 35329,
+    "short": "UNO",
+    "name": "Vienna International Hockey Club",
+    "logo": "logos/35329.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "d0720dc4-32eb-48ab-801f-edb16172b119",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 15",
+   "date": "2021-11-27",
+   "time": "21:15",
+   "timestamp": 1638044100000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35338,
+    "short": "WSC2",
+    "name": "Wiener Sport-Club 2",
+    "logo": "logos/35338.png"
+   },
+   "away": {
+    "id": 35360,
+    "short": "SCO",
+    "name": "Stockerauer Eissport Verein 2",
+    "logo": "logos/35360.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "d3b6d009-b70f-4d98-9701-3a35b0272aed",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 16",
+   "date": "2021-11-29",
+   "time": null,
+   "timestamp": 1638182700000,
+   "venue": "Wien - neuro.io arena Haupthalle",
+   "home": {
+    "id": 35325,
+    "short": "MUS",
+    "name": "EHC Muscrats",
+    "logo": "logos/35325.png"
+   },
+   "away": {
+    "id": 35328,
+    "short": "TST",
+    "name": "HC Transistor Josifgrad",
+    "logo": "logos/35328.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "1115ca3c-c902-46b4-9b77-f8997a3503d2",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 17",
+   "date": "2021-12-02",
+   "time": "20:15",
+   "timestamp": 1638472500000,
+   "venue": "Stockerau - Eislaufplatz",
+   "home": {
+    "id": 35360,
+    "short": "SCO",
+    "name": "Stockerauer Eissport Verein 2",
+    "logo": "logos/35360.png"
+   },
+   "away": {
+    "id": 35330,
+    "short": "HZB",
+    "name": "Wiener Heizbären Hockey Club",
+    "logo": "logos/35330.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "64dc7481-54b6-47de-a3e3-4392f2c2018a",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 18",
+   "date": "2021-12-07",
+   "time": "19:45",
+   "timestamp": 1638902700000,
+   "venue": "Wien - Eisring Süd",
+   "home": {
+    "id": 35336,
+    "short": "SBL",
+    "name": "EHV SunBLOCKERs",
+    "logo": "logos/35336.png"
+   },
+   "away": {
+    "id": 35319,
+    "short": "DUK",
+    "name": "EHC Vienna Ducks",
+    "logo": "logos/35319.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "a738fc09-9218-461a-9916-ea52f564ae38",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 20",
+   "date": "2021-12-08",
+   "time": "19:45",
+   "timestamp": 1638989100000,
+   "venue": "Wien - neuro.io arena Haupthalle",
+   "home": {
+    "id": 35329,
+    "short": "UNO",
+    "name": "Vienna International Hockey Club",
+    "logo": "logos/35329.png"
+   },
+   "away": {
+    "id": 35337,
+    "short": "RAN2",
+    "name": "EHC Vienna Rangers 2",
+    "logo": "logos/35337.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "0268b554-6052-4990-9afe-012fe9371289",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 19",
+   "date": "2021-12-08",
+   "time": "21:25",
+   "timestamp": 1638995100000,
+   "venue": null,
+   "home": {
+    "id": 35324,
+    "short": "TOK3",
+    "name": "Vienna University Totonka 3",
+    "logo": "logos/35324.png"
+   },
+   "away": {
+    "id": 35338,
+    "short": "WSC2",
+    "name": "Wiener Sport-Club 2",
+    "logo": "logos/35338.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "c4f06dfc-16b9-4cdf-881b-ee148d99a3b0",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 21",
+   "date": "2021-12-17",
+   "time": "19:35",
+   "timestamp": 1639766100000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35319,
+    "short": "DUK",
+    "name": "EHC Vienna Ducks",
+    "logo": "logos/35319.png"
+   },
+   "away": {
+    "id": 35360,
+    "short": "SCO",
+    "name": "Stockerauer Eissport Verein 2",
+    "logo": "logos/35360.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "e81896d5-05f4-4659-9251-08fda05884b1",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 23",
+   "date": "2021-12-18",
+   "time": "21:15",
+   "timestamp": 1639858500000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35325,
+    "short": "MUS",
+    "name": "EHC Muscrats",
+    "logo": "logos/35325.png"
+   },
+   "away": {
+    "id": 35324,
+    "short": "TOK3",
+    "name": "Vienna University Totonka 3",
+    "logo": "logos/35324.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "277cd4a2-b3f0-4aab-8580-fcba3db982fc",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 22",
+   "date": "2021-12-19",
+   "time": "20:10",
+   "timestamp": 1639941000000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35330,
+    "short": "HZB",
+    "name": "Wiener Heizbären Hockey Club",
+    "logo": "logos/35330.png"
+   },
+   "away": {
+    "id": 35338,
+    "short": "WSC2",
+    "name": "Wiener Sport-Club 2",
+    "logo": "logos/35338.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "10a9f222-33d1-4ac8-8425-90148ce9330d",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 24",
+   "date": "2021-12-20",
+   "time": "21:45",
+   "timestamp": 1640033100000,
+   "venue": "Wien - Eisring Süd",
+   "home": {
+    "id": 35337,
+    "short": "RAN2",
+    "name": "EHC Vienna Rangers 2",
+    "logo": "logos/35337.png"
+   },
+   "away": {
+    "id": 35336,
+    "short": "SBL",
+    "name": "EHV SunBLOCKERs",
+    "logo": "logos/35336.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "8d84ca91-4c7e-45f5-932f-c5228d5f68bb",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 25",
+   "date": "2021-12-22",
+   "time": "21:15",
+   "timestamp": 1640204100000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35328,
+    "short": "TST",
+    "name": "HC Transistor Josifgrad",
+    "logo": "logos/35328.png"
+   },
+   "away": {
+    "id": 35329,
+    "short": "UNO",
+    "name": "Vienna International Hockey Club",
+    "logo": "logos/35329.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "8cd3fb4f-f104-4e59-9fdc-6c6794a13e41",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 27",
+   "date": "2022-01-11",
+   "time": "21:45",
+   "timestamp": 1641933900000,
+   "venue": "Wien - Eisring Süd",
+   "home": {
+    "id": 35336,
+    "short": "SBL",
+    "name": "EHV SunBLOCKERs",
+    "logo": "logos/35336.png"
+   },
+   "away": {
+    "id": 35328,
+    "short": "TST",
+    "name": "HC Transistor Josifgrad",
+    "logo": "logos/35328.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "1e328090-d70a-42b9-86f8-8f1c06e8531b",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 28",
+   "date": "2022-01-12",
+   "time": "19:45",
+   "timestamp": 1642013100000,
+   "venue": "Wien - Eisring Süd",
+   "home": {
+    "id": 35324,
+    "short": "TOK3",
+    "name": "Vienna University Totonka 3",
+    "logo": "logos/35324.png"
+   },
+   "away": {
+    "id": 35330,
+    "short": "HZB",
+    "name": "Wiener Heizbären Hockey Club",
+    "logo": "logos/35330.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "0d5654ea-ac4d-4c1f-afbf-975cb62011d1",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 29",
+   "date": "2022-01-16",
+   "time": null,
+   "timestamp": 1642329900000,
+   "venue": "Wien - neuro.io arena Haupthalle",
+   "home": {
+    "id": 35329,
+    "short": "UNO",
+    "name": "Vienna International Hockey Club",
+    "logo": "logos/35329.png"
+   },
+   "away": {
+    "id": 35325,
+    "short": "MUS",
+    "name": "EHC Muscrats",
+    "logo": "logos/35325.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "073da1d3-265d-493f-a2cf-e0f5b40d9ed4",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 26",
+   "date": "2022-01-21",
+   "time": "20:15",
+   "timestamp": 1642792500000,
+   "venue": "Stockerau - Eislaufplatz",
+   "home": {
+    "id": 35360,
+    "short": "SCO",
+    "name": "Stockerauer Eissport Verein 2",
+    "logo": "logos/35360.png"
+   },
+   "away": {
+    "id": 35337,
+    "short": "RAN2",
+    "name": "EHC Vienna Rangers 2",
+    "logo": "logos/35337.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "5fef1ca1-1656-4881-a25e-d30ef32b725f",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 30",
+   "date": "2022-01-23",
+   "time": "21:15",
+   "timestamp": 1642968900000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35338,
+    "short": "WSC2",
+    "name": "Wiener Sport-Club 2",
+    "logo": "logos/35338.png"
+   },
+   "away": {
+    "id": 35319,
+    "short": "DUK",
+    "name": "EHC Vienna Ducks",
+    "logo": "logos/35319.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "9c1cf481-ed87-4d27-a8dd-a64d3e2d5d61",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 34",
+   "date": "2022-01-26",
+   "time": "21:15",
+   "timestamp": 1643228100000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35328,
+    "short": "TST",
+    "name": "HC Transistor Josifgrad",
+    "logo": "logos/35328.png"
+   },
+   "away": {
+    "id": 35360,
+    "short": "SCO",
+    "name": "Stockerauer Eissport Verein 2",
+    "logo": "logos/35360.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "986ce47f-3bd9-4326-a960-aa42f0c63757",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 35",
+   "date": "2022-01-30",
+   "time": null,
+   "timestamp": 1643539500000,
+   "venue": "Wien - neuro.io arena Haupthalle",
+   "home": {
+    "id": 35329,
+    "short": "UNO",
+    "name": "Vienna International Hockey Club",
+    "logo": "logos/35329.png"
+   },
+   "away": {
+    "id": 35324,
+    "short": "TOK3",
+    "name": "Vienna University Totonka 3",
+    "logo": "logos/35324.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "fdd10ea6-da52-4e04-ac5f-cf70cac529b1",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 33",
+   "date": "2022-01-31",
+   "time": "21:45",
+   "timestamp": 1643661900000,
+   "venue": "Wien - Eisring Süd",
+   "home": {
+    "id": 35337,
+    "short": "RAN2",
+    "name": "EHC Vienna Rangers 2",
+    "logo": "logos/35337.png"
+   },
+   "away": {
+    "id": 35338,
+    "short": "WSC2",
+    "name": "Wiener Sport-Club 2",
+    "logo": "logos/35338.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "32b065bc-8771-49e3-968e-ef38917bbbed",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 14",
+   "date": "2022-02-02",
+   "time": "21:15",
+   "timestamp": 1643832900000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35328,
+    "short": "TST",
+    "name": "HC Transistor Josifgrad",
+    "logo": "logos/35328.png"
+   },
+   "away": {
+    "id": 35324,
+    "short": "TOK3",
+    "name": "Vienna University Totonka 3",
+    "logo": "logos/35324.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "ac019c16-978d-4765-a579-725853c1fe5e",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 31",
+   "date": "2022-02-04",
+   "time": "19:35",
+   "timestamp": 1643999700000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35319,
+    "short": "DUK",
+    "name": "EHC Vienna Ducks",
+    "logo": "logos/35319.png"
+   },
+   "away": {
+    "id": 35330,
+    "short": "HZB",
+    "name": "Wiener Heizbären Hockey Club",
+    "logo": "logos/35330.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "57ffeeb8-5586-45c5-804b-7ad1dd6212a3",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 32",
+   "date": "2022-02-05",
+   "time": "21:15",
+   "timestamp": 1644092100000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35325,
+    "short": "MUS",
+    "name": "EHC Muscrats",
+    "logo": "logos/35325.png"
+   },
+   "away": {
+    "id": 35336,
+    "short": "SBL",
+    "name": "EHV SunBLOCKERs",
+    "logo": "logos/35336.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "d44529fb-301d-4abc-a9b8-54795a146622",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 38",
+   "date": "2022-02-12",
+   "time": "19:30",
+   "timestamp": 1644690600000,
+   "venue": "Stockerau - Eislaufplatz",
+   "home": {
+    "id": 35360,
+    "short": "SCO",
+    "name": "Stockerauer Eissport Verein 2",
+    "logo": "logos/35360.png"
+   },
+   "away": {
+    "id": 35325,
+    "short": "MUS",
+    "name": "EHC Muscrats",
+    "logo": "logos/35325.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "a916d55b-492e-48a5-8b7a-ba21ecb4b9e1",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 39",
+   "date": "2022-02-12",
+   "time": "21:15",
+   "timestamp": 1644696900000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35336,
+    "short": "SBL",
+    "name": "EHV SunBLOCKERs",
+    "logo": "logos/35336.png"
+   },
+   "away": {
+    "id": 35329,
+    "short": "UNO",
+    "name": "Vienna International Hockey Club",
+    "logo": "logos/35329.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "0134a5b1-efca-4ddc-b9f8-0c7d5aba3432",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 40",
+   "date": "2022-02-13",
+   "time": "17:10",
+   "timestamp": 1644768600000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35338,
+    "short": "WSC2",
+    "name": "Wiener Sport-Club 2",
+    "logo": "logos/35338.png"
+   },
+   "away": {
+    "id": 35328,
+    "short": "TST",
+    "name": "HC Transistor Josifgrad",
+    "logo": "logos/35328.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "180a9d46-9252-4748-b61a-4dbaa06bd5f6",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 36",
+   "date": "2022-02-18",
+   "time": "19:35",
+   "timestamp": 1645209300000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35319,
+    "short": "DUK",
+    "name": "EHC Vienna Ducks",
+    "logo": "logos/35319.png"
+   },
+   "away": {
+    "id": 35324,
+    "short": "TOK3",
+    "name": "Vienna University Totonka 3",
+    "logo": "logos/35324.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "ca7b84ef-cf3f-4622-b667-bdb4ebccd33d",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 37",
+   "date": "2022-02-20",
+   "time": "20:10",
+   "timestamp": 1645384200000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35330,
+    "short": "HZB",
+    "name": "Wiener Heizbären Hockey Club",
+    "logo": "logos/35330.png"
+   },
+   "away": {
+    "id": 35337,
+    "short": "RAN2",
+    "name": "EHC Vienna Rangers 2",
+    "logo": "logos/35337.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "f5ec2811-21d6-43cc-87b0-27af0f11ce89",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 43",
+   "date": "2022-02-23",
+   "time": "19:45",
+   "timestamp": 1645641900000,
+   "venue": "Wien - Eisring Süd",
+   "home": {
+    "id": 35324,
+    "short": "TOK3",
+    "name": "Vienna University Totonka 3",
+    "logo": "logos/35324.png"
+   },
+   "away": {
+    "id": 35336,
+    "short": "SBL",
+    "name": "EHV SunBLOCKERs",
+    "logo": "logos/35336.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "37317a1d-8035-42a3-814f-d543e60fe86a",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 45",
+   "date": "2022-02-26",
+   "time": "21:15",
+   "timestamp": 1645906500000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35329,
+    "short": "UNO",
+    "name": "Vienna International Hockey Club",
+    "logo": "logos/35329.png"
+   },
+   "away": {
+    "id": 35360,
+    "short": "SCO",
+    "name": "Stockerauer Eissport Verein 2",
+    "logo": "logos/35360.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "1162ea0c-ea98-4c27-949c-f5d5516175c1",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 42",
+   "date": "2022-02-28",
+   "time": "21:45",
+   "timestamp": 1646081100000,
+   "venue": "Wien - Eisring Süd",
+   "home": {
+    "id": 35337,
+    "short": "RAN2",
+    "name": "EHC Vienna Rangers 2",
+    "logo": "logos/35337.png"
+   },
+   "away": {
+    "id": 35319,
+    "short": "DUK",
+    "name": "EHC Vienna Ducks",
+    "logo": "logos/35319.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "e58404eb-0cf9-459c-9306-8f29d6c0987e",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 41",
+   "date": "2022-03-02",
+   "time": "19:45",
+   "timestamp": 1646246700000,
+   "venue": "Wien - Eisring Süd",
+   "home": {
+    "id": 35325,
+    "short": "MUS",
+    "name": "EHC Muscrats",
+    "logo": "logos/35325.png"
+   },
+   "away": {
+    "id": 35338,
+    "short": "WSC2",
+    "name": "Wiener Sport-Club 2",
+    "logo": "logos/35338.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "c75ae9cf-2660-40d9-813b-20357c5037b6",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 44",
+   "date": "2022-03-02",
+   "time": "21:15",
+   "timestamp": 1646252100000,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35328,
+    "short": "TST",
+    "name": "HC Transistor Josifgrad",
+    "logo": "logos/35328.png"
+   },
+   "away": {
+    "id": 35330,
+    "short": "HZB",
+    "name": "Wiener Heizbären Hockey Club",
+    "logo": "logos/35330.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "2a9a20bb-4e3c-4aad-9b14-541441133d52",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 4",
+   "date": null,
+   "time": null,
+   "timestamp": null,
+   "venue": "Wien - Eisring Süd",
+   "home": {
+    "id": 35360,
+    "short": "SCO",
+    "name": "Stockerauer Eissport Verein 2",
+    "logo": "logos/35360.png"
+   },
+   "away": {
+    "id": 35336,
+    "short": "SBL",
+    "name": "EHV SunBLOCKERs",
+    "logo": "logos/35336.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "tbd",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
+   "id": "e8057ec6-bbc1-4f47-8fef-5d369a436ceb",
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 3",
+   "date": null,
+   "time": null,
+   "timestamp": null,
+   "venue": "Wien - Wiener Stadthalle C",
+   "home": {
+    "id": 35337,
+    "short": "RAN2",
+    "name": "EHC Vienna Rangers 2",
+    "logo": "logos/35337.png"
+   },
+   "away": {
+    "id": 35324,
+    "short": "TOK3",
+    "name": "Vienna University Totonka 3",
+    "logo": "logos/35324.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "tbd",
+   "playoff": null,
+   "hasReport": false
+  }
+ ],
+ "standings": [
+  {
+   "season": "2021-22",
+   "divisionId": 9453,
+   "divisionName": "Grunddurchgang",
+   "unofficial": false,
+   "rows": [
+    {
+     "rank": 1,
+     "team": {
+      "id": 35325,
+      "short": "MUS",
+      "name": "EHC Muscrats",
+      "logo": "logos/35325.png"
+     },
+     "gp": 2,
+     "w": 1,
+     "l": 0,
+     "otw": 0,
+     "otl": 0,
+     "ties": 1,
+     "gf": 8,
+     "ga": 7,
+     "gd": 1,
+     "pts": 3
+    },
+    {
+     "rank": 2,
+     "team": {
+      "id": 35360,
+      "short": "SCO",
+      "name": "Stockerauer Eissport Verein 2",
+      "logo": "logos/35360.png"
+     },
+     "gp": 1,
+     "w": 1,
+     "l": 0,
+     "otw": 0,
+     "otl": 0,
+     "ties": 0,
+     "gf": 9,
+     "ga": 2,
+     "gd": 7,
+     "pts": 2
+    },
+    {
+     "rank": 3,
+     "team": {
+      "id": 35329,
+      "short": "UNO",
+      "name": "Vienna International Hockey Club",
+      "logo": "logos/35329.png"
+     },
+     "gp": 1,
+     "w": 1,
+     "l": 0,
+     "otw": 0,
+     "otl": 0,
+     "ties": 0,
+     "gf": 8,
+     "ga": 3,
+     "gd": 5,
+     "pts": 2
+    },
+    {
+     "rank": 4,
+     "team": {
+      "id": 35338,
+      "short": "WSC2",
+      "name": "Wiener Sport-Club 2",
+      "logo": "logos/35338.png"
+     },
+     "gp": 2,
+     "w": 1,
+     "l": 1,
+     "otw": 0,
+     "otl": 0,
+     "ties": 0,
+     "gf": 11,
+     "ga": 12,
+     "gd": -1,
+     "pts": 2
+    },
+    {
+     "rank": 5,
+     "team": {
+      "id": 35330,
+      "short": "HZB",
+      "name": "Wiener Heizbären Hockey Club",
+      "logo": "logos/35330.png"
+     },
+     "gp": 1,
+     "w": 0,
+     "l": 0,
+     "otw": 0,
+     "otl": 0,
+     "ties": 1,
+     "gf": 5,
+     "ga": 5,
+     "gd": 0,
+     "pts": 1
+    },
+    {
+     "rank": 6,
+     "team": {
+      "id": 35328,
+      "short": "TST",
+      "name": "HC Transistor Josifgrad",
+      "logo": "logos/35328.png"
+     },
+     "gp": 1,
+     "w": 0,
+     "l": 0,
+     "otw": 0,
+     "otl": 0,
+     "ties": 1,
+     "gf": 1,
+     "ga": 1,
+     "gd": 0,
+     "pts": 1
+    },
+    {
+     "rank": 7,
+     "team": {
+      "id": 35319,
+      "short": "DUK",
+      "name": "EHC Vienna Ducks",
+      "logo": "logos/35319.png"
+     },
+     "gp": 2,
+     "w": 0,
+     "l": 1,
+     "otw": 0,
+     "otl": 0,
+     "ties": 1,
+     "gf": 3,
+     "ga": 4,
+     "gd": -1,
+     "pts": 1
+    },
+    {
+     "rank": 8,
+     "team": {
+      "id": 35337,
+      "short": "RAN2",
+      "name": "EHC Vienna Rangers 2",
+      "logo": "logos/35337.png"
+     },
+     "gp": 0,
+     "w": 0,
+     "l": 0,
+     "otw": 0,
+     "otl": 0,
+     "ties": 0,
+     "gf": 0,
+     "ga": 0,
+     "gd": 0,
+     "pts": 0
+    },
+    {
+     "rank": 9,
+     "team": {
+      "id": 35336,
+      "short": "SBL",
+      "name": "EHV SunBLOCKERs",
+      "logo": "logos/35336.png"
+     },
+     "gp": 1,
+     "w": 0,
+     "l": 1,
+     "otw": 0,
+     "otl": 0,
+     "ties": 0,
+     "gf": 4,
+     "ga": 8,
+     "gd": -4,
+     "pts": 0
+    },
+    {
+     "rank": 10,
+     "team": {
+      "id": 35324,
+      "short": "TOK3",
+      "name": "Vienna University Totonka 3",
+      "logo": "logos/35324.png"
+     },
+     "gp": 1,
+     "w": 0,
+     "l": 1,
+     "otw": 0,
+     "otl": 0,
+     "ties": 0,
+     "gf": 2,
+     "ga": 9,
+     "gd": -7,
+     "pts": 0
+    }
+   ]
+  }
+ ],
+ "playoffs": null,
+ "stats": [
+  {
+   "season": "2021-22",
+   "divisionId": 9453,
+   "skaters": [
+    {
+     "player": {
+      "id": 8449,
+      "first": "Alexei",
+      "last": "Soukhanov",
+      "number": 91
+     },
+     "teamId": 35329,
+     "position": "F",
+     "gp": 1,
+     "g": 3,
+     "a": 2,
+     "p": 5,
+     "pim": 0,
+     "ppg": 1,
+     "shg": 0,
+     "gwg": 1,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 9295,
+      "first": "Edwin",
+      "last": "Frühwirth",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "F",
+     "gp": 2,
+     "g": 2,
+     "a": 3,
+     "p": 5,
+     "pim": 0,
+     "ppg": 1,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 10342,
+      "first": "Christoph",
+      "last": "Mayer",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "F",
+     "gp": 2,
+     "g": 2,
+     "a": 1,
+     "p": 3,
+     "pim": 0,
+     "ppg": 1,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94428,
+      "first": "Philipp",
+      "last": "Augustin",
+      "number": 16
+     },
+     "teamId": 35360,
+     "position": "F",
+     "gp": 1,
+     "g": 2,
+     "a": 1,
+     "p": 3,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 16221,
+      "first": "Johannes",
+      "last": "Ahammer",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 2,
+     "p": 3,
+     "pim": 6,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95035,
+      "first": "Maximilian",
+      "last": "Betak",
+      "number": 63
+     },
+     "teamId": 35329,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 2,
+     "p": 3,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94837,
+      "first": "Jeffrey",
+      "last": "Hall",
+      "number": 19
+     },
+     "teamId": 35329,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 2,
+     "p": 3,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 31454,
+      "first": "Nicolas-Linus",
+      "last": "Kaser",
+      "number": 91
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 2,
+     "g": 1,
+     "a": 2,
+     "p": 3,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 2,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 10409,
+      "first": "Markus",
+      "last": "Kisser",
+      "number": 21
+     },
+     "teamId": 35360,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 2,
+     "p": 3,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 1,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94434,
+      "first": "Herwig",
+      "last": "Moll",
+      "number": 37
+     },
+     "teamId": 35360,
+     "position": "F",
+     "gp": 1,
+     "g": 2,
+     "a": 0,
+     "p": 2,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94587,
+      "first": "Lukas",
+      "last": "Stirner",
+      "number": 38
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 2,
+     "g": 2,
+     "a": 0,
+     "p": 2,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94411,
+      "first": "Daniel",
+      "last": "Neulinger",
+      "number": 13
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 2,
+     "g": 2,
+     "a": 0,
+     "p": 2,
+     "pim": 0,
+     "ppg": 1,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94403,
+      "first": "Klaus",
+      "last": "Bauernfeind",
+      "number": 92
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 2,
+     "g": 2,
+     "a": 0,
+     "p": 2,
+     "pim": 0,
+     "ppg": 1,
+     "shg": 0,
+     "gwg": 1,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 7275,
+      "first": "Florian",
+      "last": "Wepner",
+      "number": 77
+     },
+     "teamId": 35319,
+     "position": "F",
+     "gp": 2,
+     "g": 1,
+     "a": 1,
+     "p": 2,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94409,
+      "first": "Julian Alexander",
+      "last": "Maukner",
+      "number": 82
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 2,
+     "g": 1,
+     "a": 1,
+     "p": 2,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94417,
+      "first": "Jörg",
+      "last": "Skornschek",
+      "number": 15
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 2,
+     "g": 1,
+     "a": 1,
+     "p": 2,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94419,
+      "first": "Stefan",
+      "last": "Weiss",
+      "number": 27
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 2,
+     "g": 1,
+     "a": 1,
+     "p": 2,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94841,
+      "first": "Mariusz Maciej",
+      "last": "Sader",
+      "number": 44
+     },
+     "teamId": 35329,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 1,
+     "p": 2,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94984,
+      "first": "Maximilian",
+      "last": "Sihler",
+      "number": 0
+     },
+     "teamId": 35330,
+     "position": "D",
+     "gp": 1,
+     "g": 1,
+     "a": 1,
+     "p": 2,
+     "pim": 6,
+     "ppg": 1,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 40452,
+      "first": "Michael",
+      "last": "Liegl",
+      "number": 96
+     },
+     "teamId": 35330,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 1,
+     "p": 2,
+     "pim": 0,
+     "ppg": 1,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 10392,
+      "first": "Christian",
+      "last": "Seifter",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "D",
+     "gp": 1,
+     "g": 1,
+     "a": 1,
+     "p": 2,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 1,
+     "gwg": 0,
+     "plusMinus": 2,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94432,
+      "first": "Mario",
+      "last": "Kral",
+      "number": 84
+     },
+     "teamId": 35360,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 1,
+     "p": 2,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 10410,
+      "first": "Michael",
+      "last": "Lettner",
+      "number": 13
+     },
+     "teamId": 35360,
+     "position": "D",
+     "gp": 1,
+     "g": 1,
+     "a": 1,
+     "p": 2,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 10418,
+      "first": "Michael",
+      "last": "Schwarz",
+      "number": 90
+     },
+     "teamId": 35360,
+     "position": "D",
+     "gp": 1,
+     "g": 1,
+     "a": 1,
+     "p": 2,
+     "pim": 0,
+     "ppg": 1,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94635,
+      "first": "Markus",
+      "last": "Schwarz",
+      "number": 32
+     },
+     "teamId": 35360,
+     "position": "D",
+     "gp": 1,
+     "g": 1,
+     "a": 1,
+     "p": 2,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 40451,
+      "first": "Andreas",
+      "last": "Liegl",
+      "number": 89
+     },
+     "teamId": 35330,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 2,
+     "p": 2,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 42049,
+      "first": "Martin",
+      "last": "Schweitzer",
+      "number": 55
+     },
+     "teamId": 35330,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 2,
+     "p": 2,
+     "pim": 6,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94420,
+      "first": "Florian",
+      "last": "Winkler",
+      "number": 45
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 2,
+     "g": 0,
+     "a": 2,
+     "p": 2,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94588,
+      "first": "Benedikt",
+      "last": "Tutzer",
+      "number": 53
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 2,
+     "g": 0,
+     "a": 2,
+     "p": 2,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94418,
+      "first": "Alexander",
+      "last": "Straub",
+      "number": 22
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 2,
+     "g": 0,
+     "a": 2,
+     "p": 2,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94586,
+      "first": "Arvi Johan",
+      "last": "Korhonen",
+      "number": 54
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 2,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95036,
+      "first": "Harri",
+      "last": "Humaloya",
+      "number": 47
+     },
+     "teamId": 35329,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 34467,
+      "first": "Mario",
+      "last": "Aichinger",
+      "number": 40
+     },
+     "teamId": 35330,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8597,
+      "first": "Markus",
+      "last": "Kienberger",
+      "number": 72
+     },
+     "teamId": 35329,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8557,
+      "first": "Bernd",
+      "last": "Löschnig",
+      "number": 69
+     },
+     "teamId": 35328,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94402,
+      "first": "Philipp",
+      "last": "Suppan",
+      "number": 10
+     },
+     "teamId": 35319,
+     "position": "F",
+     "gp": 2,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 9271,
+      "first": "Martin",
+      "last": "Volf",
+      "number": 12
+     },
+     "teamId": 35319,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94980,
+      "first": "Oliver",
+      "last": "Kogler",
+      "number": 0
+     },
+     "teamId": 35330,
+     "position": "D",
+     "gp": 1,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94983,
+      "first": "Julian",
+      "last": "Schuster",
+      "number": 0
+     },
+     "teamId": 35330,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 9291,
+      "first": "Roland",
+      "last": "Ambrosch",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "D",
+     "gp": 2,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 9,
+     "ppg": 1,
+     "shg": 0,
+     "gwg": 1,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 16226,
+      "first": "Stefan",
+      "last": "Zemann",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "F",
+     "gp": 2,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95025,
+      "first": "Julian-Lucas",
+      "last": "Jesse",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "D",
+     "gp": 2,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94843,
+      "first": "Elias",
+      "last": "Schröder",
+      "number": 75
+     },
+     "teamId": 35324,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 53363,
+      "first": "Peter",
+      "last": "Raff",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 53361,
+      "first": "Anton",
+      "last": "Neureiter",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95142,
+      "first": "Stefan",
+      "last": "Kadrnoschka",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "D",
+     "gp": 1,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 19172,
+      "first": "Philipp",
+      "last": "Vogel",
+      "number": 19
+     },
+     "teamId": 35324,
+     "position": "F",
+     "gp": 1,
+     "g": 1,
+     "a": 0,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95381,
+      "first": "Danilo",
+      "last": "Milikic",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95156,
+      "first": "Dennis",
+      "last": "Kistner",
+      "number": 0
+     },
+     "teamId": 35324,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 9296,
+      "first": "Andreas",
+      "last": "Isep",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "F",
+     "gp": 2,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95016,
+      "first": "Daniel",
+      "last": "Moser",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "D",
+     "gp": 2,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95530,
+      "first": "Philipp",
+      "last": "Suppanz",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8623,
+      "first": "Helmut",
+      "last": "Moritz",
+      "number": 91
+     },
+     "teamId": 35330,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 7155,
+      "first": "Paul",
+      "last": "Connert",
+      "number": 25
+     },
+     "teamId": 35319,
+     "position": "F",
+     "gp": 2,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94404,
+      "first": "Manuel",
+      "last": "Bergmann",
+      "number": 90
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 2,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 30186,
+      "first": "Georg",
+      "last": "Feigl",
+      "number": 97
+     },
+     "teamId": 35328,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 4070,
+      "first": "Markus",
+      "last": "Priwalow",
+      "number": 79
+     },
+     "teamId": 35319,
+     "position": "F",
+     "gp": 2,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 6,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8596,
+      "first": "Christian",
+      "last": "Kienberger",
+      "number": 73
+     },
+     "teamId": 35329,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94838,
+      "first": "Peter",
+      "last": "Krist",
+      "number": 18
+     },
+     "teamId": 35329,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94840,
+      "first": "Sean Patrick",
+      "last": "O'Brien",
+      "number": 74
+     },
+     "teamId": 35329,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 17773,
+      "first": "Michael",
+      "last": "Holzhuber",
+      "number": 59
+     },
+     "teamId": 35329,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94415,
+      "first": "Julian",
+      "last": "Schulz",
+      "number": 87
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 2,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 1,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94636,
+      "first": "Martin",
+      "last": "Szüts",
+      "number": 63
+     },
+     "teamId": 35360,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94430,
+      "first": "Jürgen",
+      "last": "Hornyak",
+      "number": 58
+     },
+     "teamId": 35360,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 1,
+     "p": 1,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94435,
+      "first": "Stefan",
+      "last": "Rötzer",
+      "number": 83
+     },
+     "teamId": 35360,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 33367,
+      "first": "Simon",
+      "last": "Bruck",
+      "number": 29
+     },
+     "teamId": 35338,
+     "position": "D",
+     "gp": 2,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94624,
+      "first": "Günter",
+      "last": "Spitaler",
+      "number": 80
+     },
+     "teamId": 35338,
+     "position": "D",
+     "gp": 2,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94410,
+      "first": "Laurenz",
+      "last": "Mettenheimer",
+      "number": 20
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 2,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94413,
+      "first": "Rene",
+      "last": "Roth",
+      "number": 65
+     },
+     "teamId": 35338,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94414,
+      "first": "Stefan",
+      "last": "Schaar",
+      "number": 96
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8450,
+      "first": "Harri",
+      "last": "Varjonen",
+      "number": 46
+     },
+     "teamId": 35329,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8606,
+      "first": "Maximilian",
+      "last": "Joven",
+      "number": 9
+     },
+     "teamId": 35330,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8607,
+      "first": "Bernhard",
+      "last": "Kall",
+      "number": 98
+     },
+     "teamId": 35330,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8447,
+      "first": "Francesco",
+      "last": "Queirolo",
+      "number": 11
+     },
+     "teamId": 35329,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94839,
+      "first": "Uros",
+      "last": "Milanovic",
+      "number": 15
+     },
+     "teamId": 35329,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94633,
+      "first": "Bernhard",
+      "last": "Plametzberger",
+      "number": 27
+     },
+     "teamId": 35329,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8592,
+      "first": "Andreas",
+      "last": "Ehn",
+      "number": 49
+     },
+     "teamId": 35329,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94398,
+      "first": "Peter",
+      "last": "Köck",
+      "number": 91
+     },
+     "teamId": 35319,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 7284,
+      "first": "Alexander",
+      "last": "Grimm",
+      "number": 95
+     },
+     "teamId": 35319,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94400,
+      "first": "Martin",
+      "last": "Piribauer",
+      "number": 78
+     },
+     "teamId": 35319,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 68779,
+      "first": "Clara",
+      "last": "Schuecker",
+      "number": 20
+     },
+     "teamId": 35319,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94623,
+      "first": "Georg",
+      "last": "Tschannett",
+      "number": 13
+     },
+     "teamId": 35328,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94908,
+      "first": "Milan",
+      "last": "Durica",
+      "number": 14
+     },
+     "teamId": 35328,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 9878,
+      "first": "Gerhard",
+      "last": "Seiringer",
+      "number": 15
+     },
+     "teamId": 35328,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94907,
+      "first": "Petr",
+      "last": "Novobilsky",
+      "number": 17
+     },
+     "teamId": 35328,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 7146,
+      "first": "David",
+      "last": "Zitzmann",
+      "number": 24
+     },
+     "teamId": 35328,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 6,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8573,
+      "first": "Marcel",
+      "last": "Seethaler",
+      "number": 25
+     },
+     "teamId": 35328,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8564,
+      "first": "Martin",
+      "last": "Stich",
+      "number": 26
+     },
+     "teamId": 35328,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94906,
+      "first": "Pavol",
+      "last": "Falticko",
+      "number": 38
+     },
+     "teamId": 35328,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8555,
+      "first": "Armin",
+      "last": "Kövari",
+      "number": 59
+     },
+     "teamId": 35328,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 7377,
+      "first": "Andreas",
+      "last": "Emberger",
+      "number": 61
+     },
+     "teamId": 35328,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 18093,
+      "first": "Klaus",
+      "last": "Petrovitsch",
+      "number": 65
+     },
+     "teamId": 35328,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8571,
+      "first": "Marcus",
+      "last": "Hrbek",
+      "number": 67
+     },
+     "teamId": 35328,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 17574,
+      "first": "Adrian",
+      "last": "Burry",
+      "number": 0
+     },
+     "teamId": 35328,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 30187,
+      "first": "Ernst",
+      "last": "Kopper",
+      "number": 74
+     },
+     "teamId": 35328,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 18092,
+      "first": "Christoph",
+      "last": "Gravogl",
+      "number": 78
+     },
+     "teamId": 35328,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 9877,
+      "first": "Ortwin",
+      "last": "Eckert",
+      "number": 88
+     },
+     "teamId": 35328,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 7277,
+      "first": "Christian",
+      "last": "Wotruba",
+      "number": 43
+     },
+     "teamId": 35319,
+     "position": "D",
+     "gp": 2,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 7355,
+      "first": "Gregor",
+      "last": "Kasprian",
+      "number": 6
+     },
+     "teamId": 35319,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94497,
+      "first": "Jukka",
+      "last": "Tiitinen",
+      "number": 7
+     },
+     "teamId": 35319,
+     "position": "D",
+     "gp": 2,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 6,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 7273,
+      "first": "Roland",
+      "last": "Stangl",
+      "number": 18
+     },
+     "teamId": 35319,
+     "position": "F",
+     "gp": 2,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94399,
+      "first": "Bernadette",
+      "last": "Luza",
+      "number": 19
+     },
+     "teamId": 35319,
+     "position": "F",
+     "gp": 2,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 7270,
+      "first": "Michael",
+      "last": "Fink",
+      "number": 22
+     },
+     "teamId": 35319,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8610,
+      "first": "Dominik",
+      "last": "Oberwalder",
+      "number": 84
+     },
+     "teamId": 35330,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8612,
+      "first": "Rudolf",
+      "last": "Ogertschnig",
+      "number": 18
+     },
+     "teamId": 35330,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94982,
+      "first": "Felix",
+      "last": "Oschmautz",
+      "number": 0
+     },
+     "teamId": 35330,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94981,
+      "first": "Florian",
+      "last": "Liegl",
+      "number": 0
+     },
+     "teamId": 35330,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 8609,
+      "first": "Matthias",
+      "last": "Linnert-Kuhn",
+      "number": 73
+     },
+     "teamId": 35330,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95014,
+      "first": "Anna",
+      "last": "Hauer",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "D",
+     "gp": 2,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 9301,
+      "first": "Stefan",
+      "last": "Arneitz",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 7278,
+      "first": "Fritz",
+      "last": "Jarmer",
+      "number": 33
+     },
+     "teamId": 35319,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 7276,
+      "first": "Donald",
+      "last": "Willson",
+      "number": 9
+     },
+     "teamId": 35319,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 9,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95147,
+      "first": "Robert",
+      "last": "Scherling",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95145,
+      "first": "Maurice",
+      "last": "Hundseder",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95149,
+      "first": "Wolfgang",
+      "last": "Ziegler",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95140,
+      "first": "Johannes",
+      "last": "Gruber",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95143,
+      "first": "Maximilian",
+      "last": "Katzenbeisser",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 9308,
+      "first": "Felix",
+      "last": "Schobesberger",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "D",
+     "gp": 2,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 9307,
+      "first": "Johannes",
+      "last": "Schobesberger",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 16227,
+      "first": "Stefan",
+      "last": "Wunderl",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 31452,
+      "first": "Anton",
+      "last": "Geier",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 9300,
+      "first": "Lukas",
+      "last": "Landerl",
+      "number": 0
+     },
+     "teamId": 35325,
+     "position": "F",
+     "gp": 2,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95157,
+      "first": "Katarina",
+      "last": "Knezevic",
+      "number": 0
+     },
+     "teamId": 35324,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 17770,
+      "first": "Paul",
+      "last": "Huber",
+      "number": 0
+     },
+     "teamId": 35324,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95418,
+      "first": "Florian",
+      "last": "Maak",
+      "number": 0
+     },
+     "teamId": 35324,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94454,
+      "first": "Oliver",
+      "last": "Friedl",
+      "number": 52
+     },
+     "teamId": 35360,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 10416,
+      "first": "Stefan",
+      "last": "Haslinger",
+      "number": 15
+     },
+     "teamId": 35360,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94634,
+      "first": "Sebastian",
+      "last": "Gabler",
+      "number": 61
+     },
+     "teamId": 35360,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94433,
+      "first": "Benjamin",
+      "last": "Lehner",
+      "number": 46
+     },
+     "teamId": 35360,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 9286,
+      "first": "Klemens",
+      "last": "Zleptnig",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 9280,
+      "first": "Wolfgang",
+      "last": "Freund",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 10755,
+      "first": "Axel",
+      "last": "Brunnbauer",
+      "number": 95
+     },
+     "teamId": 35324,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94810,
+      "first": "Tristan",
+      "last": "Frutschnigg",
+      "number": 93
+     },
+     "teamId": 35324,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94811,
+      "first": "Constantin",
+      "last": "Maetz",
+      "number": 92
+     },
+     "teamId": 35324,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94812,
+      "first": "Max",
+      "last": "Neuhold",
+      "number": 45
+     },
+     "teamId": 35324,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94842,
+      "first": "Michael",
+      "last": "Koene",
+      "number": 47
+     },
+     "teamId": 35324,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 17715,
+      "first": "Christopher",
+      "last": "Bosic",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 95154,
+      "first": "Michal",
+      "last": "Urbanski",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 51006,
+      "first": "Fabian",
+      "last": "Perkmann",
+      "number": 0
+     },
+     "teamId": 35336,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94585,
+      "first": "Erasmus",
+      "last": "Hoffmann",
+      "number": 6
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94405,
+      "first": "Simon",
+      "last": "Ecker",
+      "number": 44
+     },
+     "teamId": 35338,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 94407,
+      "first": "Georg",
+      "last": "Marschick",
+      "number": 70
+     },
+     "teamId": 35338,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 3,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 10754,
+      "first": "Marko",
+      "last": "Einspieler",
+      "number": 27
+     },
+     "teamId": 35324,
+     "position": "D",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    },
+    {
+     "player": {
+      "id": 4009,
+      "first": "Manfred",
+      "last": "Lexer",
+      "number": 57
+     },
+     "teamId": 35324,
+     "position": "F",
+     "gp": 1,
+     "g": 0,
+     "a": 0,
+     "p": 0,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0
+    }
+   ],
+   "goalies": [
+    {
+     "player": {
+      "id": 10191,
+      "first": "Daniel",
+      "last": "Kral",
+      "number": 30
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "ga": 1,
+     "gaa": 1,
+     "shotsAgainst": 1,
+     "savePct": 0,
+     "toi": 4500,
+     "shutouts": 0,
+     "wins": 0,
+     "losses": 0
+    },
+    {
+     "player": {
+      "id": 19221,
+      "first": "Gerulf",
+      "last": "Moll",
+      "number": 28
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "ga": 1,
+     "gaa": 1.22,
+     "shotsAgainst": 1,
+     "savePct": 0,
+     "toi": 3686,
+     "shutouts": 0,
+     "wins": 1,
+     "losses": 0
+    },
+    {
+     "player": {
+      "id": 94401,
+      "first": "Niklaus",
+      "last": "Roth",
+      "number": 32
+     },
+     "teamId": 35319,
+     "gp": 2,
+     "ga": 4,
+     "gaa": 2,
+     "shotsAgainst": 4,
+     "savePct": 0,
+     "toi": 9000,
+     "shutouts": 0,
+     "wins": 0,
+     "losses": 1
+    },
+    {
+     "player": {
+      "id": 94421,
+      "first": "Alexander",
+      "last": "Bramböck",
+      "number": 1
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "ga": 3,
+     "gaa": 3,
+     "shotsAgainst": 3,
+     "savePct": 0,
+     "toi": 4500,
+     "shutouts": 0,
+     "wins": 1,
+     "losses": 0
+    },
+    {
+     "player": {
+      "id": 95026,
+      "first": "Peter",
+      "last": "Kotzan",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 2,
+     "ga": 7,
+     "gaa": 3.5,
+     "shotsAgainst": 7,
+     "savePct": 0,
+     "toi": 9000,
+     "shutouts": 0,
+     "wins": 1,
+     "losses": 0
+    },
+    {
+     "player": {
+      "id": 4050,
+      "first": "Walter",
+      "last": "Golubich",
+      "number": 31
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "ga": 5,
+     "gaa": 5,
+     "shotsAgainst": 5,
+     "savePct": 0,
+     "toi": 4500,
+     "shutouts": 0,
+     "wins": 0,
+     "losses": 0
+    },
+    {
+     "player": {
+      "id": 94584,
+      "first": "Helge",
+      "last": "Herglotz",
+      "number": 30
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "ga": 9,
+     "gaa": 5.4,
+     "shotsAgainst": 9,
+     "savePct": 0,
+     "toi": 7500,
+     "shutouts": 0,
+     "wins": 1,
+     "losses": 1
+    },
+    {
+     "player": {
+      "id": 95141,
+      "first": "Sabrina",
+      "last": "Hartmann",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "ga": 8,
+     "gaa": 8,
+     "shotsAgainst": 8,
+     "savePct": 0,
+     "toi": 4500,
+     "shutouts": 0,
+     "wins": 0,
+     "losses": 1
+    },
+    {
+     "player": {
+      "id": 31652,
+      "first": "Leopold",
+      "last": "Mayer",
+      "number": 76
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "ga": 9,
+     "gaa": 9,
+     "shotsAgainst": 9,
+     "savePct": 0,
+     "toi": 4500,
+     "shutouts": 0,
+     "wins": 0,
+     "losses": 1
+    }
+   ],
+   "penalties": [
+    {
+     "player": {
+      "id": 7276,
+      "first": "Donald",
+      "last": "Willson",
+      "number": 9
+     },
+     "teamId": 35319,
+     "gp": 1,
+     "pim": 9,
+     "minors": 3,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 9291,
+      "first": "Roland",
+      "last": "Ambrosch",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 2,
+     "pim": 9,
+     "minors": 4,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 42049,
+      "first": "Martin",
+      "last": "Schweitzer",
+      "number": 55
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 6,
+     "minors": 2,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94984,
+      "first": "Maximilian",
+      "last": "Sihler",
+      "number": 0
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 6,
+     "minors": 2,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 16221,
+      "first": "Johannes",
+      "last": "Ahammer",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 1,
+     "pim": 6,
+     "minors": 2,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 7146,
+      "first": "David",
+      "last": "Zitzmann",
+      "number": 24
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 6,
+     "minors": 2,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94497,
+      "first": "Jukka",
+      "last": "Tiitinen",
+      "number": 7
+     },
+     "teamId": 35319,
+     "gp": 2,
+     "pim": 6,
+     "minors": 2,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 4070,
+      "first": "Markus",
+      "last": "Priwalow",
+      "number": 79
+     },
+     "teamId": 35319,
+     "gp": 2,
+     "pim": 6,
+     "minors": 2,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 9878,
+      "first": "Gerhard",
+      "last": "Seiringer",
+      "number": 15
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8555,
+      "first": "Armin",
+      "last": "Kövari",
+      "number": 59
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 17574,
+      "first": "Adrian",
+      "last": "Burry",
+      "number": 0
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94413,
+      "first": "Rene",
+      "last": "Roth",
+      "number": 65
+     },
+     "teamId": 35338,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 17773,
+      "first": "Michael",
+      "last": "Holzhuber",
+      "number": 59
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94840,
+      "first": "Sean Patrick",
+      "last": "O'Brien",
+      "number": 74
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94434,
+      "first": "Herwig",
+      "last": "Moll",
+      "number": 37
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 10755,
+      "first": "Axel",
+      "last": "Brunnbauer",
+      "number": 95
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94454,
+      "first": "Oliver",
+      "last": "Friedl",
+      "number": 52
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94983,
+      "first": "Julian",
+      "last": "Schuster",
+      "number": 0
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95154,
+      "first": "Michal",
+      "last": "Urbanski",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94407,
+      "first": "Georg",
+      "last": "Marschick",
+      "number": 70
+     },
+     "teamId": 35338,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95156,
+      "first": "Dennis",
+      "last": "Kistner",
+      "number": 0
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8612,
+      "first": "Rudolf",
+      "last": "Ogertschnig",
+      "number": 18
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 9307,
+      "first": "Johannes",
+      "last": "Schobesberger",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 31452,
+      "first": "Anton",
+      "last": "Geier",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 9286,
+      "first": "Klemens",
+      "last": "Zleptnig",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94624,
+      "first": "Günter",
+      "last": "Spitaler",
+      "number": 80
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 7277,
+      "first": "Christian",
+      "last": "Wotruba",
+      "number": 43
+     },
+     "teamId": 35319,
+     "gp": 2,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 7273,
+      "first": "Roland",
+      "last": "Stangl",
+      "number": 18
+     },
+     "teamId": 35319,
+     "gp": 2,
+     "pim": 3,
+     "minors": 1,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 7270,
+      "first": "Michael",
+      "last": "Fink",
+      "number": 22
+     },
+     "teamId": 35319,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 7355,
+      "first": "Gregor",
+      "last": "Kasprian",
+      "number": 6
+     },
+     "teamId": 35319,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 9271,
+      "first": "Martin",
+      "last": "Volf",
+      "number": 12
+     },
+     "teamId": 35319,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94907,
+      "first": "Petr",
+      "last": "Novobilsky",
+      "number": 17
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94398,
+      "first": "Peter",
+      "last": "Köck",
+      "number": 91
+     },
+     "teamId": 35319,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 7284,
+      "first": "Alexander",
+      "last": "Grimm",
+      "number": 95
+     },
+     "teamId": 35319,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94400,
+      "first": "Martin",
+      "last": "Piribauer",
+      "number": 78
+     },
+     "teamId": 35319,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 68779,
+      "first": "Clara",
+      "last": "Schuecker",
+      "number": 20
+     },
+     "teamId": 35319,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94623,
+      "first": "Georg",
+      "last": "Tschannett",
+      "number": 13
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94908,
+      "first": "Milan",
+      "last": "Durica",
+      "number": 14
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8557,
+      "first": "Bernd",
+      "last": "Löschnig",
+      "number": 69
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94498,
+      "first": "Benedikt",
+      "last": "Forstinger",
+      "number": 70
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 18092,
+      "first": "Christoph",
+      "last": "Gravogl",
+      "number": 78
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 9877,
+      "first": "Ortwin",
+      "last": "Eckert",
+      "number": 88
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 30186,
+      "first": "Georg",
+      "last": "Feigl",
+      "number": 97
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 30187,
+      "first": "Ernst",
+      "last": "Kopper",
+      "number": 74
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 7377,
+      "first": "Andreas",
+      "last": "Emberger",
+      "number": 61
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 18093,
+      "first": "Klaus",
+      "last": "Petrovitsch",
+      "number": 65
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8571,
+      "first": "Marcus",
+      "last": "Hrbek",
+      "number": 67
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8573,
+      "first": "Marcel",
+      "last": "Seethaler",
+      "number": 25
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8564,
+      "first": "Martin",
+      "last": "Stich",
+      "number": 26
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 10191,
+      "first": "Daniel",
+      "last": "Kral",
+      "number": 0
+     },
+     "teamId": 35299,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94906,
+      "first": "Pavol",
+      "last": "Falticko",
+      "number": 38
+     },
+     "teamId": 35328,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8447,
+      "first": "Francesco",
+      "last": "Queirolo",
+      "number": 11
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94841,
+      "first": "Mariusz Maciej",
+      "last": "Sader",
+      "number": 44
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8449,
+      "first": "Alexei",
+      "last": "Soukhanov",
+      "number": 91
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8450,
+      "first": "Harri",
+      "last": "Varjonen",
+      "number": 46
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95035,
+      "first": "Maximilian",
+      "last": "Betak",
+      "number": 63
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95036,
+      "first": "Harri",
+      "last": "Humaloya",
+      "number": 47
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 34467,
+      "first": "Mario",
+      "last": "Aichinger",
+      "number": 40
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 4050,
+      "first": "Walter",
+      "last": "Golubich",
+      "number": 31
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8606,
+      "first": "Maximilian",
+      "last": "Joven",
+      "number": 9
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8607,
+      "first": "Bernhard",
+      "last": "Kall",
+      "number": 98
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94980,
+      "first": "Oliver",
+      "last": "Kogler",
+      "number": 0
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 40451,
+      "first": "Andreas",
+      "last": "Liegl",
+      "number": 89
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94981,
+      "first": "Florian",
+      "last": "Liegl",
+      "number": 0
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 40452,
+      "first": "Michael",
+      "last": "Liegl",
+      "number": 96
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8609,
+      "first": "Matthias",
+      "last": "Linnert-Kuhn",
+      "number": 73
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8623,
+      "first": "Helmut",
+      "last": "Moritz",
+      "number": 91
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8610,
+      "first": "Dominik",
+      "last": "Oberwalder",
+      "number": 84
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8597,
+      "first": "Markus",
+      "last": "Kienberger",
+      "number": 72
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8596,
+      "first": "Christian",
+      "last": "Kienberger",
+      "number": 73
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94633,
+      "first": "Bernhard",
+      "last": "Plametzberger",
+      "number": 27
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 8592,
+      "first": "Andreas",
+      "last": "Ehn",
+      "number": 49
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94837,
+      "first": "Jeffrey",
+      "last": "Hall",
+      "number": 19
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94838,
+      "first": "Peter",
+      "last": "Krist",
+      "number": 18
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94839,
+      "first": "Uros",
+      "last": "Milanovic",
+      "number": 15
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94414,
+      "first": "Stefan",
+      "last": "Schaar",
+      "number": 96
+     },
+     "teamId": 35338,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94421,
+      "first": "Alexander",
+      "last": "Bramböck",
+      "number": 1
+     },
+     "teamId": 35329,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94982,
+      "first": "Felix",
+      "last": "Oschmautz",
+      "number": 0
+     },
+     "teamId": 35330,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 16227,
+      "first": "Stefan",
+      "last": "Wunderl",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 9280,
+      "first": "Wolfgang",
+      "last": "Freund",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95141,
+      "first": "Sabrina",
+      "last": "Hartmann",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 53363,
+      "first": "Peter",
+      "last": "Raff",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 53361,
+      "first": "Anton",
+      "last": "Neureiter",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95142,
+      "first": "Stefan",
+      "last": "Kadrnoschka",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 17715,
+      "first": "Christopher",
+      "last": "Bosic",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95530,
+      "first": "Philipp",
+      "last": "Suppanz",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 9301,
+      "first": "Stefan",
+      "last": "Arneitz",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 7278,
+      "first": "Fritz",
+      "last": "Jarmer",
+      "number": 33
+     },
+     "teamId": 35319,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95147,
+      "first": "Robert",
+      "last": "Scherling",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 10392,
+      "first": "Christian",
+      "last": "Seifter",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95145,
+      "first": "Maurice",
+      "last": "Hundseder",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95149,
+      "first": "Wolfgang",
+      "last": "Ziegler",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95140,
+      "first": "Johannes",
+      "last": "Gruber",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95143,
+      "first": "Maximilian",
+      "last": "Katzenbeisser",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95381,
+      "first": "Danilo",
+      "last": "Milikic",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95157,
+      "first": "Katarina",
+      "last": "Knezevic",
+      "number": 0
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 17770,
+      "first": "Paul",
+      "last": "Huber",
+      "number": 0
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95418,
+      "first": "Florian",
+      "last": "Maak",
+      "number": 0
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94428,
+      "first": "Philipp",
+      "last": "Augustin",
+      "number": 16
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94429,
+      "first": "Benjamin",
+      "last": "Berger",
+      "number": 91
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94430,
+      "first": "Jürgen",
+      "last": "Hornyak",
+      "number": 58
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94432,
+      "first": "Mario",
+      "last": "Kral",
+      "number": 84
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94433,
+      "first": "Benjamin",
+      "last": "Lehner",
+      "number": 46
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 10410,
+      "first": "Michael",
+      "last": "Lettner",
+      "number": 13
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 19221,
+      "first": "Gerulf",
+      "last": "Moll",
+      "number": 28
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 10754,
+      "first": "Marko",
+      "last": "Einspieler",
+      "number": 27
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 4009,
+      "first": "Manfred",
+      "last": "Lexer",
+      "number": 57
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 31652,
+      "first": "Leopold",
+      "last": "Mayer",
+      "number": 76
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 19172,
+      "first": "Philipp",
+      "last": "Vogel",
+      "number": 19
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 51006,
+      "first": "Fabian",
+      "last": "Perkmann",
+      "number": 0
+     },
+     "teamId": 35336,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94585,
+      "first": "Erasmus",
+      "last": "Hoffmann",
+      "number": 6
+     },
+     "teamId": 35338,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94405,
+      "first": "Simon",
+      "last": "Ecker",
+      "number": 44
+     },
+     "teamId": 35338,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 10416,
+      "first": "Stefan",
+      "last": "Haslinger",
+      "number": 15
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94634,
+      "first": "Sebastian",
+      "last": "Gabler",
+      "number": 61
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 10409,
+      "first": "Markus",
+      "last": "Kisser",
+      "number": 21
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94635,
+      "first": "Markus",
+      "last": "Schwarz",
+      "number": 32
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94636,
+      "first": "Martin",
+      "last": "Szüts",
+      "number": 63
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94810,
+      "first": "Tristan",
+      "last": "Frutschnigg",
+      "number": 93
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94811,
+      "first": "Constantin",
+      "last": "Maetz",
+      "number": 92
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94812,
+      "first": "Max",
+      "last": "Neuhold",
+      "number": 45
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94842,
+      "first": "Michael",
+      "last": "Koene",
+      "number": 47
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94843,
+      "first": "Elias",
+      "last": "Schröder",
+      "number": 75
+     },
+     "teamId": 35324,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94435,
+      "first": "Stefan",
+      "last": "Rötzer",
+      "number": 83
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 10418,
+      "first": "Michael",
+      "last": "Schwarz",
+      "number": 90
+     },
+     "teamId": 35360,
+     "gp": 1,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 16226,
+      "first": "Stefan",
+      "last": "Zemann",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95025,
+      "first": "Julian-Lucas",
+      "last": "Jesse",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95026,
+      "first": "Peter",
+      "last": "Kotzan",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 9295,
+      "first": "Edwin",
+      "last": "Frühwirth",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95014,
+      "first": "Anna",
+      "last": "Hauer",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 9296,
+      "first": "Andreas",
+      "last": "Isep",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 9300,
+      "first": "Lukas",
+      "last": "Landerl",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 10342,
+      "first": "Christoph",
+      "last": "Mayer",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 95016,
+      "first": "Daniel",
+      "last": "Moser",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 9308,
+      "first": "Felix",
+      "last": "Schobesberger",
+      "number": 0
+     },
+     "teamId": 35325,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94415,
+      "first": "Julian",
+      "last": "Schulz",
+      "number": 87
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94417,
+      "first": "Jörg",
+      "last": "Skornschek",
+      "number": 15
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94418,
+      "first": "Alexander",
+      "last": "Straub",
+      "number": 22
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94419,
+      "first": "Stefan",
+      "last": "Weiss",
+      "number": 27
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94420,
+      "first": "Florian",
+      "last": "Winkler",
+      "number": 45
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94584,
+      "first": "Helge",
+      "last": "Herglotz",
+      "number": 30
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94586,
+      "first": "Arvi Johan",
+      "last": "Korhonen",
+      "number": 54
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94587,
+      "first": "Lukas",
+      "last": "Stirner",
+      "number": 38
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94588,
+      "first": "Benedikt",
+      "last": "Tutzer",
+      "number": 53
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 33367,
+      "first": "Simon",
+      "last": "Bruck",
+      "number": 29
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 31454,
+      "first": "Nicolas-Linus",
+      "last": "Kaser",
+      "number": 91
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94403,
+      "first": "Klaus",
+      "last": "Bauernfeind",
+      "number": 92
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94404,
+      "first": "Manuel",
+      "last": "Bergmann",
+      "number": 90
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94409,
+      "first": "Julian Alexander",
+      "last": "Maukner",
+      "number": 82
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94410,
+      "first": "Laurenz",
+      "last": "Mettenheimer",
+      "number": 20
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94411,
+      "first": "Daniel",
+      "last": "Neulinger",
+      "number": 13
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94412,
+      "first": "Alexander",
+      "last": "Prückler",
+      "number": 83
+     },
+     "teamId": 35338,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 7275,
+      "first": "Florian",
+      "last": "Wepner",
+      "number": 77
+     },
+     "teamId": 35319,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94402,
+      "first": "Philipp",
+      "last": "Suppan",
+      "number": 10
+     },
+     "teamId": 35319,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 7155,
+      "first": "Paul",
+      "last": "Connert",
+      "number": 25
+     },
+     "teamId": 35319,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94401,
+      "first": "Niklaus",
+      "last": "Roth",
+      "number": 32
+     },
+     "teamId": 35319,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    },
+    {
+     "player": {
+      "id": 94399,
+      "first": "Bernadette",
+      "last": "Luza",
+      "number": 19
+     },
+     "teamId": 35319,
+     "gp": 2,
+     "pim": 0,
+     "minors": 0,
+     "majors": 0,
+     "misconducts": 0,
+     "gameMisconducts": 0,
+     "matchPenalties": 0
+    }
+   ],
+   "teams": [
+    {
+     "team": {
+      "id": 35338,
+      "short": "WSC2",
+      "name": "Wiener Sport-Club 2",
+      "logo": "logos/35338.png"
+     },
+     "gp": 2,
+     "ppChances": 4,
+     "ppGoals": 2,
+     "ppPct": 50,
+     "pkSituations": 3,
+     "ppGoalsAgainst": 1,
+     "pkPct": 66.67,
+     "shGoalsFor": 0,
+     "shGoalsAgainst": 1,
+     "pim": 9,
+     "minors": 3,
+     "majors": 0
+    },
+    {
+     "team": {
+      "id": 35329,
+      "short": "UNO",
+      "name": "Vienna International Hockey Club",
+      "logo": "logos/35329.png"
+     },
+     "gp": 1,
+     "ppChances": 2,
+     "ppGoals": 1,
+     "ppPct": 50,
+     "pkSituations": 2,
+     "ppGoalsAgainst": 0,
+     "pkPct": 100,
+     "shGoalsFor": 0,
+     "shGoalsAgainst": 0,
+     "pim": 6,
+     "minors": 2,
+     "majors": 0
+    },
+    {
+     "team": {
+      "id": 35360,
+      "short": "SCO",
+      "name": "Stockerauer Eissport Verein 2",
+      "logo": "logos/35360.png"
+     },
+     "gp": 1,
+     "ppChances": 2,
+     "ppGoals": 1,
+     "ppPct": 50,
+     "pkSituations": 2,
+     "ppGoalsAgainst": 0,
+     "pkPct": 100,
+     "shGoalsFor": 0,
+     "shGoalsAgainst": 0,
+     "pim": 6,
+     "minors": 2,
+     "majors": 0
+    },
+    {
+     "team": {
+      "id": 35330,
+      "short": "HZB",
+      "name": "Wiener Heizbären Hockey Club",
+      "logo": "logos/35330.png"
+     },
+     "gp": 1,
+     "ppChances": 5,
+     "ppGoals": 2,
+     "ppPct": 40,
+     "pkSituations": 6,
+     "ppGoalsAgainst": 1,
+     "pkPct": 83.33,
+     "shGoalsFor": 0,
+     "shGoalsAgainst": 0,
+     "pim": 18,
+     "minors": 6,
+     "majors": 0
+    },
+    {
+     "team": {
+      "id": 35325,
+      "short": "MUS",
+      "name": "EHC Muscrats",
+      "logo": "logos/35325.png"
+     },
+     "gp": 2,
+     "ppChances": 11,
+     "ppGoals": 3,
+     "ppPct": 27.27,
+     "pkSituations": 7,
+     "ppGoalsAgainst": 2,
+     "pkPct": 71.43,
+     "shGoalsFor": 0,
+     "shGoalsAgainst": 0,
+     "pim": 21,
+     "minors": 7,
+     "majors": 0
+    },
+    {
+     "team": {
+      "id": 35319,
+      "short": "DUK",
+      "name": "EHC Vienna Ducks",
+      "logo": "logos/35319.png"
+     },
+     "gp": 2,
+     "ppChances": 6,
+     "ppGoals": 0,
+     "ppPct": 0,
+     "pkSituations": 9,
+     "ppGoalsAgainst": 2,
+     "pkPct": 77.78,
+     "shGoalsFor": 0,
+     "shGoalsAgainst": 0,
+     "pim": 30,
+     "minors": 10,
+     "majors": 0
+    },
+    {
+     "team": {
+      "id": 35328,
+      "short": "TST",
+      "name": "HC Transistor Josifgrad",
+      "logo": "logos/35328.png"
+     },
+     "gp": 1,
+     "ppChances": 4,
+     "ppGoals": 0,
+     "ppPct": 0,
+     "pkSituations": 4,
+     "ppGoalsAgainst": 0,
+     "pkPct": 100,
+     "shGoalsFor": 0,
+     "shGoalsAgainst": 0,
+     "pim": 15,
+     "minors": 5,
+     "majors": 0
+    },
+    {
+     "team": {
+      "id": 35324,
+      "short": "TOK3",
+      "name": "Vienna University Totonka 3",
+      "logo": "logos/35324.png"
+     },
+     "gp": 1,
+     "ppChances": 2,
+     "ppGoals": 0,
+     "ppPct": 0,
+     "pkSituations": 2,
+     "ppGoalsAgainst": 1,
+     "pkPct": 50,
+     "shGoalsFor": 0,
+     "shGoalsAgainst": 0,
+     "pim": 6,
+     "minors": 2,
+     "majors": 0
+    },
+    {
+     "team": {
+      "id": 35336,
+      "short": "SBL",
+      "name": "EHV SunBLOCKERs",
+      "logo": "logos/35336.png"
+     },
+     "gp": 1,
+     "ppChances": 1,
+     "ppGoals": 0,
+     "ppPct": 0,
+     "pkSituations": 2,
+     "ppGoalsAgainst": 2,
+     "pkPct": 0,
+     "shGoalsFor": 1,
+     "shGoalsAgainst": 0,
+     "pim": 6,
+     "minors": 2,
+     "majors": 0
+    }
+   ]
+  }
+ ]
+}

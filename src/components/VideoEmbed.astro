@@ -1,0 +1,103 @@
+---
+// Click-to-load YouTube embed. No request to YouTube/Google until the visitor clicks:
+// the thumbnail is served from our own site (downloaded during sync), and the iframe
+// uses youtube-nocookie.com.
+import { existsSync } from 'node:fs';
+import { type Lang, t, url } from '../i18n/index.ts';
+import { TEAM } from '../config/team.ts';
+import type { Video } from '../types/models.ts';
+interface Props {
+  lang: Lang;
+  video: Video;
+}
+const { lang, video } = Astro.props;
+const hasThumb = existsSync(`public/thumbs/${video.id}.jpg`);
+---
+
+<figure class="video">
+  <div class="frame" data-yt={video.id} data-title={video.title}>
+    <button type="button" class="play" aria-label={`${t(lang, 'game.watch')}: ${video.title}`}>
+      {hasThumb && <img src={url(`thumbs/${video.id}.jpg`)} alt="" loading="lazy" decoding="async" width="480" height="360" />}
+      <span class="icon" aria-hidden="true">
+        <svg viewBox="0 0 68 48" width="68" height="48"
+          ><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C55.2.3 34 .3 34 .3s-21.2 0-26.5 1.4a8.5 8.5 0 0 0-6 6C.1 13 .1 24 .1 24s0 11 1.4 16.3a8.5 8.5 0 0 0 6 6c5.3 1.4 26.5 1.4 26.5 1.4s21.2 0 26.5-1.4a8.5 8.5 0 0 0 6-6C67.9 35 67.9 24 67.9 24s0-11-1.4-16.3z" fill="#F77A1A"
+          ></path><path d="M45 24 27 14v20" fill="#111"></path></svg
+        >
+      </span>
+    </button>
+  </div>
+  <figcaption>
+    <span class="title">{video.title}</span>
+    <span class="small muted">
+      {t(lang, 'game.consent')} · <a href={TEAM.youtube.channelUrl} rel="noopener">{t(lang, 'credit.video')}</a>
+    </span>
+  </figcaption>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.video .frame[data-yt]').forEach((frame) => {
+    frame.querySelector('button')?.addEventListener('click', () => {
+      const id = frame.dataset.yt!;
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`;
+      iframe.title = frame.dataset.title ?? 'YouTube';
+      iframe.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen';
+      iframe.allowFullscreen = true;
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      frame.replaceChildren(iframe);
+      iframe.focus();
+    });
+  });
+</script>
+
+<style>
+  .video {
+    margin: 0;
+  }
+  .frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .frame :global(iframe),
+  .play {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .play {
+    padding: 0;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--blue), #0b2e66);
+  }
+  .play img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+  }
+  .icon {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    transition: transform 0.15s;
+  }
+  .play:hover .icon,
+  .play:focus-visible .icon {
+    transform: scale(1.1);
+  }
+  figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-top: 0.5rem;
+  }
+  .title {
+    font-weight: 600;
+  }
+</style>

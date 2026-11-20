@@ -1,0 +1,72 @@
+---
+// Season picker for static pages: a <select> that navigates on change, with plain links as no-JS fallback.
+import { type Lang, t, href } from '../i18n/index.ts';
+import type { SeasonId } from '../types/models.ts';
+interface Props {
+  lang: Lang;
+  /** Section path, e.g. "schedule" */
+  section: string;
+  seasons: SeasonId[];
+  current: SeasonId;
+  extra?: { value: string; label: string }[];
+}
+const { lang, section, seasons, current, extra = [] } = Astro.props;
+const id = `season-${section}`;
+---
+
+<div class="season-picker">
+  <label for={id}>{t(lang, 'common.seasonPicker')}</label>
+  <select id={id} data-season-nav>
+    {
+      extra.map((e) => (
+        <option value={href(lang, `${section}/${e.value}/`)} selected={current === e.value}>
+          {e.label}
+        </option>
+      ))
+    }
+    {
+      seasons.map((s) => (
+        <option value={href(lang, `${section}/${s}/`)} selected={s === current}>
+          {s.replace('-', '/')}
+        </option>
+      ))
+    }
+  </select>
+  <noscript>
+    <ul class="chips">
+      {
+        seasons.map((s) => (
+          <li>
+            <a href={href(lang, `${section}/${s}/`)}>{s.replace('-', '/')}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </noscript>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLSelectElement>('select[data-season-nav]').forEach((s) =>
+    s.addEventListener('change', () => {
+      window.location.href = s.value;
+    }),
+  );
+</script>
+
+<style>
+  .season-picker {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin: 0.5rem 0 1rem;
+  }
+  label {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  noscript ul {
+    list-style: none;
+    padding: 0;
+  }
+</style>

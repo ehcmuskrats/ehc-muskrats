@@ -1,0 +1,190 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Team from '../../../components/Team.astro';
+import SeasonPicker from '../../../components/SeasonPicker.astro';
+import DataCredit from '../../../components/DataCredit.astro';
+import { type Lang, LANGS, useT, href } from '../../../i18n/index.ts';
+import { ourSeasons, currentSeasonId, season as getSeason, ourGames } from '../../../lib/data.ts';
+import { isOurTeam } from '../../../config/team.ts';
+
+export function getStaticPaths() {
+  return LANGS.flatMap((lang) => [
+    { params: { lang, season: undefined } },
+    ...ourSeasons.map((s) => ({ params: { lang, season: s.info.id } })),
+  ]);
+}
+const lang = Astro.params.lang as Lang;
+const seasonId = Astro.params.season ?? currentSeasonId;
+const t = useT(lang);
+const s = getSeason(seasonId);
+// Show later phases (placement rounds) first, then the regular season.
+const tables = s ? [...s.standings].sort((a, b) => b.divisionId - a.divisionId) : [];
+const anyTies = tables.some((st) => st.rows.some((r) => r.ties > 0));
+const anyOt = tables.some((st) => st.rows.some((r) => r.otw > 0 || r.otl > 0));
+const bracket = s?.playoffs;
+const gameLinks = new Set(ourGames(seasonId).filter((g) => g.status === 'final').map((g) => g.id));
+---
+
+<Base lang={lang} title={`${t('standings.title')} ${seasonId.replace('-', '/')}`} path={Astro.params.season ? `standings/${seasonId}/` : 'standings/'} active="nav.standings" leagueData>
+  <header class="page-head">
+    <h1>{t('standings.title')}</h1>
+    <p class="sub">{t('common.season')} {seasonId.replace('-', '/')}</p>
+  </header>
+  <SeasonPicker lang={lang} section="standings" seasons={ourSeasons.map((x) => x.info.id)} current={seasonId} />
+
+  {tables.length === 0 && <p class="muted">{t('standings.none')}</p>}
+
+  {
+    tables.map((st) => (
+      <section aria-labelledby={`h-${st.divisionId}`}>
+        <h2 id={`h-${st.divisionId}`}>{st.divisionName}</h2>
+        {st.unofficial && <p class="small muted">{t('standings.unofficial')}</p>}
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="num" scope="col">
+                  {t('standings.rank')}
+                </th>
+                <th scope="col" class="sticky-col">
+                  {t('common.team')}
+                </th>
+                <th class="num" scope="col">
+                  <abbr title={lang === 'de' ? 'Spiele' : 'Games played'}>{t('standings.gp')}</abbr>
+                </th>
+                <th class="num" scope="col">
+                  {t('standings.w')}
+                </th>
+                {anyOt && <th class="num" scope="col">{t('standings.otw')}</th>}
+                {anyOt && <th class="num" scope="col">{t('standings.otl')}</th>}
+                {anyTies && <th class="num" scope="col">{t('standings.ties')}</th>}
+                <th class="num" scope="col">
+                  {t('standings.l')}
+                </th>
+                <th class="num" scope="col">
+                  {t('standings.gf')}
+                </th>
+                <th class="num" scope="col">
+                  {t('standings.ga')}
+                </th>
+                <th class="num" scope="col">
+                  {t('standings.gd')}
+                </th>
+                <th class="num" scope="col">
+                  {t('standings.pts')}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {st.rows.map((r) => (
+                <tr class={isOurTeam(r.team) ? 'ours' : undefined}>
+                  <td class="num">{r.rank}</td>
+                  <td class="sticky-col">
+                    <Team team={r.team} />
+                  </td>
+                  <td class="num">{r.gp}</td>
+                  <td class="num">{r.w}</td>
+                  {anyOt && <td class="num">{r.otw}</td>}
+                  {anyOt && <td class="num">{r.otl}</td>}
+                  {anyTies && <td class="num">{r.ties}</td>}
+                  <td class="num">{r.l}</td>
+                  <td class="num">{r.gf}</td>
+                  <td class="num">{r.ga}</td>
+                  <td class="num">{r.gd > 0 ? `+${r.gd}` : r.gd}</td>
+                  <td class="num strong">{r.pts}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    ))
+  }
+
+  {
+    bracket && bracket.phases.length > 0 && (
+      <section aria-labelledby="h-bracket">
+        <h2 id="h-bracket">{t('standings.bracket')}</h2>
+        <div class="bracket">
+          {bracket.phases.map((ph) => (
+            <div class="round">
+              <h3>{ph.label}</h3>
+              {ph.encounters.map((enc) => (
+                <div class={`enc card ${enc.teams.some((x) => isOurTeam(x.team)) ? 'has-us' : ''}`}>
+                  <p class="small muted">{enc.label}</p>
+                  <ul>
+                    {enc.teams.map((x) => (
+                      <li class={x.winner ? 'winner' : undefined}>
+                        <Team team={x.team} />
+                        <span class="wins">{enc.bestOf > 1 ? x.wins : x.winner ? '✓' : ''}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {enc.gameIds.some((id) => gameLinks.has(id)) && (
+                    <p class="small">
+                      {enc.gameIds
+                        .filter((id) => gameLinks.has(id))
+                        .map((id, i) => (
+                          <a href={href(lang, `games/${id}/`)}>
+                            {t('common.game')} {i + 1}{' '}
+                          </a>
+                        ))}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <DataCredit lang={lang} />
+</Base>
+
+<style>
+  .bracket {
+    display: grid;
+    gap: var(--gutter);
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(240px, 1fr);
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+  .round {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    justify-content: space-around;
+  }
+  .round h3 {
+    margin: 0;
+  }
+  .enc {
+    padding: 0.6rem 0.8rem;
+  }
+  .enc.has-us {
+    border-left: 5px solid var(--orange);
+  }
+  .enc p {
+    margin: 0 0 0.3rem;
+  }
+  .enc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .enc li {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.15rem 0;
+  }
+  .enc li.winner {
+    font-weight: 700;
+  }
+  .wins {
+    font-weight: 800;
+  }
+</style>

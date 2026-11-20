@@ -1,0 +1,57 @@
+---
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import { type Lang, LANGS, useT, href, formatDate } from '../../../i18n/index.ts';
+import { newsFor, newsSlug, type NewsEntry } from '../../../lib/news.ts';
+import { games, teamName } from '../../../lib/data.ts';
+
+export async function getStaticPaths() {
+  const out = [];
+  for (const lang of LANGS) {
+    for (const post of await newsFor(lang)) out.push({ params: { lang, slug: newsSlug(post) }, props: { post } });
+  }
+  return out;
+}
+const { post } = Astro.props as { post: NewsEntry };
+const lang = Astro.params.lang as Lang;
+const t = useT(lang);
+const { Content } = await render(post);
+const game = post.data.gameId ? games.get(post.data.gameId) : undefined;
+// Language switch: link to the translation if one exists, else to the other language's news list.
+const other = lang === 'de' ? 'en' : 'de';
+const translation = post.data.translationKey
+  ? (await newsFor(other)).find((p) => p.data.translationKey === post.data.translationKey)
+  : undefined;
+const switchPath = translation ? `news/${newsSlug(translation)}/` : 'news/';
+---
+
+<Base lang={lang} title={post.data.title} description={post.data.summary} path={switchPath} active="nav.news" leagueData={!!game}>
+  <article class="prose">
+    <header class="page-head">
+      <p class="small"><a href={href(lang, 'news/')}>← {t('news.title')}</a></p>
+      <h1>{post.data.title}</h1>
+      <p class="sub">
+        {formatDate(lang, post.data.date.toISOString())}{post.data.author && ` · ${post.data.author}`}
+      </p>
+    </header>
+    {
+      post.data.gameId && (
+        <p class="card game-link">
+          <a href={href(lang, `games/${post.data.gameId}/`)}>
+            {game
+              ? `${teamName(game.home)} ${game.homeScore ?? '–'}:${game.awayScore ?? '–'} ${teamName(game.away)} · ${formatDate(lang, game.date)}`
+              : t('news.toGame')}{' '}
+            →
+          </a>
+        </p>
+      )
+    }
+    <Content />
+  </article>
+</Base>
+
+<style>
+  .game-link {
+    font-weight: 600;
+  }
+</style>

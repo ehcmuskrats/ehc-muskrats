@@ -1,0 +1,157 @@
+{
+ "_comment": "Season -> division mapping as shown in the wehv.at division picker. Refreshed by the sync (current season only, or all with --full); past seasons are frozen. kind: regular | placement | playoffs.",
+ "seasons": {
+  "2026-27": [
+   {
+    "id": 22591,
+    "name": "Grunddurchgang",
+    "kind": "regular"
+   }
+  ],
+  "2025-26": [
+   {
+    "id": 19449,
+    "name": "Grunddurchgang",
+    "kind": "regular"
+   },
+   {
+    "id": 20129,
+    "name": "TOP 5",
+    "kind": "placement"
+   },
+   {
+    "id": 20130,
+    "name": "LOW 5",
+    "kind": "placement"
+   },
+   {
+    "id": 20472,
+    "name": "Playoffs",
+    "kind": "playoffs"
+   }
+  ],
+  "2024-25": [
+   {
+    "id": 16641,
+    "name": "Grunddurchgang",
+    "kind": "regular"
+   },
+   {
+    "id": 17195,
+    "name": "TOP 4",
+    "kind": "placement"
+   },
+   {
+    "id": 17196,
+    "name": "LOW 5",
+    "kind": "placement"
+   },
+   {
+    "id": 17614,
+    "name": "Playoffs",
+    "kind": "playoffs"
+   }
+  ],
+  "2023-24": [
+   {
+    "id": 13836,
+    "name": "Grunddurchgang",
+    "kind": "regular"
+   },
+   {
+    "id": 14348,
+    "name": "TOP 4",
+    "kind": "placement"
+   },
+   {
+    "id": 14349,
+    "name": "LOW 4",
+    "kind": "placement"
+   },
+   {
+    "id": 14774,
+    "name": "Playoffs",
+    "kind": "playoffs"
+   }
+  ],
+  "2022-23": [
+   {
+    "id": 11169,
+    "name": "Grunddurchgang",
+    "kind": "regular"
+   },
+   {
+    "id": 12122,
+    "name": "Playoffs",
+    "kind": "playoffs"
+   }
+  ],
+  "2021-22": [
+   {
+    "id": 9453,
+    "name": "Grunddurchgang",
+    "kind": "regular"
+   }
+  ],
+  "2019-20": [
+   {
+    "id": 6172,
+    "name": "Grunddurchgang",
+    "kind": "regular"
+   },
+   {
+    "id": 7228,
+    "name": "Playoffs",
+    "kind": "playoffs"
+   }
+  ],
+  "2018-19": [
+   {
+    "id": 4008,
+    "name": "Grunddurchgang",
+    "kind": "regular"
+   },
+   {
+    "id": 4951,
+    "name": "Playoffs",
+    "kind": "playoffs"
+   }
+  ],
+  "2017-18": [
+   {
+    "id": 2374,
+    "name": "Grunddurchgang",
+    "kind": "regular"
+   },
+   {
+    "id": 2962,
+    "name": "Playoffs",
+    "kind": "playoffs"
+   }
+  ],
+  "2016-17": [
+   {
+    "id": 1086,
+    "name": "Grunddurchgang",
+    "kind": "regular"
+   },
+   {
+    "id": 1729,
+    "name": "Playoffs",
+    "kind": "playoffs"
+   }
+  ],
+  "2015-16": [
+   {
+    "id": 181,
+    "name": "Grunddurchgang",
+    "kind": "regular"
+   },
+   {
+    "id": 582,
+    "name": "Playoffs",
+    "kind": "playoffs"
+   }
+  ]
+ }
+}

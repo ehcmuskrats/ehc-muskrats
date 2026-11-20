@@ -1,0 +1,29 @@
+{
+  "name": "ehc-muskrats-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "prebuild": "tsx scripts/sync-data.ts --derive-only",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "sync": "tsx scripts/sync-data.ts",
+    "sync:current": "tsx scripts/sync-data.ts --current",
+    "sync:highlights": "tsx scripts/sync-data.ts --highlights-only",
+    "derive": "tsx scripts/sync-data.ts --derive-only",
+    "explore": "tsx scripts/explore.ts",
+    "test": "tsx scripts/test-titles.ts"
+  },
+  "dependencies": {
+    "astro": "^5.18.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@types/node": "^26.6.6",
+    "playwright": "^1.65.1",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}

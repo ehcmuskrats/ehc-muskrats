@@ -1,0 +1,18 @@
+// Things you will want to edit by hand. See README.md.
+
+export const SITE = {
+  /** "Join us" page: season and fee. Update each year. */
+  membership: {
+    season: '2026/27',
+    feeEur: 700,
+  },
+  /** Leave empty to hide every email reference. When set, it is shown next to the Facebook button. */
+  contactEmail: '',
+  homeRink: 'neuro.io arena',
+  homeRinkAddress: 'Attemsgasse 1, 1220 Wien',
+  /** Credits shown on pages with league data / videos. */
+  dataCredit: { label: 'Daten: WEHV', url: 'https://www.wehv.at/' },
+  /** The season the site treats as "current". Auto-detected from data if null. */
+  currentSeasonOverride: null as string | null,
+  timeZone: 'Europe/Vienna',
+} as const;

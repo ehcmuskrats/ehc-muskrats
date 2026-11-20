@@ -1,0 +1,7 @@
+{
+  "_comment": "Maps names used in YouTube titles (or elsewhere) to league team long names. Keys are matched case-insensitively. Add entries here when the sync prints an opponent it can't map.",
+  "aliases": {
+    "VIHC": "Vienna International Hockey Club",
+    "HC Transistor": "HC Transistor Josifgrad"
+  }
+}

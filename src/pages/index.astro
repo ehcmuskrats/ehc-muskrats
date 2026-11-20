@@ -1,0 +1,24 @@
+---
+// Root: send visitors to German (default) or English based on their browser language.
+import { href } from '../i18n/index.ts';
+const de = href('de');
+const en = href('en');
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EHC Muskrats</title>
+    <meta http-equiv="refresh" content={`0; url=${de}`} />
+    <link rel="canonical" href={de} />
+    <script is:inline define:vars={{ de, en }}>
+      var l = (navigator.languages || [navigator.language || 'de'])[0] || 'de';
+      location.replace(/^de/i.test(l) ? de : /^en/i.test(l) ? en : de);
+    </script>
+  </head>
+  <body>
+    <p><a href={de}>Deutsch</a> · <a href={en}>English</a></p>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+---
+import type { TeamRef } from '../types/models.ts';
+import { url } from '../i18n/index.ts';
+import { teamName } from '../lib/data.ts';
+interface Props {
+  team: TeamRef;
+  short?: boolean;
+}
+const { team, short = false } = Astro.props;
+const name = teamName(team);
+---
+
+<span class="team">
+  {
+    team.logo ? (
+      <img src={url(team.logo)} alt="" width="24" height="24" loading="lazy" decoding="async" />
+    ) : (
+      <span class="ph" aria-hidden="true">
+        {team.short.slice(0, 3)}
+      </span>
+    )
+  }
+  {short ? <abbr title={name}>{team.short || name}</abbr> : <span>{name}</span>}
+</span>

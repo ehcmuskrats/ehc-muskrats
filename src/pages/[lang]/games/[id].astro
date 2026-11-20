@@ -1,0 +1,509 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Team from '../../../components/Team.astro';
+import VideoEmbed from '../../../components/VideoEmbed.astro';
+import DataCredit from '../../../components/DataCredit.astro';
+import PlayerName from '../../../components/PlayerName.astro';
+import { type Lang, LANGS, useT, href, formatDate, formatNumber, mmss } from '../../../i18n/index.ts';
+import { ourGames, games, side, teamName, highlightFor, columns } from '../../../lib/data.ts';
+import { recapForGame, newsSlug } from '../../../lib/news.ts';
+import { penaltyLabel } from '../../../config/penalties.ts';
+import { isOurTeam } from '../../../config/team.ts';
+import type { Game, GameSummary, PersonName } from '../../../types/models.ts';
+
+export function getStaticPaths() {
+  const list = ourGames().filter((g) => g.status === 'final' || g.status === 'live' || g.hasReport);
+  return LANGS.flatMap((lang) => list.map((g) => ({ params: { lang, id: g.id }, props: { summary: g } })));
+}
+const { summary } = Astro.props as { summary: GameSummary };
+const lang = Astro.params.lang as Lang;
+const t = useT(lang);
+const game: Game | undefined = games.get(summary.id);
+const g = game ?? summary;
+const ourSide = side(g);
+const cols = columns(g.season);
+const video = highlightFor(g.id);
+const recap = await recapForGame(lang, g.id);
+const played = g.status === 'final' || g.status === 'live';
+const periodLabels = g.periods.map((_, i) => (i < (game?.numberOfPeriods ?? 3) ? String(i + 1) : i === (game?.numberOfPeriods ?? 3) ? (g.shootout && g.periods.length === i + 1 ? t('common.so') : t('common.ot')) : t('common.so')));
+const name = (p: PersonName | null) => (p ? `${p.first} ${p.last}`.trim() : null);
+const sideTeam = (s: 'home' | 'away') => (s === 'home' ? g.home : g.away);
+const situation = (s: string) => {
+  const k = `situation.${s}`;
+  const v = t(k);
+  return v === k ? s : v;
+};
+const title = `${teamName(g.home)} – ${teamName(g.away)}${played && g.homeScore != null ? ` ${g.homeScore}:${g.awayScore}` : ''}`;
+const fmtDec = (n: number | null) => formatNumber(lang, n, 2);
+---
+
+<Base lang={lang} title={title} description={`${formatDate(lang, g.date)} · ${g.venue ?? ''}`} path={`games/${g.id}/`} active="nav.schedule" leagueData>
+  <p class="crumbs small"><a href={href(lang, `schedule/${g.season}/`)}>← {t('nav.schedule')} {g.season.replace('-', '/')}</a></p>
+
+  <section class="scoreboard card" aria-label={t('game.title')}>
+    <p class="meta small muted">
+      {formatDate(lang, g.date, { weekday: true })}{g.time ? `, ${g.time}` : ''}
+      {g.venue && <> · {g.venue}</>}
+      · {g.playoff ? (g.playoff.encounter ?? g.playoff.roundLabel) : g.divisionName}
+      {g.name && !g.playoff && <> · {g.name}</>}
+    </p>
+    <div class="sb">
+      <div class={`side ${ourSide === 'home' ? 'us' : ''}`}><Team team={g.home} /></div>
+      <div class="result">
+        {
+          played && g.homeScore != null ? (
+            <>
+              <span class="big">{g.homeScore}</span>
+              <span class="colon">:</span>
+              <span class="big">{g.awayScore}</span>
+            </>
+          ) : (
+            <span class="muted">–:–</span>
+          )
+        }
+        <span class="status small">
+          {g.status === 'final' ? t('common.final') + (g.shootout ? ` (${t('common.so')})` : g.overtime ? ` (${t('common.ot')})` : '') : g.status === 'live' ? t('common.live') : g.date ? '' : t('common.dateTbc')}
+        </span>
+      </div>
+      <div class={`side away ${ourSide === 'away' ? 'us' : ''}`}><Team team={g.away} /></div>
+    </div>
+    {
+      g.periods.length > 0 && (
+        <div class="table-wrap periods">
+          <table>
+            <caption class="visually-hidden">{t('game.scoreByPeriod')}</caption>
+            <thead>
+              <tr>
+                <th scope="col">{t('common.team')}</th>
+                {periodLabels.map((p) => (
+                  <th class="num" scope="col">{p}</th>
+                ))}
+                <th class="num" scope="col">{t('common.total')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(['home', 'away'] as const).map((s, idx) => (
+                <tr class={ourSide === s ? 'ours' : undefined}>
+                  <th scope="row">{sideTeam(s).short || teamName(sideTeam(s))}</th>
+                  {g.periods.map((p) => (
+                    <td class="num">{p[idx]}</td>
+                  ))}
+                  <td class="num strong">{s === 'home' ? g.homeScore : g.awayScore}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    }
+    {recap && <p><a class="btn btn-accent" href={href(lang, `news/${newsSlug(recap)}/`)}>{t('game.recap')}</a></p>}
+  </section>
+
+  {
+    video && (
+      <section aria-labelledby="h-hl">
+        <h2 id="h-hl">{t('common.highlights')}</h2>
+        <VideoEmbed lang={lang} video={video.video} />
+      </section>
+    )
+  }
+
+  {!played && <p class="muted">{t('game.scheduledInfo')}</p>}
+  {played && !game && <p class="missing">{t('game.noReport')}</p>}
+
+  {
+    game && (
+      <>
+        <section aria-labelledby="h-goals">
+          <h2 id="h-goals">{t('game.goals')}</h2>
+          {game.goals.length ? (
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">{t('common.period')}</th>
+                    <th class="num" scope="col">{t('common.time')}</th>
+                    <th scope="col">{t('game.score')}</th>
+                    <th scope="col">{t('common.team')}</th>
+                    <th scope="col">{t('game.scorer')}</th>
+                    <th scope="col">{t('game.assists')}</th>
+                    <th scope="col">{t('game.situation')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {game.goals.map((goal) => (
+                    <tr class={goal.team === ourSide ? 'ours' : undefined}>
+                      <td>{goal.period}</td>
+                      <td class="num">{goal.timeLabel}</td>
+                      <td class="strong">{goal.score}</td>
+                      <td>{sideTeam(goal.team).short}</td>
+                      <td>
+                        <PlayerName lang={lang} p={goal.scorer} ours={goal.team === ourSide} />
+                        {goal.gwg && <span class="tag" title={t('game.gwg')}>GWG</span>}
+                      </td>
+                      <td>
+                        {goal.assists.length ? (
+                          goal.assists.map((a, i) => (
+                            <>
+                              {i > 0 && ', '}
+                              <PlayerName lang={lang} p={a} ours={goal.team === ourSide} />
+                            </>
+                          ))
+                        ) : (
+                          <span class="muted">–</span>
+                        )}
+                      </td>
+                      <td>
+                        <abbr title={situation(goal.situation)}>{goal.situation}</abbr>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p class="muted">{t('game.noGoals')}</p>
+          )}
+        </section>
+
+        <section aria-labelledby="h-pen">
+          <h2 id="h-pen">{t('game.penalties')}</h2>
+          {game.penalties.length ? (
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">{t('common.period')}</th>
+                    <th class="num" scope="col">{t('common.time')}</th>
+                    <th scope="col">{t('common.team')}</th>
+                    <th scope="col">{t('common.player')}</th>
+                    <th class="num" scope="col">{t('game.minutes')}</th>
+                    <th scope="col">{t('game.offence')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {game.penalties.map((p) => (
+                    <tr class={p.team === ourSide ? 'ours' : undefined}>
+                      <td>{p.period}</td>
+                      <td class="num">{p.timeLabel}</td>
+                      <td>{sideTeam(p.team).short}</td>
+                      <td>
+                        {p.player ? <PlayerName lang={lang} p={p.player} ours={p.team === ourSide} /> : <span class="muted">{t('common.team')}</span>}
+                        {p.servedBy && (
+                          <span class="small muted">
+                            {' '}
+                            ({t('game.servedBy')} <PlayerName lang={lang} p={p.servedBy} ours={p.team === ourSide} />)
+                          </span>
+                        )}
+                      </td>
+                      <td class="num">{p.minutes}</td>
+                      <td>
+                        {penaltyLabel(p.code, lang)} <span class="small muted">{p.code}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p class="muted">{t('game.noPenalties')}</p>
+          )}
+        </section>
+
+        <section aria-labelledby="h-lineups">
+          <h2 id="h-lineups">{t('game.lineups')}</h2>
+          <div class="grid grid-2">
+            {(['home', 'away'] as const).map((s) => (
+              <div>
+                <h3>
+                  <Team team={sideTeam(s)} />
+                </h3>
+                <div class="table-wrap">
+                  <table data-sortable>
+                    <thead>
+                      <tr>
+                        <th class="num" scope="col" data-sort="num"><button type="button">{t('col.no')}</button></th>
+                        <th scope="col" data-sort="text"><button type="button">{t('common.player')}</button></th>
+                        <th scope="col" data-sort="text"><button type="button">{t('col.pos')}</button></th>
+                        <th class="num" scope="col" data-sort="num"><button type="button">{t('col.g')}</button></th>
+                        <th class="num" scope="col" data-sort="num"><button type="button">{t('col.a')}</button></th>
+                        <th class="num" scope="col" data-sort="num"><button type="button">{t('col.p')}</button></th>
+                        {cols.plusMinus && <th class="num" scope="col" data-sort="num"><button type="button">{t('col.pm')}</button></th>}
+                        <th class="num" scope="col" data-sort="num"><button type="button">{t('col.pim')}</button></th>
+                        {cols.sog && <th class="num" scope="col" data-sort="num"><button type="button">{t('col.sog')}</button></th>}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[...game.skaters[s]]
+                        .sort((a, b) => (a.player.number ?? 999) - (b.player.number ?? 999))
+                        .map((sk) => (
+                          <tr>
+                            <td class="num">{sk.player.number ?? '–'}</td>
+                            <td>
+                              <PlayerName lang={lang} p={sk.player} ours={isOurTeam(sideTeam(s))} />
+                            </td>
+                            <td>
+                              <abbr title={t(`pos.${sk.position}`)}>{sk.position}</abbr>
+                            </td>
+                            <td class="num">{sk.g}</td>
+                            <td class="num">{sk.a}</td>
+                            <td class="num strong">{sk.p}</td>
+                            {cols.plusMinus && <td class="num">{sk.plusMinus}</td>}
+                            <td class="num">{sk.pim}</td>
+                            {cols.sog && <td class="num">{sk.sog}</td>}
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section aria-labelledby="h-goalies">
+          <h2 id="h-goalies">{t('game.goalies')}</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">{t('common.team')}</th>
+                  <th class="num" scope="col">{t('col.no')}</th>
+                  <th scope="col">{t('common.player')}</th>
+                  <th class="num" scope="col">{t('col.toi')}</th>
+                  <th class="num" scope="col">{t('col.ga')}</th>
+                  <th class="num" scope="col">{t('col.gaa')}</th>
+                  {cols.saves && <th class="num" scope="col">{t('col.sa')}</th>}
+                  {cols.saves && <th class="num" scope="col">{t('col.sv')}</th>}
+                  {cols.saves && <th class="num" scope="col">{t('col.svpct')}</th>}
+                </tr>
+              </thead>
+              <tbody>
+                {(['home', 'away'] as const).flatMap((s) =>
+                  game.goalies[s].map((gl) => (
+                    <tr class={ourSide === s ? 'ours' : undefined}>
+                      <td>{sideTeam(s).short}</td>
+                      <td class="num">{gl.player.number ?? '–'}</td>
+                      <td>
+                        <PlayerName lang={lang} p={gl.player} ours={ourSide === s} />
+                      </td>
+                      <td class="num">{gl.toi > 0 ? mmss(gl.toi) : '–'}</td>
+                      <td class="num">{gl.toi > 0 ? gl.goalsAgainst : '–'}</td>
+                      <td class="num">{gl.toi > 0 ? fmtDec(gl.gaa) : '–'}</td>
+                      {cols.saves && <td class="num">{gl.shotsAgainst}</td>}
+                      {cols.saves && <td class="num">{gl.saves}</td>}
+                      {cols.saves && <td class="num">{fmtDec(gl.savePct)}</td>}
+                    </tr>
+                  )),
+                )}
+              </tbody>
+            </table>
+          </div>
+          {game.goalieChanges.length > 0 && (
+            <>
+              <h3>{t('game.goalieChanges')}</h3>
+              <ul class="changes small">
+                {game.goalieChanges.map((c) => (
+                  <li>
+                    {c.timeLabel} · {sideTeam(c.team).short} · <PlayerName lang={lang} p={c.player} ours={c.team === ourSide} /> ·{' '}
+                    {c.action === 'on' ? t('game.on') : t('game.off')}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </section>
+
+        <section aria-labelledby="h-ts">
+          <h2 id="h-ts">{t('game.teamStats')}</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col"><span class="visually-hidden">{t('game.teamStats')}</span></th>
+                  <th class="num" scope="col">{g.home.short}</th>
+                  <th class="num" scope="col">{g.away.short}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">{t('game.pim')}</th>
+                  <td class="num">{game.teamStats.home.pim}</td>
+                  <td class="num">{game.teamStats.away.pim}</td>
+                </tr>
+                <tr>
+                  <th scope="row">{t('game.powerplay')}</th>
+                  <td class="num">{game.teamStats.home.ppGoals}/{game.teamStats.home.ppChances}</td>
+                  <td class="num">{game.teamStats.away.ppGoals}/{game.teamStats.away.ppChances}</td>
+                </tr>
+                <tr>
+                  <th scope="row">{t('game.penaltyKilling')}</th>
+                  <td class="num">{game.teamStats.home.pkKilled}/{game.teamStats.home.pkSituations}</td>
+                  <td class="num">{game.teamStats.away.pkKilled}/{game.teamStats.away.pkSituations}</td>
+                </tr>
+                {(
+                  [
+                    ['game.timeLeading', 'timeLeading'],
+                    ['game.timeTied', 'timeTied'],
+                    ['game.timeTrailing', 'timeTrailing'],
+                    ['game.timeOnPP', 'timeOnPP'],
+                    ['game.timeSH', 'timeShorthanded'],
+                  ] as const
+                ).map(([label, k]) => (
+                  <tr>
+                    <th scope="row">{t(label)}</th>
+                    <td class="num">{mmss(game.teamStats.home[k])}</td>
+                    <td class="num">{mmss(game.teamStats.away[k])}</td>
+                  </tr>
+                ))}
+                {cols.sog && (
+                  <tr>
+                    <th scope="row">{t('col.sog')}</th>
+                    <td class="num">{game.teamStats.home.sog}</td>
+                    <td class="num">{game.teamStats.away.sog}</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section aria-labelledby="h-off" class="card">
+          <h2 id="h-off" class="card-title">{t('game.officials')}</h2>
+          <dl class="facts">
+            <dt>{t('game.referees')}</dt>
+            <dd>{game.referees.length ? game.referees.map(name).join(', ') : <span class="missing">{t('common.missing')}</span>}</dd>
+            {game.linesmen.length > 0 && (
+              <>
+                <dt>{t('game.linesmen')}</dt>
+                <dd>{game.linesmen.map(name).join(', ')}</dd>
+              </>
+            )}
+            {(game.headCoaches.home || game.headCoaches.away) && (
+              <>
+                <dt>{t('game.headCoach')}</dt>
+                <dd>
+                  {g.home.short}: {name(game.headCoaches.home) ?? '–'} · {g.away.short}: {name(game.headCoaches.away) ?? '–'}
+                </dd>
+              </>
+            )}
+            <dt>{t('game.attendance')}</dt>
+            <dd>{game.attendance ?? <span class="missing">{t('common.missing')}</span>}</dd>
+            {game.startTime && (
+              <>
+                <dt>{t('game.started')}</dt>
+                <dd>{game.startTime}</dd>
+              </>
+            )}
+            {game.periodLength > 0 && (
+              <>
+                <dt>{t('game.periodLength')}</dt>
+                <dd>{game.numberOfPeriods} × {Math.round(game.periodLength / 60)} min</dd>
+              </>
+            )}
+          </dl>
+        </section>
+      </>
+    )
+  }
+
+  <DataCredit lang={lang} video={!!video} />
+</Base>
+
+<style>
+  .crumbs {
+    margin: 1rem 0 0.5rem;
+  }
+  .scoreboard {
+    margin-top: 0.5rem;
+  }
+  .meta {
+    margin-bottom: 0.75rem;
+  }
+  .sb {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .side {
+    font-weight: 700;
+    font-size: clamp(0.95rem, 3.5vw, 1.25rem);
+    min-width: 0;
+  }
+  .side :global(.team img) {
+    width: 40px;
+    height: 40px;
+  }
+  .side.away {
+    justify-self: end;
+    text-align: right;
+  }
+  .side.away :global(.team) {
+    flex-direction: row-reverse;
+  }
+  .side :global(.team) {
+    flex-wrap: wrap;
+  }
+  .result {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.2rem;
+    text-align: center;
+  }
+  .big {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 9vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1;
+  }
+  .colon {
+    font-size: 2rem;
+    color: var(--muted);
+  }
+  .status {
+    flex-basis: 100%;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .periods {
+    margin-top: 1rem;
+  }
+  .tag {
+    display: inline-block;
+    margin-left: 0.35rem;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0 0.3rem;
+    border-radius: 4px;
+    background: var(--orange);
+    color: var(--ink);
+  }
+  .changes {
+    padding-left: 1.2rem;
+  }
+  .facts {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.35rem 1rem;
+    margin: 0;
+  }
+  .facts dt {
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .facts dd {
+    margin: 0;
+  }
+  tbody th {
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.95rem;
+    background: transparent;
+    color: var(--text);
+    font-weight: 600;
+  }
+</style>
