@@ -7,6 +7,25 @@ Collected while reviewing the site. Fixed together when the user says "go".
   stats Gesamt / Grunddurchgang / Playoffs switch, playoff table on player profiles, all-time playoff points leaderboard).
 
 ## Round 4 — DONE (24–31). 31 = "Meister 2024/25" banner with sheen above the won final series.
+## Round 6 (next session — not started)
+
+35. **Team records rotate like Fun Facts** (Ewige Bestenliste → "Teamrekorde", `src/pages/[lang]/stats/[...season].astro`)
+    - Idea: show 3 records at a time, random mix on each visit + "Neue Rekorde ↻" button (same mechanism as the
+      Fun Facts panel in PlayerDashboard.astro).
+    - Needs more records computed in scripts/lib/derive.ts (teamRecords): e.g. longest win streak, longest point
+      streak (games without loss), biggest comeback (from game reports' running score), most goals in one period,
+      highest-scoring game (total goals), most shutout wins, biggest playoff win, most PIM in a game (team),
+      best season by goals for, fewest goals against in a season. Keep the current 3 (biggest win, most goals,
+      best season) in the pool. Only records with real data; no invented values.
+
+36. **Goalie pages: compare with goalies around the league** (player pages where isGoalie)
+    - Data available: league goalie leader lists per season/division (`data/seasons/*.json` → stats[].goalies:
+      GP, GA, GAA, TOI, SO, W/L per team) — all teams, not just ours. No shots/saves (league doesn't record them).
+    - Plan: on goalie profiles a "Ligavergleich" panel: per season, rank of our goalie among all league goalies by
+      GAA (min. games threshold) and GP; a small table of the league's goalies (team logo, GP, GAA, SO) with ours
+      highlighted; optional team view (each team's goalie GA/GP side by side). Season picker reuses the dashboard's.
+    - Mobile: compact list (rank, team logo + code, GAA), full table on desktop.
+
 ## Round 5 (collecting)
 32. Opponent picker removed again (too crowded on mobile) — DONE, not committed yet.
 33. Impressum name set: Christopher Bright, Wien — DONE, not committed yet.
