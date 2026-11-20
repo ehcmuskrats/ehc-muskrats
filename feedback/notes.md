@@ -2,6 +2,11 @@
 
 Collected while reviewing the site. Fixed together when the user says "go".
 
+## Status (2026-11-20)
+- DONE: 1, 2, 4, 5, 6, 7, 8, 9, 10, 11; 3 schedule phase switch (Alle / Grunddurchgang / TOP 4 / Playoffs, `#playoffs` deep link).
+- OPEN from 3: phase section headers when "Alle" is selected, playoff series score per round, stats-page phase switch
+  (needs per-phase totals in derive.ts), playoff totals on player profiles, all-time playoff leaderboard.
+
 1. **Footer text** (`footer .foot-brand p`, all pages)
    - Now: "Fan-Website des EHC Muskrats. Spieldaten mit freundlicher Genehmigung des WEHV."
    - Wanted: "Website des EHC Muskrats", with a copyright symbol.
