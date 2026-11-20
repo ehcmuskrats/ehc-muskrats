@@ -449,6 +449,10 @@ select {
   border: 0;
   border-radius: 999px;
   min-height: 44px;
+  /* Browsers size a <select> from its options using whatever font is loaded at that moment
+     and don't re-measure when the web font arrives, which cut off "Saison 2026/27".
+     A minimum width that fits "SAISON 2026/27" in the display font avoids that. */
+  min-width: 13rem;
   padding: 0 2.4rem 0 1.1rem;
   cursor: pointer;
 }
