@@ -1,0 +1,553 @@
+---
+// Player performance dashboard: tiles, last-10 / career bar chart, split cards, rotating fun facts.
+import type { PlayerProfile } from '../types/models.ts';
+import { type Lang, t, href } from '../i18n/index.ts';
+import { playerInsights, type ChartBar, type Metric } from '../lib/player-insights.ts';
+interface Props {
+  lang: Lang;
+  p: PlayerProfile;
+}
+const { lang, p } = Astro.props;
+const de = lang === 'de';
+const ins = playerInsights(p, lang);
+const metrics: { k: Metric; label: string }[] = ins.isGoalie
+  ? [{ k: 'ga', label: 'GA' }]
+  : [
+      { k: 'p', label: 'PTS' },
+      { k: 'g', label: 'G' },
+      { k: 'a', label: 'A' },
+      { k: 'pim', label: 'PIM' },
+    ];
+const defaultMetric = metrics[0].k;
+const height = (bars: ChartBar[], m: Metric, v: number) => {
+  const max = Math.max(1, ...bars.map((b) => b.values[m] ?? 0));
+  return Math.max(3, (v / max) * 100);
+};
+const avg = (bars: ChartBar[], m: Metric) => (bars.length ? bars.reduce((n, b) => n + (b.values[m] ?? 0), 0) / bars.length : 0);
+const avgPos = (bars: ChartBar[], m: Metric) => {
+  const max = Math.max(1, ...bars.map((b) => b.values[m] ?? 0));
+  return (avg(bars, m) / max) * 100;
+};
+const datasets = [
+  { scope: 'recent', bars: ins.recent, label: de ? 'Letzte 10' : 'Last 10' },
+  { scope: 'career', bars: ins.seasonBars, label: de ? 'Karriere' : 'Career' },
+] as const;
+const iconPaths: Record<string, string> = {
+  target: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM12 12h.01',
+  clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2',
+  fire: 'M12 21c3.9 0 6.5-2.6 6.5-6.3 0-3.3-2.2-5.3-3.6-7.7-.4 1.8-1.4 3-2.6 3.5.2-2.6-.8-5-3.3-6.5.3 3-1.9 4.9-3.2 6.7-.9 1.3-1.3 2.6-1.3 4C4.5 18.4 7.6 21 12 21z',
+  trophy: 'M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7M10 17h4',
+  link: 'M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1',
+  bolt: 'M13 3 5 13.5h6L10 21l8-10.5h-6z',
+  shield: 'M12 3 5 6v5.5c0 4.3 3 7.6 7 9.5 4-1.9 7-5.2 7-9.5V6z',
+  star: 'M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z',
+};
+---
+
+<section class="dash" aria-label={de ? 'Leistungsübersicht' : 'Performance overview'}>
+  <div class="tiles">
+    {
+      ins.tiles.map((tile) => (
+        <div class={`tile ${tile.accent ? 'accent' : ''}`}>
+          <span class="tk">{tile.k}</span>
+          <span class="tv tnum">{tile.v}</span>
+          <span class="ts">{tile.sub}</span>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="dash-grid">
+    <div class="main-col">
+      <div class="panel chart-panel" data-chart data-metric={defaultMetric} data-scope="recent">
+        <div class="chart-head">
+          <div class="seg metric-seg" role="group" aria-label={de ? 'Statistik' : 'Stat'}>
+            {
+              metrics.map((m, i) => (
+                <button type="button" data-metric-btn={m.k} aria-pressed={i === 0 ? 'true' : 'false'}>
+                  {m.label}
+                </button>
+              ))
+            }
+          </div>
+          {
+            ins.seasonBars.length > 1 && (
+              <div class="seg scope-seg" role="group" aria-label={de ? 'Zeitraum' : 'Range'}>
+                {datasets.map((d, i) => (
+                  <button type="button" data-scope-btn={d.scope} aria-pressed={i === 0 ? 'true' : 'false'}>
+                    {d.label}
+                  </button>
+                ))}
+              </div>
+            )
+          }
+        </div>
+
+        {
+          datasets.map((d) => (
+            <div class="chart" data-dataset={d.scope} hidden={d.scope !== 'recent'}>
+              <p class="chart-title">
+                <span data-chart-title>
+                  {metrics[0].label} · {d.scope === 'recent' ? (de ? 'letzte 10 Spiele' : 'last 10 games') : de ? 'pro Saison' : 'per season'}
+                </span>
+                <span class="avg-label">
+                  Ø <b data-avg>{avg(d.bars, defaultMetric).toFixed(1)}</b>
+                </span>
+              </p>
+              {d.bars.length === 0 ? (
+                <p class="muted">{t(lang, 'player.noRecent')}</p>
+              ) : (
+                <div class="bars" style={`--n:${d.bars.length}`}>
+                  <span class="plot" aria-hidden="true">
+                    <span class="avg-line" data-avg-line style={`bottom:${avgPos(d.bars, defaultMetric)}%`} />
+                  </span>
+                  {d.bars.map((b) => {
+                    const v = b.values[defaultMetric] ?? 0;
+                    const Tag = b.href ? 'a' : 'div';
+                    return (
+                      <Tag
+                        class="bar-col"
+                        href={b.href ? href(lang, b.href) : undefined}
+                        data-values={JSON.stringify(b.values)}
+                        aria-label={`${b.label} ${b.sub}: ${v}`}
+                      >
+                        <span class="bar-wrap">
+                          <span class={`bar ${v === 0 ? 'zero' : ''}`} style={`height:${height(d.bars, defaultMetric, v)}%`}>
+                            <span class="bv tnum" data-bv>
+                              {v}
+                            </span>
+                          </span>
+                        </span>
+                        <span class="bl">{b.label}</span>
+                        <span class={`bs ${b.result ? `r-${b.result.replace('OT', '')}` : ''}`}>{b.sub}</span>
+                      </Tag>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          ))
+        }
+      </div>
+
+      {
+        ins.splits.length > 0 && (
+          <div class="splits">
+            {ins.splits.map((s) => (
+              <div class={`split ${s.tone}`}>
+                <span class="st">{s.title}</span>
+                <span class="sm tnum">
+                  {s.main} <small>{s.unit}</small>
+                </span>
+                <span class="sd">{s.detail}</span>
+              </div>
+            ))}
+          </div>
+        )
+      }
+    </div>
+
+    {
+      ins.facts.length > 0 && (
+        <aside class="panel facts" aria-labelledby={`facts-${p.id}`}>
+          <p class="eyebrow" id={`facts-${p.id}`}>
+            {t(lang, 'player.facts')}
+          </p>
+          <ul data-facts>
+            {ins.facts.map((f, i) => (
+              <li class={i < 4 ? 'shown' : undefined}>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d={iconPaths[f.icon]} />
+                </svg>
+                <div>
+                  <p class="ft">{f.title}</p>
+                  <p class="fx">{f.text}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          {ins.facts.length > 4 && (
+            <button type="button" class="shuffle" data-shuffle>
+              {de ? 'Neue Fakten' : 'More facts'} ↻
+            </button>
+          )}
+        </aside>
+      )
+    }
+  </div>
+</section>
+
+<script>
+  // Chart: switch metric (PTS/G/A/PIM) and range (last 10 / career); bars rescale to the dataset's max.
+  document.querySelectorAll<HTMLElement>('[data-chart]').forEach((root) => {
+    const labels: Record<string, string> = { p: 'PTS', g: 'G', a: 'A', pim: 'PIM', ga: 'GA' };
+    const render = () => {
+      const metric = root.dataset.metric!;
+      const scope = root.dataset.scope!;
+      root.querySelectorAll<HTMLElement>('[data-dataset]').forEach((ds) => {
+        ds.hidden = ds.dataset.dataset !== scope;
+        const cols = Array.from(ds.querySelectorAll<HTMLElement>('.bar-col'));
+        const vals = cols.map((c) => Number(JSON.parse(c.dataset.values ?? '{}')[metric] ?? 0));
+        const max = Math.max(1, ...vals);
+        const avg = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+        cols.forEach((c, i) => {
+          const bar = c.querySelector<HTMLElement>('.bar')!;
+          bar.style.height = `${Math.max(3, (vals[i] / max) * 100)}%`;
+          bar.classList.toggle('zero', vals[i] === 0);
+          c.querySelector<HTMLElement>('[data-bv]')!.textContent = String(vals[i]);
+        });
+        const line = ds.querySelector<HTMLElement>('[data-avg-line]');
+        if (line) line.style.bottom = `${(avg / max) * 100}%`;
+        const avgEl = ds.querySelector<HTMLElement>('[data-avg]');
+        if (avgEl) avgEl.textContent = avg.toFixed(1);
+        const title = ds.querySelector<HTMLElement>('[data-chart-title]');
+        if (title) title.textContent = title.textContent!.replace(/^[A-Z]+/, labels[metric]);
+      });
+    };
+    root.querySelectorAll<HTMLButtonElement>('[data-metric-btn]').forEach((b) =>
+      b.addEventListener('click', () => {
+        root.dataset.metric = b.dataset.metricBtn!;
+        root.querySelectorAll('[data-metric-btn]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        render();
+      }),
+    );
+    root.querySelectorAll<HTMLButtonElement>('[data-scope-btn]').forEach((b) =>
+      b.addEventListener('click', () => {
+        root.dataset.scope = b.dataset.scopeBtn!;
+        root.querySelectorAll('[data-scope-btn]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        render();
+      }),
+    );
+  });
+
+  // Facts: show a random 4 on every visit (no-JS fallback: the 4 most interesting).
+  document.querySelectorAll<HTMLElement>('[data-facts]').forEach((list) => {
+    const items = Array.from(list.children) as HTMLElement[];
+    const shuffle = () => {
+      const pick = [...items].sort(() => Math.random() - 0.5).slice(0, 4);
+      items.forEach((li) => li.classList.toggle('shown', pick.includes(li)));
+    };
+    if (items.length > 4) shuffle();
+    list.parentElement?.querySelector('[data-shuffle]')?.addEventListener('click', shuffle);
+  });
+</script>
+
+<style>
+  .dash {
+    margin-top: 1.2rem;
+  }
+  /* ---------- tiles ---------- */
+  .tiles {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.65rem 0.3rem 0.6rem;
+    border-radius: 12px;
+    background: var(--panel);
+    box-shadow:
+      var(--highlight),
+      inset 0 0 0 1px var(--line);
+    min-width: 0;
+  }
+  .tk {
+    font: 700 0.66rem/1 var(--display);
+    letter-spacing: 0.12em;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+  .tv {
+    font: 800 clamp(1.4rem, 7vw, 2.2rem) / 1 var(--display);
+    color: #fff;
+    margin: 0.3rem 0 0.2rem;
+  }
+  .tile.accent .tv {
+    color: var(--orange);
+    text-shadow: 0 0 24px rgba(247, 122, 26, 0.35);
+  }
+  .ts {
+    font-size: 0.66rem;
+    color: var(--dim);
+    text-align: center;
+    line-height: 1.15;
+  }
+
+  /* ---------- layout ---------- */
+  .dash-grid {
+    display: grid;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  @media (min-width: 960px) {
+    .dash-grid {
+      grid-template-columns: minmax(0, 1fr) 320px;
+      align-items: start;
+    }
+  }
+  .main-col {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  /* ---------- chart ---------- */
+  .chart-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: space-between;
+  }
+  .metric-seg {
+    flex: 1 1 220px;
+    max-width: 340px;
+  }
+  .scope-seg {
+    flex: 0 1 220px;
+  }
+  .scope-seg [aria-pressed='true'] {
+    background: var(--orange);
+    color: var(--ink);
+  }
+  .chart-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin: 1rem 0 0.4rem;
+    font: 700 0.8rem/1 var(--display);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .avg-label b {
+    color: #fff;
+    font-size: 1rem;
+  }
+  .bars {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    gap: 6px;
+    height: 220px;
+    padding-top: 22px;
+  }
+  /* Overlay matching the bar area only (top padding and the two label rows excluded). */
+  .plot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 22px;
+    bottom: var(--labels-h, 32px);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .avg-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 1px dashed rgba(255, 255, 255, 0.5);
+    transition: bottom 0.3s;
+  }
+  .bl,
+  .bs {
+    line-height: 1;
+  }
+  .bar-col {
+    display: grid;
+    /* fixed label rows so the average-line overlay lines up exactly */
+    grid-template-rows: 1fr 17px 15px;
+    min-width: 0;
+    color: var(--text);
+    text-align: center;
+  }
+  a.bar-col:hover .bar {
+    filter: brightness(1.15);
+  }
+  .bar-wrap {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 0;
+  }
+  .bar {
+    position: relative;
+    width: min(100%, 38px);
+    border-radius: 6px 6px 2px 2px;
+    background: linear-gradient(180deg, var(--orange-hi), var(--orange));
+    box-shadow: 0 0 18px -6px rgba(247, 122, 26, 0.7);
+    transition: height 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .bar.zero {
+    background: var(--panel-hi);
+    box-shadow: none;
+  }
+  .bv {
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    transform: translateX(-50%);
+    margin-bottom: 3px;
+    font: 800 0.95rem/1 var(--display);
+    color: #fff;
+  }
+  .bar.zero .bv {
+    color: var(--dim);
+  }
+  .bl {
+    margin-top: 6px;
+    font: 700 0.72rem/1 var(--display);
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .bs {
+    margin-top: 3px;
+    font-size: 0.62rem;
+    color: var(--dim);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .bs.r-W {
+    color: var(--win);
+  }
+  .bs.r-L {
+    color: var(--loss);
+  }
+  @media (min-width: 720px) {
+    .bars {
+      height: 260px;
+      gap: 10px;
+    }
+    .bl {
+      font-size: 0.8rem;
+    }
+    .bs {
+      font-size: 0.7rem;
+    }
+  }
+
+  /* ---------- splits ---------- */
+  .splits {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  @media (min-width: 720px) {
+    .splits {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+  }
+  .split {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.8rem 0.9rem;
+    border-radius: 12px;
+    background: var(--panel);
+    box-shadow:
+      var(--highlight),
+      inset 0 0 0 1px var(--line);
+    min-width: 0;
+  }
+  .split.good {
+    background: linear-gradient(180deg, rgba(61, 220, 151, 0.12), var(--panel));
+    box-shadow: inset 0 0 0 1px rgba(61, 220, 151, 0.25);
+  }
+  .split.bad {
+    background: linear-gradient(180deg, rgba(255, 107, 107, 0.12), var(--panel));
+    box-shadow: inset 0 0 0 1px rgba(255, 107, 107, 0.22);
+  }
+  .split.accent {
+    background: linear-gradient(180deg, rgba(247, 122, 26, 0.14), var(--panel));
+    box-shadow: inset 0 0 0 1px rgba(247, 122, 26, 0.35);
+  }
+  .st {
+    font: 700 0.7rem/1.2 var(--display);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .sm {
+    font: 800 1.8rem/1 var(--display);
+    color: #fff;
+  }
+  .sm small {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+  }
+  .split.good .sm {
+    color: var(--win);
+  }
+  .split.bad .sm {
+    color: var(--loss);
+  }
+  .split.accent .sm {
+    color: var(--orange);
+  }
+  .sd {
+    font-size: 0.75rem;
+    color: var(--dim);
+  }
+
+  /* ---------- facts ---------- */
+  .facts ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .facts li {
+    display: none;
+    gap: 0.75rem;
+    padding: 0.8rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .facts li.shown {
+    display: flex;
+  }
+  .facts li.shown:first-child,
+  .facts li.shown ~ li.shown {
+    animation: rise 0.4s both;
+  }
+  .facts svg {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    margin-top: 2px;
+    fill: none;
+    stroke: var(--orange);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .ft {
+    margin: 0 0 0.2rem;
+    font: 800 1.05rem/1.1 var(--display);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .fx {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .shuffle {
+    margin-top: 0.5rem;
+    background: none;
+    border: 0;
+    padding: 0.4rem 0;
+    cursor: pointer;
+    color: var(--orange);
+    font: 700 0.85rem/1 var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+</style>

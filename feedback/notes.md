@@ -6,7 +6,10 @@ Collected while reviewing the site. Fixed together when the user says "go".
 - DONE: all 11 notes, including all parts of 3 (schedule phase switch + section headers + playoff series with score,
   stats Gesamt / Grunddurchgang / Playoffs switch, playoff table on player profiles, all-time playoff points leaderboard).
 
-## Round 2 (collecting — wait for "go")
+## Round 2 — DONE (2026-11-20), plus 21: player performance dashboard
+21. **Player dashboard** (every player page): stat tiles, last-10 / career bar chart with PTS·G·A·PIM (GA for goalies),
+    split cards (this vs previous season, last 5, last 10, vs next opponent), facts panel showing a random 4 of the
+    computed facts on each visit (with "more facts" button). Built from WEHV data only (src/lib/player-insights.ts).
 
 12. **Home results ticker runs off the side on desktop** (`main section .ticker`)
     - Now: on desktop the strip of score bugs bleeds past the right edge (last card cut off: "08.03. MU… DU…").
