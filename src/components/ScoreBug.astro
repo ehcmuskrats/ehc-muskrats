@@ -3,7 +3,7 @@
 import type { GameSummary } from '../types/models.ts';
 import { type Lang, href, t } from '../i18n/index.ts';
 import { RESULT_FULL } from '../i18n/abbr.ts';
-import { resultCode, resultClass, side } from '../lib/data.ts';
+import { resultCode, resultClass, side, currentSeasonId } from '../lib/data.ts';
 import Team from './Team.astro';
 interface Props {
   lang: Lang;
@@ -17,11 +17,20 @@ const [d, m] = (g.date ?? '').slice(5).split('-').reverse();
 const dateLabel = g.date ? (lang === 'de' ? `${d}.${m}.` : `${Number(d)}/${Number(m)}`) : t(lang, 'common.tbd');
 const winner = played && g.homeScore != null && g.awayScore != null ? (g.homeScore > g.awayScore ? 'home' : g.homeScore < g.awayScore ? 'away' : null) : null;
 const Tag = played ? 'a' : 'div';
+// Only games from an earlier season get a season label ("25/26"); current-season cards stay clean.
+const otherSeason = g.season !== currentSeasonId ? g.season.slice(2).replace('-', '/') : null;
 ---
 
 <Tag class="bug" href={played ? href(lang, `games/${g.id}/`) : undefined}>
   <span class="top">
-    <span class="date tnum">{dateLabel}</span>
+    <span class="date tnum">
+      {dateLabel}
+      {otherSeason && (
+        <span class="sn" title={`${lang === 'de' ? 'Saison' : 'Season'} ${g.season.replace('-', '/')}`}>
+          {otherSeason}
+        </span>
+      )}
+    </span>
     {r && <span class={`res res-${resultClass(r)}`} title={RESULT_FULL[r][lang]}>{r}</span>}
     {!played && <span class="time tnum">{g.time ?? ''}</span>}
   </span>
@@ -63,6 +72,19 @@ const Tag = played ? 'a' : 'div';
     font: 700 0.8rem/1 var(--display);
     letter-spacing: 0.1em;
     color: var(--dim);
+  }
+  .date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sn {
+    padding: 2px 5px 1px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
   }
   .line {
     display: flex;
