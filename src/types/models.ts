@@ -305,8 +305,12 @@ export interface SeasonData {
 
 export interface PlayerSeasonLine {
   season: SeasonId;
+  /** All numbers/positions used that season (history, not shown). */
   numbers: number[];
   positions: Position[];
+  /** Number and position in the player's last game of the season (what the site shows). */
+  number: number | null;
+  position: Position | null;
   gp: number;
   g: number;
   a: number;
@@ -332,6 +336,7 @@ export interface PlayerGameLine {
   date: string | null;
   opponent: TeamRef;
   home: boolean;
+  number: number | null;
   result: 'W' | 'L' | 'OTW' | 'OTL' | 'T' | null;
   score: string; // from our perspective "8:4"
   position: Position;
@@ -358,10 +363,14 @@ export interface PlayerProfile {
   slug: string;
   first: string;
   last: string;
+  /** Every number/position ever used (history, kept for later; not shown). */
   numbers: number[];
   positions: Position[];
+  /** From the most recent game: what the site shows. */
+  currentNumber: number | null;
+  currentPosition: Position | null;
   seasons: PlayerSeasonLine[];
-  career: Omit<PlayerSeasonLine, 'season' | 'numbers' | 'positions'>;
+  career: Omit<PlayerSeasonLine, 'season' | 'numbers' | 'positions' | 'number' | 'position'>;
   games: PlayerGameLine[];
   goals: PlayerGoal[];
   isGoalie: boolean;

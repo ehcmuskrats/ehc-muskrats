@@ -150,7 +150,7 @@ const tabs = [
                   <tbody>
                     {skaters.map(({ p, l }) => (
                       <tr>
-                        <td class="num dim">{l.numbers.join('/') || '–'}</td>
+                        <td class="num dim">{l.number ?? '–'}</td>
                         <td class="sticky-col">
                           <a href={href(lang, `players/${p.slug}/`)}>
                             {p.first.charAt(0)}. {p.last}
@@ -166,7 +166,7 @@ const tabs = [
                         <td class="num">{l.gwg}</td>
                         {cols.plusMinus && <td class="num">{l.plusMinus}</td>}
                         {cols.sog && <td class="num">{l.sog}</td>}
-                        <td class="dim">{l.positions.join('/')}</td>
+                        <td class="dim">{l.position ?? '–'}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -196,7 +196,7 @@ const tabs = [
                   <tbody>
                     {goalies.map(({ p, l }) => (
                       <tr>
-                        <td class="num dim">{l.numbers.join('/') || '–'}</td>
+                        <td class="num dim">{l.number ?? '–'}</td>
                         <td class="sticky-col">
                           <a href={href(lang, `players/${p.slug}/`)}>
                             {p.first.charAt(0)}. {p.last}

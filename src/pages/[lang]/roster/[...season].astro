@@ -23,15 +23,15 @@ const rows: Row[] = derived.players
   .filter((x) => x.l);
 const FWD = /^(C|LF|RF|F)$/;
 const DEF = /^(LD|RD|D)$/;
+// Grouped by the position in the player's last game of the season.
 const group = (r: Row) => {
-  const pos = r.l.positions;
-  if (pos.includes('G') && r.l.goalieGp >= r.l.gp) return 'goalies';
-  const f = pos.filter((x) => FWD.test(x)).length;
-  const d = pos.filter((x) => DEF.test(x)).length;
-  if (f || d) return f >= d ? 'forwards' : 'defense';
+  const pos = r.l.position;
+  if (pos === 'G' || (r.l.goalieGp > 0 && r.l.goalieGp >= r.l.gp)) return 'goalies';
+  if (pos && FWD.test(pos)) return 'forwards';
+  if (pos && DEF.test(pos)) return 'defense';
   return 'other';
 };
-const byNumber = (a: Row, b: Row) => (a.l.numbers[0] ?? 999) - (b.l.numbers[0] ?? 999);
+const byNumber = (a: Row, b: Row) => (a.l.number ?? 999) - (b.l.number ?? 999);
 const groups = (['forwards', 'defense', 'goalies', 'other'] as const)
   .map((k) => ({ k, list: rows.filter((r) => group(r) === k).sort(byNumber) }))
   .filter((g) => g.list.length);
@@ -58,15 +58,12 @@ const groups = (['forwards', 'defense', 'goalies', 'other'] as const)
           {list.map(({ p, l }) => (
             <li>
               <a href={href(lang, `players/${p.slug}/`)}>
-                <span class="jn tnum">{l.numbers[0] ?? '–'}</span>
+                <span class="jn tnum">{l.number ?? '–'}</span>
                 <span class="nm">
                   <span class="fn">{p.first}</span>
                   <span class="ln">{p.last}</span>
                   <span class="pos">
-                    {l.positions
-                      .filter((x) => x !== 'G' || k === 'goalies')
-                      .map((x) => t(`pos.${x}`))
-                      .join(' · ')}
+                    {l.position ? t(`pos.${l.position}`) : ''}
                   </span>
                 </span>
                 {k === 'goalies' ? (
