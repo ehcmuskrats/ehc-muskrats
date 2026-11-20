@@ -2,6 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 import SeasonPicker from '../../../components/SeasonPicker.astro';
 import DataCredit from '../../../components/DataCredit.astro';
+import Abbr from '../../../components/Abbr.astro';
 import { type Lang, LANGS, useT, href, formatNumber } from '../../../i18n/index.ts';
 import { ourSeasons, currentSeasonId, derived } from '../../../lib/data.ts';
 import type { PlayerProfile, PlayerSeasonLine } from '../../../types/models.ts';
@@ -20,12 +21,14 @@ type Row = { p: PlayerProfile; l: PlayerSeasonLine };
 const rows: Row[] = derived.players
   .map((p) => ({ p, l: p.seasons.find((s) => s.season === seasonId)! }))
   .filter((x) => x.l);
+const FWD = /^(C|LF|RF|F)$/;
+const DEF = /^(LD|RD|D)$/;
 const group = (r: Row) => {
   const pos = r.l.positions;
   if (pos.includes('G') && r.l.goalieGp >= r.l.gp) return 'goalies';
-  if (pos.some((x) => /^(LD|RD|D)$/.test(x)) && !pos.some((x) => /^(C|LF|RF|F)$/.test(x))) return 'defense';
-  if (pos.some((x) => /^(C|LF|RF|F)$/.test(x))) return 'forwards';
-  if (pos.some((x) => /^(LD|RD|D)$/.test(x))) return 'defense';
+  const f = pos.filter((x) => FWD.test(x)).length;
+  const d = pos.filter((x) => DEF.test(x)).length;
+  if (f || d) return f >= d ? 'forwards' : 'defense';
   return 'other';
 };
 const byNumber = (a: Row, b: Row) => (a.l.numbers[0] ?? 999) - (b.l.numbers[0] ?? 999);
@@ -36,8 +39,9 @@ const groups = (['forwards', 'defense', 'goalies', 'other'] as const)
 
 <Base lang={lang} title={`${t('roster.title')} ${seasonId.replace('-', '/')}`} path={Astro.params.season ? `roster/${seasonId}/` : 'roster/'} active="nav.roster" leagueData>
   <header class="page-head">
+    <span class="tag">{t('common.season')} {seasonId.replace('-', '/')}</span>
     <h1>{t('roster.title')}</h1>
-    <p class="sub">{t('common.season')} {seasonId.replace('-', '/')}</p>
+    <p class="sub">{rows.length} {lang === 'de' ? 'Spieler' : 'players'}</p>
   </header>
   <SeasonPicker lang={lang} section="roster" seasons={ourSeasons.map((x) => x.info.id)} current={seasonId} />
 
@@ -46,34 +50,61 @@ const groups = (['forwards', 'defense', 'goalies', 'other'] as const)
   {
     groups.map(({ k, list }) => (
       <section aria-labelledby={`h-${k}`}>
-        <h2 id={`h-${k}`}>{t(`roster.${k}`)}</h2>
-        <ul class="roster">
+        <div class="sec-head">
+          <h2 id={`h-${k}`}>{t(`roster.${k}`)}</h2>
+          <span class="count tnum">{list.length}</span>
+        </div>
+        <ul class="rows roster">
           {list.map(({ p, l }) => (
-            <li class="card">
-              <a class="pl" href={href(lang, `players/${p.slug}/`)}>
-                <span class="num" aria-label={t('col.no')}>
-                  {l.numbers.length ? l.numbers.map((n) => `#${n}`).join(' ') : '–'}
+            <li>
+              <a href={href(lang, `players/${p.slug}/`)}>
+                <span class="jn tnum">{l.numbers[0] ?? '–'}</span>
+                <span class="nm">
+                  <span class="fn">{p.first}</span>
+                  <span class="ln">{p.last}</span>
+                  <span class="pos">
+                    {l.positions
+                      .filter((x) => x !== 'G' || k === 'goalies')
+                      .map((x) => t(`pos.${x}`))
+                      .join(' · ')}
+                  </span>
                 </span>
-                <span class="name">
-                  <span class="first">{p.first}</span> <strong>{p.last}</strong>
-                </span>
-                <span class="pos small muted">{l.positions.filter((x) => x !== 'G' || k === 'goalies').map((x) => t(`pos.${x}`)).join(', ')}</span>
+                {k === 'goalies' ? (
+                  <span class="line tnum">
+                    <span>
+                      <b>{l.goalieGp}</b>
+                      <Abbr lang={lang} k="gp" />
+                    </span>
+                    <span>
+                      <b>{l.ga}</b>
+                      <Abbr lang={lang} k="ga" />
+                    </span>
+                    <span class="hi">
+                      <b>{formatNumber(lang, l.gaa, 2)}</b>
+                      <Abbr lang={lang} k="gaa" />
+                    </span>
+                  </span>
+                ) : (
+                  <span class="line tnum">
+                    <span>
+                      <b>{l.gp}</b>
+                      <Abbr lang={lang} k="gp" />
+                    </span>
+                    <span>
+                      <b>{l.g}</b>
+                      <Abbr lang={lang} k="g" />
+                    </span>
+                    <span>
+                      <b>{l.a}</b>
+                      <Abbr lang={lang} k="a" />
+                    </span>
+                    <span class="hi">
+                      <b>{l.p}</b>
+                      <Abbr lang={lang} k="p" />
+                    </span>
+                  </span>
+                )}
               </a>
-              {k === 'goalies' ? (
-                <dl class="line small">
-                  <div><dt>{t('col.gp')}</dt><dd>{l.goalieGp}</dd></div>
-                  <div><dt>{t('col.ga')}</dt><dd>{l.ga}</dd></div>
-                  <div><dt>{t('col.gaa')}</dt><dd>{formatNumber(lang, l.gaa, 2)}</dd></div>
-                </dl>
-              ) : (
-                <dl class="line small">
-                  <div><dt>{t('col.gp')}</dt><dd>{l.gp}</dd></div>
-                  <div><dt>{t('col.g')}</dt><dd>{l.g}</dd></div>
-                  <div><dt>{t('col.a')}</dt><dd>{l.a}</dd></div>
-                  <div><dt>{t('col.p')}</dt><dd><strong>{l.p}</strong></dd></div>
-                  <div><dt>{t('col.pim')}</dt><dd>{l.pim}</dd></div>
-                </dl>
-              )}
             </li>
           ))}
         </ul>
@@ -84,65 +115,84 @@ const groups = (['forwards', 'defense', 'goalies', 'other'] as const)
 </Base>
 
 <style>
-  .roster {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 0.6rem;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  .count {
+    font: 800 1.4rem/1 var(--display);
+    color: var(--dim);
   }
-  .roster li {
-    padding: 0.8rem 0.9rem;
+  .roster a {
+    display: grid;
+    grid-template-columns: 3.2rem 1fr;
+    grid-template-areas: 'jn nm' 'jn line';
+    column-gap: 0.75rem;
+    row-gap: 0.45rem;
+    align-items: center;
+    padding: 0.8rem 1rem 0.8rem 0.6rem;
+    color: var(--text);
     position: relative;
     overflow: hidden;
   }
-  .roster li::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 6px;
-    background: var(--stripes);
-    opacity: 0.8;
-  }
-  .pl {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    column-gap: 0.7rem;
+  .roster a:hover {
+    background: rgba(255, 255, 255, 0.03);
     color: var(--text);
-    text-decoration: none;
   }
-  .pl:hover .name {
-    text-decoration: underline;
+  .jn {
+    grid-area: jn;
+    font: 800 2.6rem/1 var(--display);
+    color: var(--blue-hi);
+    text-align: center;
+    align-self: center;
   }
-  .num {
-    grid-row: span 2;
-    font-family: var(--font-display);
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: var(--link);
-    min-width: 2.6ch;
-    line-height: 1.1;
-  }
-  .line {
-    display: flex;
-    gap: 0.9rem;
-    margin: 0.5rem 0 0;
-  }
-  .line div {
+  .nm {
+    grid-area: nm;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    min-width: 0;
+    line-height: 1.1;
   }
-  .line dt {
+  .fn {
+    font-size: 0.8rem;
     color: var(--muted);
-    font-size: 0.75rem;
-    text-transform: uppercase;
   }
-  .line dd {
-    margin: 0;
-    font-variant-numeric: tabular-nums;
+  .ln {
+    font: 800 1.35rem/1.05 var(--display);
+    text-transform: uppercase;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pos {
+    font-size: 0.75rem;
+    color: var(--dim);
+    margin-top: 0.15rem;
+  }
+  .line {
+    grid-area: line;
+    display: flex;
+    gap: 1.1rem;
+  }
+  .line span {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    font: 700 0.7rem/1 var(--display);
+    letter-spacing: 0.1em;
+    color: var(--dim);
+  }
+  .line b {
+    font: 800 1.15rem/1 var(--display);
+    color: #fff;
+  }
+  .line .hi b {
+    color: var(--orange);
+  }
+  @media (min-width: 720px) {
+    .roster a {
+      grid-template-columns: 3.6rem 1fr auto;
+      grid-template-areas: 'jn nm line';
+      padding: 0.7rem 1.25rem 0.7rem 0.75rem;
+    }
+    .line b {
+      font-size: 1.35rem;
+    }
   }
 </style>

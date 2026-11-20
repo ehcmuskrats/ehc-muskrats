@@ -13,5 +13,4 @@ const { lang, p, ours = false, number = false } = Astro.props;
 const slug = p && ours ? playerSlug(p.id) : null;
 const label = p ? `${number && p.number != null ? `#${p.number} ` : ''}${p.first} ${p.last}`.trim() : '';
 ---
-
-{p ? slug ? <a href={href(lang, `players/${slug}/`)}>{label}</a> : <span>{label}</span> : <span class="muted">–</span>}
+{p ? slug ? <a href={href(lang, `players/${slug}/`)}>{label}</a> : <span>{label}</span> : <span class="dim">–</span>}

@@ -1,0 +1,92 @@
+---
+// Compact TV-style score bug: two team lines with scores, used in the results ticker.
+import type { GameSummary } from '../types/models.ts';
+import { type Lang, href, t } from '../i18n/index.ts';
+import { RESULT_FULL } from '../i18n/abbr.ts';
+import { resultCode, resultClass, side } from '../lib/data.ts';
+import Team from './Team.astro';
+interface Props {
+  lang: Lang;
+  game: GameSummary;
+}
+const { lang, game: g } = Astro.props;
+const played = g.status === 'final' || g.status === 'live';
+const r = resultCode(g);
+const us = side(g);
+const [d, m] = (g.date ?? '').slice(5).split('-').reverse();
+const dateLabel = g.date ? (lang === 'de' ? `${d}.${m}.` : `${Number(d)}/${Number(m)}`) : t(lang, 'common.tbd');
+const winner = played && g.homeScore != null && g.awayScore != null ? (g.homeScore > g.awayScore ? 'home' : g.homeScore < g.awayScore ? 'away' : null) : null;
+const Tag = played ? 'a' : 'div';
+---
+
+<Tag class="bug" href={played ? href(lang, `games/${g.id}/`) : undefined}>
+  <span class="top">
+    <span class="date tnum">{dateLabel}</span>
+    {r && <span class={`res res-${resultClass(r)}`} title={RESULT_FULL[r][lang]}>{r}</span>}
+    {!played && <span class="time tnum">{g.time ?? ''}</span>}
+  </span>
+  {
+    (['home', 'away'] as const).map((s) => (
+      <span class={`line ${s === us ? 'us' : ''} ${winner === s ? 'win' : ''}`}>
+        <Team team={s === 'home' ? g.home : g.away} short size={22} />
+        <span class="sc tnum">{played ? (s === 'home' ? g.homeScore : g.awayScore) : ''}</span>
+      </span>
+    ))
+  }
+</Tag>
+
+<style>
+  .bug {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 148px;
+    padding: 10px 12px 11px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    box-shadow: var(--highlight);
+    color: var(--text);
+    scroll-snap-align: start;
+    transition:
+      transform 0.15s,
+      box-shadow 0.2s;
+  }
+  a.bug:hover {
+    color: var(--text);
+    box-shadow: var(--glow-blue);
+    transform: translateY(-2px);
+  }
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font: 700 0.8rem/1 var(--display);
+    letter-spacing: 0.1em;
+    color: var(--dim);
+  }
+  .line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: var(--muted);
+  }
+  .line :global(.name) {
+    font: 800 1.05rem/1 var(--display);
+    letter-spacing: 0.04em;
+  }
+  .line.us {
+    color: #fff;
+  }
+  .line.us :global(.name) {
+    color: var(--orange);
+  }
+  .sc {
+    font: 800 1.35rem/1 var(--display);
+    min-width: 1.4ch;
+    text-align: right;
+  }
+  .line.win .sc {
+    color: #fff;
+  }
+</style>

@@ -1,79 +1,101 @@
 ---
+// Schedule rows, designed for phones: date block | opponent | score.
 import type { GameSummary } from '../types/models.ts';
-import { type Lang, t, href, formatDate, formatTime } from '../i18n/index.ts';
-import { opponent, ourScore, resultOf, side, gamesWithHighlights } from '../lib/data.ts';
+import { type Lang, t, href } from '../i18n/index.ts';
+import { RESULT_FULL } from '../i18n/abbr.ts';
+import { opponent, ourScore, resultCode, resultClass, side, gamesWithHighlights } from '../lib/data.ts';
 import Team from './Team.astro';
 interface Props {
   lang: Lang;
   games: GameSummary[];
-  /** Hide date column (for TBD lists). */
+  /** Games without a fixed date. */
   noDate?: boolean;
   filterable?: boolean;
 }
 const { lang, games, noDate = false, filterable = false } = Astro.props;
+const WD = { de: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'], en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] };
+const MON = {
+  de: ['Jän', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
+  en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+};
+const parts = (iso: string) => {
+  const [y, m, d] = iso.split('-').map(Number);
+  return { d, mon: MON[lang][m - 1], wd: WD[lang][new Date(Date.UTC(y, m - 1, d)).getUTCDay()] };
+};
 ---
 
-<ul class="games" data-games>
+<ol class="games" data-games>
   {
     games.map((g) => {
       const opp = opponent(g);
       const s = side(g);
       const { us, them } = ourScore(g);
-      const res = resultOf(g);
-      const linkable = g.status === 'final' || g.status === 'live' || g.hasReport;
+      const r = resultCode(g);
       const played = g.status === 'final' || g.status === 'live';
-      const extra = g.shootout ? t(lang, 'common.so') : g.overtime ? t(lang, 'common.ot') : '';
-      const inner = (
-        <>
-          <span class="when">
-            {!noDate && <span class="date">{formatDate(lang, g.date, { weekday: true })}</span>}
-            <span class="time small muted">{g.time ? formatTime(lang, g.time) : t(lang, 'common.tbd')}</span>
-          </span>
-          <span class="who">
-            <span class="ha small muted">{s === 'home' ? t(lang, 'common.home') : t(lang, 'common.away')}</span>
-            <Team team={opp} />
-            {g.playoff && <span class="po small">{g.playoff.encounter ?? g.playoff.roundLabel}</span>}
-            {g.venue && <span class="venue small muted">{g.venue.replace(/^Wien - /, '')}</span>}
-          </span>
-          <span class="score">
-            {played && us != null ? (
-              <>
-                {res && <span class={`res res-${res}`}>{res === 'W' ? (lang === 'de' ? 'S' : 'W') : res === 'L' ? (lang === 'de' ? 'N' : 'L') : (lang === 'de' ? 'U' : 'T')}</span>}
-                <strong>
-                  {us}:{them}
-                </strong>
-                {extra && <span class="small muted"> {extra}</span>}
-                {g.status === 'live' && <span class="small live"> {t(lang, 'common.live')}</span>}
-              </>
-            ) : (
-              <span class="muted">–:–</span>
-            )}
-            {gamesWithHighlights.has(g.id) && (
-              <svg class="play-icon" viewBox="0 0 24 24" role="img" aria-label={t(lang, 'schedule.hasHighlights')}>
-                <title>{t(lang, 'schedule.hasHighlights')}</title>
-                <circle cx="12" cy="12" r="11" fill="currentColor" />
-                <path d="M10 8l6 4-6 4z" fill="#111" />
-              </svg>
-            )}
-          </span>
-        </>
-      );
+      const linkable = played || g.hasReport;
+      const p = g.date && !noDate ? parts(g.date) : null;
+      const Row = linkable ? 'a' : 'div';
       return (
         <li data-status={played ? 'played' : 'upcoming'} data-venue={s}>
-          {linkable ? (
-            <a class="row" href={href(lang, `games/${g.id}/`)}>
-              {inner}
-            </a>
-          ) : (
-            <div class="row">{inner}</div>
-          )}
+          <Row class={`row ${played ? 'played' : ''}`} href={linkable ? href(lang, `games/${g.id}/`) : undefined}>
+            <span class="when">
+              {p ? (
+                <>
+                  <span class="wd">{p.wd}</span>
+                  <span class="d tnum">{p.d}</span>
+                  <span class="mon">{p.mon}</span>
+                </>
+              ) : (
+                <span class="tbd">{t(lang, 'common.tbd')}</span>
+              )}
+            </span>
+            <span class="who">
+              <span class="meta">
+                <span class={`ha ${s}`}>{s === 'home' ? t(lang, 'common.home') : t(lang, 'common.away')}</span>
+                {g.playoff && <span class="po">{g.playoff.encounter ?? g.playoff.roundLabel}</span>}
+              </span>
+              <Team team={opp} size={28} />
+              <span class="venue">
+                {g.time && !played ? `${g.time} · ` : ''}
+                {g.venue?.replace(/^Wien - /, '') ?? ''}
+              </span>
+            </span>
+            <span class="score">
+              {played && us != null ? (
+                <>
+                  <span class="sc tnum">
+                    {us}
+                    <i>:</i>
+                    {them}
+                  </span>
+                  <span class="badges">
+                    {r && (
+                      <span class={`res res-${resultClass(r)}`} title={RESULT_FULL[r][lang]}>
+                        {r}
+                      </span>
+                    )}
+                    {g.status === 'live' && <span class="live">{t(lang, 'common.live')}</span>}
+                    {gamesWithHighlights.has(g.id) && (
+                      <svg class="play" viewBox="0 0 24 24" role="img" aria-label={t(lang, 'schedule.hasHighlights')}>
+                        <title>{t(lang, 'schedule.hasHighlights')}</title>
+                        <circle cx="12" cy="12" r="11" />
+                        <path d="M10 7.8l6 4.2-6 4.2z" />
+                      </svg>
+                    )}
+                  </span>
+                </>
+              ) : (
+                <span class="kick tnum">{g.time ?? '–'}</span>
+              )}
+            </span>
+          </Row>
         </li>
       );
     })
   }
-</ul>
+</ol>
 {games.length === 0 && <p class="muted">{t(lang, 'common.noGames')}</p>}
-{filterable && <p class="muted small empty-msg" hidden>{t(lang, 'common.noGames')}</p>}
+{filterable && <p class="muted empty-msg" hidden>{t(lang, 'common.noGames')}</p>}
 
 <style>
   .games {
@@ -81,65 +103,149 @@ const { lang, games, noDate = false, filterable = false } = Astro.props;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 0.5rem;
+    gap: 6px;
   }
   .row {
     display: grid;
-    grid-template-columns: 6.8rem 1fr auto;
-    gap: 0.75rem;
+    grid-template-columns: 52px 1fr auto;
+    gap: 12px;
     align-items: center;
-    padding: 0.7rem 0.85rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    min-height: 76px;
+    padding: 10px 14px 10px 10px;
+    border-radius: 12px;
+    background: var(--panel);
+    box-shadow: var(--highlight);
     color: var(--text);
-    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition:
+      background 0.15s,
+      box-shadow 0.2s;
   }
   a.row:hover {
-    border-color: var(--blue);
+    color: var(--text);
+    background: var(--panel-2);
+    box-shadow: var(--glow-blue);
   }
-  .when,
+  .when {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.04);
+    font-family: var(--display);
+    text-transform: uppercase;
+    line-height: 1;
+    padding: 6px 0;
+  }
+  .wd,
+  .mon {
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+  }
+  .d {
+    font-weight: 800;
+    font-size: 1.6rem;
+    color: #fff;
+    margin: 2px 0;
+  }
+  .tbd {
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+  }
   .who {
     display: flex;
     flex-direction: column;
+    gap: 4px;
     min-width: 0;
   }
-  .date {
-    font-weight: 600;
-    font-size: 0.92rem;
+  .who :global(.name) {
+    font: 800 1.15rem/1.05 var(--display);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
-  .who :global(.team span) {
-    font-weight: 600;
+  .meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font: 700 0.7rem/1 var(--display);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .ha {
+    color: var(--dim);
+  }
+  .ha.home {
+    color: var(--blue-hi);
+  }
+  .po {
+    color: var(--orange);
+  }
+  .venue {
+    font-size: 0.78rem;
+    color: var(--dim);
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .ha {
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-size: 0.72rem;
-  }
-  .po {
-    color: var(--brown-text);
-    font-weight: 600;
-  }
   .score {
     display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+  }
+  .sc {
+    font: 800 1.9rem/1 var(--display);
+    color: #fff;
+    letter-spacing: 0.02em;
+  }
+  .sc i {
+    font-style: normal;
+    color: var(--dim);
+    margin: 0 1px;
+  }
+  .kick {
+    font: 800 1.35rem/1 var(--display);
+    color: var(--muted);
+  }
+  .badges {
+    display: flex;
+    gap: 6px;
     align-items: center;
-    gap: 0.4rem;
-    font-size: 1.1rem;
+  }
+  .play {
+    width: 20px;
+    height: 20px;
+  }
+  .play circle {
+    fill: var(--orange);
+  }
+  .play path {
+    fill: var(--ink);
   }
   .live {
+    font: 800 0.75rem/1 var(--display);
+    letter-spacing: 0.1em;
     color: var(--loss);
-    font-weight: 700;
+    text-transform: uppercase;
   }
-  @media (max-width: 420px) {
+  @media (min-width: 720px) {
     .row {
-      grid-template-columns: 5.6rem 1fr auto;
-      gap: 0.5rem;
-      padding: 0.6rem;
+      grid-template-columns: 60px 1fr auto;
+      padding: 12px 18px 12px 12px;
     }
-    .venue {
-      display: none;
+    .who :global(.name) {
+      font-size: 1.3rem;
     }
   }
 </style>

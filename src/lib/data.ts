@@ -76,6 +76,19 @@ export function resultOf(g: GameSummary): 'W' | 'L' | 'T' | null {
   return us > them ? 'W' : us < them ? 'L' : 'T';
 }
 
+/** W / L / OTW / OTL / T from our perspective. */
+export function resultCode(g: GameSummary): 'W' | 'L' | 'OTW' | 'OTL' | 'T' | null {
+  const r = resultOf(g);
+  if (!r || r === 'T') return r;
+  const extra = g.overtime || g.shootout;
+  return extra ? (r === 'W' ? 'OTW' : 'OTL') : r;
+}
+
+/** CSS class suffix for a result code. */
+export function resultClass(code: string | null): 'W' | 'L' | 'T' {
+  return code === 'W' || code === 'OTW' ? 'W' : code === 'L' || code === 'OTL' ? 'L' : 'T';
+}
+
 export function sortByDate(list: GameSummary[], dir: 1 | -1 = 1): GameSummary[] {
   return [...list].sort((a, b) => dir * ((a.timestamp ?? Infinity) - (b.timestamp ?? Infinity)));
 }

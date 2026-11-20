@@ -3,8 +3,9 @@ import Base from '../../../layouts/Base.astro';
 import Team from '../../../components/Team.astro';
 import SeasonPicker from '../../../components/SeasonPicker.astro';
 import DataCredit from '../../../components/DataCredit.astro';
+import Abbr from '../../../components/Abbr.astro';
 import { type Lang, LANGS, useT, href } from '../../../i18n/index.ts';
-import { ourSeasons, currentSeasonId, season as getSeason, ourGames } from '../../../lib/data.ts';
+import { ourSeasons, currentSeasonId, season as getSeason, ourGames, games as reports } from '../../../lib/data.ts';
 import { isOurTeam } from '../../../config/team.ts';
 
 export function getStaticPaths() {
@@ -17,18 +18,21 @@ const lang = Astro.params.lang as Lang;
 const seasonId = Astro.params.season ?? currentSeasonId;
 const t = useT(lang);
 const s = getSeason(seasonId);
-// Show later phases (placement rounds) first, then the regular season.
-const tables = s ? [...s.standings].sort((a, b) => b.divisionId - a.divisionId) : [];
+// The latest phase we played in first (e.g. "TOP 4"), then other phases newest first.
+const hasUs = (st: { rows: { team: Parameters<typeof isOurTeam>[0] }[] }) => st.rows.some((r) => isOurTeam(r.team));
+const tables = s ? [...s.standings].sort((a, b) => Number(hasUs(b)) - Number(hasUs(a)) || b.divisionId - a.divisionId) : [];
 const anyTies = tables.some((st) => st.rows.some((r) => r.ties > 0));
 const anyOt = tables.some((st) => st.rows.some((r) => r.otw > 0 || r.otl > 0));
 const bracket = s?.playoffs;
-const gameLinks = new Set(ourGames(seasonId).filter((g) => g.status === 'final').map((g) => g.id));
+const gameById = new Map((s?.games ?? []).map((g) => [g.id, g]));
+const ourIds = new Set(ourGames(seasonId).map((g) => g.id));
+void reports;
 ---
 
 <Base lang={lang} title={`${t('standings.title')} ${seasonId.replace('-', '/')}`} path={Astro.params.season ? `standings/${seasonId}/` : 'standings/'} active="nav.standings" leagueData>
   <header class="page-head">
+    <span class="tag">{t('common.season')} {seasonId.replace('-', '/')}</span>
     <h1>{t('standings.title')}</h1>
-    <p class="sub">{t('common.season')} {seasonId.replace('-', '/')}</p>
   </header>
   <SeasonPicker lang={lang} section="standings" seasons={ourSeasons.map((x) => x.info.id)} current={seasonId} />
 
@@ -37,50 +41,64 @@ const gameLinks = new Set(ourGames(seasonId).filter((g) => g.status === 'final')
   {
     tables.map((st) => (
       <section aria-labelledby={`h-${st.divisionId}`}>
-        <h2 id={`h-${st.divisionId}`}>{st.divisionName}</h2>
-        {st.unofficial && <p class="small muted">{t('standings.unofficial')}</p>}
+        <div class="sec-head">
+          <h2 id={`h-${st.divisionId}`}>{st.divisionName}</h2>
+          {st.unofficial && <span class="tag ghost">{t('standings.unofficial')}</span>}
+        </div>
         <div class="table-wrap">
-          <table>
+          <table class="standings">
             <thead>
               <tr>
                 <th class="num" scope="col">
-                  {t('standings.rank')}
+                  <Abbr lang={lang} k="rank" />
                 </th>
-                <th scope="col" class="sticky-col">
+                <th class="sticky-col" scope="col">
                   {t('common.team')}
                 </th>
                 <th class="num" scope="col">
-                  <abbr title={lang === 'de' ? 'Spiele' : 'Games played'}>{t('standings.gp')}</abbr>
+                  <Abbr lang={lang} k="gp" />
                 </th>
                 <th class="num" scope="col">
-                  {t('standings.w')}
+                  <Abbr lang={lang} k="w" />
                 </th>
-                {anyOt && <th class="num" scope="col">{t('standings.otw')}</th>}
-                {anyOt && <th class="num" scope="col">{t('standings.otl')}</th>}
-                {anyTies && <th class="num" scope="col">{t('standings.ties')}</th>}
+                {anyOt && (
+                  <th class="num" scope="col">
+                    <Abbr lang={lang} k="otw" />
+                  </th>
+                )}
+                {anyOt && (
+                  <th class="num" scope="col">
+                    <Abbr lang={lang} k="otl" />
+                  </th>
+                )}
+                {anyTies && (
+                  <th class="num" scope="col">
+                    <Abbr lang={lang} k="t" />
+                  </th>
+                )}
                 <th class="num" scope="col">
-                  {t('standings.l')}
+                  <Abbr lang={lang} k="l" />
                 </th>
                 <th class="num" scope="col">
-                  {t('standings.gf')}
+                  <Abbr lang={lang} k="gf" />
                 </th>
                 <th class="num" scope="col">
-                  {t('standings.ga')}
+                  <Abbr lang={lang} k="ga" />
                 </th>
                 <th class="num" scope="col">
-                  {t('standings.gd')}
+                  <Abbr lang={lang} k="gd" />
                 </th>
                 <th class="num" scope="col">
-                  {t('standings.pts')}
+                  <Abbr lang={lang} k="pts" />
                 </th>
               </tr>
             </thead>
             <tbody>
               {st.rows.map((r) => (
                 <tr class={isOurTeam(r.team) ? 'ours' : undefined}>
-                  <td class="num">{r.rank}</td>
-                  <td class="sticky-col">
-                    <Team team={r.team} />
+                  <td class="num rank">{r.rank}</td>
+                  <td class="sticky-col team-col">
+                    <Team team={r.team} responsive />
                   </td>
                   <td class="num">{r.gp}</td>
                   <td class="num">{r.w}</td>
@@ -91,7 +109,7 @@ const gameLinks = new Set(ourGames(seasonId).filter((g) => g.status === 'final')
                   <td class="num">{r.gf}</td>
                   <td class="num">{r.ga}</td>
                   <td class="num">{r.gd > 0 ? `+${r.gd}` : r.gd}</td>
-                  <td class="num strong">{r.pts}</td>
+                  <td class="num big">{r.pts}</td>
                 </tr>
               ))}
             </tbody>
@@ -104,35 +122,44 @@ const gameLinks = new Set(ourGames(seasonId).filter((g) => g.status === 'final')
   {
     bracket && bracket.phases.length > 0 && (
       <section aria-labelledby="h-bracket">
-        <h2 id="h-bracket">{t('standings.bracket')}</h2>
+        <div class="sec-head">
+          <h2 id="h-bracket">{t('standings.bracket')}</h2>
+        </div>
         <div class="bracket">
           {bracket.phases.map((ph) => (
             <div class="round">
-              <h3>{ph.label}</h3>
-              {ph.encounters.map((enc) => (
-                <div class={`enc card ${enc.teams.some((x) => isOurTeam(x.team)) ? 'has-us' : ''}`}>
-                  <p class="small muted">{enc.label}</p>
-                  <ul>
-                    {enc.teams.map((x) => (
-                      <li class={x.winner ? 'winner' : undefined}>
-                        <Team team={x.team} />
-                        <span class="wins">{enc.bestOf > 1 ? x.wins : x.winner ? '✓' : ''}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  {enc.gameIds.some((id) => gameLinks.has(id)) && (
-                    <p class="small">
-                      {enc.gameIds
-                        .filter((id) => gameLinks.has(id))
-                        .map((id, i) => (
-                          <a href={href(lang, `games/${id}/`)}>
-                            {t('common.game')} {i + 1}{' '}
-                          </a>
-                        ))}
-                    </p>
-                  )}
-                </div>
-              ))}
+              <p class="eyebrow">{ph.label}</p>
+              {ph.encounters.map((enc) => {
+                const mine = enc.teams.some((x) => isOurTeam(x.team));
+                const encGames = enc.gameIds.map((id) => gameById.get(id)).filter((g) => g && g.status === 'final');
+                return (
+                  <div class={`enc ${mine ? 'mine' : ''}`}>
+                    <ul>
+                      {enc.teams.map((x) => (
+                        <li class={`${x.winner ? 'winner' : ''} ${isOurTeam(x.team) ? 'us' : ''}`}>
+                          <Team team={x.team} />
+                          <span class="wins tnum">{enc.bestOf > 1 ? x.wins : x.winner ? '✓' : ''}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {encGames.length > 0 && (
+                      <p class="games-line">
+                        {encGames.map((g, i) =>
+                          ourIds.has(g!.id) ? (
+                            <a href={href(lang, `games/${g!.id}/`)} class="tnum">
+                              {t('common.game')} {i + 1}: {g!.homeScore}:{g!.awayScore}
+                            </a>
+                          ) : (
+                            <span class="tnum">
+                              {t('common.game')} {i + 1}: {g!.homeScore}:{g!.awayScore}
+                            </span>
+                          ),
+                        )}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           ))}
         </div>
@@ -144,31 +171,48 @@ const gameLinks = new Set(ourGames(seasonId).filter((g) => g.status === 'final')
 </Base>
 
 <style>
+  .rank {
+    color: var(--dim);
+    width: 2rem;
+  }
+  .team-col {
+    width: 100%;
+  }
+  @media (min-width: 600px) {
+    .team-col {
+      min-width: 14rem;
+    }
+  }
   .bracket {
     display: grid;
-    gap: var(--gutter);
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(240px, 1fr);
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
+    gap: 1.25rem;
+  }
+  @media (min-width: 900px) {
+    .bracket {
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: 1rem;
+      align-items: center;
+    }
   }
   .round {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    justify-content: space-around;
+    display: grid;
+    gap: 8px;
   }
-  .round h3 {
-    margin: 0;
+  .round .eyebrow {
+    margin-bottom: 0.1rem;
   }
   .enc {
-    padding: 0.6rem 0.8rem;
+    background: var(--panel);
+    border-radius: 12px;
+    box-shadow: var(--highlight);
+    padding: 0.55rem 0.8rem;
+    position: relative;
   }
-  .enc.has-us {
-    border-left: 5px solid var(--orange);
-  }
-  .enc p {
-    margin: 0 0 0.3rem;
+  .enc.mine {
+    box-shadow:
+      var(--highlight),
+      inset 3px 0 0 var(--orange);
   }
   .enc ul {
     list-style: none;
@@ -178,13 +222,31 @@ const gameLinks = new Set(ourGames(seasonId).filter((g) => g.status === 'final')
   .enc li {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 0.5rem;
-    padding: 0.15rem 0;
+    min-height: 34px;
+    color: var(--muted);
   }
   .enc li.winner {
+    color: #fff;
     font-weight: 700;
   }
+  .enc li.us :global(.name) {
+    color: var(--orange);
+  }
   .wins {
-    font-weight: 800;
+    font: 800 1.2rem/1 var(--display);
+  }
+  .games-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.9rem;
+    margin: 0.35rem 0 0;
+    padding-top: 0.4rem;
+    border-top: 1px solid var(--line);
+    font: 700 0.8rem/1 var(--display);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--dim);
   }
 </style>

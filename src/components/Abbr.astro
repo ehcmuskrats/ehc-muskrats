@@ -1,0 +1,12 @@
+---
+import type { Lang } from '../i18n/index.ts';
+import { abbr, type AbbrKey } from '../i18n/abbr.ts';
+interface Props {
+  lang: Lang;
+  k: AbbrKey;
+}
+const { lang, k } = Astro.props;
+const a = abbr(lang, k);
+---
+
+<abbr title={a.full}>{a.short}</abbr>

@@ -12,6 +12,18 @@ const en = href('en');
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>EHC Muskrats</title>
     <meta http-equiv="refresh" content={`0; url=${de}`} />
+    <meta name="color-scheme" content="dark" />
+    <style is:inline>
+      html,
+      body {
+        background: #050b18;
+        color: #f2f6ff;
+        font-family: system-ui, sans-serif;
+      }
+      a {
+        color: #5aa2ff;
+      }
+    </style>
     <link rel="canonical" href={de} />
     <script is:inline define:vars={{ de, en }}>
       var l = (navigator.languages || [navigator.language || 'de'])[0] || 'de';

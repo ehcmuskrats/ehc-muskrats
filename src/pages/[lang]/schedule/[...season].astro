@@ -5,7 +5,7 @@ import SeasonPicker from '../../../components/SeasonPicker.astro';
 import DataCredit from '../../../components/DataCredit.astro';
 import VideoEmbed from '../../../components/VideoEmbed.astro';
 import { type Lang, LANGS, useT } from '../../../i18n/index.ts';
-import { ourSeasons, currentSeasonId, ourGames, sortByDate, highlights, season as getSeason } from '../../../lib/data.ts';
+import { ourSeasons, currentSeasonId, ourGames, sortByDate, highlights, season as getSeason, resultClass, resultCode } from '../../../lib/data.ts';
 
 export function getStaticPaths() {
   return LANGS.flatMap((lang) => [
@@ -21,12 +21,29 @@ const games = sortByDate(ourGames(seasonId));
 const dated = games.filter((g) => g.date);
 const tbd = games.filter((g) => !g.date && g.status !== 'final');
 const seasonVideos = highlights.items.filter((h) => !h.gameId && h.status === 'not-a-game' && h.season === seasonId);
+// Season record line
+const rec = { W: 0, L: 0, T: 0 };
+for (const g of games) {
+  const r = resultCode(g);
+  if (r) rec[resultClass(r)]++;
+}
+const played = rec.W + rec.L + rec.T;
 ---
 
 <Base lang={lang} title={`${t('schedule.title')} ${seasonId.replace('-', '/')}`} path={Astro.params.season ? `schedule/${seasonId}/` : 'schedule/'} active="nav.schedule" leagueData>
   <header class="page-head">
-    <h1>{t('schedule.title')}</h1>
-    <p class="sub">{t('common.season')} {seasonId.replace('-', '/')}</p>
+    <span class="tag">{t('common.season')} {seasonId.replace('-', '/')}</span>
+    <h1>{t('nav.schedule')}</h1>
+    {
+      played > 0 && (
+        <p class="record tnum">
+          <span class="w">{rec.W} W</span>
+          <span class="l">{rec.L} L</span>
+          {rec.T > 0 && <span class="t">{rec.T} T</span>}
+          <span class="dim">· {played} {lang === 'de' ? 'Spiele gespielt' : 'games played'}</span>
+        </p>
+      )
+    }
   </header>
 
   <SeasonPicker lang={lang} section="schedule" seasons={ourSeasons.map((x) => x.info.id)} current={seasonId} />
@@ -36,18 +53,16 @@ const seasonVideos = highlights.items.filter((h) => !h.gameId && h.status === 'n
       <p class="muted">{t('common.notPlayed')}</p>
     ) : (
       <>
-        <div class="filters" role="group" aria-label={t('schedule.filterStatus')} data-filter="status">
-          <div class="chips">
-            <button class="chip" type="button" data-value="all" aria-pressed="true">{t('common.all')}</button>
-            <button class="chip" type="button" data-value="upcoming" aria-pressed="false">{t('common.upcoming')}</button>
-            <button class="chip" type="button" data-value="played" aria-pressed="false">{t('common.played')}</button>
+        <div class="controls">
+          <div class="seg" role="group" aria-label={t('schedule.filterStatus')} data-filter="status">
+            <button type="button" data-value="all" aria-pressed="true">{t('common.all')}</button>
+            <button type="button" data-value="upcoming" aria-pressed="false">{t('common.upcoming')}</button>
+            <button type="button" data-value="played" aria-pressed="false">{t('common.played')}</button>
           </div>
-        </div>
-        <div class="filters" role="group" aria-label={t('schedule.filterVenue')} data-filter="venue">
-          <div class="chips">
-            <button class="chip" type="button" data-value="all" aria-pressed="true">{t('common.all')}</button>
-            <button class="chip" type="button" data-value="home" aria-pressed="false">{t('common.home')}</button>
-            <button class="chip" type="button" data-value="away" aria-pressed="false">{t('common.away')}</button>
+          <div class="seg" role="group" aria-label={t('schedule.filterVenue')} data-filter="venue">
+            <button type="button" data-value="all" aria-pressed="true">{t('common.all')}</button>
+            <button type="button" data-value="home" aria-pressed="false">{t('common.home')}</button>
+            <button type="button" data-value="away" aria-pressed="false">{t('common.away')}</button>
           </div>
         </div>
 
@@ -57,7 +72,9 @@ const seasonVideos = highlights.items.filter((h) => !h.gameId && h.status === 'n
 
         {tbd.length > 0 && (
           <section aria-labelledby="h-tbd" data-tbd>
-            <h2 id="h-tbd">{t('common.dateTbc')}</h2>
+            <div class="sec-head">
+              <h2 id="h-tbd">{t('common.dateTbc')}</h2>
+            </div>
             <p class="muted small">{t('common.dateTbcNote')}</p>
             <GameList lang={lang} games={tbd} noDate />
           </section>
@@ -69,8 +86,9 @@ const seasonVideos = highlights.items.filter((h) => !h.gameId && h.status === 'n
   {
     seasonVideos.length > 0 && (
       <section aria-labelledby="h-vids">
-        <div class="divider" aria-hidden="true" />
-        <h2 id="h-vids">{t('schedule.seasonVideos')}</h2>
+        <div class="sec-head">
+          <h2 id="h-vids">{t('schedule.seasonVideos')}</h2>
+        </div>
         <div class="grid grid-2">
           {seasonVideos.map((h) => (
             <VideoEmbed lang={lang} video={h.video} />
@@ -111,8 +129,31 @@ const seasonVideos = highlights.items.filter((h) => !h.gameId && h.status === 'n
 </script>
 
 <style>
-  .filters {
-    display: inline-block;
-    margin-right: 1rem;
+  .controls .seg {
+    flex: 1 1 260px;
+  }
+  .record {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: baseline;
+    margin: 0;
+    font: 800 1.15rem/1 var(--display);
+    letter-spacing: 0.04em;
+  }
+  .record .w {
+    color: var(--win);
+  }
+  .record .l {
+    color: var(--loss);
+  }
+  .record .t {
+    color: var(--tie);
+  }
+  .record .dim {
+    font-family: var(--font);
+    font-weight: 400;
+    font-size: 0.85rem;
+    letter-spacing: 0;
   }
 </style>

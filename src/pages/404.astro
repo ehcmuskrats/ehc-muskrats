@@ -8,23 +8,43 @@ import '../styles/global.css';
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#050b18" />
     <title>404 · EHC Muskrats</title>
     <meta name="robots" content="noindex" />
   </head>
-  <body>
-    <div class="stripes" aria-hidden="true"></div>
+  <body class="nf-body">
     <main class="container nf">
       <img src={url('logo.png')} width="120" height="120" alt="EHC Muskrats" />
-      <h1>404</h1>
-      <p lang="de">Diese Seite gibt es nicht. <a href={url('de/')}>Zur Startseite</a></p>
-      <p lang="en">This page doesn't exist. <a href={url('en/')}>Back to the home page</a></p>
+      <p class="code tnum">404</p>
+      <p lang="de">Diese Seite gibt es nicht.</p>
+      <p lang="en" class="muted">This page doesn't exist.</p>
+      <div class="btns">
+        <a class="btn btn-accent" href={url('de/')}>Startseite</a>
+        <a class="btn btn-ghost" href={url('en/')}>Home</a>
+      </div>
     </main>
   </body>
 </html>
 
 <style>
+  .nf-body {
+    padding-bottom: 0;
+  }
   .nf {
     text-align: center;
-    padding-top: 3rem;
+    padding-top: 4rem;
+  }
+  .code {
+    font: 800 7rem/1 var(--display);
+    color: transparent;
+    -webkit-text-stroke: 2px var(--orange);
+    margin: 1rem 0;
+  }
+  .btns {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 1.5rem;
   }
 </style>

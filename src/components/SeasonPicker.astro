@@ -15,7 +15,7 @@ const id = `season-${section}`;
 ---
 
 <div class="season-picker">
-  <label for={id}>{t(lang, 'common.seasonPicker')}</label>
+  <label for={id} class="visually-hidden">{t(lang, 'common.seasonPicker')}</label>
   <select id={id} data-season-nav>
     {
       extra.map((e) => (
@@ -27,13 +27,13 @@ const id = `season-${section}`;
     {
       seasons.map((s) => (
         <option value={href(lang, `${section}/${s}/`)} selected={s === current}>
-          {s.replace('-', '/')}
+          {t(lang, 'common.season')} {s.replace('-', '/')}
         </option>
       ))
     }
   </select>
   <noscript>
-    <ul class="chips">
+    <ul>
       {
         seasons.map((s) => (
           <li>
@@ -55,17 +55,12 @@ const id = `season-${section}`;
 
 <style>
   .season-picker {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    flex-wrap: wrap;
-    margin: 0.5rem 0 1rem;
-  }
-  label {
-    font-weight: 600;
-    font-size: 0.95rem;
+    margin: 0.9rem 0 0.4rem;
   }
   noscript ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
     list-style: none;
     padding: 0;
   }

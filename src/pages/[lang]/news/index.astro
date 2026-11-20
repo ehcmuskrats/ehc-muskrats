@@ -13,27 +13,49 @@ const posts = await newsFor(lang);
   <header class="page-head">
     <h1>{t('news.title')}</h1>
   </header>
-  {posts.length === 0 && <p class="muted">{t('news.none')}</p>}
-  <div class="grid">
+  {posts.length === 0 && <p class="muted empty">{t('news.none')}</p>}
+  <ol class="rows posts">
     {
       posts.map((p) => (
-        <article class="card">
-          <p class="small muted">{formatDate(lang, p.data.date.toISOString())}</p>
-          <h2>
-            <a href={href(lang, `news/${newsSlug(p)}/`)}>{p.data.title}</a>
-          </h2>
-          {p.data.summary && <p>{p.data.summary}</p>}
-          <p class="small">
-            <a href={href(lang, `news/${newsSlug(p)}/`)}>{t('news.readMore')} →</a>
-            {p.data.gameId && (
-              <>
-                {' · '}
-                <a href={href(lang, `games/${p.data.gameId}/`)}>{t('news.toGame')}</a>
-              </>
-            )}
-          </p>
-        </article>
+        <li>
+          <a href={href(lang, `news/${newsSlug(p)}/`)}>
+            <span class="eyebrow">
+              {formatDate(lang, p.data.date.toISOString())}
+              {p.data.gameId && <span class="tag ghost">{lang === 'de' ? 'Spielbericht' : 'Recap'}</span>}
+            </span>
+            <span class="pt">{p.data.title}</span>
+            {p.data.summary && <span class="ps">{p.data.summary}</span>}
+          </a>
+        </li>
       ))
     }
-  </div>
+  </ol>
 </Base>
+
+<style>
+  .posts:empty {
+    display: none;
+  }
+  .posts a {
+    display: block;
+    padding: 1rem 1.1rem;
+    color: var(--text);
+  }
+  .posts a:hover {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+  }
+  .posts .eyebrow {
+    margin-bottom: 0.4rem;
+  }
+  .pt {
+    display: block;
+    font: 800 1.45rem/1.05 var(--display);
+    text-transform: uppercase;
+  }
+  .ps {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--muted);
+  }
+</style>

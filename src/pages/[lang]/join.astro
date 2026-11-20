@@ -9,44 +9,21 @@ const lang = Astro.params.lang as Lang;
 const t = useT(lang);
 const email = SITE.contactEmail.trim();
 const fee = SITE.membership.feeEur.toLocaleString(lang === 'de' ? 'de-AT' : 'en-GB');
+const facts = [
+  ['join.level', t('join.levelText')],
+  ['join.rink', `${SITE.homeRink}, ${SITE.homeRinkAddress}`],
+  ['join.practice', t('join.practiceText')],
+] as const;
 ---
 
 <Base lang={lang} title={t('join.title')} path="join/" active="nav.join">
-  <header class="page-head join-head">
-    <img src={url('logo.png')} width="120" height="120" alt="" />
-    <div>
-      <h1>{t('join.title')}</h1>
-      <p class="sub">{t('join.intro')}</p>
-    </div>
-  </header>
-
-  <div class="grid grid-2">
-    <section class="card">
-      <h2 class="card-title">{t('join.level')}</h2>
-      <p>{t('join.levelText')}</p>
-    </section>
-    <section class="card">
-      <h2 class="card-title">{t('join.rink')}</h2>
-      <p>
-        <strong>{SITE.homeRink}</strong>, Wien<br />
-        <span class="muted">{SITE.homeRinkAddress}</span>
-      </p>
-    </section>
-    <section class="card">
-      <h2 class="card-title">{t('join.practice')}</h2>
-      <p>{t('join.practiceText')}</p>
-    </section>
-    <section class="card">
-      <h2 class="card-title">{t('join.cost')}</h2>
-      <p class="fee">{t('join.costText', { fee, season: SITE.membership.season })}</p>
-    </section>
-  </div>
-
-  <section class="card contact">
-    <h2>{t('join.contact')}</h2>
-    <p>{t('join.contactText')}</p>
-    <div class="buttons">
-      <a class="btn btn-brand btn-lg" href={TEAM.facebookUrl} rel="noopener">
+  <section class="hero">
+    <img class="logo" src={url('logo.png')} width="140" height="140" alt="" />
+    <span class="tag">{TEAM.leagueName}</span>
+    <h1>{t('join.title')}</h1>
+    <p class="lead">{t('join.intro')}</p>
+    <div class="cta">
+      <a class="btn btn-accent btn-block" href={TEAM.facebookUrl} rel="noopener">
         <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"
           ><path
             fill="currentColor"
@@ -57,36 +34,134 @@ const fee = SITE.membership.feeEur.toLocaleString(lang === 'de' ? 'de-AT' : 'en-
       </a>
       {
         email && (
-          <a class="btn btn-ghost btn-lg" href={`mailto:${email}`}>
-            {t('join.email')}: {email}
+          <a class="btn btn-ghost btn-block" href={`mailto:${email}`}>
+            {email}
           </a>
         )
       }
     </div>
+    <div class="band" aria-hidden="true"></div>
+  </section>
+
+  <div class="fee panel">
+    <p class="eyebrow">{t('join.cost')}</p>
+    <p class="amount tnum">€ {fee}</p>
+    <p class="muted">{t('common.season')} {SITE.membership.season}</p>
+  </div>
+
+  <ul class="rows facts">
+    {
+      facts.map(([key, text]) => (
+        <li>
+          <p class="eyebrow">{t(key)}</p>
+          <p class="txt">{text}</p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <section class="contact panel">
+    <h2>{t('join.contact')}</h2>
+    <p class="muted">{t('join.contactText')}</p>
+    <a class="btn btn-brand btn-block" href={TEAM.facebookUrl} rel="noopener">{t('join.facebook')} →</a>
+    {
+      email && (
+        <p class="mail">
+          {t('join.email')}: <a href={`mailto:${email}`}>{email}</a>
+        </p>
+      )
+    }
   </section>
 </Base>
 
 <style>
-  .join-head {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
+  .hero {
+    position: relative;
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 2rem var(--gutter) 2rem;
+    text-align: center;
+    overflow: hidden;
+    background:
+      radial-gradient(80% 70% at 50% 0%, rgba(247, 122, 26, 0.22), transparent 70%),
+      linear-gradient(170deg, #0d2a66, #081430 60%, var(--bg));
   }
-  .join-head img {
-    width: clamp(80px, 20vw, 120px);
-    height: auto;
+  @media (min-width: 1180px) {
+    .hero {
+      margin: 0 calc(50% - 50vw);
+    }
+  }
+  .logo {
+    width: 120px;
+    height: 120px;
+    display: block;
+    margin: 0 auto 1rem;
+    filter: drop-shadow(0 10px 30px rgba(24, 112, 224, 0.6));
+  }
+  h1 {
+    margin: 0.7rem 0 0.5rem;
+  }
+  .lead {
+    max-width: 44ch;
+    margin: 0 auto 1.4rem;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+  .cta {
+    display: grid;
+    gap: 10px;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+  .band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 5px;
+    background: var(--stripes-h);
   }
   .fee {
-    font-size: 1.15rem;
-    font-weight: 700;
+    margin-top: 1.25rem;
+    text-align: center;
+  }
+  .fee .eyebrow {
+    justify-content: center;
+  }
+  .amount {
+    font: 800 4rem/1 var(--display);
+    color: var(--orange);
+    margin: 0.2rem 0 0.3rem;
+    text-shadow: 0 0 40px rgba(247, 122, 26, 0.35);
+  }
+  .fee .muted {
+    margin: 0;
+  }
+  .facts {
+    margin-top: 12px;
+  }
+  .facts li {
+    padding: 1rem 1.1rem;
+  }
+  .facts .eyebrow {
+    margin-bottom: 0.35rem;
+  }
+  .txt {
+    margin: 0;
+    font-size: 1.02rem;
   }
   .contact {
-    margin-top: var(--gutter);
-    border-top: 6px solid var(--orange);
+    margin-top: 1.25rem;
   }
-  .buttons {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
+  .contact h2 {
+    margin-bottom: 0.3rem;
+  }
+  .mail {
+    margin: 0.8rem 0 0;
+    text-align: center;
+  }
+  @media (min-width: 720px) {
+    .contact .btn {
+      width: auto;
+    }
   }
 </style>

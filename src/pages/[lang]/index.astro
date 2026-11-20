@@ -1,12 +1,13 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Team from '../../components/Team.astro';
-import GameList from '../../components/GameList.astro';
+import ScoreBug from '../../components/ScoreBug.astro';
 import VideoEmbed from '../../components/VideoEmbed.astro';
 import DataCredit from '../../components/DataCredit.astro';
+import Abbr from '../../components/Abbr.astro';
 import { type Lang, langPaths, useT, href, url, formatDate } from '../../i18n/index.ts';
 import { TEAM, isOurTeam } from '../../config/team.ts';
-import { currentSeasonId, season, ourGames, sortByDate, highlights, derived } from '../../lib/data.ts';
+import { currentSeasonId, season, ourGames, sortByDate, highlights, derived, teamName, ourScore, resultCode, resultClass } from '../../lib/data.ts';
 import { newsFor, newsSlug } from '../../lib/news.ts';
 
 export const getStaticPaths = langPaths;
@@ -14,104 +15,174 @@ const lang = Astro.params.lang as Lang;
 const t = useT(lang);
 
 const all = sortByDate(ourGames());
+// Candidates for "next game"; the client script picks the first one still in the future.
 const upcoming = all.filter((g) => g.status === 'scheduled' && g.timestamp != null && g.timestamp > Date.now() - 3 * 3600_000).slice(0, 4);
-const lastResult = [...all].reverse().find((g) => g.status === 'final');
-// Newest video first (items are sorted by publish date).
+const results = [...all].reverse().filter((g) => g.status === 'final').slice(0, 10);
+const lastResult = results[0];
 const latestVideo = highlights.items[0];
 const cur = season(currentSeasonId);
 const standings = cur ? [...cur.standings].reverse().find((s) => s.rows.some((r) => isOurTeam(r.team))) : undefined;
 const recap = (await newsFor(lang))[0];
-const top3 = derived.players
+const top = derived.players
   .map((p) => ({ p, l: p.seasons.find((s) => s.season === currentSeasonId) }))
   .filter((x) => x.l && x.l.gp > 0)
   .sort((a, b) => b.l!.p - a.l!.p || b.l!.g - a.l!.g)
-  .slice(0, 3);
+  .slice(0, 5);
+const last = lastResult ? { ...ourScore(lastResult), r: resultCode(lastResult) } : null;
+const seasonLabel = currentSeasonId.replace('-', '/');
 ---
 
 <Base lang={lang} path="" active="nav.home" leagueData>
-  <section class="hero">
-    <img src={url('logo.png')} width="140" height="140" alt={`${TEAM.displayName} Logo`} />
-    <div>
-      <h1>{TEAM.displayName}</h1>
-      <p class="sub">{t('site.tagline')} · {t('common.season')} {currentSeasonId.replace('-', '/')}</p>
+  <!-- HERO: next game scoreboard -->
+  <section class="hero" aria-labelledby="h-next">
+    <div class="jersey-stripes" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <p class="hero-top rise">
+        <span class="tag" id="h-next">{t('home.nextGame')}</span>
+        <span class="season">{TEAM.leagueName} · {seasonLabel}</span>
+      </p>
+
+      {
+        upcoming.map((g, i) => (
+          <div class="next-game" data-ts={g.timestamp} hidden={i > 0}>
+            <div class="matchup rise rise-2">
+              {(['home', 'away'] as const).map((s, idx) => {
+                const team = s === 'home' ? g.home : g.away;
+                return (
+                  <>
+                    {idx === 1 && <span class="vs">VS</span>}
+                    <div class={`side ${isOurTeam(team) ? 'us' : ''}`}>
+                      <Team team={team} logoOnly size={68} />
+                      <span class="code">{team.short || teamName(team).slice(0, 3)}</span>
+                      <span class="full">{teamName(team)}</span>
+                    </div>
+                  </>
+                );
+              })}
+            </div>
+            <p class="when rise rise-3">
+              <strong>{formatDate(lang, g.date, { weekday: true })}</strong>
+              <span class="dot">·</span>
+              <strong>{g.time ?? t('common.tbd')}</strong>
+              <span class="where">{g.venue?.replace(/^Wien - /, '')}</span>
+            </p>
+            <div class="countdown rise rise-3" data-countdown={g.timestamp} aria-label={t('home.countdown')}>
+              {[
+                ['d', t('home.days')],
+                ['h', t('home.hours')],
+                ['m', t('home.minutes')],
+                ['s', lang === 'de' ? 'Sek' : 'sec'],
+              ].map(([k, label]) => (
+                <span class="seg-digit">
+                  <span class="v tnum" data-unit={k}>
+                    --
+                  </span>
+                  <span class="k">{label}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+
+      <div class="no-next" hidden={upcoming.length > 0}>
+        <p class="muted">{t('home.noNextGame')}</p>
+      </div>
+
+      <div class="hero-cta">
+        <a class="btn btn-ghost" href={href(lang, 'schedule/')}>{t('nav.schedule')}</a>
+      </div>
     </div>
+    <div class="hero-band" aria-hidden="true"></div>
   </section>
 
-  <div class="grid grid-2">
-    <section class="card next" aria-labelledby="h-next">
-      <h2 class="card-title" id="h-next">{t('home.nextGame')}</h2>
-      {
-        upcoming.length ? (
-          upcoming.map((g, i) => (
-            <div class="next-game" data-ts={g.timestamp} hidden={i > 0}>
-              <p class="matchup">
-                <Team team={g.home} /> <span class="vs">{t('common.vs')}</span> <Team team={g.away} />
-              </p>
-              <p class="when">
-                <strong>{formatDate(lang, g.date, { weekday: true })}</strong>, {g.time ?? t('common.tbd')}
-                <br />
-                <span class="muted">{g.venue}</span>
-              </p>
-              <p class="countdown" aria-live="off" data-countdown={g.timestamp}>
-                <span class="small muted">{t('home.countdown')}</span>
-                <span class="cd" data-labels={`${t('home.days')}|${t('home.hours')}|${t('home.minutes')}`} />
-              </p>
-            </div>
-          ))
-        ) : (
-          <p class="muted">{t('home.noNextGame')}</p>
-        )
-      }
-      <p class="no-next muted" hidden>{t('home.noNextGame')}</p>
-      <a href={href(lang, 'schedule/')}>{t('nav.schedule')} →</a>
-    </section>
-
-    <section class="card" aria-labelledby="h-last">
-      <h2 class="card-title" id="h-last">{t('home.lastResult')}</h2>
-      {lastResult ? <GameList lang={lang} games={[lastResult]} /> : <p class="missing">{t('common.missing')}</p>}
-    </section>
-  </div>
-
+  <!-- TICKER: latest results -->
   {
-    latestVideo && (
-      <section class="card" aria-labelledby="h-video">
-        <h2 class="card-title" id="h-video">{t('home.latestHighlight')}</h2>
-        <VideoEmbed lang={lang} video={latestVideo.video} />
-        {latestVideo.gameId && (
-          <p class="small">
-            <a href={href(lang, `games/${latestVideo.gameId}/`)}>{t('highlights.toGame')} →</a>
-          </p>
-        )}
+    results.length > 0 && (
+      <section aria-labelledby="h-results">
+        <div class="sec-head">
+          <h2 id="h-results">{t('home.results')}</h2>
+          <a href={href(lang, 'schedule/')}>{t('common.viewAll')}</a>
+        </div>
+        <div class="ticker" tabindex="0" aria-label={t('home.results')}>
+          {results.map((g) => (
+            <ScoreBug lang={lang} game={g} />
+          ))}
+        </div>
       </section>
     )
   }
 
-  <div class="grid grid-2">
-    <section class="card" aria-labelledby="h-table">
-      <h2 class="card-title" id="h-table">{t('home.standings')}{standings ? ` · ${standings.divisionName}` : ''}</h2>
+  <!-- LAST RESULT big + highlight -->
+  <div class="duo">
+    {
+      lastResult && last && (
+        <a class="panel last" href={href(lang, `games/${lastResult.id}/`)}>
+          <p class="eyebrow">{t('common.final')} · {formatDate(lang, lastResult.date)}</p>
+          <div class="last-score">
+            <Team team={lastResult.home} logoOnly size={44} />
+            <span class="big tnum">
+              {lastResult.homeScore}
+              <i>:</i>
+              {lastResult.awayScore}
+            </span>
+            <Team team={lastResult.away} logoOnly size={44} />
+          </div>
+          <p class="last-teams">
+            {teamName(lastResult.home)} <span class="dim">vs</span> {teamName(lastResult.away)}
+          </p>
+          {last.r && <span class={`res res-${resultClass(last.r)}`}>{last.r}</span>}
+        </a>
+      )
+    }
+    {
+      latestVideo && (
+        <section class="panel media" aria-labelledby="h-video">
+          <p class="eyebrow" id="h-video">
+            {t('home.latestHighlight')}
+          </p>
+          <VideoEmbed lang={lang} video={latestVideo.video} />
+          {latestVideo.gameId && (
+            <p class="small media-link">
+              <a href={href(lang, `games/${latestVideo.gameId}/`)}>{t('highlights.toGame')} →</a>
+            </p>
+          )}
+        </section>
+      )
+    }
+  </div>
+
+  <div class="duo">
+    <!-- STANDINGS -->
+    <section aria-labelledby="h-table">
+      <div class="sec-head">
+        <h2 id="h-table">{t('home.standings')}</h2>
+        <a href={href(lang, 'standings/')}>{t('home.fullTable')}</a>
+      </div>
+      {standings && <p class="eyebrow">{standings.divisionName}</p>}
       {
         standings ? (
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th class="num" scope="col">{t('standings.rank')}</th>
+                  <th class="num" scope="col"><Abbr lang={lang} k="rank" /></th>
                   <th scope="col">{t('common.team')}</th>
-                  <th class="num" scope="col">{t('standings.gp')}</th>
-                  <th class="num" scope="col">{t('standings.gd')}</th>
-                  <th class="num" scope="col">{t('standings.pts')}</th>
+                  <th class="num" scope="col"><Abbr lang={lang} k="gp" /></th>
+                  <th class="num" scope="col"><Abbr lang={lang} k="gd" /></th>
+                  <th class="num" scope="col"><Abbr lang={lang} k="pts" /></th>
                 </tr>
               </thead>
               <tbody>
                 {standings.rows.map((r) => (
                   <tr class={isOurTeam(r.team) ? 'ours' : undefined}>
-                    <td class="num">{r.rank}</td>
-                    <td>
+                    <td class="num rank">{r.rank}</td>
+                    <td class="team-cell">
                       <Team team={r.team} />
                     </td>
                     <td class="num">{r.gp}</td>
                     <td class="num">{r.gd > 0 ? `+${r.gd}` : r.gd}</td>
-                    <td class="num strong">{r.pts}</td>
+                    <td class="num big">{r.pts}</td>
                   </tr>
                 ))}
               </tbody>
@@ -121,167 +192,487 @@ const top3 = derived.players
           <p class="missing">{t('common.missing')}</p>
         )
       }
-      <p class="small"><a href={href(lang, 'standings/')}>{t('home.fullTable')} →</a></p>
     </section>
 
-    <div class="grid">
-      <section class="card" aria-labelledby="h-top">
-        <h2 class="card-title" id="h-top">{t('home.topScorers')}</h2>
-        {
-          top3.length ? (
-            <ol class="top3">
-              {top3.map(({ p, l }) => (
-                <li>
-                  <a href={href(lang, `players/${p.slug}/`)}>
-                    {p.first} {p.last}
-                  </a>
-                  <span class="pts">
-                    <strong>{l!.p}</strong> {t('col.p')} <span class="muted small">({l!.g} {t('col.g')} · {l!.a} {t('col.a')})</span>
+    <!-- LEADERS -->
+    <section aria-labelledby="h-top">
+      <div class="sec-head">
+        <h2 id="h-top">{t('home.topScorers')}</h2>
+        <a href={href(lang, 'stats/')}>{t('home.allStats')}</a>
+      </div>
+      {
+        top.length ? (
+          <ol class="rows leaders">
+            {top.map(({ p, l }, i) => (
+              <li>
+                <a href={href(lang, `players/${p.slug}/`)} class={i === 0 ? 'first' : undefined}>
+                  <span class="rk tnum">{i + 1}</span>
+                  <span class="nm">
+                    <span class="fn">{p.first}</span>
+                    <span class="ln">{p.last}</span>
                   </span>
-                </li>
-              ))}
-            </ol>
-          ) : (
-            <p class="missing">{t('common.missing')}</p>
-          )
-        }
-        <p class="small"><a href={href(lang, 'stats/')}>{t('home.allStats')} →</a></p>
-      </section>
-
-      <section class="card" aria-labelledby="h-recap">
-        <h2 class="card-title" id="h-recap">{t('home.latestRecap')}</h2>
-        {
-          recap ? (
-            <>
-              <h3>
-                <a href={href(lang, `news/${newsSlug(recap)}/`)}>{recap.data.title}</a>
-              </h3>
-              <p class="small muted">{formatDate(lang, recap.data.date.toISOString())}</p>
-              {recap.data.summary && <p>{recap.data.summary}</p>}
-            </>
-          ) : (
-            <p class="muted">{t('news.none')}</p>
-          )
-        }
-      </section>
-    </div>
+                  <span class="ga tnum">
+                    {l!.g}
+                    <Abbr lang={lang} k="g" /> · {l!.a}
+                    <Abbr lang={lang} k="a" />
+                  </span>
+                  <span class="pt tnum">
+                    {l!.p}
+                    <small>
+                      <Abbr lang={lang} k="p" />
+                    </small>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p class="missing">{t('common.missing')}</p>
+        )
+      }
+    </section>
   </div>
 
-  <section class="card join-cta">
+  {
+    recap && (
+      <section aria-labelledby="h-recap">
+        <div class="sec-head">
+          <h2 id="h-recap">{t('home.latestRecap')}</h2>
+          <a href={href(lang, 'news/')}>{t('common.viewAll')}</a>
+        </div>
+        <a class="panel recap" href={href(lang, `news/${newsSlug(recap)}/`)}>
+          <p class="eyebrow">{formatDate(lang, recap.data.date.toISOString())}</p>
+          <h3>{recap.data.title}</h3>
+          {recap.data.summary && <p class="muted">{recap.data.summary}</p>}
+        </a>
+      </section>
+    )
+  }
+
+  <!-- JOIN band -->
+  <section class="join-band" aria-labelledby="h-join">
     <div>
-      <h2>{t('home.joinTitle')}</h2>
+      <span class="tag">{t('nav.join')}</span>
+      <h2 id="h-join">{t('home.joinTitle')}</h2>
       <p>{t('home.joinText')}</p>
     </div>
-    <a class="btn btn-accent btn-lg" href={href(lang, 'join/')}>{t('nav.join')}</a>
+    <a class="btn btn-accent" href={href(lang, 'join/')}>{t('nav.join')} →</a>
   </section>
 
   <DataCredit lang={lang} video={!!latestVideo} />
 </Base>
 
 <script>
+  const pad = (n: number) => String(n).padStart(2, '0');
   function tick() {
     const now = Date.now();
     const cards = Array.from(document.querySelectorAll<HTMLElement>('.next-game'));
-    let shown = false;
+    let shown: HTMLElement | null = null;
     for (const c of cards) {
-      const ts = Number(c.dataset.ts);
-      const show = !shown && ts > now - 3 * 3600_000;
+      const show = !shown && Number(c.dataset.ts) > now;
       c.hidden = !show;
-      if (show) shown = true;
+      if (show) shown = c;
     }
-    const noNext = document.querySelector<HTMLElement>('.no-next');
-    if (noNext && cards.length) noNext.hidden = shown;
-    document.querySelectorAll<HTMLElement>('[data-countdown]').forEach((el) => {
-      const ts = Number(el.dataset.countdown);
-      const cd = el.querySelector<HTMLElement>('.cd');
-      if (!cd) return;
-      const [d, h, m] = (cd.dataset.labels ?? 'd|h|min').split('|');
-      const diff = ts - now;
-      if (diff <= 0) {
-        el.hidden = true;
-        return;
-      }
-      const days = Math.floor(diff / 86400000);
-      const hours = Math.floor((diff % 86400000) / 3600000);
-      const mins = Math.floor((diff % 3600000) / 60000);
-      cd.textContent = ` ${days} ${d} ${hours} ${h} ${mins} ${m}`;
+    const none = document.querySelector<HTMLElement>('.no-next');
+    if (none) none.hidden = !!shown;
+    if (!shown) return;
+    const diff = Math.max(0, Number(shown.dataset.ts) - now);
+    const vals: Record<string, number> = {
+      d: Math.floor(diff / 86400000),
+      h: Math.floor((diff % 86400000) / 3600000),
+      m: Math.floor((diff % 3600000) / 60000),
+      s: Math.floor((diff % 60000) / 1000),
+    };
+    shown.querySelectorAll<HTMLElement>('[data-unit]').forEach((el) => {
+      el.textContent = pad(vals[el.dataset.unit!]);
     });
   }
   tick();
-  setInterval(tick, 30000);
+  setInterval(tick, 1000);
 </script>
 
 <style>
+  /* ---------- Hero ---------- */
   .hero {
+    position: relative;
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 1.6rem var(--gutter) 1.4rem;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(24, 112, 224, 0.45), transparent 70%),
+      linear-gradient(160deg, #0d2a66 0%, #081430 55%, var(--bg) 100%);
+  }
+  .hero::before {
+    /* diagonal speed lines */
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(-62deg, rgba(255, 255, 255, 0.035) 0 2px, transparent 2px 22px);
+    mask-image: linear-gradient(90deg, transparent, #000 40%, #000 60%, transparent);
+    pointer-events: none;
+  }
+  .jersey-stripes {
+    /* oversized slanted jersey stripe (blue | white | orange | white) — brand without upscaling the 200px logo */
+    position: absolute;
+    top: -20%;
+    bottom: -20%;
+    right: -140px;
+    width: 260px;
+    transform: skewX(-18deg);
+    background: linear-gradient(
+      90deg,
+      transparent 0 18%,
+      rgba(255, 255, 255, 0.07) 18% 30%,
+      rgba(247, 122, 26, 0.16) 30% 62%,
+      rgba(255, 255, 255, 0.07) 62% 74%,
+      transparent 74%
+    );
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .hero-top {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 1rem;
-    padding: 1.25rem 0 0.5rem;
+    gap: 0.4rem 0.8rem;
+    margin: 0 0 1.25rem;
   }
-  .hero img {
-    width: clamp(84px, 22vw, 140px);
-    height: auto;
-    flex: none;
-  }
-  .hero h1 {
-    margin: 0;
-  }
-  .hero .sub {
+  .season {
+    font: 700 0.8rem/1 var(--display);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     color: var(--muted);
-    margin: 0.25rem 0 0;
   }
   .matchup {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    gap: 0.5rem;
+  }
+  .side {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: center;
-    gap: 0.4rem 0.6rem;
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 0.4rem;
+    text-align: center;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+  .side :global(.logo) {
+    box-shadow: 0 8px 30px -6px rgba(0, 0, 0, 0.7);
+  }
+  .code {
+    font: 800 clamp(2.6rem, 14vw, 4.2rem) / 0.9 var(--display);
+    letter-spacing: 0.02em;
+    color: #fff;
+  }
+  .side.us .code {
+    color: var(--orange);
+    text-shadow: 0 0 30px rgba(247, 122, 26, 0.45);
+  }
+  .full {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.25;
+    max-width: 14ch;
   }
   .vs {
-    color: var(--muted);
-    font-weight: 400;
+    align-self: center;
+    margin-top: -1.6rem;
+    font: 800 1.1rem/1 var(--display);
+    letter-spacing: 0.12em;
+    color: var(--dim);
   }
-  .countdown .cd {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
+  .when {
+    text-align: center;
+    margin: 1.2rem 0 0.9rem;
+    font-family: var(--display);
+    font-size: 1.15rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .when strong {
     font-weight: 800;
-    color: var(--link);
   }
-  .top3 {
-    margin: 0;
-    padding-left: 1.4rem;
+  .dot {
+    color: var(--orange);
+    margin: 0 0.4rem;
+  }
+  .where {
+    display: block;
+    font-family: var(--font);
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+  }
+  .countdown {
     display: grid;
-    gap: 0.4rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    max-width: 360px;
+    margin: 0 auto;
   }
-  .top3 li {
+  .seg-digit {
     display: flex;
-    justify-content: space-between;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-  .join-cta {
-    display: flex;
-    gap: 1rem;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    background: linear-gradient(120deg, var(--surface) 60%, var(--surface-2));
-    border-left: 6px solid var(--orange);
-    margin-top: var(--gutter);
+    padding: 0.55rem 0 0.45rem;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.35);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      inset 0 -2px 0 rgba(24, 112, 224, 0.5);
   }
-  .join-cta h2 {
-    margin-bottom: 0.25rem;
+  .seg-digit .v {
+    font: 800 2rem/1 var(--display);
+    color: #fff;
   }
-  .join-cta p {
+  .seg-digit .k {
+    font: 700 0.68rem/1 var(--display);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-top: 0.3rem;
+  }
+  .hero-cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.2rem;
+  }
+  .hero-band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 6px;
+    background: var(--stripes-h);
+  }
+  @media (min-width: 720px) {
+    .hero {
+      padding: 2.6rem var(--gutter) 2.2rem;
+    }
+    .jersey-stripes {
+      right: 6%;
+      width: 340px;
+    }
+    .full {
+      font-size: 0.95rem;
+    }
+  }
+  @media (min-width: 1180px) {
+    .hero {
+      margin: 0 calc(50% - 50vw);
+    }
+  }
+
+  /* ---------- Ticker ---------- */
+  .ticker {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 var(--gutter);
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 2px var(--gutter) 10px;
+    scrollbar-width: none;
+  }
+  .ticker::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ---------- Duo blocks ---------- */
+  .duo {
+    display: grid;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  @media (min-width: 900px) {
+    .duo {
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+  }
+  .last {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: var(--text);
+    margin-top: 1rem;
+  }
+  .last:hover {
+    color: var(--text);
+    box-shadow: var(--glow-blue);
+  }
+  .last .eyebrow {
+    align-self: flex-start;
+  }
+  .last-score {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0.2rem 0 0.4rem;
+  }
+  .last-score .big {
+    font: 800 3.6rem/1 var(--display);
+    color: #fff;
+  }
+  .last-score i {
+    font-style: normal;
+    color: var(--dim);
+  }
+  .last-teams {
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+  .media {
+    margin-top: 1rem;
+  }
+  .media-link {
+    margin: 0.6rem 0 0;
+  }
+  @media (min-width: 900px) {
+    .last,
+    .media {
+      margin-top: 1.5rem;
+      min-height: 100%;
+    }
+  }
+
+  /* ---------- Standings snippet ---------- */
+  .rank {
+    color: var(--dim);
+    width: 2.2rem;
+  }
+  .team-cell {
+    max-width: 52vw;
+  }
+  .team-cell :global(.name) {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  /* ---------- Leaders ---------- */
+  .leaders a {
+    display: grid;
+    grid-template-columns: 2rem 1fr auto auto;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 60px;
+    padding: 0.5rem 1rem;
+    color: var(--text);
+  }
+  .leaders a:hover {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+  }
+  .rk {
+    font: 800 1.6rem/1 var(--display);
+    color: var(--dim);
+  }
+  .first .rk {
+    color: var(--orange);
+  }
+  .nm {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    min-width: 0;
+  }
+  .fn {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .ln {
+    font: 800 1.2rem/1.05 var(--display);
+    text-transform: uppercase;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ga {
+    font-size: 0.8rem;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+  .pt {
+    font: 800 1.8rem/1 var(--display);
+    color: #fff;
+    min-width: 2.2ch;
+    text-align: right;
+  }
+  .pt small {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    margin-left: 2px;
+  }
+  .first .pt {
+    color: var(--orange);
+  }
+
+  /* ---------- Recap ---------- */
+  .recap {
+    display: block;
+    color: var(--text);
+  }
+  .recap:hover {
+    color: var(--text);
+    box-shadow: var(--glow-blue);
+  }
+
+  /* ---------- Join band ---------- */
+  .join-band {
+    margin-top: 2.5rem;
+    padding: 1.5rem 1.25rem;
+    border-radius: var(--radius);
+    background:
+      linear-gradient(120deg, rgba(247, 122, 26, 0.25), transparent 55%),
+      linear-gradient(160deg, var(--panel-hi), var(--panel));
+    box-shadow: var(--highlight);
+    display: grid;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .join-band::after {
+    content: '';
+    position: absolute;
+    right: -30px;
+    top: 0;
+    bottom: 0;
+    width: 90px;
+    background: var(--stripes-h);
+    transform: skewX(-20deg);
+    opacity: 0.35;
+  }
+  .join-band h2 {
+    margin: 0.7rem 0 0.4rem;
+  }
+  .join-band p {
     margin: 0;
+    color: var(--muted);
+    max-width: 52ch;
   }
-  section.card {
-    margin: 0;
+  .join-band .btn {
+    justify-self: start;
+    position: relative;
+    z-index: 1;
   }
-  .grid + section,
-  section + .grid {
-    margin-top: var(--gutter);
+  @media (min-width: 720px) {
+    .join-band {
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      padding: 2rem 2.5rem;
+    }
+    .join-band .btn {
+      margin-right: 60px;
+    }
   }
 </style>

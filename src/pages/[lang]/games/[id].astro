@@ -4,12 +4,14 @@ import Team from '../../../components/Team.astro';
 import VideoEmbed from '../../../components/VideoEmbed.astro';
 import DataCredit from '../../../components/DataCredit.astro';
 import PlayerName from '../../../components/PlayerName.astro';
+import Abbr from '../../../components/Abbr.astro';
 import { type Lang, LANGS, useT, href, formatDate, formatNumber, mmss } from '../../../i18n/index.ts';
-import { ourGames, games, side, teamName, highlightFor, columns } from '../../../lib/data.ts';
+import { RESULT_FULL, abbr } from '../../../i18n/abbr.ts';
+import { ourGames, games, side, teamName, highlightFor, columns, resultCode, resultClass } from '../../../lib/data.ts';
 import { recapForGame, newsSlug } from '../../../lib/news.ts';
 import { penaltyLabel } from '../../../config/penalties.ts';
 import { isOurTeam } from '../../../config/team.ts';
-import type { Game, GameSummary, PersonName } from '../../../types/models.ts';
+import type { Game, GameSummary, PersonName, Goal, Penalty } from '../../../types/models.ts';
 
 export function getStaticPaths() {
   const list = ourGames().filter((g) => g.status === 'final' || g.status === 'live' || g.hasReport);
@@ -25,7 +27,13 @@ const cols = columns(g.season);
 const video = highlightFor(g.id);
 const recap = await recapForGame(lang, g.id);
 const played = g.status === 'final' || g.status === 'live';
-const periodLabels = g.periods.map((_, i) => (i < (game?.numberOfPeriods ?? 3) ? String(i + 1) : i === (game?.numberOfPeriods ?? 3) ? (g.shootout && g.periods.length === i + 1 ? t('common.so') : t('common.ot')) : t('common.so')));
+const r = resultCode(g);
+const nPeriods = game?.numberOfPeriods ?? 3;
+const periodName = (p: string) => {
+  if (/^\d+$/.test(p)) return lang === 'de' ? `${p}. Drittel` : `${['1st', '2nd', '3rd'][Number(p) - 1] ?? p + 'th'} period`;
+  return p === 'OT' ? (lang === 'de' ? 'Verlängerung' : 'Overtime') : p === 'SO' ? (lang === 'de' ? 'Penaltyschießen' : 'Shootout') : p;
+};
+const periodShort = (i: number) => (i < nPeriods ? String(i + 1) : i === nPeriods ? t('common.ot') : t('common.so'));
 const name = (p: PersonName | null) => (p ? `${p.first} ${p.last}`.trim() : null);
 const sideTeam = (s: 'home' | 'away') => (s === 'home' ? g.home : g.away);
 const situation = (s: string) => {
@@ -33,373 +41,392 @@ const situation = (s: string) => {
   const v = t(k);
   return v === k ? s : v;
 };
+const byPeriod = <T extends { period: string }>(list: T[]) => {
+  const m = new Map<string, T[]>();
+  for (const x of list) {
+    if (!m.has(x.period)) m.set(x.period, []);
+    m.get(x.period)!.push(x);
+  }
+  return [...m.entries()];
+};
+const goalsBy = game ? byPeriod<Goal>(game.goals) : [];
+const pensBy = game ? byPeriod<Penalty>(game.penalties) : [];
 const title = `${teamName(g.home)} – ${teamName(g.away)}${played && g.homeScore != null ? ` ${g.homeScore}:${g.awayScore}` : ''}`;
 const fmtDec = (n: number | null) => formatNumber(lang, n, 2);
+
+// Team-stat comparison rows: [label, home value, away value, display home, display away]
+const ts = game?.teamStats;
+const compare: [string, number, number, string, string][] = ts
+  ? [
+      [t('game.pim'), ts.home.pim, ts.away.pim, String(ts.home.pim), String(ts.away.pim)],
+      [t('game.powerplay'), ts.home.ppGoals, ts.away.ppGoals, `${ts.home.ppGoals}/${ts.home.ppChances}`, `${ts.away.ppGoals}/${ts.away.ppChances}`],
+      [t('game.penaltyKilling'), ts.home.pkKilled, ts.away.pkKilled, `${ts.home.pkKilled}/${ts.home.pkSituations}`, `${ts.away.pkKilled}/${ts.away.pkSituations}`],
+      [t('game.timeLeading'), ts.home.timeLeading, ts.away.timeLeading, mmss(ts.home.timeLeading), mmss(ts.away.timeLeading)],
+      [t('game.timeTrailing'), ts.home.timeTrailing, ts.away.timeTrailing, mmss(ts.home.timeTrailing), mmss(ts.away.timeTrailing)],
+      [t('game.timeOnPP'), ts.home.timeOnPP, ts.away.timeOnPP, mmss(ts.home.timeOnPP), mmss(ts.away.timeOnPP)],
+      [t('game.timeSH'), ts.home.timeShorthanded, ts.away.timeShorthanded, mmss(ts.home.timeShorthanded), mmss(ts.away.timeShorthanded)],
+      ...(cols.sog ? [[abbr(lang, 'sog').full, ts.home.sog, ts.away.sog, String(ts.home.sog), String(ts.away.sog)] as [string, number, number, string, string]] : []),
+    ]
+  : [];
+const sections = game
+  ? [
+      ['goals', t('game.goals')],
+      ['penalties', t('game.penalties')],
+      ['lineups', t('game.lineups')],
+      ['teamstats', t('game.teamStats')],
+      ['info', t('game.officials')],
+    ]
+  : [];
 ---
 
 <Base lang={lang} title={title} description={`${formatDate(lang, g.date)} · ${g.venue ?? ''}`} path={`games/${g.id}/`} active="nav.schedule" leagueData>
-  <p class="crumbs small"><a href={href(lang, `schedule/${g.season}/`)}>← {t('nav.schedule')} {g.season.replace('-', '/')}</a></p>
-
-  <section class="scoreboard card" aria-label={t('game.title')}>
-    <p class="meta small muted">
-      {formatDate(lang, g.date, { weekday: true })}{g.time ? `, ${g.time}` : ''}
-      {g.venue && <> · {g.venue}</>}
-      · {g.playoff ? (g.playoff.encounter ?? g.playoff.roundLabel) : g.divisionName}
-      {g.name && !g.playoff && <> · {g.name}</>}
+  <!-- SCORE BUG -->
+  <section class="bug-hero" aria-label={t('game.title')}>
+    <a class="back" href={href(lang, `schedule/${g.season}/`)}>← {t('nav.schedule')} {g.season.replace('-', '/')}</a>
+    <p class="meta">
+      <span class="tag">{g.playoff ? (g.playoff.encounter ?? g.playoff.roundLabel) : g.divisionName}</span>
+      <span>{formatDate(lang, g.date, { weekday: true })}{g.time ? ` · ${g.time}` : ''}</span>
     </p>
     <div class="sb">
-      <div class={`side ${ourSide === 'home' ? 'us' : ''}`}><Team team={g.home} /></div>
-      <div class="result">
-        {
-          played && g.homeScore != null ? (
-            <>
-              <span class="big">{g.homeScore}</span>
-              <span class="colon">:</span>
-              <span class="big">{g.awayScore}</span>
-            </>
-          ) : (
-            <span class="muted">–:–</span>
-          )
-        }
-        <span class="status small">
-          {g.status === 'final' ? t('common.final') + (g.shootout ? ` (${t('common.so')})` : g.overtime ? ` (${t('common.ot')})` : '') : g.status === 'live' ? t('common.live') : g.date ? '' : t('common.dateTbc')}
-        </span>
-      </div>
-      <div class={`side away ${ourSide === 'away' ? 'us' : ''}`}><Team team={g.away} /></div>
+      {
+        (['home', 'away'] as const).map((s) => {
+          const team = sideTeam(s);
+          const score = s === 'home' ? g.homeScore : g.awayScore;
+          const other = s === 'home' ? g.awayScore : g.homeScore;
+          const won = played && score != null && other != null && score > other;
+          return (
+            <div class={`tm ${s} ${isOurTeam(team) ? 'us' : ''} ${won ? 'won' : ''}`}>
+              <Team team={team} logoOnly size={58} />
+              <span class="code">{team.short || teamName(team).slice(0, 3)}</span>
+              <span class="full">{teamName(team)}</span>
+              <span class="score tnum">{played && score != null ? score : '–'}</span>
+            </div>
+          );
+        })
+      }
+      <span class="status">
+        {g.status === 'final' ? t('common.final') : g.status === 'live' ? t('common.live') : g.date ? '' : t('common.dateTbc')}
+        {g.shootout ? ` · ${t('common.so')}` : g.overtime ? ` · ${t('common.ot')}` : ''}
+      </span>
     </div>
     {
       g.periods.length > 0 && (
-        <div class="table-wrap periods">
-          <table>
-            <caption class="visually-hidden">{t('game.scoreByPeriod')}</caption>
-            <thead>
-              <tr>
-                <th scope="col">{t('common.team')}</th>
-                {periodLabels.map((p) => (
-                  <th class="num" scope="col">{p}</th>
-                ))}
-                <th class="num" scope="col">{t('common.total')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {(['home', 'away'] as const).map((s, idx) => (
-                <tr class={ourSide === s ? 'ours' : undefined}>
-                  <th scope="row">{sideTeam(s).short || teamName(sideTeam(s))}</th>
-                  {g.periods.map((p) => (
-                    <td class="num">{p[idx]}</td>
-                  ))}
-                  <td class="num strong">{s === 'home' ? g.homeScore : g.awayScore}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <ol class="periods" aria-label={t('game.scoreByPeriod')}>
+          {g.periods.map((p, i) => (
+            <li>
+              <span class="pn">{periodShort(i)}</span>
+              <span class="ps tnum">
+                {p[0]}:{p[1]}
+              </span>
+            </li>
+          ))}
+        </ol>
       )
     }
-    {recap && <p><a class="btn btn-accent" href={href(lang, `news/${newsSlug(recap)}/`)}>{t('game.recap')}</a></p>}
+    <div class="sb-foot">
+      {g.venue && <span>{g.venue.replace(/^Wien - /, '')}</span>}
+      {r && <span class={`res res-${resultClass(r)}`} title={RESULT_FULL[r][lang]}>{r}</span>}
+    </div>
+    <div class="band" aria-hidden="true"></div>
   </section>
+
+  {
+    sections.length > 0 && (
+      <nav class="jump seg" aria-label={t('game.title')}>
+        {sections.map(([id, label]) => (
+          <a href={`#${id}`}>{label}</a>
+        ))}
+      </nav>
+    )
+  }
+
+  {
+    recap && (
+      <a class="btn btn-accent btn-block recap-btn" href={href(lang, `news/${newsSlug(recap)}/`)}>
+        {t('game.recap')} →
+      </a>
+    )
+  }
 
   {
     video && (
       <section aria-labelledby="h-hl">
-        <h2 id="h-hl">{t('common.highlights')}</h2>
+        <div class="sec-head">
+          <h2 id="h-hl">{t('common.highlights')}</h2>
+        </div>
         <VideoEmbed lang={lang} video={video.video} />
       </section>
     )
   }
 
-  {!played && <p class="muted">{t('game.scheduledInfo')}</p>}
-  {played && !game && <p class="missing">{t('game.noReport')}</p>}
+  {!played && <p class="muted info">{t('game.scheduledInfo')}</p>}
+  {played && !game && <p class="missing info">{t('game.noReport')}</p>}
 
   {
     game && (
       <>
-        <section aria-labelledby="h-goals">
-          <h2 id="h-goals">{t('game.goals')}</h2>
-          {game.goals.length ? (
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th scope="col">{t('common.period')}</th>
-                    <th class="num" scope="col">{t('common.time')}</th>
-                    <th scope="col">{t('game.score')}</th>
-                    <th scope="col">{t('common.team')}</th>
-                    <th scope="col">{t('game.scorer')}</th>
-                    <th scope="col">{t('game.assists')}</th>
-                    <th scope="col">{t('game.situation')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {game.goals.map((goal) => (
-                    <tr class={goal.team === ourSide ? 'ours' : undefined}>
-                      <td>{goal.period}</td>
-                      <td class="num">{goal.timeLabel}</td>
-                      <td class="strong">{goal.score}</td>
-                      <td>{sideTeam(goal.team).short}</td>
-                      <td>
+        <!-- GOALS: timeline -->
+        <section id="goals" aria-labelledby="h-goals">
+          <div class="sec-head">
+            <h2 id="h-goals">{t('game.goals')}</h2>
+          </div>
+          {game.goals.length === 0 && <p class="muted">{t('game.noGoals')}</p>}
+          {goalsBy.map(([period, list]) => (
+            <div class="period-block">
+              <p class="eyebrow">{periodName(period)}</p>
+              <ol class="rows events">
+                {list.map((goal) => (
+                  <li class={goal.team === ourSide ? 'us' : 'them'}>
+                    <span class="time tnum">{goal.timeLabel}</span>
+                    <Team team={sideTeam(goal.team)} logoOnly size={24} />
+                    <span class="who">
+                      <span class="main">
                         <PlayerName lang={lang} p={goal.scorer} ours={goal.team === ourSide} />
-                        {goal.gwg && <span class="tag" title={t('game.gwg')}>GWG</span>}
-                      </td>
-                      <td>
+                        {goal.scorer?.number != null && <span class="no tnum">#{goal.scorer.number}</span>}
+                      </span>
+                      <span class="sub">
                         {goal.assists.length ? (
-                          goal.assists.map((a, i) => (
-                            <>
-                              {i > 0 && ', '}
+                          goal.assists.map((a) => (
+                            <span class="as">
                               <PlayerName lang={lang} p={a} ours={goal.team === ourSide} />
-                            </>
+                            </span>
                           ))
                         ) : (
-                          <span class="muted">–</span>
+                          <span>{lang === 'de' ? 'ohne Assist' : 'unassisted'}</span>
                         )}
-                      </td>
-                      <td>
-                        <abbr title={situation(goal.situation)}>{goal.situation}</abbr>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                      </span>
+                      <span class="chips">
+                        <span class={`sit sit-${goal.situation.slice(0, 2)}`}>{situation(goal.situation)}</span>
+                        {goal.gwg && <span class="sit gwg">{t('game.gwg')}</span>}
+                      </span>
+                    </span>
+                    <span class="run tnum">{goal.score}</span>
+                  </li>
+                ))}
+              </ol>
             </div>
-          ) : (
-            <p class="muted">{t('game.noGoals')}</p>
-          )}
+          ))}
         </section>
 
-        <section aria-labelledby="h-pen">
-          <h2 id="h-pen">{t('game.penalties')}</h2>
-          {game.penalties.length ? (
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th scope="col">{t('common.period')}</th>
-                    <th class="num" scope="col">{t('common.time')}</th>
-                    <th scope="col">{t('common.team')}</th>
-                    <th scope="col">{t('common.player')}</th>
-                    <th class="num" scope="col">{t('game.minutes')}</th>
-                    <th scope="col">{t('game.offence')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {game.penalties.map((p) => (
-                    <tr class={p.team === ourSide ? 'ours' : undefined}>
-                      <td>{p.period}</td>
-                      <td class="num">{p.timeLabel}</td>
-                      <td>{sideTeam(p.team).short}</td>
-                      <td>
-                        {p.player ? <PlayerName lang={lang} p={p.player} ours={p.team === ourSide} /> : <span class="muted">{t('common.team')}</span>}
+        <!-- PENALTIES -->
+        <section id="penalties" aria-labelledby="h-pen">
+          <div class="sec-head">
+            <h2 id="h-pen">{t('game.penalties')}</h2>
+          </div>
+          {game.penalties.length === 0 && <p class="muted">{t('game.noPenalties')}</p>}
+          {pensBy.map(([period, list]) => (
+            <div class="period-block">
+              <p class="eyebrow">{periodName(period)}</p>
+              <ol class="rows events">
+                {list.map((p) => (
+                  <li class={p.team === ourSide ? 'us' : 'them'}>
+                    <span class="time tnum">{p.timeLabel}</span>
+                    <Team team={sideTeam(p.team)} logoOnly size={24} />
+                    <span class="who">
+                      <span class="main">
+                        {p.player ? <PlayerName lang={lang} p={p.player} ours={p.team === ourSide} /> : <span>{t('common.team')}</span>}
+                      </span>
+                      <span class="sub">
+                        {penaltyLabel(p.code, lang)}
                         {p.servedBy && (
-                          <span class="small muted">
-                            {' '}
-                            ({t('game.servedBy')} <PlayerName lang={lang} p={p.servedBy} ours={p.team === ourSide} />)
-                          </span>
+                          <>
+                            {' · '}
+                            {t('game.servedBy')} <PlayerName lang={lang} p={p.servedBy} ours={p.team === ourSide} />
+                          </>
                         )}
-                      </td>
-                      <td class="num">{p.minutes}</td>
-                      <td>
-                        {penaltyLabel(p.code, lang)} <span class="small muted">{p.code}</span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                      </span>
+                    </span>
+                    <span class="mins tnum">
+                      {p.minutes}
+                      <small>MIN</small>
+                    </span>
+                  </li>
+                ))}
+              </ol>
             </div>
-          ) : (
-            <p class="muted">{t('game.noPenalties')}</p>
-          )}
+          ))}
         </section>
 
-        <section aria-labelledby="h-lineups">
-          <h2 id="h-lineups">{t('game.lineups')}</h2>
-          <div class="grid grid-2">
+        <!-- LINEUPS -->
+        <section id="lineups" aria-labelledby="h-lineups" data-tabs>
+          <div class="sec-head">
+            <h2 id="h-lineups">{t('game.lineups')}</h2>
+          </div>
+          <div class="seg" role="tablist" aria-label={t('game.lineups')}>
             {(['home', 'away'] as const).map((s) => (
-              <div>
-                <h3>
-                  <Team team={sideTeam(s)} />
-                </h3>
-                <div class="table-wrap">
-                  <table data-sortable>
-                    <thead>
-                      <tr>
-                        <th class="num" scope="col" data-sort="num"><button type="button">{t('col.no')}</button></th>
-                        <th scope="col" data-sort="text"><button type="button">{t('common.player')}</button></th>
-                        <th scope="col" data-sort="text"><button type="button">{t('col.pos')}</button></th>
-                        <th class="num" scope="col" data-sort="num"><button type="button">{t('col.g')}</button></th>
-                        <th class="num" scope="col" data-sort="num"><button type="button">{t('col.a')}</button></th>
-                        <th class="num" scope="col" data-sort="num"><button type="button">{t('col.p')}</button></th>
-                        {cols.plusMinus && <th class="num" scope="col" data-sort="num"><button type="button">{t('col.pm')}</button></th>}
-                        <th class="num" scope="col" data-sort="num"><button type="button">{t('col.pim')}</button></th>
-                        {cols.sog && <th class="num" scope="col" data-sort="num"><button type="button">{t('col.sog')}</button></th>}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {[...game.skaters[s]]
-                        .sort((a, b) => (a.player.number ?? 999) - (b.player.number ?? 999))
-                        .map((sk) => (
-                          <tr>
-                            <td class="num">{sk.player.number ?? '–'}</td>
-                            <td>
-                              <PlayerName lang={lang} p={sk.player} ours={isOurTeam(sideTeam(s))} />
-                            </td>
-                            <td>
-                              <abbr title={t(`pos.${sk.position}`)}>{sk.position}</abbr>
-                            </td>
-                            <td class="num">{sk.g}</td>
-                            <td class="num">{sk.a}</td>
-                            <td class="num strong">{sk.p}</td>
-                            {cols.plusMinus && <td class="num">{sk.plusMinus}</td>}
-                            <td class="num">{sk.pim}</td>
-                            {cols.sog && <td class="num">{sk.sog}</td>}
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <button type="button" role="tab" id={`tab-${s}`} aria-controls={`panel-${s}`} aria-selected={s === ourSide ? 'true' : 'false'}>
+                {sideTeam(s).short || teamName(sideTeam(s))}
+              </button>
             ))}
           </div>
-        </section>
-
-        <section aria-labelledby="h-goalies">
-          <h2 id="h-goalies">{t('game.goalies')}</h2>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">{t('common.team')}</th>
-                  <th class="num" scope="col">{t('col.no')}</th>
-                  <th scope="col">{t('common.player')}</th>
-                  <th class="num" scope="col">{t('col.toi')}</th>
-                  <th class="num" scope="col">{t('col.ga')}</th>
-                  <th class="num" scope="col">{t('col.gaa')}</th>
-                  {cols.saves && <th class="num" scope="col">{t('col.sa')}</th>}
-                  {cols.saves && <th class="num" scope="col">{t('col.sv')}</th>}
-                  {cols.saves && <th class="num" scope="col">{t('col.svpct')}</th>}
-                </tr>
-              </thead>
-              <tbody>
-                {(['home', 'away'] as const).flatMap((s) =>
-                  game.goalies[s].map((gl) => (
-                    <tr class={ourSide === s ? 'ours' : undefined}>
-                      <td>{sideTeam(s).short}</td>
-                      <td class="num">{gl.player.number ?? '–'}</td>
-                      <td>
-                        <PlayerName lang={lang} p={gl.player} ours={ourSide === s} />
-                      </td>
-                      <td class="num">{gl.toi > 0 ? mmss(gl.toi) : '–'}</td>
-                      <td class="num">{gl.toi > 0 ? gl.goalsAgainst : '–'}</td>
-                      <td class="num">{gl.toi > 0 ? fmtDec(gl.gaa) : '–'}</td>
-                      {cols.saves && <td class="num">{gl.shotsAgainst}</td>}
-                      {cols.saves && <td class="num">{gl.saves}</td>}
-                      {cols.saves && <td class="num">{fmtDec(gl.savePct)}</td>}
+          {(['home', 'away'] as const).map((s) => (
+            <div class="lineup" role="tabpanel" id={`panel-${s}`} aria-labelledby={`tab-${s}`}>
+              <p class="eyebrow lineup-team">{teamName(sideTeam(s))}</p>
+              <div class="table-wrap">
+                <table data-sortable>
+                  <thead>
+                    <tr>
+                      <th class="num" scope="col" data-sort="num"><button type="button"><Abbr lang={lang} k="no" /></button></th>
+                      <th class="sticky-col" scope="col" data-sort="text"><button type="button">{t('common.player')}</button></th>
+                      <th scope="col" data-sort="text"><button type="button"><Abbr lang={lang} k="pos" /></button></th>
+                      <th class="num" scope="col" data-sort="num"><button type="button"><Abbr lang={lang} k="g" /></button></th>
+                      <th class="num" scope="col" data-sort="num"><button type="button"><Abbr lang={lang} k="a" /></button></th>
+                      <th class="num" scope="col" data-sort="num"><button type="button"><Abbr lang={lang} k="p" /></button></th>
+                      {cols.plusMinus && <th class="num" scope="col" data-sort="num"><button type="button"><Abbr lang={lang} k="pm" /></button></th>}
+                      <th class="num" scope="col" data-sort="num"><button type="button"><Abbr lang={lang} k="pim" /></button></th>
+                      {cols.sog && <th class="num" scope="col" data-sort="num"><button type="button"><Abbr lang={lang} k="sog" /></button></th>}
                     </tr>
-                  )),
-                )}
-              </tbody>
-            </table>
-          </div>
-          {game.goalieChanges.length > 0 && (
-            <>
-              <h3>{t('game.goalieChanges')}</h3>
-              <ul class="changes small">
-                {game.goalieChanges.map((c) => (
+                  </thead>
+                  <tbody>
+                    {[...game.skaters[s]]
+                      .sort((a, b) => (a.player.number ?? 999) - (b.player.number ?? 999))
+                      .map((sk) => (
+                        <tr>
+                          <td class="num dim">{sk.player.number ?? '–'}</td>
+                          <td class="sticky-col">
+                            <PlayerName lang={lang} p={sk.player} ours={isOurTeam(sideTeam(s))} />
+                          </td>
+                          <td>
+                            <abbr title={t(`pos.${sk.position}`)}>{sk.position}</abbr>
+                          </td>
+                          <td class="num">{sk.g}</td>
+                          <td class="num">{sk.a}</td>
+                          <td class="num strong">{sk.p}</td>
+                          {cols.plusMinus && <td class="num">{sk.plusMinus}</td>}
+                          <td class="num">{sk.pim}</td>
+                          {cols.sog && <td class="num">{sk.sog}</td>}
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <p class="eyebrow goalie-head">{t('game.goalies')}</p>
+              <ul class="rows goalies">
+                {game.goalies[s].map((gl) => (
                   <li>
+                    <span class="no tnum">#{gl.player.number ?? '–'}</span>
+                    <span class="gname">
+                      <PlayerName lang={lang} p={gl.player} ours={isOurTeam(sideTeam(s))} />
+                    </span>
+                    {gl.toi > 0 ? (
+                      <span class="gstats tnum">
+                        <span>
+                          <b>{mmss(gl.toi)}</b>
+                          <Abbr lang={lang} k="toi" />
+                        </span>
+                        <span>
+                          <b>{gl.goalsAgainst}</b>
+                          <Abbr lang={lang} k="ga" />
+                        </span>
+                        <span>
+                          <b>{fmtDec(gl.gaa)}</b>
+                          <Abbr lang={lang} k="gaa" />
+                        </span>
+                        {cols.saves && (
+                          <span>
+                            <b>{gl.saves}</b>
+                            <Abbr lang={lang} k="sv" />
+                          </span>
+                        )}
+                      </span>
+                    ) : (
+                      <span class="dim small">{lang === 'de' ? 'nicht eingesetzt' : 'did not play'}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          {game.goalieChanges.some((c) => c.time > 0) && (
+            <details class="changes">
+              <summary>{t('game.goalieChanges')}</summary>
+              <ul>
+                {game.goalieChanges.map((c) => (
+                  <li class="tnum">
                     {c.timeLabel} · {sideTeam(c.team).short} · <PlayerName lang={lang} p={c.player} ours={c.team === ourSide} /> ·{' '}
                     {c.action === 'on' ? t('game.on') : t('game.off')}
                   </li>
                 ))}
               </ul>
-            </>
+            </details>
           )}
         </section>
 
-        <section aria-labelledby="h-ts">
-          <h2 id="h-ts">{t('game.teamStats')}</h2>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col"><span class="visually-hidden">{t('game.teamStats')}</span></th>
-                  <th class="num" scope="col">{g.home.short}</th>
-                  <th class="num" scope="col">{g.away.short}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">{t('game.pim')}</th>
-                  <td class="num">{game.teamStats.home.pim}</td>
-                  <td class="num">{game.teamStats.away.pim}</td>
-                </tr>
-                <tr>
-                  <th scope="row">{t('game.powerplay')}</th>
-                  <td class="num">{game.teamStats.home.ppGoals}/{game.teamStats.home.ppChances}</td>
-                  <td class="num">{game.teamStats.away.ppGoals}/{game.teamStats.away.ppChances}</td>
-                </tr>
-                <tr>
-                  <th scope="row">{t('game.penaltyKilling')}</th>
-                  <td class="num">{game.teamStats.home.pkKilled}/{game.teamStats.home.pkSituations}</td>
-                  <td class="num">{game.teamStats.away.pkKilled}/{game.teamStats.away.pkSituations}</td>
-                </tr>
-                {(
-                  [
-                    ['game.timeLeading', 'timeLeading'],
-                    ['game.timeTied', 'timeTied'],
-                    ['game.timeTrailing', 'timeTrailing'],
-                    ['game.timeOnPP', 'timeOnPP'],
-                    ['game.timeSH', 'timeShorthanded'],
-                  ] as const
-                ).map(([label, k]) => (
-                  <tr>
-                    <th scope="row">{t(label)}</th>
-                    <td class="num">{mmss(game.teamStats.home[k])}</td>
-                    <td class="num">{mmss(game.teamStats.away[k])}</td>
-                  </tr>
-                ))}
-                {cols.sog && (
-                  <tr>
-                    <th scope="row">{t('col.sog')}</th>
-                    <td class="num">{game.teamStats.home.sog}</td>
-                    <td class="num">{game.teamStats.away.sog}</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+        <!-- TEAM STATS: head-to-head bars -->
+        <section id="teamstats" aria-labelledby="h-ts">
+          <div class="sec-head">
+            <h2 id="h-ts">{t('game.teamStats')}</h2>
+          </div>
+          <div class="panel h2h">
+            <div class="h2h-head">
+              <Team team={g.home} short />
+              <Team team={g.away} short />
+            </div>
+            {compare.map(([label, hv, av, hd, ad]) => {
+              const total = hv + av || 1;
+              return (
+                <div class="h2h-row">
+                  <span class="hv tnum">{hd}</span>
+                  <span class="lbl">{label}</span>
+                  <span class="av tnum">{ad}</span>
+                  <span class="bar" aria-hidden="true">
+                    <i class={`h ${ourSide === 'home' ? 'us' : ''}`} style={`width:${(hv / total) * 100}%`} />
+                    <i class={`a ${ourSide === 'away' ? 'us' : ''}`} style={`width:${(av / total) * 100}%`} />
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </section>
 
-        <section aria-labelledby="h-off" class="card">
-          <h2 id="h-off" class="card-title">{t('game.officials')}</h2>
-          <dl class="facts">
-            <dt>{t('game.referees')}</dt>
-            <dd>{game.referees.length ? game.referees.map(name).join(', ') : <span class="missing">{t('common.missing')}</span>}</dd>
+        <!-- INFO -->
+        <section id="info" aria-labelledby="h-off">
+          <div class="sec-head">
+            <h2 id="h-off">{t('game.officials')}</h2>
+          </div>
+          <dl class="facts panel">
+            <div>
+              <dt>{t('game.referees')}</dt>
+              <dd>{game.referees.length ? game.referees.map(name).join(', ') : <span class="missing">{t('common.missing')}</span>}</dd>
+            </div>
             {game.linesmen.length > 0 && (
-              <>
+              <div>
                 <dt>{t('game.linesmen')}</dt>
                 <dd>{game.linesmen.map(name).join(', ')}</dd>
-              </>
+              </div>
             )}
             {(game.headCoaches.home || game.headCoaches.away) && (
-              <>
+              <div>
                 <dt>{t('game.headCoach')}</dt>
                 <dd>
                   {g.home.short}: {name(game.headCoaches.home) ?? '–'} · {g.away.short}: {name(game.headCoaches.away) ?? '–'}
                 </dd>
-              </>
+              </div>
             )}
-            <dt>{t('game.attendance')}</dt>
-            <dd>{game.attendance ?? <span class="missing">{t('common.missing')}</span>}</dd>
+            <div>
+              <dt>{t('game.attendance')}</dt>
+              <dd>{game.attendance ?? <span class="missing">{t('common.missing')}</span>}</dd>
+            </div>
             {game.startTime && (
-              <>
+              <div>
                 <dt>{t('game.started')}</dt>
                 <dd>{game.startTime}</dd>
-              </>
+              </div>
             )}
             {game.periodLength > 0 && (
-              <>
+              <div>
                 <dt>{t('game.periodLength')}</dt>
-                <dd>{game.numberOfPeriods} × {Math.round(game.periodLength / 60)} min</dd>
-              </>
+                <dd>
+                  {game.numberOfPeriods} × {Math.round(game.periodLength / 60)} min
+                </dd>
+              </div>
+            )}
+            {g.venue && (
+              <div>
+                <dt>{t('common.venue')}</dt>
+                <dd>{g.venue}</dd>
+              </div>
             )}
           </dl>
         </section>
@@ -411,99 +438,428 @@ const fmtDec = (n: number | null) => formatNumber(lang, n, 2);
 </Base>
 
 <style>
-  .crumbs {
-    margin: 1rem 0 0.5rem;
+  /* ---------- Score bug hero ---------- */
+  .bug-hero {
+    position: relative;
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 0.9rem var(--gutter) 1.2rem;
+    background:
+      radial-gradient(90% 70% at 50% 0%, rgba(24, 112, 224, 0.4), transparent 70%),
+      linear-gradient(170deg, #0d2a66, #081430 60%, var(--bg));
+    overflow: hidden;
   }
-  .scoreboard {
-    margin-top: 0.5rem;
+  .bug-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(-62deg, rgba(255, 255, 255, 0.03) 0 2px, transparent 2px 22px);
+    pointer-events: none;
+  }
+  .back {
+    position: relative;
+    display: inline-block;
+    font: 700 0.85rem/1 var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.4rem 0;
   }
   .meta {
-    margin-bottom: 0.75rem;
-  }
-  .sb {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .side {
-    font-weight: 700;
-    font-size: clamp(0.95rem, 3.5vw, 1.25rem);
-    min-width: 0;
-  }
-  .side :global(.team img) {
-    width: 40px;
-    height: 40px;
-  }
-  .side.away {
-    justify-self: end;
-    text-align: right;
-  }
-  .side.away :global(.team) {
-    flex-direction: row-reverse;
-  }
-  .side :global(.team) {
-    flex-wrap: wrap;
-  }
-  .result {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     justify-content: center;
-    align-items: baseline;
-    gap: 0.2rem;
+    gap: 0.5rem 0.75rem;
+    margin: 0.6rem 0 1rem;
+    font: 700 0.9rem/1 var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .sb {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 0.75rem;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .tm {
+    display: grid;
+    grid-template-areas: 'logo score' 'code score' 'full full';
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 0.6rem;
+    row-gap: 0.15rem;
+  }
+  .tm.away {
+    grid-template-areas: 'score logo' 'score code' 'full full';
+    grid-template-columns: 1fr auto;
+    text-align: right;
+  }
+  .tm :global(.team) {
+    grid-area: logo;
+  }
+  .tm.away :global(.team) {
+    justify-self: end;
+  }
+  .code {
+    grid-area: code;
+    font: 800 1.7rem/1 var(--display);
+    color: var(--muted);
+  }
+  .tm.us .code {
+    color: var(--orange);
+  }
+  .full {
+    grid-area: full;
+    font-size: 0.75rem;
+    color: var(--dim);
+    line-height: 1.25;
+  }
+  .score {
+    grid-area: score;
+    font: 800 clamp(4.2rem, 22vw, 6.5rem) / 0.85 var(--display);
+    color: var(--muted);
     text-align: center;
   }
-  .big {
-    font-family: var(--font-display);
-    font-size: clamp(2.2rem, 9vw, 3.4rem);
-    font-weight: 800;
-    line-height: 1;
-  }
-  .colon {
-    font-size: 2rem;
-    color: var(--muted);
+  .tm.won .score {
+    color: #fff;
+    text-shadow: 0 0 40px rgba(90, 162, 255, 0.45);
   }
   .status {
-    flex-basis: 100%;
-    color: var(--muted);
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: 0.7rem;
+    font: 800 0.85rem/1 var(--display);
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    color: var(--orange);
   }
   .periods {
+    position: relative;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 0;
+    margin: 0.8rem 0 0;
+  }
+  .periods li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+  .pn {
+    font: 700 0.72rem/1 var(--display);
+    letter-spacing: 0.1em;
+    color: var(--dim);
+  }
+  .ps {
+    font: 800 1.05rem/1 var(--display);
+  }
+  .sb-foot {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.8rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 5px;
+    background: var(--stripes-h);
+  }
+  @media (min-width: 1180px) {
+    .bug-hero {
+      margin: 0 calc(50% - 50vw);
+    }
+  }
+  @media (min-width: 720px) {
+    .bug-hero {
+      padding-bottom: 1.6rem;
+    }
+    .full {
+      font-size: 0.9rem;
+    }
+  }
+
+  /* ---------- Section jump nav ---------- */
+  .jump {
+    position: sticky;
+    top: calc(var(--topbar-h) + 4px);
+    z-index: 20;
+    margin: 0.9rem 0 0;
+    background: var(--panel);
+    box-shadow:
+      0 0 0 6px var(--bg),
+      0 8px 20px -6px rgba(0, 0, 0, 0.7);
+  }
+  .jump a {
+    color: var(--muted);
+  }
+  .jump a:hover {
+    color: #fff;
+  }
+  .recap-btn {
+    margin-top: 0.9rem;
+  }
+  .info {
+    margin-top: 1.5rem;
+  }
+
+  /* ---------- Event timelines ---------- */
+  .period-block + .period-block {
     margin-top: 1rem;
   }
-  .tag {
-    display: inline-block;
+  .events li {
+    display: grid;
+    grid-template-columns: 3.4rem auto 1fr auto;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 0.9rem 0.7rem 0.7rem;
+    position: relative;
+  }
+  .events li.us::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: var(--orange);
+    box-shadow: var(--glow-orange);
+  }
+  .time {
+    font: 800 1.05rem/1 var(--display);
+    color: var(--muted);
+  }
+  .who {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .main {
+    font-weight: 700;
+    font-size: 0.98rem;
+    color: #fff;
+  }
+  .main :global(a) {
+    color: #fff;
+  }
+  .no {
+    font: 700 0.85rem/1 var(--display);
+    color: var(--dim);
     margin-left: 0.35rem;
-    font-size: 0.7rem;
-    font-weight: 800;
-    padding: 0 0.3rem;
+  }
+  .sub {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .sub :global(a) {
+    color: var(--muted);
+  }
+  .as + .as::before {
+    content: ', ';
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 3px;
+  }
+  .sit {
+    font: 700 0.68rem/1 var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 7px;
     border-radius: 4px;
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--muted);
+  }
+  .sit-PP {
+    background: rgba(90, 162, 255, 0.16);
+    color: var(--blue-hi);
+  }
+  .sit-SH {
+    background: rgba(61, 220, 151, 0.14);
+    color: var(--win);
+  }
+  .sit-EN,
+  .sit-PS {
+    background: rgba(232, 161, 116, 0.16);
+    color: var(--brown);
+  }
+  .sit.gwg {
     background: var(--orange);
     color: var(--ink);
   }
-  .changes {
-    padding-left: 1.2rem;
+  .run {
+    font: 800 1.4rem/1 var(--display);
+    color: #fff;
+    padding: 0.3rem 0.5rem;
+    border-radius: 7px;
+    background: rgba(0, 0, 0, 0.3);
   }
+  .mins {
+    font: 800 1.4rem/1 var(--display);
+    color: #fff;
+    text-align: right;
+  }
+  .mins small {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+  }
+
+  /* ---------- Lineups ---------- */
+  #lineups .seg {
+    max-width: 320px;
+    margin-bottom: 0.9rem;
+  }
+  .lineup-team {
+    margin-top: 0.2rem;
+  }
+  .goalie-head {
+    margin-top: 1.1rem;
+  }
+  .goalies li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.75rem;
+    padding: 0.75rem 0.9rem;
+  }
+  .goalies .no {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+  .gname {
+    font-weight: 700;
+    flex: 1;
+    min-width: 8rem;
+  }
+  .gstats {
+    display: flex;
+    gap: 1rem;
+  }
+  .gstats span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font: 700 0.68rem/1 var(--display);
+    letter-spacing: 0.1em;
+    color: var(--dim);
+  }
+  .gstats b {
+    font: 800 1.15rem/1.1 var(--display);
+    color: #fff;
+  }
+  .changes {
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .changes summary {
+    cursor: pointer;
+    font: 700 0.85rem/1 var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.5rem 0;
+  }
+  .changes ul {
+    padding-left: 1.1rem;
+    margin: 0.3rem 0 0;
+  }
+
+  /* ---------- Head-to-head ---------- */
+  .h2h {
+    display: grid;
+    gap: 0.9rem;
+  }
+  .h2h-head {
+    display: flex;
+    justify-content: space-between;
+    font: 800 1rem/1 var(--display);
+  }
+  .h2h-row {
+    display: grid;
+    grid-template-columns: 4rem 1fr 4rem;
+    align-items: baseline;
+    row-gap: 6px;
+  }
+  .hv,
+  .av {
+    font: 800 1.2rem/1 var(--display);
+    color: #fff;
+  }
+  .av {
+    text-align: right;
+  }
+  .lbl {
+    text-align: center;
+    font: 700 0.75rem/1.2 var(--display);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .bar {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 3px;
+    height: 6px;
+  }
+  .bar i {
+    display: block;
+    height: 100%;
+    border-radius: 3px;
+    background: var(--panel-hi);
+    min-width: 3px;
+  }
+  .bar i.h {
+    background: linear-gradient(90deg, var(--blue), #3d86e8);
+  }
+  .bar i.a {
+    background: linear-gradient(90deg, #6b7fa6, #8597bd);
+  }
+  .bar i.us {
+    background: linear-gradient(90deg, var(--orange), var(--orange-hi));
+  }
+
+  /* ---------- Facts ---------- */
   .facts {
     display: grid;
-    grid-template-columns: max-content 1fr;
-    gap: 0.35rem 1rem;
+    gap: 0.9rem;
     margin: 0;
   }
   .facts dt {
-    font-weight: 600;
-    color: var(--muted);
+    font: 700 0.75rem/1 var(--display);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 0.25rem;
   }
   .facts dd {
     margin: 0;
-  }
-  tbody th {
-    text-transform: none;
-    letter-spacing: 0;
-    font-size: 0.95rem;
-    background: transparent;
-    color: var(--text);
     font-weight: 600;
+  }
+  @media (min-width: 720px) {
+    .facts {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 </style>

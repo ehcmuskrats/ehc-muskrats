@@ -19,32 +19,51 @@ const t = useT(lang);
 const fullTitle = title ? `${title} · ${TEAM.displayName}` : `${TEAM.displayName} · ${TEAM.leagueName}`;
 const desc = description ?? t('site.tagline');
 const other = otherLang(lang);
-const nav = [
-  ['', 'nav.home'],
-  ['schedule/', 'nav.schedule'],
-  ['standings/', 'nav.standings'],
-  ['roster/', 'nav.roster'],
-  ['stats/', 'nav.stats'],
-  ['highlights/', 'nav.highlights'],
-  ['news/', 'nav.news'],
-  ['join/', 'nav.join'],
-] as const;
 const canonical = new URL(href(lang, path), Astro.site).toString();
 const lastUpdate = syncStatus?.lastRun ? syncStatus.lastRun.slice(0, 10) : null;
+
+// Icons (24×24, stroke)
+const icons: Record<string, string> = {
+  home: 'M3 11.5 12 4l9 7.5M5.5 9.5V20h13V9.5',
+  schedule: 'M4 6.5h16v13H4zM4 10.5h16M8.5 3.5v5M15.5 3.5v5',
+  standings: 'M4 6h16M4 12h16M4 18h16M8 4v16',
+  stats: 'M5 20V12M10 20V5M15 20v-9M20 20v-5',
+  more: 'M5 12h.01M12 12h.01M19 12h.01',
+  roster: 'M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.3a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.7.8 2.8 2.6 3 5.2',
+  highlights: 'M4 5.5h16v13H4zM10 9.5v5l4.5-2.5z',
+  news: 'M5 4.5h11v15H5zM16 8.5h3v9.5a1.5 1.5 0 0 1-3 0M8 8.5h5M8 12h5M8 15.5h3',
+  join: 'M12 20.5s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.9c0 5.4-7.5 10-7.5 10z',
+};
+const primary = [
+  ['', 'nav.home', 'home'],
+  ['schedule/', 'nav.schedule', 'schedule'],
+  ['standings/', 'nav.standings', 'standings'],
+  ['stats/', 'nav.stats', 'stats'],
+] as const;
+const secondary = [
+  ['roster/', 'nav.roster', 'roster'],
+  ['highlights/', 'nav.highlights', 'highlights'],
+  ['news/', 'nav.news', 'news'],
+  ['join/', 'nav.join', 'join'],
+] as const;
+const all = [...primary, ...secondary];
+const moreActive = secondary.some(([, key]) => key === active);
 ---
 
 <!doctype html>
 <html lang={lang}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{fullTitle}</title>
     <meta name="description" content={desc} />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#050b18" />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang={lang} href={canonical} />
     <link rel="alternate" hreflang={other} href={new URL(href(other, path), Astro.site).toString()} />
     <link rel="icon" type="image/png" href={url('logo.png')} />
-    <meta name="theme-color" content="#1870E0" />
+    <link rel="apple-touch-icon" href={url('logo.png')} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={desc} />
     <meta property="og:image" content={new URL(url('logo.png'), Astro.site).toString()} />
@@ -52,41 +71,29 @@ const lastUpdate = syncStatus?.lastRun ? syncStatus.lastRun.slice(0, 10) : null;
   </head>
   <body>
     <a class="skip-link" href="#main">{t('nav.skip')}</a>
-    <header class="site-header">
+
+    <header class="topbar">
       <div class="container bar">
         <a class="brand" href={href(lang)} aria-label={`${TEAM.displayName} – ${t('nav.home')}`}>
-          <img src={url('logo.png')} width="48" height="48" alt="" />
-          <span class="brand-text">
-            <span class="brand-name">{TEAM.displayName}</span>
-            <span class="brand-league">{TEAM.leagueName}</span>
+          <img src={url('logo.png')} width="40" height="40" alt="" />
+          <span class="wordmark">
+            <span class="w1">EHC</span><span class="w2">Muskrats</span>
           </span>
         </a>
-        <div class="actions">
-          <a class="lang" href={href(other, path)} hreflang={other} lang={other} title={t('lang.switchLabel')}>
-            {other.toUpperCase()}<span class="visually-hidden"> – {t('lang.switch')}</span>
-          </a>
-          <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">
-            <span class="visually-hidden">{t('nav.menu')}</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"
-              ><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path></svg
-            >
-          </button>
-        </div>
-      </div>
-      <nav id="site-nav" class="site-nav" aria-label="Main">
-        <ul class="container">
+        <nav class="desk-nav" aria-label={t('nav.menu')}>
           {
-            nav.map(([p, key]) => (
-              <li>
-                <a href={href(lang, p)} aria-current={active === key ? 'page' : undefined}>
-                  {t(key)}
-                </a>
-              </li>
+            all.map(([p, key]) => (
+              <a href={href(lang, p)} aria-current={active === key ? 'page' : undefined}>
+                {t(key)}
+              </a>
             ))
           }
-        </ul>
-      </nav>
-      <div class="stripes" aria-hidden="true"></div>
+        </nav>
+        <a class="lang" href={href(other, path)} hreflang={other} lang={other} title={t('lang.switchLabel')}>
+          {other.toUpperCase()}<span class="visually-hidden"> – {t('lang.switch')}</span>
+        </a>
+      </div>
+      <div class="band" aria-hidden="true"></div>
     </header>
 
     <main id="main" class="container">
@@ -94,38 +101,60 @@ const lastUpdate = syncStatus?.lastRun ? syncStatus.lastRun.slice(0, 10) : null;
     </main>
 
     <footer class="site-footer">
-      <div class="stripes" aria-hidden="true"></div>
       <div class="container foot">
-        <div>
-          <strong>{TEAM.displayName}</strong>
-          <p class="small">{t('footer.unofficial')}</p>
+        <div class="foot-brand">
+          <img src={url('logo.png')} width="44" height="44" alt="" loading="lazy" />
+          <div>
+            <strong>{TEAM.displayName}</strong>
+            <p class="small muted">{t('footer.unofficial')}</p>
+          </div>
         </div>
-        <div class="small">
-          {
-            leagueData && (
-              <p>
-                <a href="https://www.wehv.at/" rel="noopener">{t('credit.data')}</a>
-              </p>
-            )
-          }
-          {lastUpdate && <p>{t('footer.lastUpdate')}: {formatDate(lang, lastUpdate)}</p>}
-          <p>
-            <a href={TEAM.facebookUrl} rel="noopener">Facebook</a> ·
-            <a href={TEAM.youtube.channelUrl} rel="noopener">YouTube (hockeyyy)</a>
-          </p>
+        <div class="small foot-links">
+          {leagueData && <a href="https://www.wehv.at/" rel="noopener">{t('credit.data')}</a>}
+          <a href={TEAM.facebookUrl} rel="noopener">Facebook</a>
+          <a href={TEAM.youtube.channelUrl} rel="noopener">YouTube · hockeyyy</a>
+          {lastUpdate && <span class="dim">{t('footer.lastUpdate')}: {formatDate(lang, lastUpdate)}</span>}
         </div>
       </div>
     </footer>
 
-    <script>
-      const btn = document.querySelector<HTMLButtonElement>('.menu-btn');
-      const nav = document.getElementById('site-nav');
-      btn?.addEventListener('click', () => {
-        const open = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!open));
-        nav?.classList.toggle('open', !open);
-      });
+    <!-- Phone navigation: thumb-reachable tab bar -->
+    <nav class="tabbar" aria-label={t('nav.menu')}>
+      {
+        primary.map(([p, key, icon]) => (
+          <a href={href(lang, p)} aria-current={active === key ? 'page' : undefined}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d={icons[icon]} />
+            </svg>
+            <span>{t(key)}</span>
+          </a>
+        ))
+      }
+      <button type="button" popovertarget="more-sheet" class={moreActive ? 'is-active' : undefined} aria-haspopup="true">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icons.more} stroke-width="3.2"></path></svg>
+        <span>{t('common.more')}</span>
+      </button>
+    </nav>
+    <div id="more-sheet" popover class="sheet" role="dialog" aria-label={t('common.more')}>
+      <div class="sheet-grip" aria-hidden="true"></div>
+      <ul>
+        {
+          secondary.map(([p, key, icon]) => (
+            <li>
+              <a href={href(lang, p)} aria-current={active === key ? 'page' : undefined}>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d={icons[icon]} />
+                </svg>
+                {t(key)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="sheet-lang" href={href(other, path)} hreflang={other} lang={other}>{t('lang.switch')}</a>
+    </div>
 
+    <script>
       // Sortable tables: <table data-sortable> with <th data-sort="num|text"><button>..</button></th>
       document.querySelectorAll<HTMLTableElement>('table[data-sortable]').forEach((table) => {
         const ths = Array.from(table.querySelectorAll<HTMLTableCellElement>('thead th'));
@@ -137,166 +166,329 @@ const lastUpdate = syncStatus?.lastRun ? syncStatus.lastRun.slice(0, 10) : null;
             ths.forEach((x) => x.removeAttribute('aria-sort'));
             th.setAttribute('aria-sort', asc ? 'ascending' : 'descending');
             const body = table.tBodies[0];
-            const rows = Array.from(body.rows);
             const val = (r: HTMLTableRowElement) => {
               const c = r.cells[idx];
               const v = c?.dataset.v ?? c?.textContent ?? '';
               return kind === 'num' ? Number(v.replace(',', '.').replace(/[^\d.-]/g, '')) || 0 : v.trim().toLowerCase();
             };
-            rows.sort((a, b) => {
-              const x = val(a);
-              const y = val(b);
-              const cmp = x < y ? -1 : x > y ? 1 : 0;
-              return asc ? cmp : -cmp;
-            });
-            rows.forEach((r) => body.appendChild(r));
+            Array.from(body.rows)
+              .sort((a, b) => {
+                const x = val(a);
+                const y = val(b);
+                const c = x < y ? -1 : x > y ? 1 : 0;
+                return asc ? c : -c;
+              })
+              .forEach((r) => body.appendChild(r));
           });
         });
+      });
+
+      // Tabs: [data-tabs] containing .seg [role=tab][aria-controls] and [role=tabpanel] panels.
+      document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((root) => {
+        const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[role=tab]'));
+        const show = (tab: HTMLButtonElement) => {
+          tabs.forEach((x) => {
+            const on = x === tab;
+            x.setAttribute('aria-selected', String(on));
+            x.tabIndex = on ? 0 : -1;
+            const panel = document.getElementById(x.getAttribute('aria-controls')!);
+            if (panel) panel.hidden = !on;
+          });
+        };
+        tabs.forEach((tab, i) => {
+          tab.addEventListener('click', () => show(tab));
+          tab.addEventListener('keydown', (e) => {
+            const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+            if (!d) return;
+            const next = tabs[(i + d + tabs.length) % tabs.length];
+            next.focus();
+            show(next);
+          });
+        });
+        show(tabs.find((x) => x.getAttribute('aria-selected') === 'true') ?? tabs[0]);
       });
     </script>
   </body>
 </html>
 
 <style>
-  .site-header {
-    background: var(--blue);
-    color: #fff;
+  /* Top bar */
+  .topbar {
     position: sticky;
     top: 0;
-    z-index: 50;
+    z-index: 60;
+    background: rgba(5, 11, 24, 0.78);
+    backdrop-filter: saturate(160%) blur(14px);
+    -webkit-backdrop-filter: saturate(160%) blur(14px);
   }
   .bar {
+    height: var(--topbar-h);
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
-    min-height: 64px;
+  }
+  .band {
+    height: 4px;
+    background: var(--stripes-h);
+    opacity: 0.9;
   }
   .brand {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.55rem;
     color: #fff;
-    text-decoration: none;
-    min-width: 0;
+    margin-right: auto;
   }
   .brand img {
-    width: 48px;
-    height: 48px;
-    flex: none;
+    width: 40px;
+    height: 40px;
+    filter: drop-shadow(0 2px 8px rgba(24, 112, 224, 0.5));
   }
-  .brand-text {
+  .wordmark {
     display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-    min-width: 0;
-  }
-  .brand-name {
-    font-family: var(--font-display);
+    align-items: baseline;
+    gap: 0.3rem;
+    font-family: var(--display);
     font-weight: 800;
-    font-size: 1.3rem;
     text-transform: uppercase;
+    font-size: 1.45rem;
+    line-height: 1;
     letter-spacing: 0.02em;
   }
-  .brand-league {
-    font-size: 0.8rem;
-  }
-  .actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  .w1 {
+    color: var(--orange);
   }
   .lang {
-    color: #fff;
-    font-weight: 700;
-    text-decoration: none;
-    border: 2px solid rgba(255, 255, 255, 0.6);
-    border-radius: 999px;
-    padding: 0.3rem 0.65rem;
-    font-size: 0.85rem;
-  }
-  .lang:hover {
-    background: rgba(255, 255, 255, 0.15);
-  }
-  .menu-btn {
-    background: transparent;
-    color: #fff;
-    border: 0;
-    width: 44px;
-    height: 44px;
     display: grid;
     place-items: center;
-    cursor: pointer;
-    border-radius: 8px;
+    min-width: 44px;
+    height: 34px;
+    padding: 0 0.7rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--text);
+    font: 800 0.9rem/1 var(--display);
+    letter-spacing: 0.1em;
   }
-  .site-nav {
-    display: none;
-    background: var(--blue-dark);
-  }
-  .site-nav.open {
-    display: block;
-  }
-  .site-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0.25rem var(--gutter) 0.75rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.15rem 1rem;
-  }
-  .site-nav a {
-    display: block;
+  .lang:hover {
+    background: rgba(255, 255, 255, 0.14);
     color: #fff;
-    text-decoration: none;
-    padding: 0.6rem 0;
-    font-weight: 600;
   }
-  .site-nav a[aria-current='page'] {
-    /* orange text on blue fails contrast; use an orange marker instead */
-    box-shadow: inset 4px 0 0 var(--orange);
-    padding-left: 0.6rem;
+
+  /* Desktop nav */
+  .desk-nav {
+    display: none;
   }
-  @media (min-width: 900px) {
-    .menu-btn {
+  @media (min-width: 960px) {
+    .desk-nav {
+      display: flex;
+      gap: 0.15rem;
+      height: 100%;
+    }
+    .desk-nav a {
+      display: flex;
+      align-items: center;
+      padding: 0 0.75rem;
+      color: var(--muted);
+      font: 700 1rem/1 var(--display);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      position: relative;
+    }
+    .desk-nav a:hover {
+      color: #fff;
+    }
+    .desk-nav a[aria-current='page'] {
+      color: #fff;
+    }
+    .desk-nav a[aria-current='page']::after {
+      content: '';
+      position: absolute;
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: 0;
+      height: 3px;
+      background: var(--orange);
+      box-shadow: var(--glow-orange);
+    }
+  }
+
+  /* Phone tab bar */
+  .tabbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 70;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    height: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    background: rgba(8, 17, 38, 0.86);
+    backdrop-filter: saturate(160%) blur(16px);
+    -webkit-backdrop-filter: saturate(160%) blur(16px);
+    box-shadow: 0 -1px 0 var(--line);
+  }
+  .tabbar a,
+  .tabbar button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: var(--dim);
+    background: none;
+    border: 0;
+    font: 700 0.72rem/1 var(--display);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tabbar svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .tabbar [aria-current='page'],
+  .tabbar .is-active {
+    color: #fff;
+  }
+  .tabbar [aria-current='page']::before,
+  .tabbar .is-active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 28%;
+    right: 28%;
+    height: 3px;
+    border-radius: 0 0 3px 3px;
+    background: var(--orange);
+    box-shadow: var(--glow-orange);
+  }
+  .tabbar [aria-current='page'] svg {
+    stroke: var(--orange);
+  }
+  @media (min-width: 960px) {
+    .tabbar {
       display: none;
     }
-    .site-nav {
-      display: block;
-    }
-    .site-nav ul {
-      display: flex;
-      padding: 0 var(--gutter);
-      gap: 0.25rem;
-      overflow-x: auto;
-    }
-    .site-nav a {
-      padding: 0.6rem 0.75rem;
-      border-bottom: 3px solid transparent;
-    }
-    .site-nav a[aria-current='page'] {
-      border-bottom-color: var(--orange);
-      color: #fff;
-      box-shadow: none;
-      padding-left: 0.75rem;
+  }
+
+  /* "More" bottom sheet */
+  .sheet {
+    position: fixed;
+    inset: auto 0 0 0;
+    margin: 0;
+    width: 100%;
+    max-width: none;
+    border: 0;
+    padding: 0.5rem 1rem calc(1.25rem + env(safe-area-inset-bottom));
+    background: var(--panel);
+    color: var(--text);
+    border-radius: 22px 22px 0 0;
+    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.6);
+  }
+  .sheet::backdrop {
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
+  }
+  .sheet:popover-open {
+    animation: sheet-up 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  @keyframes sheet-up {
+    from {
+      transform: translateY(40%);
+      opacity: 0;
     }
   }
+  .sheet-grip {
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--line-strong);
+    margin: 0.25rem auto 0.75rem;
+  }
+  .sheet ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .sheet li a {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 60px;
+    padding: 0 1rem;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    font: 800 1.1rem/1 var(--display);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .sheet li a[aria-current='page'] {
+    background: var(--blue);
+  }
+  .sheet svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: var(--orange);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .sheet-lang {
+    display: block;
+    text-align: center;
+    margin-top: 0.9rem;
+    font: 700 0.95rem/1 var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.75rem;
+  }
+
+  /* Footer */
   .site-footer {
-    margin-top: 3rem;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
+    margin-top: 3.5rem;
+    background: linear-gradient(180deg, transparent, rgba(8, 17, 38, 0.9));
+    box-shadow: 0 -1px 0 var(--line);
   }
   .foot {
     display: grid;
     gap: 1rem;
-    padding-top: 1.25rem;
-    padding-bottom: 2rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  .foot-brand {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  .foot-brand p {
+    margin: 0.15rem 0 0;
+  }
+  .foot-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.1rem;
+  }
+  .foot-links a {
+    color: var(--muted);
   }
   @media (min-width: 720px) {
     .foot {
       grid-template-columns: 1fr auto;
+      align-items: center;
     }
-  }
-  .foot p {
-    margin: 0.25rem 0;
   }
 </style>

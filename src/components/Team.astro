@@ -4,21 +4,45 @@ import { url } from '../i18n/index.ts';
 import { teamName } from '../lib/data.ts';
 interface Props {
   team: TeamRef;
+  /** Show the short code (e.g. "MUS") instead of the full name. */
   short?: boolean;
+  /** Full name on wide screens, short code on phones (for dense tables). */
+  responsive?: boolean;
+  /** Hide the name entirely (logo only). */
+  logoOnly?: boolean;
+  size?: number;
 }
-const { team, short = false } = Astro.props;
+const { team, short = false, responsive = false, logoOnly = false, size = 26 } = Astro.props;
 const name = teamName(team);
+const code = team.short || name.slice(0, 3).toUpperCase();
+const style = size !== 26 ? `width:${size}px;height:${size}px` : undefined;
 ---
 
-<span class="team">
+<span class:list={['team', { resp: responsive }]}>
   {
     team.logo ? (
-      <img src={url(team.logo)} alt="" width="24" height="24" loading="lazy" decoding="async" />
+      <img class="logo" src={url(team.logo)} alt={logoOnly ? name : ''} width={size} height={size} style={style} loading="lazy" decoding="async" />
     ) : (
-      <span class="ph" aria-hidden="true">
-        {team.short.slice(0, 3)}
+      <span class="ph" style={style} aria-hidden={logoOnly ? undefined : 'true'} title={logoOnly ? name : undefined}>
+        {code.slice(0, 3)}
       </span>
     )
   }
-  {short ? <abbr title={name}>{team.short || name}</abbr> : <span>{name}</span>}
+  {
+    !logoOnly &&
+      (responsive ? (
+        <>
+          <span class="name long">{name}</span>
+          <abbr class="name short" title={name}>
+            {code}
+          </abbr>
+        </>
+      ) : short ? (
+        <abbr class="name" title={name}>
+          {code}
+        </abbr>
+      ) : (
+        <span class="name">{name}</span>
+      ))
+  }
 </span>

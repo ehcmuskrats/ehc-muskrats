@@ -1,73 +1,127 @@
 ---
 import Base from '../../layouts/Base.astro';
 import VideoEmbed from '../../components/VideoEmbed.astro';
+import Team from '../../components/Team.astro';
 import DataCredit from '../../components/DataCredit.astro';
 import { type Lang, langPaths, useT, href, formatDate } from '../../i18n/index.ts';
-import { highlights, games, ourGames } from '../../lib/data.ts';
+import { highlights, ourGames, opponent, ourScore, resultCode, resultClass } from '../../lib/data.ts';
 import { TEAM } from '../../config/team.ts';
 
 export const getStaticPaths = langPaths;
 const lang = Astro.params.lang as Lang;
 const t = useT(lang);
 const summaries = new Map(ourGames().map((g) => [g.id, g]));
-// Only show what we can place: game videos (matched/pinned) and non-game videos.
+// Only what we can place: game videos (matched/pinned) and non-game videos.
 const visible = highlights.items.filter((h) => h.status !== 'ambiguous' && h.status !== 'unmatched');
-const seasonOf = (h: (typeof visible)[number]) => h.season ?? 'other';
 const bySeason = new Map<string, typeof visible>();
 for (const h of visible) {
-  const k = seasonOf(h);
+  const k = h.season ?? 'other';
   if (!bySeason.has(k)) bySeason.set(k, []);
   bySeason.get(k)!.push(h);
 }
 const seasonKeys = [...bySeason.keys()].sort((a, b) => (a === 'other' ? 1 : b === 'other' ? -1 : b.localeCompare(a)));
-void games;
+const [feature, ...rest] = visible;
 ---
 
 <Base lang={lang} title={t('highlights.title')} path="highlights/" active="nav.highlights">
   <header class="page-head">
+    <span class="tag">{visible.length} Videos</span>
     <h1>{t('highlights.title')}</h1>
     <p class="sub">
-      {t('highlights.intro')} <a href={TEAM.youtube.channelUrl} rel="noopener">youtube.com/@hoooockeyyy</a>
+      {t('highlights.intro')} <a href={TEAM.youtube.channelUrl} rel="noopener">@hoooockeyyy</a>
     </p>
   </header>
 
   {visible.length === 0 && <p class="muted">{t('highlights.none')}</p>}
+  {
+    feature && (
+      <div class="feature">
+        <VideoEmbed lang={lang} video={feature.video} />
+      </div>
+    )
+  }
 
   {
-    seasonKeys.map((k) => (
-      <section aria-labelledby={`h-${k}`}>
-        <h2 id={`h-${k}`}>{k === 'other' ? t('highlights.other') : `${t('common.season')} ${k.replace('-', '/')}`}</h2>
-        <div class="grid grid-2">
-          {bySeason.get(k)!.map((h) => {
-            const g = h.gameId ? summaries.get(h.gameId) : undefined;
-            return (
-              <article class="card">
-                <VideoEmbed lang={lang} video={h.video} />
-                <p class="small meta">
+    seasonKeys.map((k) => {
+      const items = bySeason.get(k)!.filter((h) => h !== feature);
+      if (!items.length) return null;
+      return (
+        <section aria-labelledby={`h-${k}`}>
+          <div class="sec-head">
+            <h2 id={`h-${k}`}>{k === 'other' ? t('highlights.other') : `${t('common.season')} ${k.replace('-', '/')}`}</h2>
+            <span class="count tnum">{items.length}</span>
+          </div>
+          <div class="vgrid">
+            {items.map((h) => {
+              const g = h.gameId ? summaries.get(h.gameId) : undefined;
+              const r = g ? resultCode(g) : null;
+              const sc = g ? ourScore(g) : null;
+              return (
+                <article class="vcard">
+                  <VideoEmbed lang={lang} video={h.video} bare />
                   {g ? (
-                    <a href={href(lang, `games/${g.id}/`)}>
-                      {t('highlights.toGame')}: {formatDate(lang, g.date)}
-                      {g.homeScore != null && ` · ${g.homeScore}:${g.awayScore}`}
+                    <a class="vmeta" href={href(lang, `games/${g.id}/`)}>
+                      <Team team={opponent(g)} short size={22} />
+                      {r && <span class={`res res-${resultClass(r)}`}>{r}</span>}
+                      <span class="tnum sc">
+                        {sc!.us}:{sc!.them}
+                      </span>
+                      <span class="dim small d">{formatDate(lang, g.date)}</span>
                     </a>
                   ) : (
-                    <span class="muted">{formatDate(lang, h.video.publishedAt.slice(0, 10))}</span>
+                    <p class="vmeta dim small">{formatDate(lang, h.video.publishedAt.slice(0, 10))}</p>
                   )}
-                </p>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-    ))
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })
   }
+  <p class="small dim consent">{t('game.consent')}</p>
   <DataCredit lang={lang} video />
 </Base>
 
 <style>
-  .meta {
-    margin: 0.5rem 0 0;
+  .feature {
+    margin-top: 1rem;
   }
-  article.card {
-    padding: 0.75rem;
+  .count {
+    font: 800 1.4rem/1 var(--display);
+    color: var(--dim);
+  }
+  .vgrid {
+    display: grid;
+    gap: 16px;
+  }
+  @media (min-width: 640px) {
+    .vgrid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (min-width: 1000px) {
+    .vgrid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .vmeta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0.55rem 0 0;
+    color: var(--text);
+  }
+  .vmeta:hover {
+    color: var(--text);
+  }
+  .sc {
+    font: 800 1.15rem/1 var(--display);
+  }
+  .d {
+    margin-left: auto;
+  }
+  .consent {
+    margin-top: 1.5rem;
   }
 </style>

@@ -172,6 +172,8 @@ Actions → "Nightly sync & deploy" → **Run workflow**. After a few minutes th
 
 ## Notes
 
+- **Design:** dark only, broadcast/scoreboard style, mobile first (phones get a bottom tab bar). Colours and fonts are defined once at the top of `src/styles/global.css`. Fonts (Barlow Condensed, Inter) are bundled with the site, with no requests to Google.
+- **Stat abbreviations** are English in both languages, as on the ICE Hockey League sites (GP, G, A, PTS, PIM, GAA…). They're defined in `src/i18n/abbr.ts`, along with the full German and English names that appear on hover. Game situations are written out (Gleichzahl / Even strength, Powerplay, Unterzahl …) in `src/i18n/de.json` and `en.json`.
 - **Logo:** `public/logo.png` is only 200×200, so the site never shows it bigger than about 140 px. A high-resolution PNG or an SVG version would make it look sharper.
 - **Games are 3 × 25 minutes** and minors are 3 minutes in this league. The site reads period length and penalty length from each game report and never assumes NHL values.
 - **Not recorded by the league:** shots on goal, saves, save % and +/-. Columns that are empty for a whole season are hidden automatically and come back if the league ever records them.

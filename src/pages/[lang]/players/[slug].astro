@@ -2,8 +2,10 @@
 import Base from '../../../layouts/Base.astro';
 import Team from '../../../components/Team.astro';
 import DataCredit from '../../../components/DataCredit.astro';
+import Abbr from '../../../components/Abbr.astro';
 import { type Lang, LANGS, useT, href, url, formatDate, formatNumber, mmss } from '../../../i18n/index.ts';
-import { derived, playerExtras, columns } from '../../../lib/data.ts';
+import { RESULT_FULL } from '../../../i18n/abbr.ts';
+import { derived, playerExtras, columns, resultClass } from '../../../lib/data.ts';
 import type { PlayerProfile } from '../../../types/models.ts';
 
 export function getStaticPaths() {
@@ -17,65 +19,125 @@ const bio = extra?.bio?.[lang] ?? extra?.bio?.de;
 const skaterSeasons = p.seasons.filter((s) => s.gp > 0);
 const goalieSeasons = p.seasons.filter((s) => s.goalieGp > 0);
 const showPm = p.seasons.some((s) => columns(s.season).plusMinus);
-const resLabel = (r: string | null) =>
-  r == null ? '' : lang === 'de' ? ({ W: 'S', L: 'N', OTW: 'SnV', OTL: 'NnV', T: 'U' } as Record<string, string>)[r] : r;
-const resClass = (r: string | null) => (r === 'W' || r === 'OTW' ? 'W' : r === 'L' || r === 'OTL' ? 'L' : 'T');
+const c = p.career;
+const situation = (s: string) => {
+  const k = `situation.${s}`;
+  const v = t(k);
+  return v === k ? s : v;
+};
+// Jersey numbers, most recent first (the hero shows the current one).
+const numbers = [...new Set(p.seasons.flatMap((s) => s.numbers))];
+const first = p.seasons.at(-1)?.season.replace('-', '/');
+const lastS = p.seasons[0]?.season.replace('-', '/');
 ---
 
 <Base lang={lang} title={`${p.first} ${p.last}`} path={`players/${p.slug}/`} active="nav.roster" leagueData>
-  <header class="profile card">
+  <section class="hero">
+    <span class="bignum tnum" aria-hidden="true">{numbers[0] ?? ''}</span>
+    <div class="hero-in">
+      {extra?.photo && <img class="photo" src={url(extra.photo)} alt={`${p.first} ${p.last}`} width="120" height="120" />}
+      <div>
+        <span class="tag">
+          {numbers.length ? numbers.map((n) => `#${n}`).join(' / ') : '#–'} · {p.positions.map((x) => x).join(' / ')}
+        </span>
+        <h1>
+          <span class="fn">{p.first}</span>
+          <span class="ln">{p.last}</span>
+        </h1>
+        <p class="sub">
+          {p.positions.map((x) => t(`pos.${x}`)).join(', ')}
+          {first && <> · {first === lastS ? first : `${first} – ${lastS}`}</>} · {p.seasons.length} {t('player.seasons')}
+        </p>
+      </div>
+    </div>
+    <div class="band" aria-hidden="true"></div>
+  </section>
+
+  {bio && <p class="bio">{bio}</p>}
+
+  <section aria-label={t('player.career')}>
+    <p class="eyebrow car">{t('player.career')}</p>
     {
-      extra?.photo ? (
-        <img class="photo" src={url(extra.photo)} alt={`${p.first} ${p.last}`} width="140" height="140" />
+      p.isGoalie ? (
+        <div class="lockups">
+          <div class="lockup">
+            <span class="v">{c.goalieGp}</span>
+            <span class="k"><Abbr lang={lang} k="gp" /></span>
+          </div>
+          <div class="lockup">
+            <span class="v">{c.ga}</span>
+            <span class="k"><Abbr lang={lang} k="ga" /></span>
+          </div>
+          <div class="lockup accent">
+            <span class="v">{formatNumber(lang, c.gaa, 2)}</span>
+            <span class="k"><Abbr lang={lang} k="gaa" /></span>
+          </div>
+          <div class="lockup">
+            <span class="v">{c.toi ? Math.round(c.toi / 60) : '–'}</span>
+            <span class="k">{lang === 'de' ? 'Minuten' : 'Minutes'}</span>
+          </div>
+        </div>
       ) : (
-        <div class="jersey" aria-hidden="true">
-          <span>{p.numbers[0] ?? ''}</span>
+        <div class="lockups">
+          <div class="lockup">
+            <span class="v">{c.gp}</span>
+            <span class="k"><Abbr lang={lang} k="gp" /></span>
+          </div>
+          <div class="lockup">
+            <span class="v">{c.g}</span>
+            <span class="k"><Abbr lang={lang} k="g" /></span>
+          </div>
+          <div class="lockup">
+            <span class="v">{c.a}</span>
+            <span class="k"><Abbr lang={lang} k="a" /></span>
+          </div>
+          <div class="lockup accent">
+            <span class="v">{c.p}</span>
+            <span class="k"><Abbr lang={lang} k="p" /></span>
+          </div>
+          <div class="lockup">
+            <span class="v">{c.pim}</span>
+            <span class="k"><Abbr lang={lang} k="pim" /></span>
+          </div>
         </div>
       )
     }
-    <div>
-      <h1><span class="first">{p.first}</span> {p.last}</h1>
-      <dl class="facts">
-        <div><dt>{t('player.numbers')}</dt><dd>{p.numbers.length ? p.numbers.map((n) => `#${n}`).join(', ') : '–'}</dd></div>
-        <div><dt>{t('player.positions')}</dt><dd>{p.positions.map((x) => t(`pos.${x}`)).join(', ') || '–'}</dd></div>
-        <div><dt>{t('player.seasons')}</dt><dd>{p.seasons.map((s) => s.season.replace('-', '/')).reverse().join(', ')}</dd></div>
-      </dl>
-      {bio && <p class="bio">{bio}</p>}
-    </div>
-  </header>
+  </section>
 
   {
     skaterSeasons.length > 0 && (
       <section aria-labelledby="h-seasons">
-        <h2 id="h-seasons">{t('player.bySeason')}</h2>
+        <div class="sec-head">
+          <h2 id="h-seasons">{t('player.bySeason')}</h2>
+        </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th scope="col">{t('common.season')}</th>
-                <th class="num" scope="col">{t('col.no')}</th>
-                <th class="num" scope="col">{t('col.gp')}</th>
-                <th class="num" scope="col">{t('col.g')}</th>
-                <th class="num" scope="col">{t('col.a')}</th>
-                <th class="num" scope="col">{t('col.p')}</th>
-                <th class="num" scope="col">{t('col.pim')}</th>
-                <th class="num" scope="col">{t('col.ppg')}</th>
-                <th class="num" scope="col">{t('col.shg')}</th>
-                <th class="num" scope="col">{t('col.gwg')}</th>
-                {showPm && <th class="num" scope="col">{t('col.pm')}</th>}
+                <th class="sticky-col" scope="col">{t('common.season')}</th>
+                <th class="num" scope="col"><Abbr lang={lang} k="no" /></th>
+                <th class="num" scope="col"><Abbr lang={lang} k="gp" /></th>
+                <th class="num" scope="col"><Abbr lang={lang} k="g" /></th>
+                <th class="num" scope="col"><Abbr lang={lang} k="a" /></th>
+                <th class="num" scope="col"><Abbr lang={lang} k="p" /></th>
+                <th class="num" scope="col"><Abbr lang={lang} k="pim" /></th>
+                <th class="num" scope="col"><Abbr lang={lang} k="ppg" /></th>
+                <th class="num" scope="col"><Abbr lang={lang} k="shg" /></th>
+                <th class="num" scope="col"><Abbr lang={lang} k="gwg" /></th>
+                {showPm && <th class="num" scope="col"><Abbr lang={lang} k="pm" /></th>}
               </tr>
             </thead>
             <tbody>
               {skaterSeasons.map((s) => (
                 <tr>
-                  <td>
+                  <td class="sticky-col">
                     <a href={href(lang, `stats/${s.season}/`)}>{s.season.replace('-', '/')}</a>
                   </td>
-                  <td class="num">{s.numbers.join('/') || '–'}</td>
+                  <td class="num dim">{s.numbers.join('/') || '–'}</td>
                   <td class="num">{s.gp}</td>
                   <td class="num">{s.g}</td>
                   <td class="num">{s.a}</td>
-                  <td class="num strong">{s.p}</td>
+                  <td class="num big">{s.p}</td>
                   <td class="num">{s.pim}</td>
                   <td class="num">{s.ppg}</td>
                   <td class="num">{s.shg}</td>
@@ -83,22 +145,20 @@ const resClass = (r: string | null) => (r === 'W' || r === 'OTW' ? 'W' : r === '
                   {showPm && <td class="num">{columns(s.season).plusMinus ? s.plusMinus : '–'}</td>}
                 </tr>
               ))}
-            </tbody>
-            <tfoot>
-              <tr class="ours">
-                <th scope="row">{t('player.career')}</th>
+              <tr class="ours total">
+                <th class="sticky-col" scope="row">{t('player.career')}</th>
                 <td />
-                <td class="num">{p.career.gp}</td>
-                <td class="num">{p.career.g}</td>
-                <td class="num">{p.career.a}</td>
-                <td class="num strong">{p.career.p}</td>
-                <td class="num">{p.career.pim}</td>
-                <td class="num">{p.career.ppg}</td>
-                <td class="num">{p.career.shg}</td>
-                <td class="num">{p.career.gwg}</td>
+                <td class="num">{c.gp}</td>
+                <td class="num">{c.g}</td>
+                <td class="num">{c.a}</td>
+                <td class="num big">{c.p}</td>
+                <td class="num">{c.pim}</td>
+                <td class="num">{c.ppg}</td>
+                <td class="num">{c.shg}</td>
+                <td class="num">{c.gwg}</td>
                 {showPm && <td />}
               </tr>
-            </tfoot>
+            </tbody>
           </table>
         </div>
       </section>
@@ -108,38 +168,38 @@ const resClass = (r: string | null) => (r === 'W' || r === 'OTW' ? 'W' : r === '
   {
     goalieSeasons.length > 0 && (
       <section aria-labelledby="h-gseasons">
-        <h2 id="h-gseasons">{t('roster.goalies')}</h2>
+        <div class="sec-head">
+          <h2 id="h-gseasons">{t('roster.goalies')}</h2>
+        </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th scope="col">{t('common.season')}</th>
-                <th class="num" scope="col">{t('col.gp')}</th>
-                <th class="num" scope="col">{t('col.toi')}</th>
-                <th class="num" scope="col">{t('col.ga')}</th>
-                <th class="num" scope="col">{t('col.gaa')}</th>
+                <th class="sticky-col" scope="col">{t('common.season')}</th>
+                <th class="num" scope="col"><Abbr lang={lang} k="gp" /></th>
+                <th class="num" scope="col"><Abbr lang={lang} k="toi" /></th>
+                <th class="num" scope="col"><Abbr lang={lang} k="ga" /></th>
+                <th class="num" scope="col"><Abbr lang={lang} k="gaa" /></th>
               </tr>
             </thead>
             <tbody>
               {goalieSeasons.map((s) => (
                 <tr>
-                  <td>{s.season.replace('-', '/')}</td>
+                  <td class="sticky-col">{s.season.replace('-', '/')}</td>
                   <td class="num">{s.goalieGp}</td>
                   <td class="num">{s.toi ? mmss(s.toi) : '–'}</td>
                   <td class="num">{s.ga}</td>
-                  <td class="num">{formatNumber(lang, s.gaa, 2)}</td>
+                  <td class="num big">{formatNumber(lang, s.gaa, 2)}</td>
                 </tr>
               ))}
-            </tbody>
-            <tfoot>
-              <tr class="ours">
-                <th scope="row">{t('player.career')}</th>
-                <td class="num">{p.career.goalieGp}</td>
-                <td class="num">{p.career.toi ? mmss(p.career.toi) : '–'}</td>
-                <td class="num">{p.career.ga}</td>
-                <td class="num">{formatNumber(lang, p.career.gaa, 2)}</td>
+              <tr class="ours total">
+                <th class="sticky-col" scope="row">{t('player.career')}</th>
+                <td class="num">{c.goalieGp}</td>
+                <td class="num">{c.toi ? mmss(c.toi) : '–'}</td>
+                <td class="num">{c.ga}</td>
+                <td class="num big">{formatNumber(lang, c.gaa, 2)}</td>
               </tr>
-            </tfoot>
+            </tbody>
           </table>
         </div>
       </section>
@@ -147,42 +207,32 @@ const resClass = (r: string | null) => (r === 'W' || r === 'OTW' ? 'W' : r === '
   }
 
   <section aria-labelledby="h-goals">
-    <h2 id="h-goals">{t('player.goals')} ({p.goals.length})</h2>
+    <div class="sec-head">
+      <h2 id="h-goals">{t('player.goals')}</h2>
+      <span class="count tnum">{p.goals.length}</span>
+    </div>
     {
       p.goals.length ? (
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col">{t('common.date')}</th>
-                <th scope="col">{t('common.opponent')}</th>
-                <th scope="col">{t('common.period')}</th>
-                <th class="num" scope="col">{t('common.time')}</th>
-                <th scope="col">{t('game.situation')}</th>
-                <th scope="col">{t('game.assists')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {p.goals.map((g) => (
-                <tr>
-                  <td>
-                    <a href={href(lang, `games/${g.gameId}/`)}>{formatDate(lang, g.date)}</a>
-                  </td>
-                  <td>
-                    <Team team={g.opponent} />
-                  </td>
-                  <td>{g.period}</td>
-                  <td class="num">{g.timeLabel}</td>
-                  <td>
-                    {g.situation}
-                    {g.gwg && ' · GWG'}
-                  </td>
-                  <td>{g.assists.map((a) => `${a.first} ${a.last}`).join(', ') || '–'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <details class="more" open={p.goals.length <= 8}>
+          <summary>{p.goals.length > 8 ? (lang === 'de' ? 'Alle Tore anzeigen' : 'Show all goals') : t('player.goals')}</summary>
+          <ol class="rows goals">
+            {p.goals.map((g) => (
+              <li>
+                <a href={href(lang, `games/${g.gameId}/`)}>
+                  <span class="gd small dim">{formatDate(lang, g.date)}</span>
+                  <Team team={g.opponent} short size={22} />
+                  <span class="gt tnum">
+                    {g.period === 'OT' || g.period === 'SO' ? g.period : `${g.period}.`} · {g.timeLabel}
+                  </span>
+                  <span class="gs">
+                    <span class={`sit sit-${g.situation.slice(0, 2)}`}>{situation(g.situation)}</span>
+                    {g.gwg && <span class="sit gwg">GWG</span>}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </details>
       ) : (
         <p class="muted">{t('player.noGoals')}</p>
       )
@@ -190,39 +240,47 @@ const resClass = (r: string | null) => (r === 'W' || r === 'OTW' ? 'W' : r === '
   </section>
 
   <section aria-labelledby="h-log">
-    <h2 id="h-log">{t('player.gameLog')} ({p.games.length})</h2>
+    <div class="sec-head">
+      <h2 id="h-log">{t('player.gameLog')}</h2>
+      <span class="count tnum">{p.games.length}</span>
+    </div>
     {
       p.games.length ? (
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th scope="col">{t('common.date')}</th>
+                <th class="sticky-col" scope="col">{t('common.date')}</th>
                 <th scope="col">{t('common.opponent')}</th>
                 <th scope="col">{t('common.result')}</th>
-                <th scope="col">{t('col.pos')}</th>
-                <th class="num" scope="col">{t('col.g')}</th>
-                <th class="num" scope="col">{t('col.a')}</th>
-                <th class="num" scope="col">{t('col.pim')}</th>
-                {p.isGoalie && <th class="num" scope="col">{t('col.ga')}</th>}
+                <th class="num" scope="col"><Abbr lang={lang} k="g" /></th>
+                <th class="num" scope="col"><Abbr lang={lang} k="a" /></th>
+                <th class="num" scope="col"><Abbr lang={lang} k="pim" /></th>
+                {p.isGoalie && <th class="num" scope="col"><Abbr lang={lang} k="ga" /></th>}
               </tr>
             </thead>
             <tbody>
               {p.games.map((g) => (
                 <tr>
-                  <td>
-                    <a href={href(lang, `games/${g.gameId}/`)}>{formatDate(lang, g.date)}</a>
+                  <td class="sticky-col">
+                    <a href={href(lang, `games/${g.gameId}/`)} class="tnum">
+                      {formatDate(lang, g.date)}
+                    </a>
                   </td>
                   <td>
-                    <span class="small muted">{g.home ? (lang === 'de' ? 'vs' : 'vs') : '@'}</span> <Team team={g.opponent} />
+                    <span class="dim small">{g.home ? 'vs' : '@'}</span> <Team team={g.opponent} short size={22} />
                   </td>
-                  <td>
-                    {g.result && <span class={`res res-${resClass(g.result)}`}>{resLabel(g.result)}</span>} {g.score}
+                  <td class="tnum">
+                    {g.result && (
+                      <span class={`res res-${resultClass(g.result)}`} title={RESULT_FULL[g.result][lang]}>
+                        {g.result}
+                      </span>
+                    )}{' '}
+                    {g.score}
                   </td>
-                  <td>{g.position}</td>
-                  <td class="num">{g.g}</td>
-                  <td class="num">{g.a}</td>
-                  <td class="num">{g.pim}</td>
+                  <td class="num">{g.g || <span class="dim">0</span>}</td>
+                  <td class="num">{g.a || <span class="dim">0</span>}</td>
+                  <td class="num">{g.pim || <span class="dim">0</span>}</td>
                   {p.isGoalie && <td class="num">{g.goalie ? g.goalie.ga : '–'}</td>}
                 </tr>
               ))}
@@ -239,66 +297,157 @@ const resClass = (r: string | null) => (r === 'W' || r === 'OTW' ? 'W' : r === '
 </Base>
 
 <style>
-  .profile {
+  .hero {
+    position: relative;
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 2rem var(--gutter) 1.6rem;
+    overflow: hidden;
+    background:
+      radial-gradient(90% 80% at 80% 10%, rgba(24, 112, 224, 0.45), transparent 70%),
+      linear-gradient(160deg, #0d2a66, #081430 60%, var(--bg));
+    min-height: 230px;
     display: flex;
-    gap: 1.25rem;
-    align-items: center;
-    margin-top: 1.25rem;
-    flex-wrap: wrap;
+    align-items: flex-end;
   }
-  .profile h1 {
-    margin-bottom: 0.4rem;
+  @media (min-width: 1180px) {
+    .hero {
+      margin: 0 calc(50% - 50vw);
+      padding-left: calc(50vw - 50% + var(--gutter));
+    }
   }
-  .first {
-    display: block;
-    font-size: 0.6em;
-    color: var(--muted);
+  .bignum {
+    position: absolute;
+    right: -0.05em;
+    top: -0.12em;
+    font: 800 clamp(11rem, 58vw, 20rem) / 1 var(--display);
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(90, 162, 255, 0.28);
+    letter-spacing: -0.02em;
+    pointer-events: none;
+  }
+  .hero-in {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    width: 100%;
+    max-width: var(--maxw);
   }
   .photo {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
+    width: 104px;
+    height: 104px;
     border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 3px var(--orange);
   }
-  .jersey {
-    width: 110px;
-    height: 110px;
-    border-radius: 18px 18px 26px 26px;
-    background:
-      linear-gradient(to bottom, transparent 62%, var(--white) 62% 66%, var(--orange) 66% 76%, var(--white) 76% 80%, transparent 80%),
-      var(--blue);
-    display: grid;
-    place-items: center;
-    flex: none;
+  h1 {
+    margin: 0.6rem 0 0.35rem;
+    line-height: 0.92;
   }
-  .jersey span {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 2.6rem;
-    color: #fff;
-    margin-top: -1.2rem;
-    text-shadow: 0 1px 0 #111;
-  }
-  .facts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 1.5rem;
-    margin: 0;
-  }
-  .facts dt {
-    font-size: 0.75rem;
+  h1 .fn {
+    display: block;
+    font-size: 0.45em;
     color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
   }
-  .facts dd {
+  h1 .ln {
+    display: block;
+    font-size: clamp(2.8rem, 13vw, 4.6rem);
+  }
+  .sub {
     margin: 0;
-    font-weight: 600;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  .band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 5px;
+    background: var(--stripes-h);
   }
   .bio {
-    margin-top: 0.75rem;
+    margin: 1.25rem 0 0;
+    max-width: 62ch;
   }
-  tfoot th {
-    text-align: left;
+  .car {
+    margin-top: 1.4rem;
+  }
+  .count {
+    font: 800 1.4rem/1 var(--display);
+    color: var(--dim);
+  }
+  tr.total th {
+    font-family: var(--display);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .more summary {
+    cursor: pointer;
+    font: 700 0.9rem/1 var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--link);
+    padding: 0.4rem 0 0.8rem;
+  }
+  .more[open] summary {
+    display: none;
+  }
+  .goals a {
+    display: grid;
+    grid-template-columns: 5.6rem auto 1fr;
+    grid-template-areas: 'gd tm gt' 'gd tm gs';
+    align-items: center;
+    column-gap: 0.75rem;
+    row-gap: 0.25rem;
+    padding: 0.6rem 1rem;
+    color: var(--text);
+  }
+  .goals a:hover {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+  }
+  .gd {
+    grid-area: gd;
+  }
+  .goals a > :global(.team) {
+    grid-area: tm;
+  }
+  .gt {
+    grid-area: gt;
+    font: 800 1rem/1 var(--display);
+  }
+  .gs {
+    grid-area: gs;
+    display: flex;
+    gap: 4px;
+  }
+  .sit {
+    font: 700 0.66rem/1 var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--muted);
+  }
+  .sit-PP {
+    background: rgba(90, 162, 255, 0.16);
+    color: var(--blue-hi);
+  }
+  .sit-SH {
+    background: rgba(61, 220, 151, 0.14);
+    color: var(--win);
+  }
+  .sit-EN,
+  .sit-PS {
+    background: rgba(232, 161, 116, 0.16);
+    color: var(--brown);
+  }
+  .sit.gwg {
+    background: var(--orange);
+    color: var(--ink);
   }
 </style>
