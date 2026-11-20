@@ -20,6 +20,7 @@ const skaterSeasons = p.seasons.filter((s) => s.gp > 0);
 const goalieSeasons = p.seasons.filter((s) => s.goalieGp > 0);
 const showPm = p.seasons.some((s) => columns(s.season).plusMinus);
 const c = p.career;
+const po = p.playoffs;
 const situation = (s: string) => {
   const k = `situation.${s}`;
   const v = t(k);
@@ -158,6 +159,61 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
                 <td class="num">{c.gwg}</td>
                 {showPm && <td />}
               </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    (po.career.gp > 0 || po.career.goalieGp > 0) && (
+      <section aria-labelledby="h-po">
+        <div class="sec-head">
+          <h2 id="h-po">{t('player.playoffs')}</h2>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="sticky-col" scope="col">{t('common.season')}</th>
+                <th class="num" scope="col"><Abbr lang={lang} k="gp" /></th>
+                {po.career.gp > 0 && <th class="num" scope="col"><Abbr lang={lang} k="g" /></th>}
+                {po.career.gp > 0 && <th class="num" scope="col"><Abbr lang={lang} k="a" /></th>}
+                {po.career.gp > 0 && <th class="num" scope="col"><Abbr lang={lang} k="p" /></th>}
+                {po.career.gp > 0 && <th class="num" scope="col"><Abbr lang={lang} k="pim" /></th>}
+                {po.career.gp > 0 && <th class="num" scope="col"><Abbr lang={lang} k="gwg" /></th>}
+                {po.career.goalieGp > 0 && <th class="num" scope="col"><Abbr lang={lang} k="ga" /></th>}
+                {po.career.goalieGp > 0 && <th class="num" scope="col"><Abbr lang={lang} k="gaa" /></th>}
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ...po.seasons.map((s) => ({ label: s.season.replace('-', '/'), season: s.season, s: s as typeof po.career, total: false })),
+                { label: t('player.career'), season: '', s: po.career, total: true },
+              ].map(
+                ({ label, season, s, total }) => (
+                  <tr class={total ? 'ours total' : undefined}>
+                    {total ? (
+                      <th class="sticky-col" scope="row">
+                        {label}
+                      </th>
+                    ) : (
+                      <td class="sticky-col">
+                        <a href={href(lang, `stats/${season}/playoffs/`)}>{label}</a>
+                      </td>
+                    )}
+                    <td class="num">{po.career.gp > 0 ? s.gp : s.goalieGp}</td>
+                    {po.career.gp > 0 && <td class="num">{s.g}</td>}
+                    {po.career.gp > 0 && <td class="num">{s.a}</td>}
+                    {po.career.gp > 0 && <td class="num big">{s.p}</td>}
+                    {po.career.gp > 0 && <td class="num">{s.pim}</td>}
+                    {po.career.gp > 0 && <td class="num">{s.gwg}</td>}
+                    {po.career.goalieGp > 0 && <td class="num">{s.ga}</td>}
+                    {po.career.goalieGp > 0 && <td class="num">{formatNumber(lang, s.gaa, 2)}</td>}
+                  </tr>
+                ),
+              )}
             </tbody>
           </table>
         </div>

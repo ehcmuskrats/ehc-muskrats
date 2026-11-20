@@ -185,5 +185,11 @@
   "notFound.title": "Page not found",
   "notFound.text": "This page doesn't exist.",
   "notFound.back": "Back to the home page",
-  "home.results": "Latest results"
+  "home.results": "Latest results",
+  "stats.careerPlayoffPoints": "Most playoff points",
+  "player.playoffs": "Playoffs",
+  "player.regular": "Regular season",
+  "schedule.series": "Series",
+  "schedule.seriesWon": "Series won",
+  "schedule.seriesLost": "Series lost"
 }

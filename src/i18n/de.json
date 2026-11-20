@@ -185,5 +185,11 @@
   "notFound.title": "Seite nicht gefunden",
   "notFound.text": "Diese Seite gibt es nicht.",
   "notFound.back": "Zur Startseite",
-  "home.results": "Letzte Ergebnisse"
+  "home.results": "Letzte Ergebnisse",
+  "stats.careerPlayoffPoints": "Meiste Punkte (Playoffs)",
+  "player.playoffs": "Playoffs",
+  "player.regular": "Grunddurchgang",
+  "schedule.series": "Serie",
+  "schedule.seriesWon": "Serie gewonnen",
+  "schedule.seriesLost": "Serie verloren"
 }

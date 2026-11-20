@@ -10,28 +10,54 @@ import { ourSeasons, currentSeasonId, derived, season as getSeason, columns } fr
 import { TEAM, isOurTeam } from '../../../config/team.ts';
 import type { LeaderPenalty, TeamSeasonStats } from '../../../types/models.ts';
 
+type Phase = 'all' | 'regular' | 'playoffs';
+const hasPlayoffs = (sid: string) => derived.players.some((p) => p.playoffs.seasons.some((l) => l.season === sid));
+
 export function getStaticPaths() {
+  // (getStaticPaths runs in isolation, so it can't use helpers defined elsewhere in this file.)
+  const hasPlayoffs = (sid: string) => derived.players.some((p) => p.playoffs.seasons.some((l) => l.season === sid));
   return LANGS.flatMap((lang) => [
     { params: { lang, season: undefined } },
     { params: { lang, season: 'all-time' } },
     ...ourSeasons.map((s) => ({ params: { lang, season: s.info.id } })),
+    // Phase views (regular season / playoffs only) for seasons with playoff games.
+    ...ourSeasons
+      .filter((s) => hasPlayoffs(s.info.id))
+      .flatMap((s) => [
+        { params: { lang, season: `${s.info.id}/regular` } },
+        { params: { lang, season: `${s.info.id}/playoffs` } },
+      ]),
   ]);
 }
 const lang = Astro.params.lang as Lang;
 const allTime = Astro.params.season === 'all-time';
-const seasonId = allTime ? currentSeasonId : (Astro.params.season ?? currentSeasonId);
+const [seasonParam, phaseParam] = (Astro.params.season ?? '').split('/');
+const seasonId = allTime || !seasonParam ? currentSeasonId : seasonParam;
+const phase: Phase = phaseParam === 'regular' || phaseParam === 'playoffs' ? phaseParam : 'all';
 const t = useT(lang);
 const cols = columns(seasonId);
 const s = getSeason(seasonId);
+const seasonHasPlayoffs = hasPlayoffs(seasonId);
+// Which league divisions belong to the chosen phase (for the penalty and team tables).
+const divInPhase = (divisionId: number) => {
+  if (phase === 'all') return true;
+  const isPo = s?.info.divisions.find((d) => d.id === divisionId)?.kind === 'playoffs';
+  return phase === 'playoffs' ? isPo : !isPo;
+};
+const phaseLabel = { all: lang === 'de' ? 'Gesamt' : 'Total', regular: 'Grunddurchgang', playoffs: t('common.playoffs') };
+if (lang === 'en') phaseLabel.regular = 'Regular season';
 
 // ----- Season view -----
 const lines = derived.players
-  .map((p) => ({ p, l: p.seasons.find((x) => x.season === seasonId)! }))
+  .map((p) => {
+    const src = phase === 'all' ? p.seasons : phase === 'regular' ? p.regular.seasons : p.playoffs.seasons;
+    return { p, l: src.find((x) => x.season === seasonId)! };
+  })
   .filter((x) => x.l);
 const skaters = lines.filter((x) => x.l.gp > 0).sort((a, b) => b.l.p - a.l.p || b.l.g - a.l.g);
 const goalies = lines.filter((x) => x.l.goalieGp > 0).sort((a, b) => b.l.goalieGp - a.l.goalieGp);
 const penMap = new Map<number, LeaderPenalty>();
-for (const st of s?.stats ?? []) {
+for (const st of (s?.stats ?? []).filter((x) => divInPhase(x.divisionId))) {
   for (const r of st.penalties.filter((x) => x.teamId === TEAM.leagueTeamId)) {
     const e = penMap.get(r.player.id);
     if (!e) penMap.set(r.player.id, { ...r });
@@ -47,7 +73,7 @@ for (const st of s?.stats ?? []) {
 const penalties = [...penMap.values()].filter((r) => r.pim > 0).sort((a, b) => b.pim - a.pim);
 const slugOf = (id: number) => derived.players.find((p) => p.id === id)?.slug;
 const teamTables: { name: string; rows: TeamSeasonStats[] }[] = (s?.stats ?? [])
-  .filter((st) => st.teams.some((r) => isOurTeam(r.team)))
+  .filter((st) => divInPhase(st.divisionId) && st.teams.some((r) => isOurTeam(r.team)))
   .map((st) => ({ name: s!.info.divisions.find((d) => d.id === st.divisionId)?.name ?? '', rows: st.teams }));
 const pct = (n: number | null) => (n == null ? '–' : `${formatNumber(lang, n, 1)}%`);
 const leader = skaters[0];
@@ -59,6 +85,10 @@ const top = (key: 'p' | 'gp' | 'g' | 'pim') =>
     .filter((p) => p.career[key] > 0)
     .sort((a, b) => b.career[key] - a.career[key] || b.career.g - a.career.g)
     .slice(0, 10);
+const topPlayoffs = derived.players
+  .filter((p) => p.playoffs.career.p > 0)
+  .sort((a, b) => b.playoffs.career.p - a.playoffs.career.p || b.playoffs.career.g - a.playoffs.career.g)
+  .slice(0, 10);
 const rec = derived.records;
 const at = rec.allTime;
 const boards = [
@@ -83,7 +113,9 @@ const tabs = [
   leagueData
 >
   <header class="page-head">
-    <span class="tag">{allTime ? t('stats.allTime') : `${t('common.season')} ${seasonId.replace('-', '/')}`}</span>
+    <span class="tag">
+      {allTime ? t('stats.allTime') : `${t('common.season')} ${seasonId.replace('-', '/')}${phase !== 'all' ? ` · ${phaseLabel[phase]}` : ''}`}
+    </span>
     <h1>{t('stats.title')}</h1>
   </header>
 
@@ -93,6 +125,20 @@ const tabs = [
       <a href={href(lang, 'stats/all-time/')} aria-current={allTime ? 'page' : undefined}>{t('stats.allTime')}</a>
     </nav>
     {!allTime && <SeasonPicker lang={lang} section="stats" seasons={ourSeasons.map((x) => x.info.id)} current={seasonId} />}
+    {
+      !allTime && seasonHasPlayoffs && (
+        <nav class="seg phase-seg" aria-label={lang === 'de' ? 'Phase' : 'Phase'}>
+          {(['all', 'regular', 'playoffs'] as const).map((ph) => (
+            <a
+              href={href(lang, ph === 'all' ? `stats/${seasonId}/` : `stats/${seasonId}/${ph}/`)}
+              aria-current={phase === ph ? 'page' : undefined}
+            >
+              {phaseLabel[ph]}
+            </a>
+          ))}
+        </nav>
+      )
+    }
   </div>
 
   {
@@ -428,6 +474,34 @@ const tabs = [
               </section>
             );
           })}
+          {topPlayoffs.length > 0 && (
+            <section>
+              <div class="sec-head">
+                <h2>{t('stats.careerPlayoffPoints')}</h2>
+              </div>
+              <ol class="rows leaders">
+                {topPlayoffs.map((p, i) => (
+                  <li>
+                    <a href={href(lang, `players/${p.slug}/`)} class={i === 0 ? 'first' : undefined}>
+                      <span class="rk tnum">{i + 1}</span>
+                      <span class="nm">
+                        <span class="fn">{p.first}</span>
+                        <span class="ln">{p.last}</span>
+                      </span>
+                      <span class="sn small dim tnum">
+                        {p.playoffs.career.gp} {abbr(lang, 'gp').short} · {p.playoffs.career.g} {abbr(lang, 'g').short} · {p.playoffs.career.a}{' '}
+                        {abbr(lang, 'a').short}
+                      </span>
+                      <span class="pt tnum">
+                        {p.playoffs.career.p}
+                        <small>{abbr(lang, 'p').short}</small>
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
         </div>
       </>
     )
@@ -444,6 +518,14 @@ const tabs = [
   }
   .view-switch {
     flex: 0 1 auto;
+  }
+  .phase-seg {
+    flex-basis: 100%;
+  }
+  .phase-seg [aria-current='page'] {
+    background: var(--orange);
+    color: var(--ink);
+    box-shadow: var(--glow-orange);
   }
   .season-lockups {
     margin-bottom: 1rem;

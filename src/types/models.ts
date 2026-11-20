@@ -330,6 +330,8 @@ export interface PlayerSeasonLine {
   saves: number;
 }
 
+export type CareerLine = Omit<PlayerSeasonLine, 'season' | 'numbers' | 'positions' | 'number' | 'position'>;
+
 export interface PlayerGameLine {
   gameId: string;
   season: SeasonId;
@@ -337,6 +339,7 @@ export interface PlayerGameLine {
   opponent: TeamRef;
   home: boolean;
   number: number | null;
+  playoff: boolean;
   result: 'W' | 'L' | 'OTW' | 'OTL' | 'T' | null;
   score: string; // from our perspective "8:4"
   position: Position;
@@ -356,6 +359,7 @@ export interface PlayerGoal {
   situation: GoalSituation;
   assists: PlayerRef[];
   gwg: boolean;
+  playoff: boolean;
 }
 
 export interface PlayerProfile {
@@ -369,8 +373,12 @@ export interface PlayerProfile {
   /** From the most recent game: what the site shows. */
   currentNumber: number | null;
   currentPosition: Position | null;
+  /** Season totals (all phases). */
   seasons: PlayerSeasonLine[];
-  career: Omit<PlayerSeasonLine, 'season' | 'numbers' | 'positions' | 'number' | 'position'>;
+  career: CareerLine;
+  /** Same split by phase: regular = every non-playoff round (incl. TOP 4 / LOW 5), playoffs = playoff games only. */
+  regular: { seasons: PlayerSeasonLine[]; career: CareerLine };
+  playoffs: { seasons: PlayerSeasonLine[]; career: CareerLine };
   games: PlayerGameLine[];
   goals: PlayerGoal[];
   isGoalie: boolean;

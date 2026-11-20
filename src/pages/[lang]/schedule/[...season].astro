@@ -6,6 +6,7 @@ import DataCredit from '../../../components/DataCredit.astro';
 import VideoEmbed from '../../../components/VideoEmbed.astro';
 import { type Lang, LANGS, useT } from '../../../i18n/index.ts';
 import { ourSeasons, currentSeasonId, ourGames, sortByDate, highlights, season as getSeason, resultClass, resultCode } from '../../../lib/data.ts';
+import { isOurTeam } from '../../../config/team.ts';
 
 export function getStaticPaths() {
   return LANGS.flatMap((lang) => [
@@ -35,6 +36,34 @@ for (const d of [...(s?.info.divisions ?? [])].sort((a, b) => a.id - b.id)) {
   if (games.some((g) => !g.playoff && g.divisionId === d.id)) phases.push({ value: String(d.id), label: d.name });
 }
 if (games.some((g) => g.playoff)) phases.push({ value: 'playoffs', label: t('common.playoffs') });
+
+// Dated games grouped by phase (one section per phase when the season had more than one).
+const phaseOf = (g: (typeof games)[number]) => (g.playoff ? 'playoffs' : String(g.divisionId));
+const phaseGroups = phases.length > 1 ? phases.map((p) => ({ ...p, games: dated.filter((g) => phaseOf(g) === p.value) })) : [];
+
+// Playoff series: one block per encounter we played in, in date order, with the series score from our side.
+type Series = { label: string; games: typeof dated; us: number; them: number; decided: 'won' | 'lost' | null; bestOf: number };
+const series: Series[] = [];
+for (const ph of s?.playoffs?.phases ?? []) {
+  for (const enc of ph.encounters) {
+    const encGames = dated.filter((g) => enc.gameIds.includes(g.id));
+    if (!encGames.length) continue;
+    const ours = enc.teams.find((x) => isOurTeam(x.team));
+    const theirs = enc.teams.filter((x) => !isOurTeam(x.team));
+    const anyWinner = enc.teams.some((x) => x.winner);
+    series.push({
+      label: enc.label || ph.label,
+      games: encGames,
+      us: ours?.wins ?? 0,
+      them: Math.max(0, ...theirs.map((x) => x.wins)),
+      decided: anyWinner ? (ours?.winner ? 'won' : 'lost') : null,
+      bestOf: enc.bestOf,
+    });
+  }
+}
+// Any playoff game not found in the bracket still gets shown.
+const inSeries = new Set(series.flatMap((x) => x.games.map((g) => g.id)));
+const looseRound = dated.filter((g) => g.playoff && !inSeries.has(g.id));
 ---
 
 <Base lang={lang} title={`${t('schedule.title')} ${seasonId.replace('-', '/')}`} path={Astro.params.season ? `schedule/${seasonId}/` : 'schedule/'} active="nav.schedule" leagueData>
@@ -83,9 +112,50 @@ if (games.some((g) => g.playoff)) phases.push({ value: 'playoffs', label: t('com
           </div>
         </div>
 
-        <section aria-label={t('schedule.title')}>
-          <GameList lang={lang} games={dated} filterable />
-        </section>
+        {phaseGroups.length === 0 ? (
+          <section aria-label={t('schedule.title')}>
+            <GameList lang={lang} games={dated} filterable />
+          </section>
+        ) : (
+          <>
+            {phaseGroups.map((pg) => (
+              <section class="phase-sec" data-phase-section={pg.value} aria-labelledby={`h-ph-${pg.value}`}>
+                <div class="sec-head">
+                  <h2 id={`h-ph-${pg.value}`}>{pg.label}</h2>
+                  <span class="count tnum">{pg.games.length}</span>
+                </div>
+                {pg.value !== 'playoffs' ? (
+                  <GameList lang={lang} games={pg.games} />
+                ) : (
+                  <>
+                    {series.map((sr) => (
+                      <div class="series">
+                        <p class="series-head">
+                          <span class="sl">{sr.label}</span>
+                          {sr.bestOf > 1 && (
+                            <span class="ss tnum">
+                              {t('schedule.series')} {sr.us}:{sr.them}
+                            </span>
+                          )}
+                          {sr.decided && (
+                            <span class={`res res-${sr.decided === 'won' ? 'W' : 'L'}`}>
+                              {t(sr.decided === 'won' ? 'schedule.seriesWon' : 'schedule.seriesLost')}
+                            </span>
+                          )}
+                        </p>
+                        <GameList lang={lang} games={sr.games} />
+                      </div>
+                    ))}
+                    {looseRound.length > 0 && <GameList lang={lang} games={looseRound} />}
+                  </>
+                )}
+              </section>
+            ))}
+            <p class="muted empty-msg" hidden>
+              {t('common.noGames')}
+            </p>
+          </>
+        )}
 
         {tbd.length > 0 && (
           <section aria-labelledby="h-tbd" data-tbd>
@@ -130,6 +200,10 @@ if (games.some((g) => g.playoff)) phases.push({ value: 'playoffs', label: t('com
       li.hidden = !ok;
       if (ok && !li.closest('[data-tbd]')) visible++;
     });
+    // Hide phase sections / playoff series blocks that have nothing left to show.
+    document.querySelectorAll<HTMLElement>('[data-phase-section], .series').forEach((sec) => {
+      sec.hidden = !sec.querySelector('[data-games] > li:not([hidden])');
+    });
     const tbd = document.querySelector<HTMLElement>('[data-tbd]');
     if (tbd) tbd.hidden = state.status === 'played';
     const empty = document.querySelector<HTMLElement>('.empty-msg');
@@ -157,6 +231,36 @@ if (games.some((g) => g.playoff)) phases.push({ value: 'playoffs', label: t('com
   }
   .controls .phase-seg {
     flex-basis: 100%;
+  }
+  .count {
+    font: 800 1.4rem/1 var(--display);
+    color: var(--dim);
+  }
+  .series + .series {
+    margin-top: 1.1rem;
+  }
+  .series-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.75rem;
+    margin: 0 0 0.5rem;
+  }
+  .sl {
+    font: 800 1.05rem/1 var(--display);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--orange);
+  }
+  .ss {
+    font: 800 1.05rem/1 var(--display);
+    color: #fff;
+  }
+  .series-head .res {
+    width: auto;
+    padding: 0 0.5em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
   .phase-seg [aria-pressed='true'] {
     background: var(--orange);

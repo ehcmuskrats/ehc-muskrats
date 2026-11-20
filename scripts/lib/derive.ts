@@ -88,6 +88,8 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
     numbers: number[];
     positions: Position[];
     seasons: Map<SeasonId, PlayerSeasonLine>;
+    /** Same totals split by phase: key `${season}|regular` or `${season}|playoffs`. */
+    phases: Map<string, PlayerSeasonLine>;
     games: PlayerGameLine[];
     goals: PlayerGoal[];
     goalieGames: number;
@@ -97,7 +99,7 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
     const id = canon(p.id);
     let a = players.get(id);
     if (!a) {
-      a = { id, first: p.first, last: p.last, lastSeen: season, numbers: [], positions: [], seasons: new Map(), games: [], goals: [], goalieGames: 0 };
+      a = { id, first: p.first, last: p.last, lastSeen: season, numbers: [], positions: [], seasons: new Map(), phases: new Map(), games: [], goals: [], goalieGames: 0 };
       players.set(id, a);
     }
     if (season >= a.lastSeen) {
@@ -113,6 +115,15 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
     addUnique(a.seasons.get(season)!.numbers, num);
     return a;
   };
+  /** The season-total line and the phase line for (season, phase); every stat is added to both. */
+  const linesFor = (a: Acc, season: SeasonId, playoffs: boolean): PlayerSeasonLine[] => {
+    const key = `${season}|${playoffs ? 'playoffs' : 'regular'}`;
+    if (!a.phases.has(key)) a.phases.set(key, emptyLine(season));
+    return [a.seasons.get(season)!, a.phases.get(key)!];
+  };
+  const isPlayoffDivision = new Map<string, boolean>();
+  for (const s of seasons) for (const d of s.info.divisions) isPlayoffDivision.set(`${s.info.id}:${d.id}`, d.kind === 'playoffs');
+  const gameIsPlayoff = (g: GameSummary) => !!g.playoff || isPlayoffDivision.get(`${g.season}:${g.divisionId}`) === true;
 
   // Per (season, division): take totals from our boxscores when we have a report for every
   // final game we played there (they match the game pages exactly; the league's playoff
@@ -141,30 +152,33 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
   for (const s of seasons) {
     for (const st of s.stats) {
       if (!leaderDivisions.has(`${s.info.id}:${st.divisionId}`)) continue;
+      const po = isPlayoffDivision.get(`${s.info.id}:${st.divisionId}`) === true;
       for (const r of st.skaters.filter((x) => x.teamId === TEAM.leagueTeamId)) {
         const a = touch(r.player, s.info.id);
-        const l = a.seasons.get(s.info.id)!;
-        l.gp += r.gp;
-        l.g += r.g;
-        l.a += r.a;
-        l.p += r.p;
-        l.pim += r.pim;
-        l.ppg += r.ppg;
-        l.shg += r.shg;
-        l.gwg += r.gwg;
-        l.plusMinus += r.plusMinus;
-        l.sog += r.sog;
-        addUnique(l.positions, r.position);
+        for (const l of linesFor(a, s.info.id, po)) {
+          l.gp += r.gp;
+          l.g += r.g;
+          l.a += r.a;
+          l.p += r.p;
+          l.pim += r.pim;
+          l.ppg += r.ppg;
+          l.shg += r.shg;
+          l.gwg += r.gwg;
+          l.plusMinus += r.plusMinus;
+          l.sog += r.sog;
+          addUnique(l.positions, r.position);
+        }
       }
       for (const r of st.goalies.filter((x) => x.teamId === TEAM.leagueTeamId)) {
         const a = touch(r.player, s.info.id);
-        const l = a.seasons.get(s.info.id)!;
-        l.goalieGp += r.gp;
-        l.ga += r.ga;
-        l.toi += r.toi;
-        l.shotsAgainst += r.shotsAgainst;
-        l.saves += Math.max(0, r.shotsAgainst - r.ga);
-        addUnique(l.positions, 'G');
+        for (const l of linesFor(a, s.info.id, po)) {
+          l.goalieGp += r.gp;
+          l.ga += r.ga;
+          l.toi += r.toi;
+          l.shotsAgainst += r.shotsAgainst;
+          l.saves += Math.max(0, r.shotsAgainst - r.ga);
+          addUnique(l.positions, 'G');
+        }
       }
     }
   }
@@ -184,21 +198,22 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
     const score = us != null && them != null ? `${us}:${them}` : '–';
     const result = resultFor(g);
     const useBox = !leaderDivisions.has(`${g.season}:${g.divisionId}`);
-    const periodLen = g.periodLength || 0;
+    const po = gameIsPlayoff(g);
 
     for (const sk of g.skaters[side]) {
       const a = touch(sk.player, g.season);
       addUnique(a.positions, sk.position);
-      const l = a.seasons.get(g.season)!;
-      addUnique(l.positions, sk.position);
-      if (useBox) {
-        l.gp += 1;
-        l.g += sk.g;
-        l.a += sk.a;
-        l.p += sk.g + sk.a;
-        l.pim += sk.pim;
-        l.plusMinus += sk.plusMinus;
-        l.sog += sk.sog;
+      for (const l of linesFor(a, g.season, po)) {
+        addUnique(l.positions, sk.position);
+        if (useBox) {
+          l.gp += 1;
+          l.g += sk.g;
+          l.a += sk.a;
+          l.p += sk.g + sk.a;
+          l.pim += sk.pim;
+          l.plusMinus += sk.plusMinus;
+          l.sog += sk.sog;
+        }
       }
       a.games.push({
         gameId: g.id,
@@ -207,6 +222,7 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
         opponent: opp,
         home: side === 'home',
         number: sk.player.number && sk.player.number > 0 ? sk.player.number : null,
+        playoff: po,
         result,
         score,
         position: sk.position,
@@ -219,16 +235,18 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
     for (const gl of g.goalies[side]) {
       const a = touch(gl.player, g.season);
       addUnique(a.positions, 'G');
-      const l = a.seasons.get(g.season)!;
-      addUnique(l.positions, 'G');
+      const gLines = linesFor(a, g.season, po);
+      for (const l of gLines) addUnique(l.positions, 'G');
       if (gl.toi <= 0) continue; // dressed but didn't play
       a.goalieGames++;
       if (useBox) {
-        l.goalieGp += 1;
-        l.ga += gl.goalsAgainst;
-        l.toi += gl.toi;
-        l.shotsAgainst += gl.shotsAgainst;
-        l.saves += gl.saves;
+        for (const l of gLines) {
+          l.goalieGp += 1;
+          l.ga += gl.goalsAgainst;
+          l.toi += gl.toi;
+          l.shotsAgainst += gl.shotsAgainst;
+          l.saves += gl.saves;
+        }
       }
       const existing = a.games.find((x) => x.gameId === g.id);
       const goalie = { ga: gl.goalsAgainst, toi: gl.toi };
@@ -241,6 +259,7 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
           opponent: opp,
           home: side === 'home',
           number: gl.player.number && gl.player.number > 0 ? gl.player.number : null,
+          playoff: po,
           result,
           score,
           position: 'G',
@@ -262,15 +281,16 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
         situation: goal.situation,
         assists: goal.assists,
         gwg: goal.gwg,
+        playoff: po,
       });
       if (useBox) {
-        const l = a.seasons.get(g.season)!;
-        if (goal.gwg) l.gwg++;
-        if (/^PP/.test(goal.situation)) l.ppg++;
-        if (/^SH/.test(goal.situation)) l.shg++;
+        for (const l of linesFor(a, g.season, po)) {
+          if (goal.gwg) l.gwg++;
+          if (/^PP/.test(goal.situation)) l.ppg++;
+          if (/^SH/.test(goal.situation)) l.shg++;
+        }
       }
     }
-    void periodLen;
   }
 
   // 3) Finalize profiles.
@@ -282,34 +302,46 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
   };
   const profiles: PlayerProfile[] = [...players.values()].map((a) => {
     a.positions = refine(a.positions);
-    for (const l of a.seasons.values()) l.positions = refine(l.positions);
+    for (const l of [...a.seasons.values(), ...a.phases.values()]) l.positions = refine(l.positions);
     const fix = aliases.names[String(a.id)];
     const first = fix?.first ?? a.first;
     const last = fix?.last ?? a.last;
-    const seasonLines = [...a.seasons.values()]
-      .filter((l) => l.gp > 0 || l.goalieGp > 0 || l.positions.length)
-      .sort((x, y) => y.season.localeCompare(x.season));
     // Most recent game first: it decides the number/position the site shows (history stays in numbers/positions).
     const gamesDesc = [...a.games].sort((x, y) => (y.date ?? '').localeCompare(x.date ?? ''));
-    for (const l of seasonLines) {
-      // GAA normalised to a 60-minute game would be wrong here (75-minute games), so GAA = GA per game played.
-      l.gaa = l.goalieGp > 0 ? Math.round((l.ga / l.goalieGp) * 100) / 100 : null;
-      const lastGame = gamesDesc.find((x) => x.season === l.season);
-      l.number = lastGame?.number ?? l.numbers[0] ?? null;
-      l.position = lastGame?.position ?? (l.goalieGp > l.gp ? 'G' : l.positions[0]) ?? null;
-    }
+    const finalize = (list: PlayerSeasonLine[], gameFilter: (x: PlayerGameLine) => boolean) => {
+      const lines = list.filter((l) => l.gp > 0 || l.goalieGp > 0).sort((x, y) => y.season.localeCompare(x.season));
+      for (const l of lines) {
+        // GAA normalised to a 60-minute game would be wrong here (75-minute games), so GAA = GA per game played.
+        l.gaa = l.goalieGp > 0 ? Math.round((l.ga / l.goalieGp) * 100) / 100 : null;
+        const lastGame = gamesDesc.find((x) => x.season === l.season && gameFilter(x));
+        l.number = lastGame?.number ?? l.numbers[0] ?? null;
+        l.position = lastGame?.position ?? (l.goalieGp > l.gp ? 'G' : l.positions[0]) ?? null;
+      }
+      const c = lines.reduce(
+        (acc, l) => {
+          for (const k of ['gp', 'g', 'a', 'p', 'pim', 'ppg', 'shg', 'gwg', 'plusMinus', 'sog', 'goalieGp', 'ga', 'toi', 'shotsAgainst', 'saves'] as const)
+            (acc as any)[k] += l[k];
+          return acc;
+        },
+        { ...emptyLine(''), gaa: null as number | null },
+      );
+      c.gaa = c.goalieGp > 0 ? Math.round((c.ga / c.goalieGp) * 100) / 100 : null;
+      const { season: _s, numbers: _n, positions: _p, number: _no, position: _po, ...rest } = c;
+      return { lines, career: rest };
+    };
+    const all = finalize([...a.seasons.values()], () => true);
+    const reg = finalize(
+      [...a.phases.entries()].filter(([k]) => k.endsWith('|regular')).map(([, v]) => v),
+      (x) => !x.playoff,
+    );
+    const po = finalize(
+      [...a.phases.entries()].filter(([k]) => k.endsWith('|playoffs')).map(([, v]) => v),
+      (x) => x.playoff,
+    );
+    const seasonLines = all.lines;
+    const careerRest = all.career;
     const currentNumber = gamesDesc.find((x) => x.number != null)?.number ?? seasonLines[0]?.number ?? null;
     const currentPosition = gamesDesc[0]?.position ?? seasonLines[0]?.position ?? null;
-    const career = seasonLines.reduce(
-      (c, l) => {
-        for (const k of ['gp', 'g', 'a', 'p', 'pim', 'ppg', 'shg', 'gwg', 'plusMinus', 'sog', 'goalieGp', 'ga', 'toi', 'shotsAgainst', 'saves'] as const)
-          (c as any)[k] += l[k];
-        return c;
-      },
-      { ...emptyLine(''), gaa: null as number | null },
-    );
-    career.gaa = career.goalieGp > 0 ? Math.round((career.ga / career.goalieGp) * 100) / 100 : null;
-    const { season: _s, numbers: _n, positions: _p, number: _no, position: _po, ...careerRest } = career;
     const isGoalie = a.positions.includes('G') && seasonLines.reduce((n, l) => n + l.goalieGp, 0) >= seasonLines.reduce((n, l) => n + l.gp, 0);
     return {
       id: a.id,
@@ -322,6 +354,8 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
       currentPosition,
       seasons: seasonLines,
       career: careerRest,
+      regular: { seasons: reg.lines, career: reg.career },
+      playoffs: { seasons: po.lines, career: po.career },
       games: a.games.sort((x, y) => (y.date ?? '').localeCompare(x.date ?? '')),
       goals: a.goals.sort((x, y) => (y.date ?? '').localeCompare(x.date ?? '')),
       isGoalie,
