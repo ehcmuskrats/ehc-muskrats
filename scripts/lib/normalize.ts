@@ -1,5 +1,6 @@
 // Raw hockeydata payloads -> typed models in src/types/models.ts.
-// Personal data we don't need (birthdates, nationality) is dropped here.
+// Personal data we don't need (birthdates) is dropped here. Nationality is kept: WEHV publishes it and the
+// player profiles show it as a small flag.
 import { existsSync } from 'node:fs';
 import type {
   DivisionRef,
@@ -253,6 +254,7 @@ export function normalizeSkaters(raw: any): LeaderSkater[] {
       gwg: int(r.gameWinningGoals),
       plusMinus: int(r.plusMinus),
       sog: int(r.shotsOnGoal),
+      nation: str(r.nation) || null,
     }))
     .filter((r: LeaderSkater) => r.player);
 }
@@ -271,6 +273,7 @@ export function normalizeGoalies(raw: any): LeaderGoalie[] {
       shutouts: int(r.shutOuts),
       wins: int(r.gameWinsRegular) + int(r.gameWinsOvertime),
       losses: int(r.gameLostRegular) + int(r.gameLostOvertime),
+      nation: str(r.nation) || null,
     }))
     .filter((r: LeaderGoalie) => r.player);
 }

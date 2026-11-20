@@ -2291,7 +2291,8 @@
      "shg": 5,
      "gwg": 2,
      "plusMinus": 9,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2311,7 +2312,8 @@
      "shg": 3,
      "gwg": 3,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2331,7 +2333,8 @@
      "shg": 0,
      "gwg": 4,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2351,7 +2354,8 @@
      "shg": 2,
      "gwg": 1,
      "plusMinus": 4,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2371,7 +2375,8 @@
      "shg": 0,
      "gwg": 2,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2391,7 +2396,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 8,
-     "sog": 0
+     "sog": 0,
+     "nation": "RUS"
     },
     {
      "player": {
@@ -2411,7 +2417,8 @@
      "shg": 0,
      "gwg": 2,
      "plusMinus": 9,
-     "sog": 0
+     "sog": 0,
+     "nation": "RUS"
     },
     {
      "player": {
@@ -2431,7 +2438,8 @@
      "shg": 3,
      "gwg": 2,
      "plusMinus": 4,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2451,7 +2459,8 @@
      "shg": 1,
      "gwg": 0,
      "plusMinus": 4,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2471,7 +2480,8 @@
      "shg": 1,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "RUS"
     },
     {
      "player": {
@@ -2491,7 +2501,8 @@
      "shg": 2,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2511,7 +2522,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2531,7 +2543,8 @@
      "shg": 2,
      "gwg": 1,
      "plusMinus": 2,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2551,7 +2564,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 9,
-     "sog": 0
+     "sog": 0,
+     "nation": "FIN"
     },
     {
      "player": {
@@ -2571,7 +2585,8 @@
      "shg": 1,
      "gwg": 1,
      "plusMinus": 2,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2591,7 +2606,8 @@
      "shg": 2,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2611,7 +2627,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2631,7 +2648,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2651,7 +2669,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 5,
-     "sog": 0
+     "sog": 0,
+     "nation": "CAN"
     },
     {
      "player": {
@@ -2671,7 +2690,8 @@
      "shg": 1,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "GER"
     },
     {
      "player": {
@@ -2691,7 +2711,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2711,7 +2732,8 @@
      "shg": 1,
      "gwg": 1,
      "plusMinus": 7,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2731,7 +2753,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2751,7 +2774,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2771,7 +2795,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "SUI"
     },
     {
      "player": {
@@ -2791,7 +2816,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2811,7 +2837,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "EST"
     },
     {
      "player": {
@@ -2831,7 +2858,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 5,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2851,7 +2879,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 3,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2871,7 +2900,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 3,
-     "sog": 0
+     "sog": 0,
+     "nation": "CAN"
     },
     {
      "player": {
@@ -2891,7 +2921,8 @@
      "shg": 1,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2911,7 +2942,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 2,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2931,7 +2963,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 3,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2951,7 +2984,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2971,7 +3005,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -2991,7 +3026,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 3,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3011,7 +3047,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 2,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3031,7 +3068,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 2,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3051,7 +3089,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3071,7 +3110,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3091,7 +3131,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 5,
-     "sog": 0
+     "sog": 0,
+     "nation": "FIN"
     },
     {
      "player": {
@@ -3111,7 +3152,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 5,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3131,7 +3173,8 @@
      "shg": 2,
      "gwg": 0,
      "plusMinus": 2,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3151,7 +3194,8 @@
      "shg": 0,
      "gwg": 2,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "RUS"
     },
     {
      "player": {
@@ -3171,7 +3215,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 3,
-     "sog": 0
+     "sog": 0,
+     "nation": "USA"
     },
     {
      "player": {
@@ -3191,7 +3236,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3211,7 +3257,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 2,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3231,7 +3278,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3251,7 +3299,8 @@
      "shg": 1,
      "gwg": 0,
      "plusMinus": 2,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3271,7 +3320,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3291,7 +3341,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3311,7 +3362,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "SVK"
     },
     {
      "player": {
@@ -3331,7 +3383,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3351,7 +3404,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 2,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3371,7 +3425,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3391,7 +3446,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3411,7 +3467,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 4,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3431,7 +3488,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 2,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3451,7 +3509,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3471,7 +3530,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3491,7 +3551,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "ITA"
     },
     {
      "player": {
@@ -3511,7 +3572,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3531,7 +3593,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3551,7 +3614,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 2,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3571,7 +3635,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3591,7 +3656,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3611,7 +3677,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3631,7 +3698,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3651,7 +3719,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3671,7 +3740,8 @@
      "shg": 1,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3691,7 +3761,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 2,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3711,7 +3782,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3731,7 +3803,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3751,7 +3824,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": -2,
-     "sog": 0
+     "sog": 0,
+     "nation": "CAN"
     },
     {
      "player": {
@@ -3771,7 +3845,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3791,7 +3866,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "USA"
     },
     {
      "player": {
@@ -3811,7 +3887,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 2,
-     "sog": 0
+     "sog": 0,
+     "nation": "ESP"
     },
     {
      "player": {
@@ -3831,7 +3908,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3851,7 +3929,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3871,7 +3950,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "GER"
     },
     {
      "player": {
@@ -3891,7 +3971,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "SVK"
     },
     {
      "player": {
@@ -3911,7 +3992,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3931,7 +4013,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3951,7 +4034,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3971,7 +4055,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -3991,7 +4076,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4011,7 +4097,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "USA"
     },
     {
      "player": {
@@ -4031,7 +4118,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4051,7 +4139,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 3,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4071,7 +4160,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4091,7 +4181,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4111,7 +4202,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4131,7 +4223,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "RUS"
     },
     {
      "player": {
@@ -4151,7 +4244,8 @@
      "shg": 1,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "FIN"
     },
     {
      "player": {
@@ -4171,7 +4265,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4191,7 +4286,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4211,7 +4307,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4231,7 +4328,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4251,7 +4349,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 2,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4271,7 +4370,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4291,7 +4391,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4311,7 +4412,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4331,7 +4433,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4351,7 +4454,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4371,7 +4475,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "SRB"
     },
     {
      "player": {
@@ -4391,7 +4496,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4411,7 +4517,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4431,7 +4538,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4451,7 +4559,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4471,7 +4580,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4491,7 +4601,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4511,7 +4622,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4531,7 +4643,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4551,7 +4664,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4571,7 +4685,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4591,7 +4706,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4611,7 +4727,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4631,7 +4748,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4651,7 +4769,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4671,7 +4790,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "RUS"
     },
     {
      "player": {
@@ -4691,7 +4811,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4711,7 +4832,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4731,7 +4853,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4751,7 +4874,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4771,7 +4895,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4791,7 +4916,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4811,7 +4937,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4831,7 +4958,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4851,7 +4979,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4871,7 +5000,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4891,7 +5021,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "GBR"
     },
     {
      "player": {
@@ -4911,7 +5042,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4931,7 +5063,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4951,7 +5084,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4971,7 +5105,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -4991,7 +5126,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 1,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5011,7 +5147,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5031,7 +5168,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5051,7 +5189,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5071,7 +5210,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "COL"
     },
     {
      "player": {
@@ -5091,7 +5231,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5111,7 +5252,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5131,7 +5273,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5151,7 +5294,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5171,7 +5315,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "SVK"
     },
     {
      "player": {
@@ -5191,7 +5336,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5211,7 +5357,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5231,7 +5378,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5251,7 +5399,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5271,7 +5420,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5291,7 +5441,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "SVK"
     },
     {
      "player": {
@@ -5311,7 +5462,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5331,7 +5483,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5351,7 +5504,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5371,7 +5525,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5391,7 +5546,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5411,7 +5567,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5431,7 +5588,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5451,7 +5609,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5471,7 +5630,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5491,7 +5651,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5511,7 +5672,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5531,7 +5693,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5551,7 +5714,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5571,7 +5735,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5591,7 +5756,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "GBR"
     },
     {
      "player": {
@@ -5611,7 +5777,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     }
    ],
    "goalies": [
@@ -5631,7 +5798,8 @@
      "toi": 20692,
      "shutouts": 0,
      "wins": 4,
-     "losses": 0
+     "losses": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5649,7 +5817,8 @@
      "toi": 47955,
      "shutouts": 1,
      "wins": 5,
-     "losses": 3
+     "losses": 3,
+     "nation": "SVK"
     },
     {
      "player": {
@@ -5667,7 +5836,8 @@
      "toi": 11828,
      "shutouts": 0,
      "wins": 2,
-     "losses": 0
+     "losses": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5685,7 +5855,8 @@
      "toi": 57600,
      "shutouts": 1,
      "wins": 6,
-     "losses": 5
+     "losses": 5,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5703,7 +5874,8 @@
      "toi": 28680,
      "shutouts": 0,
      "wins": 5,
-     "losses": 1
+     "losses": 1,
+     "nation": "CAN"
     },
     {
      "player": {
@@ -5721,7 +5893,8 @@
      "toi": 52800,
      "shutouts": 0,
      "wins": 5,
-     "losses": 6
+     "losses": 6,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5739,7 +5912,8 @@
      "toi": 47880,
      "shutouts": 0,
      "wins": 3,
-     "losses": 7
+     "losses": 7,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5757,7 +5931,8 @@
      "toi": 15480,
      "shutouts": 0,
      "wins": 3,
-     "losses": 1
+     "losses": 1,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5775,7 +5950,8 @@
      "toi": 19200,
      "shutouts": 0,
      "wins": 1,
-     "losses": 3
+     "losses": 3,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -5793,7 +5969,8 @@
      "toi": 24580,
      "shutouts": 0,
      "wins": 0,
-     "losses": 5
+     "losses": 5,
+     "nation": "AUT"
     }
    ],
    "penalties": [
@@ -8955,7 +9132,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -8975,7 +9153,8 @@
      "shg": 1,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -8995,7 +9174,8 @@
      "shg": 1,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9015,7 +9195,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9035,7 +9216,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9055,7 +9237,8 @@
      "shg": 0,
      "gwg": 1,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "RUS"
     },
     {
      "player": {
@@ -9075,7 +9258,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9095,7 +9279,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9115,7 +9300,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "FIN"
     },
     {
      "player": {
@@ -9135,7 +9321,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "ESP"
     },
     {
      "player": {
@@ -9155,7 +9342,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9175,7 +9363,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "CAN"
     },
     {
      "player": {
@@ -9195,7 +9384,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9215,7 +9405,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9235,7 +9426,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "RUS"
     },
     {
      "player": {
@@ -9255,7 +9447,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "GBR"
     },
     {
      "player": {
@@ -9275,7 +9468,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "RUS"
     },
     {
      "player": {
@@ -9295,7 +9489,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9315,7 +9510,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9335,7 +9531,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9355,7 +9552,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "RUS"
     },
     {
      "player": {
@@ -9375,7 +9573,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9395,7 +9594,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "FIN"
     },
     {
      "player": {
@@ -9415,7 +9615,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "USA"
     },
     {
      "player": {
@@ -9435,7 +9636,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9455,7 +9657,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9475,7 +9678,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9495,7 +9699,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9515,7 +9720,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9535,7 +9741,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9555,7 +9762,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9575,7 +9783,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "FIN"
     },
     {
      "player": {
@@ -9595,7 +9804,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9615,7 +9825,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9635,7 +9846,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9655,7 +9867,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9675,7 +9888,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9695,7 +9909,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9715,7 +9930,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9735,7 +9951,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9755,7 +9972,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9775,7 +9993,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9795,7 +10014,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9815,7 +10035,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9835,7 +10056,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9855,7 +10077,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9875,7 +10098,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9895,7 +10119,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9915,7 +10140,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9935,7 +10161,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9955,7 +10182,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9975,7 +10203,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -9995,7 +10224,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -10015,7 +10245,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -10035,7 +10266,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -10055,7 +10287,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -10075,7 +10308,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "USA"
     },
     {
      "player": {
@@ -10095,7 +10329,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "USA"
     },
     {
      "player": {
@@ -10115,7 +10350,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "SRB"
     },
     {
      "player": {
@@ -10135,7 +10371,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "RUS"
     },
     {
      "player": {
@@ -10155,7 +10392,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "CAN"
     },
     {
      "player": {
@@ -10175,7 +10413,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -10195,7 +10434,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -10215,7 +10455,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -10235,7 +10476,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "RUS"
     },
     {
      "player": {
@@ -10255,7 +10497,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -10275,7 +10518,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -10295,7 +10539,8 @@
      "shg": 0,
      "gwg": 0,
      "plusMinus": 0,
-     "sog": 0
+     "sog": 0,
+     "nation": "CAN"
     }
    ],
    "goalies": [
@@ -10315,7 +10560,8 @@
      "toi": 4800,
      "shutouts": 0,
      "wins": 0,
-     "losses": 0
+     "losses": 0,
+     "nation": "SVK"
     },
     {
      "player": {
@@ -10333,7 +10579,8 @@
      "toi": 5428,
      "shutouts": 0,
      "wins": 0,
-     "losses": 0
+     "losses": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -10351,7 +10598,8 @@
      "toi": 2972,
      "shutouts": 0,
      "wins": 0,
-     "losses": 0
+     "losses": 0,
+     "nation": "AUT"
     },
     {
      "player": {
@@ -10369,7 +10617,8 @@
      "toi": 4800,
      "shutouts": 0,
      "wins": 0,
-     "losses": 0
+     "losses": 0,
+     "nation": "AUT"
     }
    ],
    "penalties": [

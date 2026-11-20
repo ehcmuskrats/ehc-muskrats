@@ -6,7 +6,8 @@
 //   npm run sync:highlights    only YouTube highlights + derive
 //   npm run derive             only recompute derived data + validation from data/
 //
-// Raw captures go to data/raw/ (gitignored). Normalized JSON goes to data/ (committed).
+// Raw captures go to data/raw/ (gitignored) plus a scrubbed, gzipped backup in data/archive/ (committed).
+// Normalized JSON goes to data/ (committed).
 // On any scraper failure the last good data is kept, a clear message is printed and the
 // process exits with code 1 (the workflow then still deploys and opens an issue).
 import { existsSync } from 'node:fs';

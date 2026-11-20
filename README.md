@@ -138,6 +138,120 @@ Put your YouTube key in `.env` first (copy `.env.example`). Commit the changed f
 
 If wehv.at changes and the scraper breaks, the sync stops with a clear message and keeps the last good data. On GitHub, the site still deploys and an issue labelled `sync-failure` is opened.
 
+### …make sure we still have everything if WEHV goes offline?
+
+Nothing to do: it's automatic. Three copies exist:
+
+- , , : everything the site shows (committed).
+- : every response we ever got from WEHV, gzipped, birthdates removed (committed; the nightly sync adds new ones).
+- : the untouched responses, only on the PC that ran the sync (gitignored).
+
+To rebuild  from a local : Archived 291 responses to data/archive/..
+
+### …fix a player's flag?
+
+Flags come from the nationality WEHV publishes. To override one, add it to :
+ ( hides the flag), then > ehc-muskrats-website@1.0.0 sync
+> tsx scripts/sync-data.ts --derive-only
+Current league season: 2026-27
+Seasons to scrape: 2026-27
+Fetching schedule...
+  loading spielplan-ergebnisse/ (1 division(s))
+Fetching standings...
+  loading tabelle/ (1 division(s))
+Fetching knockout...
+Fetching skaters...
+  loading statistik/spieler-statistik/top-scorer/ (1 division(s))
+Fetching goalies...
+  loading statistik/spieler-statistik/top-goalies/ (1 division(s))
+Fetching penalties...
+  loading statistik/spieler-statistik/bad-boys/ (1 division(s))
+Fetching teams...
+  loading statistik/team-statistik/power-play/ (1 division(s))
+  2026-27: 36 games (8 ours), 1 standings table(s)
+Fetched 0 game report(s).
+Fetching YouTube uploads...
+  37 videos
+
+== Highlights match report ==
+  matched: 34, overrides: 1, not a game: 2, ambiguous: 0, unmatched: 0
+Derived: 61 players (36 merged across league ids), 125 game reports.
+
+== Validation: standings recomputed from game results ==
+  2026-27 Grunddurchgang: OK (9 final games)
+  2025-26 Grunddurchgang: OK (45 final games)
+  2025-26 TOP 5: OK (10 final games)
+  2025-26 LOW 5: OK (10 final games)
+  2024-25 Grunddurchgang: OK (36 final games)
+  2024-25 TOP 4: OK (6 final games)
+  2024-25 LOW 5: OK (10 final games)
+  2023-24 Grunddurchgang: OK (28 final games)
+  2023-24 TOP 4: OK (6 final games)
+  2023-24 LOW 4: OK (6 final games)
+  2022-23 Grunddurchgang: OK (45 final games)
+  2021-22 Grunddurchgang: OK (6 final games)
+  2019-20 Grunddurchgang: OK (36 final games)
+  2018-19 Grunddurchgang: OK (56 final games)
+  2017-18 Grunddurchgang: OK (42 final games)
+  2016-17 Grunddurchgang: OK (42 final games)
+  2015-16 Grunddurchgang: OK (45 final games)
+
+== Validation: our player totals from boxscores vs league top-scorer list ==
+  2026-27 div 22591: OK (16 players, 3 games)
+  2025-26 div 19449: OK (20 players, 9 games)
+  2025-26 div 20129: OK (23 players, 4 games)
+  2025-26 div 20472: OK (20 players, 5 games)
+  2024-25 div 16641: 1 mismatch(es) (23 players, 8 games)
+  2024-25 div 17195: OK (20 players, 3 games)
+  2024-25 div 17614: 18 mismatch(es) (21 players, 6 games)
+  2023-24 div 13836: 1 mismatch(es) (20 players, 7 games)
+  2023-24 div 14349: OK (17 players, 3 games)
+  2023-24 div 14774: 14 mismatch(es) (17 players, 3 games)
+  2022-23 div 11169: OK (23 players, 9 games)
+  2022-23 div 12122: OK (16 players, 3 games)
+  2021-22 div 9453: 1 mismatch(es) (16 players, 2 games)
+
+Mismatches:
+  - Player 2024-25 div 16641 #0 Wunderl Stefan (league vs boxscores): PIM 3 vs 0
+  - Player 2024-25 div 17614 #0 Naukkarinen Pyry Verneri (league vs boxscores): G 11 vs 13, GP 5 vs 6
+  - Player 2024-25 div 17614 #0 Mayer Christoph (league vs boxscores): G 7 vs 8, PIM 12 vs 14, GP 5 vs 6
+  - Player 2024-25 div 17614 #0 Kona Robert (league vs boxscores): G 2 vs 3, A 4 vs 5, GP 5 vs 6
+  - Player 2024-25 div 17614 #0 Bonholzer Marco (league vs boxscores): A 2 vs 3, PIM 0 vs 2, GP 3 vs 4
+  - Player 2024-25 div 17614 #0 Moser Daniel (league vs boxscores): A 2 vs 3, PIM 2 vs 4, GP 5 vs 6
+  - Player 2024-25 div 17614 #0 Suppanz Philipp (league vs boxscores): A 3 vs 4, GP 5 vs 6
+  - Player 2024-25 div 17614 #0 Preisinger Thomas (league vs boxscores): G 1 vs 2, A 2 vs 3, PIM 2 vs 6, GP 5 vs 6
+  - Player 2024-25 div 17614 #0 Zenker Sebastian (league vs boxscores): A 2 vs 3, PIM 6 vs 10, GP 4 vs 5
+  - Player 2024-25 div 17614 #0 Frühwirth Edwin (league vs boxscores): G 1 vs 2, PIM 2 vs 4, GP 5 vs 6
+  - Player 2024-25 div 17614 #0 Schaschl Helmut (league vs boxscores): GP 5 vs 6
+  - Player 2024-25 div 17614 #0 Oblin Stefan (league vs boxscores): GP 5 vs 6
+  - Player 2024-25 div 17614 #0 Suppanz Markus (league vs boxscores): G 0 vs 1, PIM 0 vs 4, GP 5 vs 6
+  - Player 2024-25 div 17614 #0 Moskalenko Andrei (league vs boxscores): GP 5 vs 6
+  - Player 2024-25 div 17614 #0 Isep Andreas (league vs boxscores): GP 5 vs 6
+  - Player 2024-25 div 17614 #0 Zemann Stefan (league vs boxscores): GP 4 vs 5
+  - Player 2024-25 div 17614 #0 Pfeifer Benjamin (league vs boxscores): GP 5 vs 6
+  - Player 2024-25 div 17614 #0 Wunderl Stefan (league vs boxscores): GP 3 vs 4
+  - Player 2024-25 div 17614 #0 Kornfeind Michael Ferry (league vs boxscores): A 0 vs 2, PIM 2 vs 4, GP 4 vs 5
+  - Player 2023-24 div 13836 #0 Pfeifer Benjamin (league vs boxscores): PIM 6 vs 3
+  - Player 2023-24 div 14774 #0 Naukkarinen Pyry Verneri (league vs boxscores): G 2 vs 4, A 0 vs 2, GP 1 vs 2
+  - Player 2023-24 div 14774 #0 Zenker Sebastian (league vs boxscores): GP 2 vs 3
+  - Player 2023-24 div 14774 #0 Ambrosch Roland (league vs boxscores): PIM 12 vs 14, GP 2 vs 3
+  - Player 2023-24 div 14774 #0 Bonholzer Marco (league vs boxscores): GP 2 vs 3
+  - Player 2023-24 div 14774 #0 Kornfeind Michael Ferry (league vs boxscores): GP 2 vs 3
+  - Player 2023-24 div 14774 #0 Reautschnig Armin (league vs boxscores): GP 1 vs 2
+  - Player 2023-24 div 14774 #0 Kona Robert (league vs boxscores): G 0 vs 1, A 0 vs 1, PIM 0 vs 2, GP 1 vs 2
+  - Player 2023-24 div 14774 #0 Suppanz Markus (league vs boxscores): G 0 vs 1, A 0 vs 1, PIM 4 vs 6, GP 2 vs 3
+  - Player 2023-24 div 14774 #0 Pfeifer Benjamin (league vs boxscores): GP 2 vs 3
+  - Player 2023-24 div 14774 #0 Moser Daniel (league vs boxscores): A 0 vs 1, PIM 0 vs 4, GP 2 vs 3
+  - Player 2023-24 div 14774 #0 Zemann Stefan (league vs boxscores): GP 2 vs 3
+  - Player 2023-24 div 14774 #0 Suppanz Philipp (league vs boxscores): PIM 4 vs 6, GP 2 vs 3
+  - Player 2023-24 div 14774 #0 Frühwirth Edwin (league vs boxscores): GP 2 vs 3
+  - Player 2023-24 div 14774 #0 Isep Andreas (league vs boxscores): PIM 2 vs 4, GP 2 vs 3
+  - Player 2021-22 div 9453 #0 Ambrosch Roland (league vs boxscores): PIM 9 vs 11
+
+35 warning(s)/mismatch(es) — see above.
+
+Sync OK in 35s. Team: EHC Muskrats.
+
 ## One-time setup
 
 ### 1. Put the code on GitHub

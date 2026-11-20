@@ -155,6 +155,10 @@ const moreActive = secondary.some(([, key]) => key === active);
         }
       </ul>
       <a class="sheet-lang" href={href(other, path)} hreflang={other} lang={other}>{t('lang.switch')}</a>
+      <p class="sheet-legal">
+        <a href={href(lang, 'imprint/')}>{lang === 'de' ? 'Impressum' : 'Imprint'}</a>
+        <a href={href(lang, 'privacy/')}>{lang === 'de' ? 'Datenschutz' : 'Privacy'}</a>
+      </p>
     </div>
 
     <script>
@@ -413,6 +417,20 @@ const moreActive = secondary.some(([, key]) => key === active);
       transform: translateY(40%);
       opacity: 0;
     }
+  }
+  .sheet-legal {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 0.5rem 0 0;
+  }
+  .sheet-legal a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 0.75rem;
+    color: var(--muted);
+    font-size: 0.85rem;
   }
   .sheet-grip {
     width: 40px;

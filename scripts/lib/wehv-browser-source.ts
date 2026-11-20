@@ -14,6 +14,7 @@ import type { DataSource, DivisionDataKind, DivisionTarget, SeasonDivisions } fr
 import { SyncError } from './datasource.ts';
 import { stripJsonp, endpointName } from './jsonp.ts';
 import { listDivisions, listSeasons, pickDivision, pickSeason } from './picker.ts';
+import { archive } from './archive.ts';
 import { parseScheduleDom, parseStandingsDom } from './dom-fallback.ts';
 
 const LEAGUE_BASE = 'https://www.wehv.at/de/leagues/wiener-landesliga-4/';
@@ -156,6 +157,7 @@ export class WehvBrowserSource implements DataSource {
     const file = join(this.rawDir, ...parts);
     mkdirSync(join(file, '..'), { recursive: true });
     writeFileSync(file, JSON.stringify(data));
+    archive(parts, data);
   }
 
   async listSeasons(): Promise<SeasonDivisions[]> {

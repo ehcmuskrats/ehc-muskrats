@@ -93,8 +93,7 @@ const top = (key: 'p' | 'gp' | 'g' | 'pim') =>
   [...career]
     .filter((p) => careerValue(p, key) > 0)
     .sort((a, b) => careerValue(b, key) - careerValue(a, key) || b.career.g - a.career.g)
-    // "Most games" shows 15 so long-serving goalies make the list; the other boards show 10.
-    .slice(0, key === 'gp' ? 15 : 10);
+    .slice(0, 10);
 // All-time goalies: games in net, wins, goals against, GA per game, shutouts (from the game log).
 const goalieBoard = derived.players
   .filter((p) => p.career.goalieGp > 0)

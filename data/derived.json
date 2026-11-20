@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-20T23:39:20.013Z",
+ "generatedAt": "2026-11-20T23:58:47.085Z",
  "players": [
   {
    "id": 16221,
@@ -2039,7 +2039,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 9291,
@@ -3902,7 +3903,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 9301,
@@ -5782,7 +5784,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 71148,
@@ -5941,7 +5944,8 @@
     }
    ],
    "goals": [],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 31618,
@@ -7128,7 +7132,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 9303,
@@ -8214,7 +8219,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 31620,
@@ -9314,7 +9320,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 12780,
@@ -10929,7 +10936,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 80297,
@@ -11980,7 +11988,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 165725,
@@ -12530,7 +12539,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "CAN"
   },
   {
    "id": 73010,
@@ -12731,7 +12741,8 @@
     }
    ],
    "goals": [],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "LAT"
   },
   {
    "id": 9293,
@@ -13873,7 +13884,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 31622,
@@ -14526,7 +14538,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 9295,
@@ -18797,7 +18810,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 31452,
@@ -19063,7 +19077,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 17088,
@@ -19399,7 +19414,8 @@
     }
    ],
    "goals": [],
-   "isGoalie": true
+   "isGoalie": true,
+   "nation": "GER"
   },
   {
    "id": 127838,
@@ -19657,7 +19673,8 @@
     }
    ],
    "goals": [],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 95014,
@@ -20024,7 +20041,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 163544,
@@ -20366,7 +20384,8 @@
     }
    ],
    "goals": [],
-   "isGoalie": true
+   "isGoalie": true,
+   "nation": "UKR"
   },
   {
    "id": 31624,
@@ -20807,7 +20826,8 @@
     }
    ],
    "goals": [],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 31625,
@@ -21600,7 +21620,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 9296,
@@ -25254,7 +25275,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 95025,
@@ -25912,7 +25934,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "GER"
   },
   {
    "id": 11806,
@@ -26303,7 +26326,8 @@
     }
    ],
    "goals": [],
-   "isGoalie": true
+   "isGoalie": true,
+   "nation": "AUT"
   },
   {
    "id": 127960,
@@ -28607,7 +28631,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "SVK"
   },
   {
    "id": 95015,
@@ -30341,7 +30366,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 95026,
@@ -32233,7 +32259,8 @@
     }
    ],
    "goals": [],
-   "isGoalie": true
+   "isGoalie": true,
+   "nation": "GER"
   },
   {
    "id": 52258,
@@ -32978,7 +33005,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 31628,
@@ -34260,7 +34288,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 17094,
@@ -34717,7 +34746,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 9300,
@@ -36028,7 +36058,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 31630,
@@ -38132,7 +38163,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 54281,
@@ -38402,7 +38434,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 31631,
@@ -39285,7 +39318,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 10342,
@@ -42869,7 +42903,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 9314,
@@ -43831,7 +43866,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 95016,
@@ -46199,7 +46235,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 147829,
@@ -47320,7 +47357,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "RUS"
   },
   {
    "id": 115795,
@@ -47952,7 +47990,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "RUS"
   },
   {
    "id": 127949,
@@ -51129,7 +51168,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "FIN"
   },
   {
    "id": 111173,
@@ -53001,7 +53041,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 31633,
@@ -54117,7 +54158,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 33377,
@@ -54570,7 +54612,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "ESP"
   },
   {
    "id": 111830,
@@ -56646,7 +56689,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 9305,
@@ -58821,7 +58865,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 127839,
@@ -59858,7 +59903,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 9306,
@@ -60164,7 +60210,8 @@
     }
    ],
    "goals": [],
-   "isGoalie": true
+   "isGoalie": true,
+   "nation": "AUT"
   },
   {
    "id": 31636,
@@ -60525,7 +60572,8 @@
     }
    ],
    "goals": [],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 17713,
@@ -61398,7 +61446,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 9308,
@@ -62799,7 +62848,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 9307,
@@ -65759,7 +65809,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 9309,
@@ -67008,7 +67059,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 70098,
@@ -67188,7 +67240,8 @@
     }
    ],
    "goals": [],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 9311,
@@ -67502,7 +67555,8 @@
     }
    ],
    "goals": [],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 4043,
@@ -68886,7 +68940,8 @@
      "playoff": true
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 95530,
@@ -71050,7 +71105,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 9312,
@@ -71403,7 +71459,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 16227,
@@ -73547,7 +73604,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 16226,
@@ -76508,7 +76566,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 114302,
@@ -78023,7 +78082,8 @@
      "playoff": false
     }
    ],
-   "isGoalie": false
+   "isGoalie": false,
+   "nation": "AUT"
   },
   {
    "id": 4046,
@@ -79472,7 +79532,8 @@
     }
    ],
    "goals": [],
-   "isGoalie": true
+   "isGoalie": true,
+   "nation": "AUT"
   }
  ],
  "records": {

@@ -5,6 +5,7 @@ import DataCredit from '../../../components/DataCredit.astro';
 import Abbr from '../../../components/Abbr.astro';
 import PlayerDashboard from '../../../components/PlayerDashboard.astro';
 import GoalieLeague from '../../../components/GoalieLeague.astro';
+import Flag from '../../../components/Flag.astro';
 import { type Lang, LANGS, useT, href, url, formatDate, formatNumber, mmss } from '../../../i18n/index.ts';
 import { RESULT_FULL, posCode } from '../../../i18n/abbr.ts';
 import { derived, playerExtras, columns, resultClass } from '../../../lib/data.ts';
@@ -45,9 +46,12 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
     <div class="hero-in">
       {extra?.photo && <img class="photo" src={url(extra.photo)} alt={`${p.first} ${p.last}`} width="120" height="120" />}
       <div>
-        <span class="tag">
-          {numbers.length ? `#${numbers[0]}` : '#–'}{p.currentPosition && ` · ${posCode(p.currentPosition)}`}
-        </span>
+        <div class="tagline">
+          <span class="tag">
+            {numbers.length ? `#${numbers[0]}` : '#–'}{p.currentPosition && ` · ${posCode(p.currentPosition)}`}
+          </span>
+          <Flag code={p.nation} lang={lang} size={22} />
+        </div>
         <h1>
           <span class="fn">{p.first}</span>
           <span class="ln">{p.last}</span>
@@ -395,6 +399,11 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
     border-radius: 50%;
     object-fit: cover;
     box-shadow: 0 0 0 3px var(--orange);
+  }
+  .tagline {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
   }
   h1 {
     margin: 0.6rem 0 0.35rem;

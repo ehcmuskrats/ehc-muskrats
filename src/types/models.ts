@@ -239,6 +239,8 @@ export interface LeaderSkater {
   gwg: number;
   plusMinus: number;
   sog: number;
+  /** IOC-style code from the league ("AUT", "SVK"); null when not entered. */
+  nation?: string | null;
 }
 
 export interface LeaderGoalie {
@@ -253,6 +255,7 @@ export interface LeaderGoalie {
   shutouts: number;
   wins: number;
   losses: number;
+  nation?: string | null;
 }
 
 export interface LeaderPenalty {
@@ -384,6 +387,8 @@ export interface PlayerProfile {
   games: PlayerGameLine[];
   goals: PlayerGoal[];
   isGoalie: boolean;
+  /** Latest nationality from the league lists (3-letter code), or a manual override in data/player-extras.json. */
+  nation: string | null;
 }
 
 export interface TeamRecordGame {

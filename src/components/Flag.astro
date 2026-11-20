@@ -1,0 +1,57 @@
+---
+// Small nationality flag from WEHV's 3-letter code (AUT, CAN, ...). Inlined SVG from flag-icons (MIT),
+// so it renders everywhere (Windows has no emoji flags) and costs no extra request.
+const svgs = import.meta.glob<string>('/node_modules/flag-icons/flags/4x3/*.svg', { eager: true, query: '?raw', import: 'default' });
+
+// League codes are IOC-style; flag-icons uses ISO 3166 alpha-2.
+const IOC_TO_ISO: Record<string, string> = {
+  AUT: 'at', GER: 'de', SUI: 'ch', CAN: 'ca', USA: 'us', SVK: 'sk', CZE: 'cz', FIN: 'fi', SWE: 'se', NOR: 'no',
+  DEN: 'dk', RUS: 'ru', UKR: 'ua', BLR: 'by', LAT: 'lv', LTU: 'lt', EST: 'ee', POL: 'pl', HUN: 'hu', SLO: 'si',
+  CRO: 'hr', SRB: 'rs', BIH: 'ba', ROU: 'ro', BUL: 'bg', ITA: 'it', FRA: 'fr', ESP: 'es', POR: 'pt', NED: 'nl',
+  BEL: 'be', GBR: 'gb', IRL: 'ie', AUS: 'au', NZL: 'nz', KAZ: 'kz', JPN: 'jp', KOR: 'kr', CHN: 'cn', ISR: 'il',
+  TUR: 'tr', GRE: 'gr', MEX: 'mx', BRA: 'br', ARG: 'ar', RSA: 'za', ISL: 'is', LUX: 'lu', LIE: 'li', SVN: 'si',
+};
+const NAMES_DE: Record<string, string> = {
+  at: 'Österreich', de: 'Deutschland', ca: 'Kanada', sk: 'Slowakei', fi: 'Finnland', ru: 'Russland', ua: 'Ukraine',
+  lv: 'Lettland', es: 'Spanien', cz: 'Tschechien', se: 'Schweden', us: 'USA', ch: 'Schweiz', it: 'Italien',
+  hu: 'Ungarn', pl: 'Polen', gb: 'Großbritannien', fr: 'Frankreich', nl: 'Niederlande', si: 'Slowenien', hr: 'Kroatien',
+};
+
+interface Props {
+  code: string | null | undefined;
+  lang: 'de' | 'en';
+  size?: number;
+}
+const { code, lang, size = 18 } = Astro.props;
+const iso = code ? (IOC_TO_ISO[code.toUpperCase()] ?? (code.length === 2 ? code.toLowerCase() : null)) : null;
+const raw = iso ? svgs[`/node_modules/flag-icons/flags/4x3/${iso}.svg`] : undefined;
+let label = code ?? '';
+if (iso) {
+  try {
+    label = lang === 'de' ? (NAMES_DE[iso] ?? new Intl.DisplayNames(['de'], { type: 'region' }).of(iso.toUpperCase())!) : new Intl.DisplayNames(['en'], { type: 'region' }).of(iso.toUpperCase())!;
+  } catch {}
+}
+// Make the SVG scale to the wrapper and carry an accessible name.
+const svg = raw?.replace('<svg ', `<svg role="img" aria-label="${label}" preserveAspectRatio="xMidYMid slice" `);
+---
+
+{svg && <span class="flag" title={label} style={`--h:${size * 0.75}px;--w:${size}px`} set:html={svg} />}
+
+<style>
+  .flag {
+    display: inline-block;
+    flex: none;
+    width: var(--w);
+    height: var(--h);
+    border-radius: 2px;
+    overflow: hidden;
+    vertical-align: -0.1em;
+    box-shadow: 0 0 0 1px var(--line-strong);
+    line-height: 0;
+  }
+  .flag :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+</style>

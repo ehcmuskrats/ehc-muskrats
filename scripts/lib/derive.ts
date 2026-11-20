@@ -19,6 +19,11 @@ import type {
 } from '../../src/types/models.ts';
 import { TEAM, isOurTeam } from '../../src/config/team.ts';
 import { loadGames, loadPlayerAliases, loadSeasons } from './data-access.ts';
+import { readJson } from './io.ts';
+
+function readExtras(): Record<string, { nation?: string }> {
+  return readJson<{ players?: Record<string, { nation?: string }> }>('data/player-extras.json', {}).players ?? {};
+}
 
 export function slugify(s: string): string {
   return s
@@ -405,9 +410,24 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
       games: a.games.sort((x, y) => (y.date ?? '').localeCompare(x.date ?? '')),
       goals: a.goals.sort((x, y) => (y.date ?? '').localeCompare(x.date ?? '')),
       isGoalie,
+      nation: null,
     };
   });
   profiles.sort((x, y) => x.last.localeCompare(y.last) || x.first.localeCompare(y.first));
+
+  // Nationality: the most recent non-empty code from the league lists (our team's rows only);
+  // data/player-extras.json { "players": { "<id>": { "nation": "CAN" } } } overrides it ("" hides it).
+  const extras = readExtras();
+  const nationOf = new Map<number, string>();
+  const ourIds = new Set(seasons.flatMap((x) => x.games.flatMap((g) => [g.home, g.away]).filter((t) => isOurTeam(t)).map((t) => t.id)));
+  for (const s of [...seasons].sort((a, b) => b.info.id.localeCompare(a.info.id)))
+    for (const st of s.stats)
+      for (const r of [...st.skaters, ...st.goalies])
+        if (r.nation && ourIds.has(r.teamId) && !nationOf.has(canon(r.player.id))) nationOf.set(canon(r.player.id), r.nation);
+  for (const p of profiles) {
+    const o = extras[String(p.id)]?.nation;
+    p.nation = o !== undefined ? o || null : (nationOf.get(p.id) ?? null);
+  }
 
   const derived: Derived = {
     generatedAt: new Date().toISOString(),
