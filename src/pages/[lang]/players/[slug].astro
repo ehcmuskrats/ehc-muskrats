@@ -444,7 +444,7 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
   }
   /* Season arrived at via ?saison= is highlighted in the season tables. */
   tr.picked > * {
-    background: rgba(247, 122, 26, 0.14);
+    background: rgba(var(--accent-rgb), 0.14);
   }
   tr.picked > :first-child {
     box-shadow: inset 3px 0 0 var(--orange);

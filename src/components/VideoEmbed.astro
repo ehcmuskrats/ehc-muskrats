@@ -111,7 +111,7 @@ const hasThumb = existsSync(`public/thumbs/${video.id}.jpg`);
     border-radius: 50%;
     background: var(--orange);
     box-shadow:
-      0 0 0 8px rgba(247, 122, 26, 0.25),
+      0 0 0 8px rgba(var(--accent-rgb), 0.25),
       0 10px 30px rgba(0, 0, 0, 0.5);
     transition: transform 0.2s;
   }

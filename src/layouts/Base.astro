@@ -62,11 +62,12 @@ const moreActive = secondary.some(([, key]) => key === active);
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang={lang} href={canonical} />
     <link rel="alternate" hreflang={other} href={new URL(href(other, path), Astro.site).toString()} />
-    <link rel="icon" type="image/png" href={url('logo.png')} />
-    <link rel="apple-touch-icon" href={url('logo.png')} />
+    <link rel="icon" type="image/svg+xml" href={url('logo.svg')} />
+    <link rel="icon" type="image/png" sizes="512x512" href={url('logo.png')} />
+    <link rel="apple-touch-icon" href={url('apple-touch-icon.png')} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={desc} />
-    <meta property="og:image" content={new URL(url('logo.png'), Astro.site).toString()} />
+    <meta property="og:image" content={new URL(url('og-image.png'), Astro.site).toString()} />
     <meta property="og:locale" content={lang === 'de' ? 'de_AT' : 'en_GB'} />
   </head>
   <body>
@@ -75,7 +76,7 @@ const moreActive = secondary.some(([, key]) => key === active);
     <header class="topbar">
       <div class="container bar">
         <a class="brand" href={href(lang)} aria-label={`${TEAM.displayName} – ${t('nav.home')}`}>
-          <img src={url('logo.png')} width="40" height="40" alt="" />
+          <img src={url('logo.svg')} width="40" height="40" alt="" />
           <span class="wordmark">
             <span class="w1">EHC</span><span class="w2">Muskrats</span>
           </span>
@@ -103,7 +104,7 @@ const moreActive = secondary.some(([, key]) => key === active);
     <footer class="site-footer">
       <div class="container foot">
         <div class="foot-brand">
-          <img src={url('logo.png')} width="44" height="44" alt="" loading="lazy" />
+          <img src={url('logo.svg')} width="44" height="44" alt="" loading="lazy" />
           <div>
             <strong>{TEAM.displayName}</strong>
             <p class="small muted">{t('footer.unofficial', { year: new Date().getFullYear() })}</p>

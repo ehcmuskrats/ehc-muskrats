@@ -27,16 +27,18 @@ const extrasFile = import.meta.glob<{ players: Record<string, { photo?: string; 
   { eager: true, import: 'default' },
 );
 
-// Display-name overrides (data/player-aliases.json "names") apply to every player reference in every file,
+// Display fixes applied to every loaded file: player name overrides (data/player-aliases.json "names")
+// and our official logo. Name overrides apply to every player reference,
 // so a renamed player reads the same on profiles, game reports, stats tables and leader lists.
 const nameFixes = Object.values(aliasesFile)[0]?.names ?? {};
-function applyNameFixes<T>(root: T): T {
-  if (!Object.keys(nameFixes).length) return root;
+function applyDisplayFixes<T>(root: T): T {
   const seen = new Set<object>();
   const walk = (o: any) => {
     if (!o || typeof o !== 'object' || seen.has(o)) return;
     seen.add(o);
     if (Array.isArray(o)) return o.forEach(walk);
+    // Our own team always shows the official club logo (WEHV serves an older one).
+    if (typeof o.id === 'number' && 'logo' in o && typeof o.name === 'string' && isOurTeam(o)) o.logo = 'logo.svg';
     if (typeof o.id === 'number' && typeof o.last === 'string' && 'first' in o) {
       const fix = nameFixes[String(o.id)];
       if (fix) {
@@ -49,9 +51,9 @@ function applyNameFixes<T>(root: T): T {
   walk(root);
   return root;
 }
-Object.values(seasonFiles).forEach(applyNameFixes);
-Object.values(gameFiles).forEach(applyNameFixes);
-Object.values(derivedFile).forEach(applyNameFixes);
+Object.values(seasonFiles).forEach(applyDisplayFixes);
+Object.values(gameFiles).forEach(applyDisplayFixes);
+Object.values(derivedFile).forEach(applyDisplayFixes);
 
 export const seasons: SeasonData[] = Object.values(seasonFiles).sort((a, b) => b.info.id.localeCompare(a.info.id));
 export const games = new Map<string, Game>(Object.values(gameFiles).map((g) => [g.id, g]));

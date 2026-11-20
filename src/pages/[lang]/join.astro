@@ -19,7 +19,7 @@ const facts = [
 
 <Base lang={lang} title={t('join.title')} path="join/" active="nav.join">
   <section class="hero">
-    <img class="logo" src={url('logo.png')} width="140" height="140" alt="" />
+    <img class="logo" src={url('logo.svg')} width="140" height="140" alt="" />
     <span class="tag">{TEAM.leagueName}</span>
     <h1>{t('join.title')}</h1>
     <p class="lead">{t('join.intro')}</p>
@@ -77,7 +77,7 @@ const facts = [
     text-align: center;
     overflow: hidden;
     background:
-      radial-gradient(80% 70% at 50% 0%, rgba(247, 122, 26, 0.22), transparent 70%),
+      radial-gradient(80% 70% at 50% 0%, rgba(var(--accent-rgb), 0.22), transparent 70%),
       linear-gradient(170deg, #1f1f1f, #141414 60%, var(--bg));
   }
   @media (min-width: 1180px) {
@@ -126,7 +126,7 @@ const facts = [
     font: 800 4rem/1 var(--display);
     color: var(--orange);
     margin: 0.2rem 0 0.3rem;
-    text-shadow: 0 0 40px rgba(247, 122, 26, 0.35);
+    text-shadow: 0 0 40px rgba(var(--accent-rgb), 0.35);
   }
   .fee .muted {
     margin: 0;
