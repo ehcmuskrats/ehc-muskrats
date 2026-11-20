@@ -62,13 +62,6 @@ for (const ph of s?.playoffs?.phases ?? []) {
     });
   }
 }
-// Opponents played this season, A–Z, for the opponent picker.
-const oppMap = new Map<number, (typeof games)[number]['home']>();
-for (const g of games) {
-  const o = isOurTeam(g.home) ? g.away : g.home;
-  oppMap.set(o.id, o);
-}
-const opponents = [...oppMap.values()].sort((a, b) => teamName(a).localeCompare(teamName(b)));
 // Any playoff game not found in the bracket still gets shown.
 const inSeries = new Set(series.flatMap((x) => x.games.map((g) => g.id)));
 const looseRound = dated.filter((g) => g.playoff && !inSeries.has(g.id));
@@ -113,23 +106,7 @@ const looseRound = dated.filter((g) => g.playoff && !inSeries.has(g.id));
             <button type="button" data-value="upcoming" aria-pressed="false">{t('common.upcoming')}</button>
             <button type="button" data-value="played" aria-pressed="false">{t('common.played')}</button>
           </div>
-          {opponents.length > 1 && (
-            <div class="opp-pick">
-              <label for="opp-filter" class="visually-hidden">
-                {t('common.opponent')}
-              </label>
-              <select id="opp-filter" data-opp-filter>
-                <option value="all">
-                  {t('common.opponent')}: {t('common.all')}
-                </option>
-                {opponents.map((o) => (
-                  <option value={String(o.id)}>{teamName(o)}</option>
-                ))}
-              </select>
-            </div>
-          )}
         </div>
-        <p class="h2h tnum" data-h2h hidden></p>
 
         {phaseGroups.length === 0 ? (
           <section aria-label={t('schedule.title')}>
@@ -223,35 +200,16 @@ const looseRound = dated.filter((g) => g.playoff && !inSeries.has(g.id));
 </Base>
 
 <script>
-  const state: Record<string, string> = { status: 'all', opp: 'all', phase: 'all' };
-  const lang = document.documentElement.lang;
+  const state: Record<string, string> = { status: 'all', phase: 'all' };
   function apply() {
     let visible = 0;
-    const h2h = { W: 0, L: 0, T: 0, gf: 0, ga: 0, gp: 0 };
     document.querySelectorAll<HTMLElement>('[data-games] > li').forEach((li) => {
       const ok =
         (state.status === 'all' || li.dataset.status === state.status) &&
-        (state.opp === 'all' || li.dataset.opp === state.opp) &&
         (state.phase === 'all' || li.dataset.phase === state.phase);
       li.hidden = !ok;
       if (ok && !li.closest('[data-tbd]')) visible++;
-      if (ok && li.dataset.res) {
-        h2h[li.dataset.res as 'W' | 'L' | 'T']++;
-        h2h.gf += Number(li.dataset.gf ?? 0);
-        h2h.ga += Number(li.dataset.ga ?? 0);
-        h2h.gp++;
-      }
     });
-    // Head-to-head line when an opponent is picked, e.g. "vs VIHC: 2 W · 1 L · Tore 14:11".
-    const line = document.querySelector<HTMLElement>('[data-h2h]');
-    const sel = document.querySelector<HTMLSelectElement>('[data-opp-filter]');
-    if (line && sel) {
-      line.hidden = state.opp === 'all' || h2h.gp === 0;
-      const name = sel.options[sel.selectedIndex]?.text ?? '';
-      const parts = [`${h2h.W} W`, `${h2h.L} L`, ...(h2h.T ? [`${h2h.T} T`] : [])].join(' · ');
-      const el = (tag: string, text: string) => Object.assign(document.createElement(tag), { textContent: text });
-      line.replaceChildren(el('b', `vs ${name}`), el('span', parts), el('span', `${lang === 'de' ? 'Tore' : 'Goals'} ${h2h.gf}:${h2h.ga}`));
-    }
     // Hide phase sections / playoff series blocks that have nothing left to show.
     document.querySelectorAll<HTMLElement>('[data-phase-section], .series').forEach((sec) => {
       sec.hidden = !sec.querySelector('[data-games] > li:not([hidden])');
@@ -271,10 +229,6 @@ const looseRound = dated.filter((g) => g.playoff && !inSeries.has(g.id));
         apply();
       }),
     );
-  });
-  document.querySelector<HTMLSelectElement>('[data-opp-filter]')?.addEventListener('change', (e) => {
-    state.opp = (e.target as HTMLSelectElement).value;
-    apply();
   });
   // Deep link: …/schedule/2024-25/#playoffs
   const fromHash = location.hash.slice(1);
@@ -351,30 +305,6 @@ const looseRound = dated.filter((g) => g.playoff && !inSeries.has(g.id));
     margin: 0.3rem 0 0;
     color: var(--text);
     font-size: 0.9rem;
-  }
-  .opp-pick {
-    flex: 1 1 220px;
-  }
-  .opp-pick select {
-    width: 100%;
-    min-height: 44px;
-  }
-  .h2h {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem 1rem;
-    align-items: baseline;
-    margin: -0.25rem 0 1rem;
-    padding: 0.7rem 1rem;
-    border-radius: 12px;
-    background: var(--panel);
-    box-shadow: inset 3px 0 0 var(--orange);
-    font: 800 1.05rem/1.2 var(--display);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-  .h2h :global(span) {
-    color: var(--muted);
   }
   .controls .seg {
     flex: 1 1 260px;

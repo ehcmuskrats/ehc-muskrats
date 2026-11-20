@@ -7,7 +7,11 @@ Collected while reviewing the site. Fixed together when the user says "go".
   stats Gesamt / Grunddurchgang / Playoffs switch, playoff table on player profiles, all-time playoff points leaderboard).
 
 ## Round 4 — DONE (24–31). 31 = "Meister 2024/25" banner with sheen above the won final series.
-## OPEN: SITE.impressum.name in src/config/site.ts must be filled before going live.
+## Round 5 (collecting)
+32. Opponent picker removed again (too crowded on mobile) — DONE, not committed yet.
+33. Impressum name set: Christopher Bright, Wien — DONE, not committed yet.
+34. Impressum "Quellen": dropped "mit dessen Zustimmung" / "with its permission"; now just "Spieldaten: WEHV, wehv.at."
+    (also fixed the stray space before the comma) — DONE, not committed yet.
 
 24. **Player chart bars: blue instead of orange** (player dashboard `.bars .bar`)
     - Now: bars are orange, and so is the active "Letzte 10 / Karriere" toggle, so they compete.

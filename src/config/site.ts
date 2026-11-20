@@ -11,7 +11,7 @@ export const SITE = {
    * REQUIRED before going live: name and town/city (no street address needed for a private site).
    */
   impressum: {
-    name: '',
+    name: 'Christopher Bright',
     city: 'Wien',
   },
   /** Leave empty to hide every email reference. When set, it is shown next to the Facebook button. */
