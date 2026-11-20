@@ -1,9 +1,10 @@
 /* EHC Muskrats — broadcast / scoreboard design system. Dark only, mobile first.
    Base styles target phones (~375px); larger screens are progressive enhancements.
 
-   Contrast (WCAG AA) on --bg #050b18 / --panel #0b1631:
-     --text   #f2f6ff  ≈ 18:1      --muted #a3b3d1 ≈ 9:1     --dim #7d8fb3 ≈ 5.6:1
-     --blue-hi #5aa2ff ≈ 7:1 (links)   --orange #f77a1a ≈ 7:1 (fine as text on dark)
+   Neutral near-black surfaces (like broadcast graphics); brand colours live in the jersey stripes and orange accents.
+   Contrast (WCAG AA) on --bg #0e0e0e / --panel #171717:
+     --text #f2f2f2 ≈ 17:1   --muted #a8a8a8 ≈ 7.8:1   --dim #8c8c8c ≈ 5.2:1
+     links are white; hover orange   --orange #f77a1a ≈ 7:1 (fine as text on dark)
      Orange buttons use ink text (#111, 6.9:1). */
 
 @import '@fontsource/barlow-condensed/latin-700.css';
@@ -23,27 +24,27 @@
   --ink: #111111;
 
   /* surfaces */
-  --bg: #050b18;
-  --bg-2: #081126;
-  --panel: #0b1631;
-  --panel-2: #0f1d3f;
-  --panel-hi: #142652;
-  --line: rgba(160, 190, 255, 0.1);
-  --line-strong: rgba(160, 190, 255, 0.18);
+  --bg: #0e0e0e;
+  --bg-2: #131313;
+  --panel: #171717;
+  --panel-2: #1c1c1c;
+  --panel-hi: #262626;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
   --highlight: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 
   /* text */
-  --text: #f2f6ff;
-  --muted: #a3b3d1;
-  --dim: #7d8fb3;
-  --link: var(--blue-hi);
+  --text: #f2f2f2;
+  --muted: #a8a8a8;
+  --dim: #8c8c8c;
+  --link: #ffffff;
 
   /* results */
   --win: #3ddc97;
   --loss: #ff6b6b;
-  --tie: #a3b3d1;
+  --tie: #a8a8a8;
 
-  --glow-blue: 0 0 0 1px rgba(90, 162, 255, 0.35), 0 8px 30px -8px rgba(24, 112, 224, 0.55);
+  --glow-blue: 0 0 0 1px rgba(255, 255, 255, 0.16), 0 10px 30px -10px rgba(0, 0, 0, 0.9); /* hover lift (neutral) */
   --glow-orange: 0 0 24px -4px rgba(247, 122, 26, 0.6);
 
   --radius: 14px;
@@ -94,8 +95,7 @@ body {
   font: 400 15px/1.5 var(--font);
   font-feature-settings: 'cv11', 'ss01';
   background:
-    radial-gradient(1200px 600px at 85% -10%, rgba(24, 112, 224, 0.22), transparent 60%),
-    radial-gradient(800px 500px at -10% 10%, rgba(247, 122, 26, 0.07), transparent 60%),
+    radial-gradient(1000px 500px at 85% -10%, rgba(255, 255, 255, 0.04), transparent 60%),
     var(--bg);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
@@ -119,7 +119,20 @@ a {
   text-decoration: none;
 }
 a:hover {
-  color: #8cc0ff;
+  color: var(--orange-hi);
+}
+/* Links are white; inside running text they're underlined so they still read as links. */
+p a,
+.prose a,
+.credit a {
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.35);
+  text-underline-offset: 3px;
+}
+p a:hover,
+.prose a:hover,
+.credit a:hover {
+  text-decoration-color: var(--orange);
 }
 :focus-visible {
   outline: 2px solid var(--orange);
@@ -361,11 +374,12 @@ p {
   box-shadow: var(--glow-orange);
 }
 .btn-brand {
-  background: var(--blue);
-  color: #fff;
+  background: #f2f2f2;
+  color: #0e0e0e;
 }
 .btn-brand:hover {
-  color: #fff;
+  background: #fff;
+  color: #0e0e0e;
   box-shadow: var(--glow-blue);
 }
 .btn-ghost {
@@ -411,9 +425,9 @@ p {
 .seg [aria-pressed='true'],
 .seg [aria-selected='true'],
 .seg [aria-current='page'] {
-  background: var(--blue);
-  color: #fff;
-  box-shadow: 0 4px 14px -4px rgba(24, 112, 224, 0.8);
+  background: #f2f2f2;
+  color: #0e0e0e;
+  box-shadow: 0 4px 14px -6px rgba(0, 0, 0, 0.8);
 }
 .controls {
   display: flex;
@@ -531,7 +545,7 @@ thead .sticky-col {
   z-index: 2;
 }
 tr.ours .sticky-col {
-  background: #2a2234;
+  background: #2a1f17;
 }
 th[data-sort] button {
   all: unset;
@@ -695,13 +709,13 @@ th[aria-sort='ascending'] button::after {
 }
 
 /* ---------- Motion ---------- */
+/* Movement only, never opacity: if a browser pauses animations (power saving, link previews,
+   background tabs) the content must still be visible. */
 @keyframes rise {
   from {
-    opacity: 0;
     transform: translateY(10px);
   }
   to {
-    opacity: 1;
     transform: none;
   }
 }
