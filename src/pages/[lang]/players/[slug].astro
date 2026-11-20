@@ -4,6 +4,7 @@ import Team from '../../../components/Team.astro';
 import DataCredit from '../../../components/DataCredit.astro';
 import Abbr from '../../../components/Abbr.astro';
 import PlayerDashboard from '../../../components/PlayerDashboard.astro';
+import GoalieLeague from '../../../components/GoalieLeague.astro';
 import { type Lang, LANGS, useT, href, url, formatDate, formatNumber, mmss } from '../../../i18n/index.ts';
 import { RESULT_FULL, posCode } from '../../../i18n/abbr.ts';
 import { derived, playerExtras, columns, resultClass } from '../../../lib/data.ts';
@@ -63,6 +64,8 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
   {bio && <p class="bio">{bio}</p>}
 
   <PlayerDashboard lang={lang} p={p} />
+
+  {goalieSeasons.length > 0 && <GoalieLeague lang={lang} p={p} />}
 
   {
     skaterSeasons.length > 0 && (

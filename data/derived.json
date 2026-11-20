@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-20T17:58:03.290Z",
+ "generatedAt": "2026-11-20T23:39:20.013Z",
  "players": [
   {
    "id": 16221,
@@ -46202,638 +46202,6 @@
    "isGoalie": false
   },
   {
-   "id": 115795,
-   "slug": "115795-aleksei-moskalenko",
-   "first": "Aleksei",
-   "last": "Moskalenko",
-   "numbers": [
-    63,
-    98
-   ],
-   "positions": [
-    "RF",
-    "LF",
-    "C"
-   ],
-   "currentNumber": 98,
-   "currentPosition": "LF",
-   "seasons": [
-    {
-     "season": "2025-26",
-     "numbers": [
-      63,
-      98
-     ],
-     "positions": [
-      "RF",
-      "LF",
-      "C"
-     ],
-     "number": 98,
-     "position": "LF",
-     "gp": 13,
-     "g": 7,
-     "a": 7,
-     "p": 14,
-     "pim": 0,
-     "ppg": 0,
-     "shg": 0,
-     "gwg": 0,
-     "plusMinus": 0,
-     "sog": 0,
-     "goalieGp": 0,
-     "ga": 0,
-     "toi": 0,
-     "gaa": null,
-     "shotsAgainst": 0,
-     "saves": 0,
-     "dressed": 0
-    }
-   ],
-   "career": {
-    "gp": 13,
-    "g": 7,
-    "a": 7,
-    "p": 14,
-    "pim": 0,
-    "ppg": 0,
-    "shg": 0,
-    "gwg": 0,
-    "plusMinus": 0,
-    "sog": 0,
-    "goalieGp": 0,
-    "ga": 0,
-    "toi": 0,
-    "gaa": null,
-    "shotsAgainst": 0,
-    "saves": 0,
-    "dressed": 0
-   },
-   "regular": {
-    "seasons": [
-     {
-      "season": "2025-26",
-      "numbers": [],
-      "positions": [
-       "RF",
-       "LF",
-       "C"
-      ],
-      "number": 98,
-      "position": "LF",
-      "gp": 8,
-      "g": 4,
-      "a": 4,
-      "p": 8,
-      "pim": 0,
-      "ppg": 0,
-      "shg": 0,
-      "gwg": 0,
-      "plusMinus": 0,
-      "sog": 0,
-      "goalieGp": 0,
-      "ga": 0,
-      "toi": 0,
-      "gaa": null,
-      "shotsAgainst": 0,
-      "saves": 0,
-      "dressed": 0
-     }
-    ],
-    "career": {
-     "gp": 8,
-     "g": 4,
-     "a": 4,
-     "p": 8,
-     "pim": 0,
-     "ppg": 0,
-     "shg": 0,
-     "gwg": 0,
-     "plusMinus": 0,
-     "sog": 0,
-     "goalieGp": 0,
-     "ga": 0,
-     "toi": 0,
-     "gaa": null,
-     "shotsAgainst": 0,
-     "saves": 0,
-     "dressed": 0
-    }
-   },
-   "playoffs": {
-    "seasons": [
-     {
-      "season": "2025-26",
-      "numbers": [],
-      "positions": [
-       "LF"
-      ],
-      "number": 98,
-      "position": "LF",
-      "gp": 5,
-      "g": 3,
-      "a": 3,
-      "p": 6,
-      "pim": 0,
-      "ppg": 0,
-      "shg": 0,
-      "gwg": 0,
-      "plusMinus": 0,
-      "sog": 0,
-      "goalieGp": 0,
-      "ga": 0,
-      "toi": 0,
-      "gaa": null,
-      "shotsAgainst": 0,
-      "saves": 0,
-      "dressed": 0
-     }
-    ],
-    "career": {
-     "gp": 5,
-     "g": 3,
-     "a": 3,
-     "p": 6,
-     "pim": 0,
-     "ppg": 0,
-     "shg": 0,
-     "gwg": 0,
-     "plusMinus": 0,
-     "sog": 0,
-     "goalieGp": 0,
-     "ga": 0,
-     "toi": 0,
-     "gaa": null,
-     "shotsAgainst": 0,
-     "saves": 0,
-     "dressed": 0
-    }
-   },
-   "games": [
-    {
-     "gameId": "ce189cac-7c72-4ac0-a1bd-8db312b3a553",
-     "season": "2025-26",
-     "date": "2026-03-29",
-     "opponent": {
-      "id": 35329,
-      "short": "UNO",
-      "name": "Vienna International Hockey Club",
-      "logo": "logos/35329.png"
-     },
-     "home": true,
-     "number": 98,
-     "playoff": true,
-     "result": "L",
-     "score": "3:5",
-     "position": "LF",
-     "g": 0,
-     "a": 0,
-     "pim": 0,
-     "goalie": null
-    },
-    {
-     "gameId": "c84e8017-2b16-4e0f-ab41-2ac228a8df96",
-     "season": "2025-26",
-     "date": "2026-03-27",
-     "opponent": {
-      "id": 35329,
-      "short": "UNO",
-      "name": "Vienna International Hockey Club",
-      "logo": "logos/35329.png"
-     },
-     "home": false,
-     "number": 98,
-     "playoff": true,
-     "result": "L",
-     "score": "5:8",
-     "position": "LF",
-     "g": 0,
-     "a": 0,
-     "pim": 0,
-     "goalie": null
-    },
-    {
-     "gameId": "4e9fae1f-90d0-448a-b610-de2dd90c89a9",
-     "season": "2025-26",
-     "date": "2026-03-22",
-     "opponent": {
-      "id": 41346,
-      "short": "EVE",
-      "name": "EHV Vienna Eagles",
-      "logo": "logos/41346.png"
-     },
-     "home": false,
-     "number": 98,
-     "playoff": true,
-     "result": "W",
-     "score": "3:2",
-     "position": "LF",
-     "g": 1,
-     "a": 1,
-     "pim": 0,
-     "goalie": null
-    },
-    {
-     "gameId": "429b8ec7-47eb-4ff2-9e0c-d4f392df5992",
-     "season": "2025-26",
-     "date": "2026-03-15",
-     "opponent": {
-      "id": 41346,
-      "short": "EVE",
-      "name": "EHV Vienna Eagles",
-      "logo": "logos/41346.png"
-     },
-     "home": true,
-     "number": 98,
-     "playoff": true,
-     "result": "T",
-     "score": "5:5",
-     "position": "LF",
-     "g": 1,
-     "a": 1,
-     "pim": 0,
-     "goalie": null
-    },
-    {
-     "gameId": "ca0a8b19-7300-425c-97a1-f27695a593b4",
-     "season": "2025-26",
-     "date": "2026-03-08",
-     "opponent": {
-      "id": 35319,
-      "short": "DUK",
-      "name": "EHC Vienna Ducks",
-      "logo": "logos/35319.png"
-     },
-     "home": true,
-     "number": 98,
-     "playoff": true,
-     "result": "W",
-     "score": "6:4",
-     "position": "LF",
-     "g": 1,
-     "a": 1,
-     "pim": 0,
-     "goalie": null
-    },
-    {
-     "gameId": "0a1366d2-2040-4867-88ed-619377b2c56e",
-     "season": "2025-26",
-     "date": "2026-02-28",
-     "opponent": {
-      "id": 35319,
-      "short": "DUK",
-      "name": "EHC Vienna Ducks",
-      "logo": "logos/35319.png"
-     },
-     "home": true,
-     "number": 98,
-     "playoff": false,
-     "result": "W",
-     "score": "4:3",
-     "position": "LF",
-     "g": 1,
-     "a": 1,
-     "pim": 0,
-     "goalie": null
-    },
-    {
-     "gameId": "82b591f0-c971-46e5-b37c-82eadaab3c8a",
-     "season": "2025-26",
-     "date": "2026-02-21",
-     "opponent": {
-      "id": 35329,
-      "short": "UNO",
-      "name": "Vienna International Hockey Club",
-      "logo": "logos/35329.png"
-     },
-     "home": false,
-     "number": 98,
-     "playoff": false,
-     "result": "L",
-     "score": "3:9",
-     "position": "RF",
-     "g": 0,
-     "a": 1,
-     "pim": 0,
-     "goalie": null
-    },
-    {
-     "gameId": "911af5ed-2b78-41ba-b01f-8c3e3d3e0cda",
-     "season": "2025-26",
-     "date": "2026-01-25",
-     "opponent": {
-      "id": 35338,
-      "short": "WSC2",
-      "name": "Wiener Sport-Club 2",
-      "logo": "logos/35338.png"
-     },
-     "home": false,
-     "number": 98,
-     "playoff": false,
-     "result": "W",
-     "score": "6:3",
-     "position": "RF",
-     "g": 1,
-     "a": 0,
-     "pim": 0,
-     "goalie": null
-    },
-    {
-     "gameId": "e38f42a8-84e5-4c3a-90ea-d39cc6051729",
-     "season": "2025-26",
-     "date": "2026-01-17",
-     "opponent": {
-      "id": 35333,
-      "short": "RAN",
-      "name": "EHC Vienna Rangers",
-      "logo": "logos/35333.png"
-     },
-     "home": true,
-     "number": 98,
-     "playoff": false,
-     "result": "W",
-     "score": "9:1",
-     "position": "LF",
-     "g": 1,
-     "a": 2,
-     "pim": 0,
-     "goalie": null
-    },
-    {
-     "gameId": "06d90f85-c82a-4ef6-8b9a-47413cf779b0",
-     "season": "2025-26",
-     "date": "2026-01-10",
-     "opponent": {
-      "id": 65662,
-      "short": "DRA",
-      "name": "EHC Donaufeld Dragons",
-      "logo": "logos/65662.png"
-     },
-     "home": true,
-     "number": 98,
-     "playoff": false,
-     "result": "W",
-     "score": "13:1",
-     "position": "RF",
-     "g": 0,
-     "a": 0,
-     "pim": 0,
-     "goalie": null
-    },
-    {
-     "gameId": "f701fcb8-059a-4df0-8e24-e7b783ac1502",
-     "season": "2025-26",
-     "date": "2025-12-20",
-     "opponent": {
-      "id": 41233,
-      "short": "TFL2",
-      "name": "Teifl 2",
-      "logo": "logos/41233.png"
-     },
-     "home": false,
-     "number": 98,
-     "playoff": false,
-     "result": "W",
-     "score": "5:0",
-     "position": "C",
-     "g": 0,
-     "a": 0,
-     "pim": 0,
-     "goalie": null
-    },
-    {
-     "gameId": "3d5dd523-256a-47ac-a2f0-85d2422817fb",
-     "season": "2025-26",
-     "date": "2025-12-03",
-     "opponent": {
-      "id": 35328,
-      "short": "TST",
-      "name": "HC Transistor Josifgrad",
-      "logo": "logos/35328.png"
-     },
-     "home": false,
-     "number": 63,
-     "playoff": false,
-     "result": "W",
-     "score": "11:3",
-     "position": "LF",
-     "g": 1,
-     "a": 0,
-     "pim": 0,
-     "goalie": null
-    },
-    {
-     "gameId": "6103077c-6b80-424b-ae91-3f7d47149506",
-     "season": "2025-26",
-     "date": "2025-11-22",
-     "opponent": {
-      "id": 35338,
-      "short": "WSC2",
-      "name": "Wiener Sport-Club 2",
-      "logo": "logos/35338.png"
-     },
-     "home": true,
-     "number": 63,
-     "playoff": false,
-     "result": "L",
-     "score": "2:3",
-     "position": "RF",
-     "g": 0,
-     "a": 0,
-     "pim": 0,
-     "goalie": null
-    }
-   ],
-   "goals": [
-    {
-     "gameId": "4e9fae1f-90d0-448a-b610-de2dd90c89a9",
-     "season": "2025-26",
-     "date": "2026-03-22",
-     "opponent": {
-      "id": 41346,
-      "short": "EVE",
-      "name": "EHV Vienna Eagles",
-      "logo": "logos/41346.png"
-     },
-     "period": "1",
-     "timeLabel": "04:14",
-     "situation": "EQ",
-     "assists": [
-      {
-       "id": 95016,
-       "first": "Daniel",
-       "last": "Moser",
-       "number": 65
-      },
-      {
-       "id": 4043,
-       "first": "Markus",
-       "last": "Suppanz",
-       "number": 8
-      }
-     ],
-     "gwg": false,
-     "playoff": true
-    },
-    {
-     "gameId": "429b8ec7-47eb-4ff2-9e0c-d4f392df5992",
-     "season": "2025-26",
-     "date": "2026-03-15",
-     "opponent": {
-      "id": 41346,
-      "short": "EVE",
-      "name": "EHV Vienna Eagles",
-      "logo": "logos/41346.png"
-     },
-     "period": "2",
-     "timeLabel": "31:43",
-     "situation": "EQ",
-     "assists": [
-      {
-       "id": 12780,
-       "first": "Marco",
-       "last": "Bonholzer",
-       "number": 24
-      },
-      {
-       "id": 9295,
-       "first": "Edwin",
-       "last": "Frühwirth",
-       "number": 17
-      }
-     ],
-     "gwg": false,
-     "playoff": true
-    },
-    {
-     "gameId": "ca0a8b19-7300-425c-97a1-f27695a593b4",
-     "season": "2025-26",
-     "date": "2026-03-08",
-     "opponent": {
-      "id": 35319,
-      "short": "DUK",
-      "name": "EHC Vienna Ducks",
-      "logo": "logos/35319.png"
-     },
-     "period": "2",
-     "timeLabel": "23:53",
-     "situation": "EQ",
-     "assists": [
-      {
-       "id": 127949,
-       "first": "Pyry Verneri",
-       "last": "Naukkarinen",
-       "number": 95
-      }
-     ],
-     "gwg": false,
-     "playoff": true
-    },
-    {
-     "gameId": "0a1366d2-2040-4867-88ed-619377b2c56e",
-     "season": "2025-26",
-     "date": "2026-02-28",
-     "opponent": {
-      "id": 35319,
-      "short": "DUK",
-      "name": "EHC Vienna Ducks",
-      "logo": "logos/35319.png"
-     },
-     "period": "1",
-     "timeLabel": "12:31",
-     "situation": "EQ",
-     "assists": [
-      {
-       "id": 9305,
-       "first": "Thomas",
-       "last": "Preisinger",
-       "number": 87
-      }
-     ],
-     "gwg": false,
-     "playoff": false
-    },
-    {
-     "gameId": "911af5ed-2b78-41ba-b01f-8c3e3d3e0cda",
-     "season": "2025-26",
-     "date": "2026-01-25",
-     "opponent": {
-      "id": 35338,
-      "short": "WSC2",
-      "name": "Wiener Sport-Club 2",
-      "logo": "logos/35338.png"
-     },
-     "period": "3",
-     "timeLabel": "58:45",
-     "situation": "EQ",
-     "assists": [],
-     "gwg": false,
-     "playoff": false
-    },
-    {
-     "gameId": "e38f42a8-84e5-4c3a-90ea-d39cc6051729",
-     "season": "2025-26",
-     "date": "2026-01-17",
-     "opponent": {
-      "id": 35333,
-      "short": "RAN",
-      "name": "EHC Vienna Rangers",
-      "logo": "logos/35333.png"
-     },
-     "period": "3",
-     "timeLabel": "65:18",
-     "situation": "EQ",
-     "assists": [
-      {
-       "id": 17713,
-       "first": "Helmut",
-       "last": "Schaschl",
-       "number": 9
-      },
-      {
-       "id": 127949,
-       "first": "Pyry Verneri",
-       "last": "Naukkarinen",
-       "number": 95
-      }
-     ],
-     "gwg": false,
-     "playoff": false
-    },
-    {
-     "gameId": "3d5dd523-256a-47ac-a2f0-85d2422817fb",
-     "season": "2025-26",
-     "date": "2025-12-03",
-     "opponent": {
-      "id": 35328,
-      "short": "TST",
-      "name": "HC Transistor Josifgrad",
-      "logo": "logos/35328.png"
-     },
-     "period": "2",
-     "timeLabel": "33:19",
-     "situation": "EQ",
-     "assists": [
-      {
-       "id": 111830,
-       "first": "Benjamin",
-       "last": "Pfeifer",
-       "number": 11
-      },
-      {
-       "id": 9296,
-       "first": "Andreas",
-       "last": "Isep",
-       "number": 27
-      }
-     ],
-     "gwg": false,
-     "playoff": false
-    }
-   ],
-   "isGoalie": false
-  },
-  {
    "id": 147829,
    "slug": "147829-andrei-moskalenko",
    "first": "Andrei",
@@ -47946,6 +47314,638 @@
        "first": "Pyry Verneri",
        "last": "Naukkarinen",
        "number": 95
+      }
+     ],
+     "gwg": false,
+     "playoff": false
+    }
+   ],
+   "isGoalie": false
+  },
+  {
+   "id": 115795,
+   "slug": "115795-aleksei-moskalenko-jr",
+   "first": "Aleksei",
+   "last": "Moskalenko Jr.",
+   "numbers": [
+    63,
+    98
+   ],
+   "positions": [
+    "RF",
+    "LF",
+    "C"
+   ],
+   "currentNumber": 98,
+   "currentPosition": "LF",
+   "seasons": [
+    {
+     "season": "2025-26",
+     "numbers": [
+      63,
+      98
+     ],
+     "positions": [
+      "RF",
+      "LF",
+      "C"
+     ],
+     "number": 98,
+     "position": "LF",
+     "gp": 13,
+     "g": 7,
+     "a": 7,
+     "p": 14,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0,
+     "goalieGp": 0,
+     "ga": 0,
+     "toi": 0,
+     "gaa": null,
+     "shotsAgainst": 0,
+     "saves": 0,
+     "dressed": 0
+    }
+   ],
+   "career": {
+    "gp": 13,
+    "g": 7,
+    "a": 7,
+    "p": 14,
+    "pim": 0,
+    "ppg": 0,
+    "shg": 0,
+    "gwg": 0,
+    "plusMinus": 0,
+    "sog": 0,
+    "goalieGp": 0,
+    "ga": 0,
+    "toi": 0,
+    "gaa": null,
+    "shotsAgainst": 0,
+    "saves": 0,
+    "dressed": 0
+   },
+   "regular": {
+    "seasons": [
+     {
+      "season": "2025-26",
+      "numbers": [],
+      "positions": [
+       "RF",
+       "LF",
+       "C"
+      ],
+      "number": 98,
+      "position": "LF",
+      "gp": 8,
+      "g": 4,
+      "a": 4,
+      "p": 8,
+      "pim": 0,
+      "ppg": 0,
+      "shg": 0,
+      "gwg": 0,
+      "plusMinus": 0,
+      "sog": 0,
+      "goalieGp": 0,
+      "ga": 0,
+      "toi": 0,
+      "gaa": null,
+      "shotsAgainst": 0,
+      "saves": 0,
+      "dressed": 0
+     }
+    ],
+    "career": {
+     "gp": 8,
+     "g": 4,
+     "a": 4,
+     "p": 8,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0,
+     "goalieGp": 0,
+     "ga": 0,
+     "toi": 0,
+     "gaa": null,
+     "shotsAgainst": 0,
+     "saves": 0,
+     "dressed": 0
+    }
+   },
+   "playoffs": {
+    "seasons": [
+     {
+      "season": "2025-26",
+      "numbers": [],
+      "positions": [
+       "LF"
+      ],
+      "number": 98,
+      "position": "LF",
+      "gp": 5,
+      "g": 3,
+      "a": 3,
+      "p": 6,
+      "pim": 0,
+      "ppg": 0,
+      "shg": 0,
+      "gwg": 0,
+      "plusMinus": 0,
+      "sog": 0,
+      "goalieGp": 0,
+      "ga": 0,
+      "toi": 0,
+      "gaa": null,
+      "shotsAgainst": 0,
+      "saves": 0,
+      "dressed": 0
+     }
+    ],
+    "career": {
+     "gp": 5,
+     "g": 3,
+     "a": 3,
+     "p": 6,
+     "pim": 0,
+     "ppg": 0,
+     "shg": 0,
+     "gwg": 0,
+     "plusMinus": 0,
+     "sog": 0,
+     "goalieGp": 0,
+     "ga": 0,
+     "toi": 0,
+     "gaa": null,
+     "shotsAgainst": 0,
+     "saves": 0,
+     "dressed": 0
+    }
+   },
+   "games": [
+    {
+     "gameId": "ce189cac-7c72-4ac0-a1bd-8db312b3a553",
+     "season": "2025-26",
+     "date": "2026-03-29",
+     "opponent": {
+      "id": 35329,
+      "short": "UNO",
+      "name": "Vienna International Hockey Club",
+      "logo": "logos/35329.png"
+     },
+     "home": true,
+     "number": 98,
+     "playoff": true,
+     "result": "L",
+     "score": "3:5",
+     "position": "LF",
+     "g": 0,
+     "a": 0,
+     "pim": 0,
+     "goalie": null
+    },
+    {
+     "gameId": "c84e8017-2b16-4e0f-ab41-2ac228a8df96",
+     "season": "2025-26",
+     "date": "2026-03-27",
+     "opponent": {
+      "id": 35329,
+      "short": "UNO",
+      "name": "Vienna International Hockey Club",
+      "logo": "logos/35329.png"
+     },
+     "home": false,
+     "number": 98,
+     "playoff": true,
+     "result": "L",
+     "score": "5:8",
+     "position": "LF",
+     "g": 0,
+     "a": 0,
+     "pim": 0,
+     "goalie": null
+    },
+    {
+     "gameId": "4e9fae1f-90d0-448a-b610-de2dd90c89a9",
+     "season": "2025-26",
+     "date": "2026-03-22",
+     "opponent": {
+      "id": 41346,
+      "short": "EVE",
+      "name": "EHV Vienna Eagles",
+      "logo": "logos/41346.png"
+     },
+     "home": false,
+     "number": 98,
+     "playoff": true,
+     "result": "W",
+     "score": "3:2",
+     "position": "LF",
+     "g": 1,
+     "a": 1,
+     "pim": 0,
+     "goalie": null
+    },
+    {
+     "gameId": "429b8ec7-47eb-4ff2-9e0c-d4f392df5992",
+     "season": "2025-26",
+     "date": "2026-03-15",
+     "opponent": {
+      "id": 41346,
+      "short": "EVE",
+      "name": "EHV Vienna Eagles",
+      "logo": "logos/41346.png"
+     },
+     "home": true,
+     "number": 98,
+     "playoff": true,
+     "result": "T",
+     "score": "5:5",
+     "position": "LF",
+     "g": 1,
+     "a": 1,
+     "pim": 0,
+     "goalie": null
+    },
+    {
+     "gameId": "ca0a8b19-7300-425c-97a1-f27695a593b4",
+     "season": "2025-26",
+     "date": "2026-03-08",
+     "opponent": {
+      "id": 35319,
+      "short": "DUK",
+      "name": "EHC Vienna Ducks",
+      "logo": "logos/35319.png"
+     },
+     "home": true,
+     "number": 98,
+     "playoff": true,
+     "result": "W",
+     "score": "6:4",
+     "position": "LF",
+     "g": 1,
+     "a": 1,
+     "pim": 0,
+     "goalie": null
+    },
+    {
+     "gameId": "0a1366d2-2040-4867-88ed-619377b2c56e",
+     "season": "2025-26",
+     "date": "2026-02-28",
+     "opponent": {
+      "id": 35319,
+      "short": "DUK",
+      "name": "EHC Vienna Ducks",
+      "logo": "logos/35319.png"
+     },
+     "home": true,
+     "number": 98,
+     "playoff": false,
+     "result": "W",
+     "score": "4:3",
+     "position": "LF",
+     "g": 1,
+     "a": 1,
+     "pim": 0,
+     "goalie": null
+    },
+    {
+     "gameId": "82b591f0-c971-46e5-b37c-82eadaab3c8a",
+     "season": "2025-26",
+     "date": "2026-02-21",
+     "opponent": {
+      "id": 35329,
+      "short": "UNO",
+      "name": "Vienna International Hockey Club",
+      "logo": "logos/35329.png"
+     },
+     "home": false,
+     "number": 98,
+     "playoff": false,
+     "result": "L",
+     "score": "3:9",
+     "position": "RF",
+     "g": 0,
+     "a": 1,
+     "pim": 0,
+     "goalie": null
+    },
+    {
+     "gameId": "911af5ed-2b78-41ba-b01f-8c3e3d3e0cda",
+     "season": "2025-26",
+     "date": "2026-01-25",
+     "opponent": {
+      "id": 35338,
+      "short": "WSC2",
+      "name": "Wiener Sport-Club 2",
+      "logo": "logos/35338.png"
+     },
+     "home": false,
+     "number": 98,
+     "playoff": false,
+     "result": "W",
+     "score": "6:3",
+     "position": "RF",
+     "g": 1,
+     "a": 0,
+     "pim": 0,
+     "goalie": null
+    },
+    {
+     "gameId": "e38f42a8-84e5-4c3a-90ea-d39cc6051729",
+     "season": "2025-26",
+     "date": "2026-01-17",
+     "opponent": {
+      "id": 35333,
+      "short": "RAN",
+      "name": "EHC Vienna Rangers",
+      "logo": "logos/35333.png"
+     },
+     "home": true,
+     "number": 98,
+     "playoff": false,
+     "result": "W",
+     "score": "9:1",
+     "position": "LF",
+     "g": 1,
+     "a": 2,
+     "pim": 0,
+     "goalie": null
+    },
+    {
+     "gameId": "06d90f85-c82a-4ef6-8b9a-47413cf779b0",
+     "season": "2025-26",
+     "date": "2026-01-10",
+     "opponent": {
+      "id": 65662,
+      "short": "DRA",
+      "name": "EHC Donaufeld Dragons",
+      "logo": "logos/65662.png"
+     },
+     "home": true,
+     "number": 98,
+     "playoff": false,
+     "result": "W",
+     "score": "13:1",
+     "position": "RF",
+     "g": 0,
+     "a": 0,
+     "pim": 0,
+     "goalie": null
+    },
+    {
+     "gameId": "f701fcb8-059a-4df0-8e24-e7b783ac1502",
+     "season": "2025-26",
+     "date": "2025-12-20",
+     "opponent": {
+      "id": 41233,
+      "short": "TFL2",
+      "name": "Teifl 2",
+      "logo": "logos/41233.png"
+     },
+     "home": false,
+     "number": 98,
+     "playoff": false,
+     "result": "W",
+     "score": "5:0",
+     "position": "C",
+     "g": 0,
+     "a": 0,
+     "pim": 0,
+     "goalie": null
+    },
+    {
+     "gameId": "3d5dd523-256a-47ac-a2f0-85d2422817fb",
+     "season": "2025-26",
+     "date": "2025-12-03",
+     "opponent": {
+      "id": 35328,
+      "short": "TST",
+      "name": "HC Transistor Josifgrad",
+      "logo": "logos/35328.png"
+     },
+     "home": false,
+     "number": 63,
+     "playoff": false,
+     "result": "W",
+     "score": "11:3",
+     "position": "LF",
+     "g": 1,
+     "a": 0,
+     "pim": 0,
+     "goalie": null
+    },
+    {
+     "gameId": "6103077c-6b80-424b-ae91-3f7d47149506",
+     "season": "2025-26",
+     "date": "2025-11-22",
+     "opponent": {
+      "id": 35338,
+      "short": "WSC2",
+      "name": "Wiener Sport-Club 2",
+      "logo": "logos/35338.png"
+     },
+     "home": true,
+     "number": 63,
+     "playoff": false,
+     "result": "L",
+     "score": "2:3",
+     "position": "RF",
+     "g": 0,
+     "a": 0,
+     "pim": 0,
+     "goalie": null
+    }
+   ],
+   "goals": [
+    {
+     "gameId": "4e9fae1f-90d0-448a-b610-de2dd90c89a9",
+     "season": "2025-26",
+     "date": "2026-03-22",
+     "opponent": {
+      "id": 41346,
+      "short": "EVE",
+      "name": "EHV Vienna Eagles",
+      "logo": "logos/41346.png"
+     },
+     "period": "1",
+     "timeLabel": "04:14",
+     "situation": "EQ",
+     "assists": [
+      {
+       "id": 95016,
+       "first": "Daniel",
+       "last": "Moser",
+       "number": 65
+      },
+      {
+       "id": 4043,
+       "first": "Markus",
+       "last": "Suppanz",
+       "number": 8
+      }
+     ],
+     "gwg": false,
+     "playoff": true
+    },
+    {
+     "gameId": "429b8ec7-47eb-4ff2-9e0c-d4f392df5992",
+     "season": "2025-26",
+     "date": "2026-03-15",
+     "opponent": {
+      "id": 41346,
+      "short": "EVE",
+      "name": "EHV Vienna Eagles",
+      "logo": "logos/41346.png"
+     },
+     "period": "2",
+     "timeLabel": "31:43",
+     "situation": "EQ",
+     "assists": [
+      {
+       "id": 12780,
+       "first": "Marco",
+       "last": "Bonholzer",
+       "number": 24
+      },
+      {
+       "id": 9295,
+       "first": "Edwin",
+       "last": "Frühwirth",
+       "number": 17
+      }
+     ],
+     "gwg": false,
+     "playoff": true
+    },
+    {
+     "gameId": "ca0a8b19-7300-425c-97a1-f27695a593b4",
+     "season": "2025-26",
+     "date": "2026-03-08",
+     "opponent": {
+      "id": 35319,
+      "short": "DUK",
+      "name": "EHC Vienna Ducks",
+      "logo": "logos/35319.png"
+     },
+     "period": "2",
+     "timeLabel": "23:53",
+     "situation": "EQ",
+     "assists": [
+      {
+       "id": 127949,
+       "first": "Pyry Verneri",
+       "last": "Naukkarinen",
+       "number": 95
+      }
+     ],
+     "gwg": false,
+     "playoff": true
+    },
+    {
+     "gameId": "0a1366d2-2040-4867-88ed-619377b2c56e",
+     "season": "2025-26",
+     "date": "2026-02-28",
+     "opponent": {
+      "id": 35319,
+      "short": "DUK",
+      "name": "EHC Vienna Ducks",
+      "logo": "logos/35319.png"
+     },
+     "period": "1",
+     "timeLabel": "12:31",
+     "situation": "EQ",
+     "assists": [
+      {
+       "id": 9305,
+       "first": "Thomas",
+       "last": "Preisinger",
+       "number": 87
+      }
+     ],
+     "gwg": false,
+     "playoff": false
+    },
+    {
+     "gameId": "911af5ed-2b78-41ba-b01f-8c3e3d3e0cda",
+     "season": "2025-26",
+     "date": "2026-01-25",
+     "opponent": {
+      "id": 35338,
+      "short": "WSC2",
+      "name": "Wiener Sport-Club 2",
+      "logo": "logos/35338.png"
+     },
+     "period": "3",
+     "timeLabel": "58:45",
+     "situation": "EQ",
+     "assists": [],
+     "gwg": false,
+     "playoff": false
+    },
+    {
+     "gameId": "e38f42a8-84e5-4c3a-90ea-d39cc6051729",
+     "season": "2025-26",
+     "date": "2026-01-17",
+     "opponent": {
+      "id": 35333,
+      "short": "RAN",
+      "name": "EHC Vienna Rangers",
+      "logo": "logos/35333.png"
+     },
+     "period": "3",
+     "timeLabel": "65:18",
+     "situation": "EQ",
+     "assists": [
+      {
+       "id": 17713,
+       "first": "Helmut",
+       "last": "Schaschl",
+       "number": 9
+      },
+      {
+       "id": 127949,
+       "first": "Pyry Verneri",
+       "last": "Naukkarinen",
+       "number": 95
+      }
+     ],
+     "gwg": false,
+     "playoff": false
+    },
+    {
+     "gameId": "3d5dd523-256a-47ac-a2f0-85d2422817fb",
+     "season": "2025-26",
+     "date": "2025-12-03",
+     "opponent": {
+      "id": 35328,
+      "short": "TST",
+      "name": "HC Transistor Josifgrad",
+      "logo": "logos/35328.png"
+     },
+     "period": "2",
+     "timeLabel": "33:19",
+     "situation": "EQ",
+     "assists": [
+      {
+       "id": 111830,
+       "first": "Benjamin",
+       "last": "Pfeifer",
+       "number": 11
+      },
+      {
+       "id": 9296,
+       "first": "Andreas",
+       "last": "Isep",
+       "number": 27
       }
      ],
      "gwg": false,
@@ -79476,6 +79476,180 @@
   }
  ],
  "records": {
+  "cards": [
+   {
+    "kind": "biggestWin",
+    "value": "17:2",
+    "gameId": "e60421f8-8dd2-490c-960a-156422cd9d52",
+    "season": "2018-19",
+    "date": "2019-02-25",
+    "opponent": {
+     "id": 15343,
+     "short": "SBL",
+     "name": "EHV SunBLOCKERs",
+     "logo": "logos/15343.png"
+    },
+    "score": "17:2"
+   },
+   {
+    "kind": "mostGoals",
+    "value": "17",
+    "gameId": "e60421f8-8dd2-490c-960a-156422cd9d52",
+    "season": "2018-19",
+    "date": "2019-02-25",
+    "opponent": {
+     "id": 15343,
+     "short": "SBL",
+     "name": "EHV SunBLOCKERs",
+     "logo": "logos/15343.png"
+    },
+    "score": "17:2"
+   },
+   {
+    "kind": "bestSeason",
+    "value": "2019/20",
+    "season": "2019-20",
+    "n": 2,
+    "text": "14|8|Grunddurchgang"
+   },
+   {
+    "kind": "winStreak",
+    "value": "7",
+    "from": "2021-11-15",
+    "to": "2022-12-08"
+   },
+   {
+    "kind": "unbeatenStreak",
+    "value": "11",
+    "from": "2020-01-27",
+    "to": "2022-12-08"
+   },
+   {
+    "kind": "shutouts",
+    "value": "9",
+    "gameId": "7231b6e1-7ae3-4c06-8ec9-280b9fc69f2c",
+    "season": "2023-24",
+    "date": "2024-01-28",
+    "opponent": {
+     "id": 35332,
+     "short": "CSH",
+     "name": "EC Carinthian Seahawks",
+     "logo": "logos/35332.png"
+    },
+    "score": "4:0"
+   },
+   {
+    "kind": "playoffWin",
+    "value": "9:2",
+    "gameId": "021d1983-6a76-482a-8e7f-3468eb333965",
+    "season": "2024-25",
+    "date": "2025-03-15",
+    "opponent": {
+     "id": 35329,
+     "short": "UNO",
+     "name": "Vienna International Hockey Club",
+     "logo": "logos/35329.png"
+    },
+    "score": "9:2"
+   },
+   {
+    "kind": "playoffSeries",
+    "value": "9"
+   },
+   {
+    "kind": "periodGoals",
+    "value": "8",
+    "n": 1,
+    "gameId": "06d90f85-c82a-4ef6-8b9a-47413cf779b0",
+    "season": "2025-26",
+    "date": "2026-01-10",
+    "opponent": {
+     "id": 65662,
+     "short": "DRA",
+     "name": "EHC Donaufeld Dragons",
+     "logo": "logos/65662.png"
+    },
+    "score": "13:1"
+   },
+   {
+    "kind": "comeback",
+    "value": "3",
+    "gameId": "aa6f4b16-cbb0-499b-98ec-fae910e5202a",
+    "season": "2024-25",
+    "date": "2025-04-06",
+    "opponent": {
+     "id": 41233,
+     "short": "TFL2",
+     "name": "Teifl 2",
+     "logo": "logos/41233.png"
+    },
+    "score": "8:6"
+   },
+   {
+    "kind": "fastestGoal",
+    "value": "0:04",
+    "gameId": "5c773628-636e-4dc0-b95e-a7f78bc9773d",
+    "season": "2016-17",
+    "date": "2016-12-12",
+    "opponent": {
+     "id": 1088,
+     "short": "TOK 3",
+     "name": "Vienna University Totonka 3",
+     "logo": "logos/1088.png"
+    },
+    "score": "6:2",
+    "player": {
+     "id": 31622,
+     "first": "Lucas",
+     "last": "Crow",
+     "number": 13,
+     "slug": "31622-lucas-crow"
+    }
+   },
+   {
+    "kind": "playerGoalsGame",
+    "value": "5",
+    "gameId": "e60421f8-8dd2-490c-960a-156422cd9d52",
+    "season": "2018-19",
+    "date": "2019-02-25",
+    "opponent": {
+     "id": 15343,
+     "short": "SBL",
+     "name": "EHV SunBLOCKERs",
+     "logo": "logos/15343.png"
+    },
+    "score": "17:2",
+    "player": {
+     "id": 80297,
+     "first": "Steven",
+     "last": "Brenneis",
+     "number": 87,
+     "slug": "80297-steven-brenneis"
+    }
+   },
+   {
+    "kind": "playerPointsGame",
+    "value": "9",
+    "n": 4,
+    "gameId": "3ef15534-47c0-42d7-a517-ca41be473009",
+    "season": "2019-20",
+    "date": "2019-11-02",
+    "opponent": {
+     "id": 23114,
+     "short": "WSC2",
+     "name": "Wiener Sport-Club 2",
+     "logo": "logos/23114.png"
+    },
+    "score": "15:3",
+    "player": {
+     "id": 10342,
+     "first": "Christoph",
+     "last": "Mayer",
+     "number": 75,
+     "slug": "10342-christoph-mayer"
+    }
+   }
+  ],
   "biggestWin": {
    "gameId": "e60421f8-8dd2-490c-960a-156422cd9d52",
    "season": "2018-19",

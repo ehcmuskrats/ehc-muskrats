@@ -1,0 +1,195 @@
+---
+// Rotating team records (all-time stats page): a random 3 per visit plus a shuffle button.
+// Every card comes from data/derived.json (records.cards), computed from league data only.
+// No-JS fallback: the first 3 (biggest win, most goals, best season).
+import Team from './Team.astro';
+import { type Lang, href, formatDate } from '../i18n/index.ts';
+import { abbr } from '../i18n/abbr.ts';
+import { ourSeasons } from '../lib/data.ts';
+import type { TeamRecordCard } from '../types/models.ts';
+
+interface Props {
+  lang: Lang;
+  cards: TeamRecordCard[];
+}
+const { lang, cards } = Astro.props;
+const de = lang === 'de';
+const SHOW = 3;
+const firstSeason = ourSeasons.at(-1)?.info.label ?? '';
+const ord = (n: number) => (de ? `${n}.` : n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : `${n}th`);
+const range = (c: TeamRecordCard) =>
+  c.from && c.to ? `${formatDate(lang, c.from)} – ${formatDate(lang, c.to)}` : '';
+const name = (c: TeamRecordCard) => (c.player ? `${c.player.first} ${c.player.last}` : '');
+
+const LABEL: Record<TeamRecordCard['kind'], [string, string]> = {
+  biggestWin: ['Höchster Sieg', 'Biggest win'],
+  mostGoals: ['Meiste Tore in einem Spiel', 'Most goals in a game'],
+  bestSeason: ['Beste Saison (Punkte pro Spiel)', 'Best season (points per game)'],
+  winStreak: ['Längste Siegesserie', 'Longest winning streak'],
+  unbeatenStreak: ['Längste Serie ohne Niederlage', 'Longest unbeaten run'],
+  highestScoring: ['Torreichstes Spiel', 'Highest-scoring game'],
+  shutouts: ['Shutouts', 'Shutouts'],
+  playoffWin: ['Höchster Playoff-Sieg', 'Biggest playoff win'],
+  playoffSeries: ['Gewonnene Playoff-Serien', 'Playoff series won'],
+  periodGoals: ['Meiste Tore in einem Drittel', 'Most goals in one period'],
+  comeback: ['Größtes Comeback', 'Biggest comeback'],
+  fastestGoal: ['Schnellstes Tor', 'Fastest goal'],
+  playerGoalsGame: ['Meiste Tore eines Spielers in einem Spiel', 'Most goals by a player in one game'],
+  playerPointsGame: ['Meiste Punkte eines Spielers in einem Spiel', 'Most points by a player in one game'],
+};
+
+/** Line under the big number: what it means. */
+function lead(c: TeamRecordCard): string {
+  switch (c.kind) {
+    case 'winStreak':
+      return de ? 'Siege in Folge' : 'straight wins';
+    case 'unbeatenStreak':
+      return de ? 'Spiele in Folge ohne Niederlage' : 'games in a row without a loss';
+    case 'highestScoring':
+      return de ? `Tore · ${c.score}` : `goals · ${c.score}`;
+    case 'shutouts':
+      return de ? 'Spiele ohne Gegentor · zuletzt' : 'games without conceding · last';
+    case 'playoffSeries':
+      return de ? `seit ${firstSeason}` : `since ${firstSeason}`;
+    case 'periodGoals':
+      return de ? `Tore im ${ord(c.n ?? 1)} Drittel · ${c.score}` : `goals in the ${ord(c.n ?? 1)} period · ${c.score}`;
+    case 'comeback':
+      return de ? `Tore Rückstand gedreht · ${c.score}` : `goal deficit overturned · ${c.score}`;
+    case 'fastestGoal':
+      return de ? `nach Spielbeginn · ${name(c)}` : `into the game · ${name(c)}`;
+    case 'playerGoalsGame':
+      return de ? `Tore · ${name(c)}` : `goals · ${name(c)}`;
+    case 'playerPointsGame': {
+      const g = c.n ?? 0;
+      const a = Number(c.value) - g;
+      return `${name(c)} · ${g} ${abbr(lang, 'g').short}, ${a} ${abbr(lang, 'a').short}`;
+    }
+    case 'mostGoals':
+      return c.score ?? '';
+    default:
+      return '';
+  }
+}
+
+const link = (c: TeamRecordCard) =>
+  c.gameId ? href(lang, `games/${c.gameId}/`) : c.kind === 'bestSeason' && c.season ? href(lang, `standings/${c.season}/`) : null;
+---
+
+{
+  cards.length > 0 && (
+    <div class="recs" data-records>
+      <div class="grid grid-3" data-rec-list>
+        {cards.map((c, i) => {
+          const Tag = link(c) ? 'a' : 'div';
+          const l = lead(c);
+          const [pts, gp, div] = (c.text ?? '').split('|');
+          return (
+            <Tag class:list={['panel', 'record', { on: i < SHOW }]} href={link(c) ?? undefined} data-rec>
+              <p class="eyebrow">{LABEL[c.kind][de ? 0 : 1]}</p>
+              <span class="rv tnum">{c.value}</span>
+              {c.kind === 'bestSeason' ? (
+                <>
+                  <span class="rd tnum">
+                    {pts} {abbr(lang, 'pts').short} / {gp} {abbr(lang, 'gp').short} · #{c.n}
+                  </span>
+                  <span class="small dim">{div}</span>
+                </>
+              ) : (
+                <>
+                  {(l || c.opponent) && (
+                    <span class="rd">
+                      {l && <span>{l}</span>}
+                      {c.opponent && (
+                        <span class="vs">
+                          vs <Team team={c.opponent} />
+                        </span>
+                      )}
+                    </span>
+                  )}
+                  {(c.from || c.date) && <span class="small dim">{c.from ? range(c) : formatDate(lang, c.date)}</span>}
+                </>
+              )}
+            </Tag>
+          );
+        })}
+      </div>
+      {cards.length > SHOW && (
+        <button type="button" class="shuffle" data-rec-shuffle hidden>
+          {de ? 'Neue Rekorde' : 'More records'} ↻
+        </button>
+      )}
+    </div>
+  )
+}
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-records]').forEach((root) => {
+    const items = Array.from(root.querySelectorAll<HTMLElement>('[data-rec]'));
+    const btn = root.querySelector<HTMLButtonElement>('[data-rec-shuffle]');
+    if (items.length <= 3) return;
+    let current: HTMLElement[] = [];
+    const shuffle = () => {
+      // Never show the exact same three twice in a row.
+      const pool = items.filter((x) => !current.includes(x));
+      const rest = current;
+      const pick = [...pool].sort(() => Math.random() - 0.5).slice(0, 3);
+      while (pick.length < 3) pick.push(rest[pick.length]);
+      current = pick;
+      // Keep the page order stable so the grid doesn't jump around.
+      items.forEach((el) => el.classList.toggle('on', pick.includes(el)));
+    };
+    shuffle();
+    if (btn) {
+      btn.hidden = false;
+      btn.addEventListener('click', shuffle);
+    }
+  });
+</script>
+
+<style>
+  .record {
+    display: none;
+    flex-direction: column;
+    gap: 0.3rem;
+    color: var(--text);
+  }
+  .record.on {
+    display: flex;
+    animation: rise 0.4s both;
+  }
+  a.record:hover {
+    color: var(--text);
+    box-shadow: var(--glow-blue);
+  }
+  .rv {
+    font: 800 3rem/1 var(--display);
+    color: var(--orange);
+  }
+  .rd {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.6rem;
+    font-weight: 600;
+  }
+  .vs {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .shuffle {
+    margin-top: 0.75rem;
+    min-height: 44px;
+    padding: 0 0.25rem;
+    background: none;
+    border: 0;
+    color: var(--orange);
+    font: 700 0.85rem/1 var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .shuffle:hover {
+    color: var(--text);
+  }
+</style>

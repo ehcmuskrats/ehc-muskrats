@@ -1,5 +1,10 @@
 {
-  "_comment": "merge: { \"<duplicatePlayerId>\": <canonicalPlayerId> } joins two league player ids into one profile. names: { \"<playerId>\": { \"first\": \"...\", \"last\": \"...\" } } fixes a displayed name. Player ids are in the profile URL (/de/players/<id>-name/).",
+  "_comment": "merge: { \"<duplicatePlayerId>\": <canonicalPlayerId> } joins two league player ids into one profile. names: { \"<playerId>\": { \"first\": \"...\", \"last\": \"...\" } } renames a player everywhere on the site (profiles, game reports, stats, leader lists), e.g. 115795 Aleksei Moskalenko -> \"Moskalenko Jr.\" to tell him apart from Andrei Moskalenko. Player ids are in the profile URL (/de/players/<id>-name/).",
   "merge": {},
-  "names": {}
+  "names": {
+    "115795": {
+      "first": "Aleksei",
+      "last": "Moskalenko Jr."
+    }
+  }
 }

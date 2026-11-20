@@ -396,7 +396,46 @@ export interface TeamRecordGame {
   goalsFor: number;
 }
 
+/**
+ * One rotating record card on the all-time page. Every number is computed from league data; nothing is typed in.
+ * kind decides the label and how the detail line reads.
+ */
+export interface TeamRecordCard {
+  kind:
+    | 'biggestWin'
+    | 'mostGoals'
+    | 'bestSeason'
+    | 'winStreak'
+    | 'unbeatenStreak'
+    | 'comeback'
+    | 'periodGoals'
+    | 'highestScoring'
+    | 'shutouts'
+    | 'playoffWin'
+    | 'fastestGoal'
+    | 'playerGoalsGame'
+    | 'playerPointsGame'
+    | 'playoffSeries';
+  /** Big number/label on the card ("5", "8:1", "0:42", "2024/25"). */
+  value: string;
+  /** Link target: a game, or a standings season. */
+  gameId?: string;
+  season?: SeasonId;
+  date?: string | null;
+  /** Range for streaks. */
+  from?: string | null;
+  to?: string | null;
+  opponent?: TeamRef;
+  score?: string;
+  player?: PlayerRef & { slug?: string };
+  /** Extra numbers a card needs (deficit overcome, period number, count of games ...). */
+  n?: number;
+  text?: string;
+}
+
 export interface TeamRecords {
+  /** Pool of record cards; the page shows a random 3 per visit. */
+  cards?: TeamRecordCard[];
   biggestWin: TeamRecordGame | null;
   mostGoals: TeamRecordGame | null;
   bestSeason: { season: SeasonId; divisionName: string; pts: number; gp: number; rank: number } | null;

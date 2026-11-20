@@ -7,7 +7,9 @@ Collected while reviewing the site. Fixed together when the user says "go".
   stats Gesamt / Grunddurchgang / Playoffs switch, playoff table on player profiles, all-time playoff points leaderboard).
 
 ## Round 4 — DONE (24–31). 31 = "Meister 2024/25" banner with sheen above the won final series.
-## Round 6 (next session — not started)
+## Round 6 (done 2026-11-21)
+
+_Done: #35 record pool of 14 in derive.ts (forfeits excluded from score records) + RecordCards.astro; #36 GoalieLeague.astro on goalie profiles (season/round picker, Goalies/Teams views); #37 names override in data/player-aliases.json applied to every player reference in src/lib/data.ts. New profile URL: /players/115795-aleksei-moskalenko-jr/._
 
 35. **Team records rotate like Fun Facts** (Ewige Bestenliste → "Teamrekorde", `src/pages/[lang]/stats/[...season].astro`)
     - Idea: show 3 records at a time, random mix on each visit + "Neue Rekorde ↻" button (same mechanism as the

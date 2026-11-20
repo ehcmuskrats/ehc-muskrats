@@ -18,10 +18,40 @@ const gameFiles = import.meta.glob<Game>('/data/games/*.json', { eager: true, im
 const derivedFile = import.meta.glob<Derived>('/data/derived.json', { eager: true, import: 'default' });
 const highlightsFile = import.meta.glob<HighlightsData>('/data/highlights.json', { eager: true, import: 'default' });
 const statusFile = import.meta.glob<{ lastRun: string; ok: boolean }>('/data/sync-status.json', { eager: true, import: 'default' });
+const aliasesFile = import.meta.glob<{ names?: Record<string, { first?: string; last?: string }> }>('/data/player-aliases.json', {
+  eager: true,
+  import: 'default',
+});
 const extrasFile = import.meta.glob<{ players: Record<string, { photo?: string; bio?: { de?: string; en?: string } }> }>(
   '/data/player-extras.json',
   { eager: true, import: 'default' },
 );
+
+// Display-name overrides (data/player-aliases.json "names") apply to every player reference in every file,
+// so a renamed player reads the same on profiles, game reports, stats tables and leader lists.
+const nameFixes = Object.values(aliasesFile)[0]?.names ?? {};
+function applyNameFixes<T>(root: T): T {
+  if (!Object.keys(nameFixes).length) return root;
+  const seen = new Set<object>();
+  const walk = (o: any) => {
+    if (!o || typeof o !== 'object' || seen.has(o)) return;
+    seen.add(o);
+    if (Array.isArray(o)) return o.forEach(walk);
+    if (typeof o.id === 'number' && typeof o.last === 'string' && 'first' in o) {
+      const fix = nameFixes[String(o.id)];
+      if (fix) {
+        if (fix.first) o.first = fix.first;
+        if (fix.last) o.last = fix.last;
+      }
+    }
+    for (const v of Object.values(o)) walk(v);
+  };
+  walk(root);
+  return root;
+}
+Object.values(seasonFiles).forEach(applyNameFixes);
+Object.values(gameFiles).forEach(applyNameFixes);
+Object.values(derivedFile).forEach(applyNameFixes);
 
 export const seasons: SeasonData[] = Object.values(seasonFiles).sort((a, b) => b.info.id.localeCompare(a.info.id));
 export const games = new Map<string, Game>(Object.values(gameFiles).map((g) => [g.id, g]));

@@ -4,6 +4,7 @@ import Team from '../../../components/Team.astro';
 import SeasonPicker from '../../../components/SeasonPicker.astro';
 import DataCredit from '../../../components/DataCredit.astro';
 import Abbr from '../../../components/Abbr.astro';
+import RecordCards from '../../../components/RecordCards.astro';
 import { type Lang, LANGS, useT, href, formatNumber, formatDate, mmss } from '../../../i18n/index.ts';
 import { abbr, posCode } from '../../../i18n/abbr.ts';
 import { ourSeasons, currentSeasonId, derived, season as getSeason, columns } from '../../../lib/data.ts';
@@ -434,38 +435,7 @@ const tabs = [
           <div class="sec-head">
             <h2 id="h-records">{t('stats.teamRecords')}</h2>
           </div>
-          <div class="grid grid-3">
-            {rec.biggestWin && (
-              <a class="panel record" href={href(lang, `games/${rec.biggestWin.gameId}/`)}>
-                <p class="eyebrow">{t('stats.biggestWin')}</p>
-                <span class="rv tnum">{rec.biggestWin.score}</span>
-                <span class="rd">
-                  vs <Team team={rec.biggestWin.opponent} />
-                </span>
-                <span class="small dim">{formatDate(lang, rec.biggestWin.date)}</span>
-              </a>
-            )}
-            {rec.mostGoals && (
-              <a class="panel record" href={href(lang, `games/${rec.mostGoals.gameId}/`)}>
-                <p class="eyebrow">{t('stats.mostGoals')}</p>
-                <span class="rv tnum">{rec.mostGoals.goalsFor}</span>
-                <span class="rd">
-                  {rec.mostGoals.score} vs <Team team={rec.mostGoals.opponent} />
-                </span>
-                <span class="small dim">{formatDate(lang, rec.mostGoals.date)}</span>
-              </a>
-            )}
-            {rec.bestSeason && (
-              <a class="panel record" href={href(lang, `standings/${rec.bestSeason.season}/`)}>
-                <p class="eyebrow">{t('stats.bestSeason')}</p>
-                <span class="rv tnum">{rec.bestSeason.season.replace('-', '/')}</span>
-                <span class="rd tnum">
-                  {rec.bestSeason.pts} {abbr(lang, 'pts').short} / {rec.bestSeason.gp} {abbr(lang, 'gp').short} · #{rec.bestSeason.rank}
-                </span>
-                <span class="small dim">{rec.bestSeason.divisionName}</span>
-              </a>
-            )}
-          </div>
+          <RecordCards lang={lang} cards={rec.cards ?? []} />
         </section>
 
         <div class="boards">
@@ -602,26 +572,6 @@ const tabs = [
   }
   .note {
     margin-top: 1rem;
-  }
-  .record {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    color: var(--text);
-  }
-  .record:hover {
-    color: var(--text);
-    box-shadow: var(--glow-blue);
-  }
-  .rv {
-    font: 800 3rem/1 var(--display);
-    color: var(--orange);
-  }
-  .rd {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-weight: 600;
   }
   .boards {
     display: grid;

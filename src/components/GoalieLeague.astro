@@ -1,0 +1,374 @@
+---
+// Goalie profile: league comparison ("Ligavergleich"). For each season/round in which the goalie
+// shows up in WEHV's league goalie list: his rank among all league goalies, the full goalie table
+// (ours highlighted) and a per-team view (goals against per game, from the standings).
+// GAA = goals against per game played, the same definition as everywhere else on the site.
+import Team from './Team.astro';
+import Abbr from './Abbr.astro';
+import { type Lang, href, formatNumber } from '../i18n/index.ts';
+import { seasons, derived } from '../lib/data.ts';
+import { TEAM } from '../config/team.ts';
+import type { LeaderGoalie, PlayerProfile, StandingRow, TeamRef } from '../types/models.ts';
+
+interface Props {
+  lang: Lang;
+  p: PlayerProfile;
+}
+const { lang, p } = Astro.props;
+const de = lang === 'de';
+
+const key = (x: { first: string; last: string }) => `${x.first} ${x.last}`.toLowerCase();
+const isMe = (g: LeaderGoalie) => g.teamId === TEAM.leagueTeamId && (g.player.id === p.id || key(g.player) === key(p));
+const profileOf = (g: LeaderGoalie) =>
+  g.teamId === TEAM.leagueTeamId ? derived.players.find((x) => x.id === g.player.id || key(x) === key(g.player)) : undefined;
+const gaa = (ga: number, gp: number) => (gp > 0 ? ga / gp : null);
+
+interface Row {
+  g: LeaderGoalie;
+  team: TeamRef | null;
+  gaa: number | null;
+  qualified: boolean;
+  rank: number | null;
+  me: boolean;
+  slug?: string;
+}
+interface TeamRow {
+  row: StandingRow;
+  gaPer: number;
+  goalies: number;
+  rank: number;
+}
+interface View {
+  id: string; // "2025-26-123"
+  season: string;
+  label: string;
+  minGp: number;
+  rows: Row[];
+  teams: TeamRow[];
+  me: Row;
+  qualifiedCount: number;
+  gpRank: number;
+  soRank: number | null;
+}
+
+const views: View[] = [];
+for (const s of seasons) {
+  const teamsById = new Map<number, TeamRef>();
+  for (const g of s.games) {
+    teamsById.set(g.home.id, g.home);
+    teamsById.set(g.away.id, g.away);
+  }
+  for (const st of s.stats) {
+    const me = st.goalies.find(isMe);
+    if (!me || me.gp === 0) continue;
+    const div = s.info.divisions.find((d) => d.id === st.divisionId);
+    const list = st.goalies.filter((g) => g.gp > 0);
+    // Qualified for the GAA ranking: at least a third of the most games any goalie played (min. 1).
+    const maxGp = Math.max(...list.map((g) => g.gp));
+    const minGp = Math.max(1, Math.ceil(maxGp / 3));
+    const rows: Row[] = list.map((g) => ({
+      g,
+      team: teamsById.get(g.teamId) ?? null,
+      gaa: gaa(g.ga, g.gp),
+      qualified: g.gp >= minGp,
+      rank: null,
+      me: isMe(g),
+      slug: profileOf(g)?.slug,
+    }));
+    rows.sort((a, b) => Number(b.qualified) - Number(a.qualified) || (a.gaa ?? 99) - (b.gaa ?? 99) || b.g.gp - a.g.gp);
+    let r = 0;
+    for (const x of rows) if (x.qualified) x.rank = ++r;
+    const meRow = rows.find((x) => x.me)!;
+    const gpRank = 1 + list.filter((g) => g.gp > me.gp).length;
+    const soRank = me.shutouts > 0 ? 1 + list.filter((g) => g.shutouts > me.shutouts).length : null;
+    const standing = s.standings.find((x) => x.divisionId === st.divisionId);
+    const teams: TeamRow[] = (standing?.rows ?? [])
+      .filter((x) => x.gp > 0)
+      .map((row) => ({ row, gaPer: row.ga / row.gp, goalies: list.filter((g) => g.teamId === row.team.id).length, rank: 0 }))
+      .sort((a, b) => a.gaPer - b.gaPer);
+    teams.forEach((x, i) => (x.rank = i + 1));
+    const phase = div?.kind === 'playoffs' ? 'Playoffs' : (div?.name ?? st.divisionId);
+    views.push({
+      id: `${s.info.id}-${st.divisionId}`,
+      season: s.info.id,
+      label: `${s.info.label} · ${phase}`,
+      minGp,
+      rows,
+      teams,
+      me: meRow,
+      qualifiedCount: r,
+      gpRank,
+      soRank,
+    });
+  }
+}
+// Newest season first (seasons are already newest first); within a season, the regular season first.
+const first = views[0];
+const of = de ? 'von' : 'of';
+---
+
+{
+  views.length > 0 && (
+    <section class="gl" aria-labelledby={`h-gl-${p.id}`} data-gl>
+      <div class="sec-head">
+        <h2 id={`h-gl-${p.id}`}>{de ? 'Ligavergleich' : 'League comparison'}</h2>
+        {views.length > 1 && (
+          <>
+            <label for={`gl-pick-${p.id}`} class="visually-hidden">
+              {de ? 'Saison und Runde' : 'Season and round'}
+            </label>
+            <select id={`gl-pick-${p.id}`} data-gl-pick>
+              {views.map((v) => (
+                <option value={v.id} data-season={v.season}>
+                  {v.label}
+                </option>
+              ))}
+            </select>
+          </>
+        )}
+      </div>
+
+      {views.map((v) => (
+        <div class="gl-view" data-gl-view={v.id} data-season={v.season} hidden={v !== first}>
+          <div class="tiles">
+            <div class="tile">
+              <span class="k">
+                <Abbr lang={lang} k="gaa" />{' '}{de ? 'Rang' : 'rank'}
+              </span>
+              <span class="v tnum">{v.me.rank ? `#${v.me.rank}` : '–'}</span>
+              <span class="s">
+                {v.me.rank
+                  ? `${of} ${v.qualifiedCount} · ${formatNumber(lang, v.me.gaa, 2)}`
+                  : de
+                    ? `ab ${v.minGp} Spielen gewertet`
+                    : `ranked from ${v.minGp} games`}
+              </span>
+            </div>
+            <div class="tile">
+              <span class="k">
+                <Abbr lang={lang} k="gp" />{' '}{de ? 'Rang' : 'rank'}
+              </span>
+              <span class="v tnum">#{v.gpRank}</span>
+              <span class="s">
+                {`${of} ${v.rows.length} · ${v.me.g.gp}`}{' '}<Abbr lang={lang} k="gp" />
+              </span>
+            </div>
+            <div class="tile">
+              <span class="k">
+                <Abbr lang={lang} k="so" />
+              </span>
+              <span class="v tnum">{v.me.g.shutouts}</span>
+              <span class="s">{v.soRank ? `#${v.soRank} ${of} ${v.rows.length}` : de ? 'keiner' : 'none'}</span>
+            </div>
+            <div class="tile">
+              <span class="k">W–L</span>
+              <span class="v tnum">
+                {v.me.g.wins}–{v.me.g.losses}
+              </span>
+              <span class="s">{de ? 'laut Ligastatistik' : 'per league stats'}</span>
+            </div>
+          </div>
+
+          <div class="seg gl-seg" role="group" aria-label={de ? 'Ansicht' : 'View'}>
+            <button type="button" aria-pressed="true" data-gl-tab="goalies">
+              Goalies
+            </button>
+            <button type="button" aria-pressed="false" data-gl-tab="teams">
+              Teams
+            </button>
+          </div>
+
+          <div class="table-wrap" data-gl-panel="goalies">
+            <table class="gl-table">
+              <thead>
+                <tr>
+                  <th class="num rk" scope="col">#</th>
+                  <th scope="col">Goalie</th>
+                  <th scope="col">Team</th>
+                  <th class="num" scope="col"><Abbr lang={lang} k="gp" /></th>
+                  <th class="num opt" scope="col"><Abbr lang={lang} k="ga" /></th>
+                  <th class="num" scope="col"><Abbr lang={lang} k="gaa" /></th>
+                  <th class="num opt" scope="col"><Abbr lang={lang} k="so" /></th>
+                  <th class="num" scope="col">W–L</th>
+                </tr>
+              </thead>
+              <tbody>
+                {v.rows.map((x, i) => (
+                  <>
+                    {!x.qualified && (i === 0 || v.rows[i - 1].qualified) && (
+                      <tr class="cut">
+                        <td colspan="8" class="cut-cell">{de ? `Unter ${v.minGp} Spielen (nicht gewertet)` : `Under ${v.minGp} games (not ranked)`}</td>
+                      </tr>
+                    )}
+                    <tr class:list={{ ours: x.g.teamId === TEAM.leagueTeamId, me: x.me }}>
+                      <td class="num rk dim">{x.rank ?? ''}</td>
+                      <td class="nm">
+                        {x.slug && !x.me ? (
+                          <a href={href(lang, `players/${x.slug}/`)}>
+                            {x.g.player.first.charAt(0)}. {x.g.player.last}
+                          </a>
+                        ) : (
+                          <span>
+                            {x.g.player.first.charAt(0)}. {x.g.player.last}
+                          </span>
+                        )}
+                      </td>
+                      <td>{x.team ? <Team team={x.team} short /> : '–'}</td>
+                      <td class="num">{x.g.gp}</td>
+                      <td class="num opt">{x.g.ga}</td>
+                      <td class="num big">{formatNumber(lang, x.gaa, 2)}</td>
+                      <td class="num opt">{x.g.shutouts}</td>
+                      <td class="num">
+                        {x.g.wins}–{x.g.losses}
+                      </td>
+                    </tr>
+                  </>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-wrap" data-gl-panel="teams" hidden>
+            {v.teams.length > 0 ? (
+              <table class="gl-table">
+                <thead>
+                  <tr>
+                    <th class="num rk" scope="col">#</th>
+                    <th scope="col">Team</th>
+                    <th class="num" scope="col"><Abbr lang={lang} k="gp" /></th>
+                    <th class="num" scope="col"><Abbr lang={lang} k="ga" /></th>
+                    <th class="num" scope="col">
+                      <Abbr lang={lang} k="ga" />/<Abbr lang={lang} k="gp" />
+                    </th>
+                    <th class="num" scope="col">Goalies</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {v.teams.map((x) => (
+                    <tr class:list={{ ours: x.row.team.id === TEAM.leagueTeamId }}>
+                      <td class="num rk dim">{x.rank}</td>
+                      <td>
+                        <Team team={x.row.team} responsive />
+                      </td>
+                      <td class="num">{x.row.gp}</td>
+                      <td class="num">{x.row.ga}</td>
+                      <td class="num big">{formatNumber(lang, x.gaPer, 2)}</td>
+                      <td class="num">{x.goalies || '–'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p class="dim small">{de ? 'Für diese Runde gibt es keine Tabelle.' : 'No standings for this round.'}</p>
+            )}
+          </div>
+        </div>
+      ))}
+      <p class="small dim note">
+        {de
+          ? `Laut Ligastatistik der WEHV. GAA = Gegentore pro Spiel. Die Rangliste zählt Goalies ab einem Drittel der Spiele des Goalies mit den meisten Einsätzen.`
+          : `From WEHV league stats. GAA = goals against per game. The ranking counts goalies with at least a third of the games of the busiest goalie.`}
+      </p>
+    </section>
+  )
+}
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-gl]').forEach((root) => {
+    const pick = root.querySelector<HTMLSelectElement>('[data-gl-pick]');
+    const show = (id: string) => {
+      root.querySelectorAll<HTMLElement>('[data-gl-view]').forEach((v) => (v.hidden = v.dataset.glView !== id));
+    };
+    pick?.addEventListener('change', () => show(pick.value));
+    // Follow the dashboard's season picker when this season exists here.
+    document.querySelector<HTMLSelectElement>('[data-dash-season]')?.addEventListener('change', (e) => {
+      const sid = (e.target as HTMLSelectElement).value;
+      const opt = pick && [...pick.options].find((o) => o.dataset.season === sid);
+      if (pick && opt) {
+        pick.value = opt.value;
+        show(opt.value);
+      }
+    });
+    root.querySelectorAll<HTMLElement>('.gl-view').forEach((view) => {
+      view.querySelectorAll<HTMLButtonElement>('[data-gl-tab]').forEach((b) =>
+        b.addEventListener('click', () => {
+          view.querySelectorAll('[data-gl-tab]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          view.querySelectorAll<HTMLElement>('[data-gl-panel]').forEach((p) => (p.hidden = p.dataset.glPanel !== b.dataset.glTab));
+        }),
+      );
+    });
+  });
+</script>
+
+<style>
+  .gl .sec-head {
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+  }
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  @media (min-width: 720px) {
+    .tiles {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .tile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.85rem 0.95rem;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius, 10px);
+  }
+  .tile .k {
+    font: 700 0.72rem/1 var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tile .v {
+    font: 800 2.2rem/1 var(--display);
+    color: var(--orange);
+  }
+  .tile .s {
+    font-size: 0.8rem;
+    color: var(--dim);
+  }
+  .gl-seg {
+    margin-bottom: 0.75rem;
+  }
+  .gl-table .rk {
+    width: 2.2rem;
+  }
+  .gl-table .nm {
+    white-space: nowrap;
+  }
+  .gl-table tr.me td {
+    font-weight: 700;
+  }
+  .gl-table tr.cut td {
+    padding-top: 0.9rem;
+    font-size: 0.75rem;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  @media (max-width: 479px) {
+    .gl-table .opt {
+      display: none;
+    }
+  }
+  .gl-table th,
+  .gl-table td {
+    padding-left: 0.45rem;
+    padding-right: 0.45rem;
+  }
+  .note {
+    margin-top: 0.75rem;
+  }
+</style>

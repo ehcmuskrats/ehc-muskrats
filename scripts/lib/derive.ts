@@ -13,6 +13,7 @@ import type {
   Position,
   SeasonData,
   SeasonId,
+  TeamRecordCard,
   TeamRecordGame,
   TeamRecords,
 } from '../../src/types/models.ts';
@@ -411,14 +412,19 @@ export function deriveAll(log: (m: string) => void = console.log): Derived {
   const derived: Derived = {
     generatedAt: new Date().toISOString(),
     players: profiles,
-    records: teamRecords(seasons),
+    records: teamRecords(seasons, games, canon, profiles),
     columnAvailability: columnAvailability(seasons, games),
   };
   log(`Derived: ${profiles.length} players (${mergedPeople} merged across league ids), ${ourGames.length} game reports.`);
   return derived;
 }
 
-function teamRecords(seasons: SeasonData[]): TeamRecords {
+function teamRecords(
+  seasons: SeasonData[],
+  games: Map<string, Game>,
+  canon: (id: number) => number,
+  profiles: PlayerProfile[],
+): TeamRecords {
   let biggestWin: TeamRecordGame | null = null;
   let mostGoals: TeamRecordGame | null = null;
   const allTime = { gp: 0, w: 0, l: 0, otw: 0, otl: 0, ties: 0, gf: 0, ga: 0 };
@@ -430,8 +436,10 @@ function teamRecords(seasons: SeasonData[]): TeamRecords {
       const them = side === 'home' ? g.awayScore : g.homeScore;
       const opp = side === 'home' ? g.away : g.home;
       const rec: TeamRecordGame = { gameId: g.id, season: g.season, date: g.date, opponent: opp, score: `${us}:${them}`, margin: us - them, goalsFor: us };
-      if (!biggestWin || rec.margin > biggestWin.margin) biggestWin = rec;
-      if (!mostGoals || rec.goalsFor > mostGoals.goalsFor) mostGoals = rec;
+      if (!isForfeit(g)) {
+        if (!biggestWin || rec.margin > biggestWin.margin) biggestWin = rec;
+        if (!mostGoals || rec.goalsFor > mostGoals.goalsFor) mostGoals = rec;
+      }
       allTime.gp++;
       allTime.gf += us;
       allTime.ga += them;
@@ -459,7 +467,176 @@ function teamRecords(seasons: SeasonData[]): TeamRecords {
       if (better) bestSeason = { season: s.info.id, divisionName: st.divisionName, pts: row.pts, gp: row.gp, rank: row.rank };
     }
   }
-  return { biggestWin, mostGoals, bestSeason, allTime };
+  const cards = recordCards(seasons, games, canon, profiles, { biggestWin, mostGoals, bestSeason });
+  return { cards, biggestWin, mostGoals, bestSeason, allTime };
+}
+
+/** Forfeit (Strafverifizierung): a final score but every period 0:0 and no goals on the sheet. */
+function isForfeit(g: GameSummary): boolean {
+  const sum = g.periods.flat().reduce((a, b) => a + b, 0);
+  return g.periods.length > 0 && sum === 0 && (g.homeScore ?? 0) + (g.awayScore ?? 0) > 0;
+}
+
+/** Pool of rotating record cards (the stats page shows a random 3). Only from real league data. */
+function recordCards(
+  seasons: SeasonData[],
+  games: Map<string, Game>,
+  canon: (id: number) => number,
+  profiles: PlayerProfile[],
+  base: Pick<TeamRecords, 'biggestWin' | 'mostGoals' | 'bestSeason'>,
+): TeamRecordCard[] {
+  const cards: TeamRecordCard[] = [];
+  const { biggestWin, mostGoals, bestSeason } = base;
+  const gameCard = (kind: TeamRecordCard['kind'], value: string, r: TeamRecordGame): TeamRecordCard => ({
+    kind,
+    value,
+    gameId: r.gameId,
+    season: r.season,
+    date: r.date,
+    opponent: r.opponent,
+    score: r.score,
+  });
+  if (biggestWin) cards.push(gameCard('biggestWin', biggestWin.score, biggestWin));
+  if (mostGoals) cards.push(gameCard('mostGoals', String(mostGoals.goalsFor), mostGoals));
+  if (bestSeason)
+    cards.push({
+      kind: 'bestSeason',
+      value: bestSeason.season.replace('-', '/'),
+      season: bestSeason.season,
+      n: bestSeason.rank,
+      text: `${bestSeason.pts}|${bestSeason.gp}|${bestSeason.divisionName}`,
+    });
+
+  // All our finished games in date order. Streaks count forfeits (they count in the standings);
+  // score records skip them (a 5:0 forfeit is not a real shutout).
+  const allFinals = seasons
+    .flatMap((x) => x.games)
+    .filter((g) => resultFor(g) != null)
+    .sort((a, b) => (a.timestamp ?? 0) - (b.timestamp ?? 0) || (a.date ?? '').localeCompare(b.date ?? ''));
+  const finals = allFinals.filter((g) => !isForfeit(g));
+  const score = (g: GameSummary) => {
+    const home = ourSide(g) === 'home';
+    const us = (home ? g.homeScore : g.awayScore) ?? 0;
+    const them = (home ? g.awayScore : g.homeScore) ?? 0;
+    return { us, them, opp: home ? g.away : g.home, label: `${us}:${them}` };
+  };
+  const at = (g: GameSummary) => {
+    const x = score(g);
+    return { gameId: g.id, season: g.season, date: g.date, opponent: x.opp, score: x.label };
+  };
+
+  // Streaks across seasons.
+  const streak = (ok: (r: string) => boolean) => {
+    let best = { n: 0, from: null as string | null, to: null as string | null };
+    let cur = 0;
+    let start: string | null = null;
+    for (const g of allFinals) {
+      if (ok(resultFor(g)!)) {
+        if (cur === 0) start = g.date;
+        cur++;
+        if (cur > best.n) best = { n: cur, from: start, to: g.date };
+      } else cur = 0;
+    }
+    return best;
+  };
+  const wins = streak((r) => r === 'W' || r === 'OTW');
+  if (wins.n >= 2) cards.push({ kind: 'winStreak', value: String(wins.n), from: wins.from, to: wins.to });
+  const unbeaten = streak((r) => r === 'W' || r === 'OTW' || r === 'T');
+  if (unbeaten.n > wins.n) cards.push({ kind: 'unbeatenStreak', value: String(unbeaten.n), from: unbeaten.from, to: unbeaten.to });
+
+  // Highest-scoring game (both teams).
+  let high: GameSummary | null = null;
+  for (const g of finals) if (!high || g.homeScore! + g.awayScore! > high.homeScore! + high.awayScore!) high = g;
+  if (high && high.id !== mostGoals?.gameId) {
+    const x = score(high);
+    cards.push({ kind: 'highestScoring', value: String(x.us + x.them), ...at(high) });
+  }
+
+  // Shutouts: games we didn't concede in.
+  const shutouts = finals.filter((g) => score(g).them === 0);
+  if (shutouts.length) cards.push({ kind: 'shutouts', value: String(shutouts.length), ...at(shutouts[shutouts.length - 1]) });
+
+  // Biggest playoff win.
+  let pw: GameSummary | null = null;
+  const margin = (g: GameSummary) => score(g).us - score(g).them;
+  for (const g of finals) if (g.playoff && margin(g) > 0 && (!pw || margin(g) > margin(pw))) pw = g;
+  if (pw) cards.push({ kind: 'playoffWin', value: score(pw).label, ...at(pw) });
+
+  // Playoff series won, all-time.
+  let seriesWon = 0;
+  for (const x of seasons)
+    for (const ph of x.playoffs?.phases ?? [])
+      for (const e of ph.encounters) if (e.teams.some((t) => t.winner && isOurTeam(t.team))) seriesWon++;
+  if (seriesWon > 0) cards.push({ kind: 'playoffSeries', value: String(seriesWon) });
+
+  // Most goals in one regulation period.
+  let per: { g: GameSummary; n: number; period: number } | null = null;
+  for (const g of finals) {
+    const home = ourSide(g) === 'home';
+    g.periods.slice(0, 3).forEach((p, i) => {
+      const n = home ? p[0] : p[1];
+      if (!per || n > per.n) per = { g, n, period: i + 1 };
+    });
+  }
+  if (per) {
+    const pr = per as { g: GameSummary; n: number; period: number };
+    cards.push({ kind: 'periodGoals', value: String(pr.n), n: pr.period, ...at(pr.g) });
+  }
+
+  // From game reports: comeback, fastest goal, single-game player highs.
+  const byId = new Map(profiles.map((p) => [p.id, p]));
+  const who = (ref: PlayerRef) => {
+    const p = byId.get(canon(ref.id));
+    return { id: p?.id ?? ref.id, first: p?.first ?? ref.first, last: p?.last ?? ref.last, number: ref.number, slug: p?.slug };
+  };
+  const reports = [...games.values()].sort((a, b) => (a.date ?? '').localeCompare(b.date ?? ''));
+  let comeback: { g: Game; n: number } | null = null;
+  let fastest: { g: Game; time: number; player: PlayerRef | null } | null = null;
+  let pGoals: { g: Game; n: number; player: PlayerRef } | null = null;
+  let pPoints: { g: Game; n: number; player: PlayerRef; goals: number } | null = null;
+  for (const g of reports) {
+    const side = ourSide(g);
+    const r = resultFor(g);
+    if (!side || !r) continue;
+    const goals = g.goals.filter((x) => x.period !== 'SO').sort((a, b) => a.time - b.time);
+    if (r === 'W' || r === 'OTW') {
+      let diff = 0;
+      let worst = 0;
+      for (const x of goals) {
+        diff += x.team === side ? 1 : -1;
+        worst = Math.min(worst, diff);
+      }
+      if (worst < 0 && (!comeback || -worst > comeback.n)) comeback = { g, n: -worst };
+    }
+    const ours = goals.filter((x) => x.team === side);
+    if (ours[0] && (!fastest || ours[0].time < fastest.time)) fastest = { g, time: ours[0].time, player: ours[0].scorer };
+    const tally = new Map<number, { ref: PlayerRef; g: number; a: number }>();
+    const bump = (ref: PlayerRef | null, k: 'g' | 'a') => {
+      if (!ref) return;
+      const id = canon(ref.id);
+      const e = tally.get(id) ?? { ref, g: 0, a: 0 };
+      e[k]++;
+      tally.set(id, e);
+    };
+    for (const x of ours) {
+      bump(x.scorer, 'g');
+      x.assists.forEach((a) => bump(a, 'a'));
+    }
+    for (const e of tally.values()) {
+      if (!pGoals || e.g > pGoals.n) pGoals = { g, n: e.g, player: e.ref };
+      if (!pPoints || e.g + e.a > pPoints.n) pPoints = { g, n: e.g + e.a, player: e.ref, goals: e.g };
+    }
+  }
+  if (comeback) cards.push({ kind: 'comeback', value: String(comeback.n), ...at(comeback.g) });
+  if (fastest) {
+    const m = Math.floor(fastest.time / 60);
+    const s = String(fastest.time % 60).padStart(2, '0');
+    cards.push({ kind: 'fastestGoal', value: `${m}:${s}`, ...at(fastest.g), player: fastest.player ? who(fastest.player) : undefined });
+  }
+  if (pGoals && pGoals.n >= 2) cards.push({ kind: 'playerGoalsGame', value: String(pGoals.n), ...at(pGoals.g), player: who(pGoals.player) });
+  if (pPoints && pPoints.n >= 3 && pPoints.n > (pGoals?.n ?? 0))
+    cards.push({ kind: 'playerPointsGame', value: String(pPoints.n), n: pPoints.goals, ...at(pPoints.g), player: who(pPoints.player) });
+  return cards;
 }
 
 function columnAvailability(seasons: SeasonData[], games: Map<string, Game>): Derived['columnAvailability'] {
