@@ -13,6 +13,7 @@ const facts = [
   ['join.level', t('join.levelText')],
   ['join.rink', `${SITE.homeRink}, ${SITE.homeRinkAddress}`],
   ['join.practice', t('join.practiceText')],
+  ['join.cost', t('join.costText', { fee, season: SITE.membership.season })],
 ] as const;
 ---
 
@@ -42,12 +43,6 @@ const facts = [
     </div>
     <div class="band" aria-hidden="true"></div>
   </section>
-
-  <div class="fee panel">
-    <p class="eyebrow">{t('join.cost')}</p>
-    <p class="amount tnum">€ {fee}</p>
-    <p class="muted">{t('common.season')} {SITE.membership.season}</p>
-  </div>
 
   <ul class="rows facts">
     {
@@ -137,7 +132,7 @@ const facts = [
     margin: 0;
   }
   .facts {
-    margin-top: 12px;
+    margin-top: 1.25rem;
   }
   .facts li {
     padding: 1rem 1.1rem;

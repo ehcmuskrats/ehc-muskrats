@@ -18,6 +18,10 @@ export const TEAM = {
   facebookUrl: 'https://www.facebook.com/ehcmuskrats/',
   youtube: {
     channelName: 'hockeyyy',
+    /** Shown as the video credit on the site (the teammate who films the games). */
+    creditName: 'Kona',
+    /** League player id of the video creator, to link the credit to his profile. */
+    creditPlayerId: 127960,
     channelUrl: 'https://www.youtube.com/@hoooockeyyy',
     channelId: 'UCojaNKQ53iGc_0SJsc4aXgw',
     /** Uploads playlist = channel id with UC replaced by UU. */

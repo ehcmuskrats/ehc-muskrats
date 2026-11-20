@@ -34,7 +34,7 @@ const hasThumb = existsSync(`public/thumbs/${video.id}.jpg`);
         <span class="note">
           {t(lang, 'game.consent')} ·{' '}
           <a href={TEAM.youtube.channelUrl} rel="noopener">
-            {t(lang, 'credit.video')}
+            {t(lang, 'credit.video', { name: TEAM.youtube.creditName })}
           </a>
         </span>
       </figcaption>

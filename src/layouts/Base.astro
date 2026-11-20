@@ -106,13 +106,13 @@ const moreActive = secondary.some(([, key]) => key === active);
           <img src={url('logo.png')} width="44" height="44" alt="" loading="lazy" />
           <div>
             <strong>{TEAM.displayName}</strong>
-            <p class="small muted">{t('footer.unofficial')}</p>
+            <p class="small muted">{t('footer.unofficial', { year: new Date().getFullYear() })}</p>
           </div>
         </div>
         <div class="small foot-links">
           {leagueData && <a href="https://www.wehv.at/" rel="noopener">{t('credit.data')}</a>}
           <a href={TEAM.facebookUrl} rel="noopener">Facebook</a>
-          <a href={TEAM.youtube.channelUrl} rel="noopener">YouTube · hockeyyy</a>
+          <a href={TEAM.youtube.channelUrl} rel="noopener">YouTube</a>
           {lastUpdate && <span class="dim">{t('footer.lastUpdate')}: {formatDate(lang, lastUpdate)}</span>}
         </div>
       </div>
@@ -259,11 +259,14 @@ const moreActive = secondary.some(([, key]) => key === active);
     color: var(--orange);
   }
   .lang {
-    display: grid;
-    place-items: center;
+    /* The condensed caps sit high in their line box; flex centring + a small top pad centres them optically. */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
     min-width: 44px;
     height: 34px;
-    padding: 0 0.7rem;
+    padding: 0.14em 0.7rem 0;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.07);
     color: var(--text);

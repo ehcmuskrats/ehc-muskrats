@@ -15,7 +15,7 @@ const { lang, video = false } = Astro.props;
       <>
         {' · '}
         <a href={TEAM.youtube.channelUrl} rel="noopener">
-          {t(lang, 'credit.video')}
+          {t(lang, 'credit.video', { name: TEAM.youtube.creditName })}
         </a>
       </>
     )

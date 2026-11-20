@@ -4,7 +4,7 @@ import VideoEmbed from '../../components/VideoEmbed.astro';
 import Team from '../../components/Team.astro';
 import DataCredit from '../../components/DataCredit.astro';
 import { type Lang, langPaths, useT, href, formatDate } from '../../i18n/index.ts';
-import { highlights, ourGames, opponent, ourScore, resultCode, resultClass } from '../../lib/data.ts';
+import { highlights, ourGames, opponent, ourScore, resultCode, resultClass, playerSlug } from '../../lib/data.ts';
 import { TEAM } from '../../config/team.ts';
 
 export const getStaticPaths = langPaths;
@@ -20,7 +20,8 @@ for (const h of visible) {
   bySeason.get(k)!.push(h);
 }
 const seasonKeys = [...bySeason.keys()].sort((a, b) => (a === 'other' ? 1 : b === 'other' ? -1 : b.localeCompare(a)));
-const [feature, ...rest] = visible;
+const [feature] = visible;
+const creditSlug = playerSlug(TEAM.youtube.creditPlayerId) ?? '';
 ---
 
 <Base lang={lang} title={t('highlights.title')} path="highlights/" active="nav.highlights">
@@ -28,7 +29,8 @@ const [feature, ...rest] = visible;
     <span class="tag">{visible.length} Videos</span>
     <h1>{t('highlights.title')}</h1>
     <p class="sub">
-      {t('highlights.intro')} <a href={TEAM.youtube.channelUrl} rel="noopener">@hoooockeyyy</a>
+      {t('highlights.intro')} <a href={href(lang, `players/${creditSlug}/`)}>{TEAM.youtube.creditName}</a> ·
+      <a href={TEAM.youtube.channelUrl} rel="noopener">YouTube</a>
     </p>
   </header>
 
