@@ -28,6 +28,13 @@ for (const g of games) {
   if (r) rec[resultClass(r)]++;
 }
 const played = rec.W + rec.L + rec.T;
+// Phases of the season we actually played in (Grunddurchgang, TOP 4 / LOW 5, Playoffs) for the phase switch.
+const phases: { value: string; label: string }[] = [];
+for (const d of [...(s?.info.divisions ?? [])].sort((a, b) => a.id - b.id)) {
+  if (d.kind === 'playoffs') continue;
+  if (games.some((g) => !g.playoff && g.divisionId === d.id)) phases.push({ value: String(d.id), label: d.name });
+}
+if (games.some((g) => g.playoff)) phases.push({ value: 'playoffs', label: t('common.playoffs') });
 ---
 
 <Base lang={lang} title={`${t('schedule.title')} ${seasonId.replace('-', '/')}`} path={Astro.params.season ? `schedule/${seasonId}/` : 'schedule/'} active="nav.schedule" leagueData>
@@ -54,6 +61,16 @@ const played = rec.W + rec.L + rec.T;
     ) : (
       <>
         <div class="controls">
+          {phases.length > 1 && (
+            <div class="seg phase-seg" role="group" aria-label={t('common.season')} data-filter="phase">
+              <button type="button" data-value="all" aria-pressed="true">{t('common.all')}</button>
+              {phases.map((p) => (
+                <button type="button" data-value={p.value} aria-pressed="false">
+                  {p.label}
+                </button>
+              ))}
+            </div>
+          )}
           <div class="seg" role="group" aria-label={t('schedule.filterStatus')} data-filter="status">
             <button type="button" data-value="all" aria-pressed="true">{t('common.all')}</button>
             <button type="button" data-value="upcoming" aria-pressed="false">{t('common.upcoming')}</button>
@@ -102,12 +119,14 @@ const played = rec.W + rec.L + rec.T;
 </Base>
 
 <script>
-  const state: Record<string, string> = { status: 'all', venue: 'all' };
+  const state: Record<string, string> = { status: 'all', venue: 'all', phase: 'all' };
   function apply() {
     let visible = 0;
     document.querySelectorAll<HTMLElement>('[data-games] > li').forEach((li) => {
       const ok =
-        (state.status === 'all' || li.dataset.status === state.status) && (state.venue === 'all' || li.dataset.venue === state.venue);
+        (state.status === 'all' || li.dataset.status === state.status) &&
+        (state.venue === 'all' || li.dataset.venue === state.venue) &&
+        (state.phase === 'all' || li.dataset.phase === state.phase);
       li.hidden = !ok;
       if (ok && !li.closest('[data-tbd]')) visible++;
     });
@@ -122,15 +141,27 @@ const played = rec.W + rec.L + rec.T;
       b.addEventListener('click', () => {
         group.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
         state[key] = b.dataset.value!;
+        if (key === 'phase') history.replaceState(null, '', state.phase === 'all' ? location.pathname : `#${state.phase}`);
         apply();
       }),
     );
   });
+  // Deep link: …/schedule/2024-25/#playoffs
+  const fromHash = location.hash.slice(1);
+  if (fromHash) document.querySelector<HTMLButtonElement>(`[data-filter="phase"] button[data-value="${CSS.escape(fromHash)}"]`)?.click();
 </script>
 
 <style>
   .controls .seg {
     flex: 1 1 260px;
+  }
+  .controls .phase-seg {
+    flex-basis: 100%;
+  }
+  .phase-seg [aria-pressed='true'] {
+    background: var(--orange);
+    color: var(--ink);
+    box-shadow: var(--glow-orange);
   }
   .record {
     display: flex;
