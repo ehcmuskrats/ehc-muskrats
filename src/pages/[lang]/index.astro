@@ -34,12 +34,43 @@ const lastReport = lastResult ? games.get(lastResult.id) : undefined;
 const lastGoals = lastReport?.goals ?? [];
 const lastSide = lastResult ? side(lastResult) : 'home';
 const seasonLabel = currentSeasonId.replace('-', '/');
+// Skate scratches for the center-ice hero texture (fixed seed → identical on every build).
+let seed = 7;
+const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+const scratches = Array.from({ length: 46 }, () => {
+  const x = rnd() * 1400;
+  const y = rnd() * 560;
+  const len = 120 + rnd() * 420;
+  const bend = (rnd() - 0.5) * 140;
+  const ang = (rnd() - 0.5) * 0.6;
+  const x2 = x + Math.cos(ang) * len;
+  const y2 = y + Math.sin(ang) * len;
+  return {
+    d: `M${x.toFixed(0)} ${y.toFixed(0)} Q ${((x + x2) / 2).toFixed(0)} ${((y + y2) / 2 + bend).toFixed(0)} ${x2.toFixed(0)} ${y2.toFixed(0)}`,
+    o: (0.03 + rnd() * 0.06).toFixed(3),
+    w: (0.6 + rnd() * 1.2).toFixed(1),
+  };
+});
 ---
 
 <Base lang={lang} path="" active="nav.home" leagueData>
   <!-- HERO: next game scoreboard -->
   <section class="hero" aria-labelledby="h-next">
-    <div class="jersey-stripes" aria-hidden="true"></div>
+    <svg class="rink" viewBox="0 0 1400 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g class="scratches">
+        {scratches.map((s) => <path d={s.d} stroke={`rgba(255,255,255,${s.o})`} stroke-width={s.w} fill="none" />)}
+      </g>
+      <line x1="700" y1="0" x2="700" y2="560" stroke="rgba(247,122,26,0.22)" stroke-width="5"></line>
+      <line x1="700" y1="0" x2="700" y2="560" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="14 10"></line>
+      <line x1="330" y1="0" x2="330" y2="560" stroke="rgba(24,112,224,0.28)" stroke-width="9"></line>
+      <line x1="1070" y1="0" x2="1070" y2="560" stroke="rgba(24,112,224,0.28)" stroke-width="9"></line>
+      <circle cx="700" cy="280" r="190" stroke="rgba(255,255,255,0.09)" stroke-width="2" fill="none"></circle>
+      <circle cx="700" cy="280" r="7" fill="rgba(24,112,224,0.5)"></circle>
+      <circle cx="190" cy="140" r="5" fill="rgba(247,122,26,0.35)"></circle>
+      <circle cx="190" cy="420" r="5" fill="rgba(247,122,26,0.35)"></circle>
+      <circle cx="1210" cy="140" r="5" fill="rgba(247,122,26,0.35)"></circle>
+      <circle cx="1210" cy="420" r="5" fill="rgba(247,122,26,0.35)"></circle>
+    </svg>
     <div class="hero-inner">
       <p class="hero-top rise">
         <span class="tag" id="h-next">{t('home.nextGame')}</span>
@@ -334,35 +365,25 @@ const seasonLabel = currentSeasonId.replace('-', '/');
     padding: 1.6rem var(--gutter) 1.4rem;
     overflow: hidden;
     background:
-      radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.06), transparent 70%),
-      linear-gradient(160deg, #1f1f1f 0%, #141414 55%, var(--bg) 100%);
+      radial-gradient(70% 90% at 50% 50%, rgba(201, 225, 248, 0.05), transparent 70%),
+      linear-gradient(165deg, #1c1d1f 0%, #131415 60%, var(--bg) 100%);
   }
-  .hero::before {
-    /* diagonal speed lines */
-    content: '';
+  /* Center ice: faint rink markings + skate scratches behind the matchup. */
+  .rink {
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(-62deg, rgba(255, 255, 255, 0.035) 0 2px, transparent 2px 22px);
-    mask-image: linear-gradient(90deg, transparent, #000 40%, #000 60%, transparent);
+    width: 100%;
+    height: 100%;
     pointer-events: none;
   }
-  .jersey-stripes {
-    /* oversized slanted jersey stripe (blue | white | orange | white) — brand without upscaling the 200px logo */
-    position: absolute;
-    top: -20%;
-    bottom: -20%;
-    right: -140px;
-    width: 260px;
-    transform: skewX(-18deg);
-    background: linear-gradient(
-      90deg,
-      transparent 0 18%,
-      rgba(255, 255, 255, 0.07) 18% 30%,
-      rgba(247, 122, 26, 0.16) 30% 62%,
-      rgba(255, 255, 255, 0.07) 62% 74%,
-      transparent 74%
-    );
-    pointer-events: none;
+  /* Phones get the lighter version: markings only, no scratches. */
+  .rink .scratches {
+    display: none;
+  }
+  @media (min-width: 720px) {
+    .rink .scratches {
+      display: inline;
+    }
   }
   .hero-inner {
     position: relative;
@@ -490,10 +511,6 @@ const seasonLabel = currentSeasonId.replace('-', '/');
   @media (min-width: 720px) {
     .hero {
       padding: 2.6rem var(--gutter) 2.2rem;
-    }
-    .jersey-stripes {
-      right: 6%;
-      width: 340px;
     }
     .full {
       font-size: 0.95rem;

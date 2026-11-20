@@ -6,6 +6,16 @@ Collected while reviewing the site. Fixed together when the user says "go".
 - DONE: all 11 notes, including all parts of 3 (schedule phase switch + section headers + playoff series with score,
   stats Gesamt / Grunddurchgang / Playoffs switch, playoff table on player profiles, all-time playoff points leaderboard).
 
+## Round 3 — DONE: 22 (Fun Facts), 23 (center-ice hero texture; mockup page removed)
+
+22. **"Fakten" → "Fun Facts"** in both languages (player dashboard facts panel heading, `player.facts`).
+
+23. **Desktop home hero redesign** (desktop only; mobile hero stays simple). Inspired by an editorial/technical reference
+    First round (editorial grid / split scoreboard / subtle) rejected. Second round: keep the current hero, change only
+    the texture: 1 center ice (rink markings + skate scratches), 2 jersey knit + stitched sleeve stripe, 3 printed poster
+    (grain + halftone + torn tape). Temporary page: /dev/hero-mockups/ — delete when decided. Waiting for the pick.
+    User likes the stripe ribbon idea but finds the current slanted one generic.
+
 ## Round 2 — DONE (2026-11-20), plus 21: player performance dashboard
 21. **Player dashboard** (every player page): stat tiles, last-10 / career bar chart with PTS·G·A·PIM (GA for goalies),
     split cards (this vs previous season, last 5, last 10, vs next opponent), facts panel showing a random 4 of the
