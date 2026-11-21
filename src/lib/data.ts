@@ -81,6 +81,13 @@ export function isOurGame(g: GameSummary): boolean {
   return isOurTeam(g.home) || isOurTeam(g.away);
 }
 
+/** Our games with a page: played ones (report) and dated upcoming ones of the current season (preview). */
+export function hasGamePage(g: GameSummary): boolean {
+  if (!isOurGame(g)) return false;
+  if (g.status === 'final' || g.status === 'live' || g.hasReport) return true;
+  return g.season === currentSeasonId && g.status === 'scheduled' && g.date != null;
+}
+
 export function ourGames(seasonId?: SeasonId): GameSummary[] {
   const list = (seasonId ? seasons.filter((s) => s.info.id === seasonId) : seasons).flatMap((s) => s.games);
   return list.filter(isOurGame);

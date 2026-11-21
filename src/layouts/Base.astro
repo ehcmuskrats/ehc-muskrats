@@ -32,6 +32,7 @@ const icons: Record<string, string> = {
   roster: 'M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.3a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.7.8 2.8 2.6 3 5.2',
   highlights: 'M4 5.5h16v13H4zM10 9.5v5l4.5-2.5z',
   news: 'M5 4.5h11v15H5zM16 8.5h3v9.5a1.5 1.5 0 0 1-3 0M8 8.5h5M8 12h5M8 15.5h3',
+  matchday: 'M12 21s-6.5-5.6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5.4-6.5 11-6.5 11zM12 12.3a2.3 2.3 0 1 0 0-4.6 2.3 2.3 0 0 0 0 4.6z',
   about: 'M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z',
   join: 'M12 20.5s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.9c0 5.4-7.5 10-7.5 10z',
 };
@@ -45,10 +46,12 @@ const secondary = [
   ['roster/', 'nav.roster', 'roster'],
   ['highlights/', 'nav.highlights', 'highlights'],
   ['news/', 'nav.news', 'news'],
+  ['matchday/', 'nav.matchday', 'matchday'],
   ['about/', 'nav.about', 'about'],
   ['join/', 'nav.join', 'join'],
 ] as const;
-const all = [...primary, ...secondary];
+// Matchday info is in the phone menu and the footer; the desktop bar stays at nine links.
+const all = [...primary, ...secondary].filter(([p]) => p !== 'matchday/');
 const moreActive = secondary.some(([, key]) => key === active);
 ---
 
@@ -137,6 +140,7 @@ const moreActive = secondary.some(([, key]) => key === active);
           {leagueData && <a href="https://www.wehv.at/" rel="noopener">{t('credit.data')}</a>}
           <a href={TEAM.facebookUrl} rel="noopener">Facebook</a>
           <a href={TEAM.youtube.channelUrl} rel="noopener">YouTube</a>
+          <a href={href(lang, 'matchday/')}>{t('nav.matchday')}</a>
           <a href={href(lang, 'imprint/')}>{lang === 'de' ? 'Impressum' : 'Imprint'}</a>
           <a href={href(lang, 'privacy/')}>{lang === 'de' ? 'Datenschutz' : 'Privacy'}</a>
           {lastUpdate && <span class="dim">{t('footer.lastUpdate')}: {formatDate(lang, lastUpdate)}</span>}

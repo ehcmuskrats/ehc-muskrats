@@ -1,0 +1,222 @@
+---
+// Matchday info (#15): for anyone who has never been to a Muskrats game. Spectators are always welcome and
+// entry is always free (confirmed by the team). Venue facts live in src/config/venues.ts.
+import Base from '../../layouts/Base.astro';
+import CalendarButton from '../../components/CalendarButton.astro';
+import Team from '../../components/Team.astro';
+import { type Lang, langPaths, useT, href, formatDate } from '../../i18n/index.ts';
+import { ourGames, currentSeasonId, teamName, hasGamePage } from '../../lib/data.ts';
+import { VENUES, venueFor, directionsUrl, hallOf } from '../../config/venues.ts';
+import { isOurTeam } from '../../config/team.ts';
+
+export const getStaticPaths = langPaths;
+const lang = Astro.params.lang as Lang;
+const de = lang === 'de';
+const t = useT(lang);
+const season = ourGames(currentSeasonId);
+const next = season
+  .filter((g) => g.status === 'scheduled' && g.timestamp != null && g.timestamp > Date.now() - 3 * 3600_000)
+  .sort((a, b) => a.timestamp! - b.timestamp!)[0];
+// Venues used this season first; fall back to all known venues.
+const usedKeys = new Set(season.map((g) => venueFor(g.venue)?.key).filter(Boolean));
+const venues = VENUES.filter((v) => usedKeys.has(v.key));
+const show = venues.length ? venues : VENUES;
+const halls = [...new Set(season.map((g) => hallOf(g.venue)).filter(Boolean))];
+---
+
+<Base lang={lang} title={de ? 'Spieltag-Infos' : 'Matchday info'} path="matchday/" active="nav.matchday">
+  <header class="page-head">
+    <span class="tag">{de ? 'Zuschauen' : 'Watch a game'}</span>
+    <h1>{de ? 'Spieltag-Infos' : 'Matchday info'}</h1>
+  </header>
+
+  <section class="facts" aria-label={de ? 'Das Wichtigste' : 'The essentials'}>
+    <div class="fact">
+      <span class="fi" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.3a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.7.8 2.8 2.6 3 5.2" /></svg>
+      </span>
+      <div>
+        <p class="ft">{de ? 'Zuschauer willkommen' : 'Spectators welcome'}</p>
+        <p class="fx">{de ? 'Bei jedem Spiel – egal ob Heim- oder Auswärtsspiel.' : 'At every game, home or away.'}</p>
+      </div>
+    </div>
+    <div class="fact">
+      <span class="fi" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M4 8.5h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4zM14.5 8.5v10" /></svg>
+      </span>
+      <div>
+        <p class="ft">{de ? 'Eintritt frei' : 'Free entry'}</p>
+        <p class="fx">{de ? 'Kein Ticket nötig. Einfach vorbeikommen.' : 'No ticket needed. Just turn up.'}</p>
+      </div>
+    </div>
+  </section>
+
+  {
+    next && (
+      <section aria-labelledby="h-next">
+        <div class="sec-head">
+          <h2 id="h-next">{t('home.nextGame')}</h2>
+        </div>
+        <a class="panel next" href={hasGamePage(next) ? href(lang, `games/${next.id}/`) : href(lang, 'schedule/')}>
+          <Team team={isOurTeam(next.home) ? next.away : next.home} logoOnly size={40} />
+          <span class="nx">
+            <strong>
+              {teamName(next.home)} – {teamName(next.away)}
+            </strong>
+            <span class="small dim">
+              {formatDate(lang, next.date, { weekday: true })} · {next.time ?? t('common.tbd')} · {next.venue?.replace(/^Wien - /, '')}
+            </span>
+          </span>
+          <span aria-hidden="true">→</span>
+        </a>
+        <div class="row-btns">
+          <CalendarButton lang={lang} feed />
+        </div>
+      </section>
+    )
+  }
+
+  {
+    show.map((v) => {
+      const dirs = directionsUrl(v.name);
+      return (
+        <section aria-labelledby={`h-${v.key}`}>
+          <div class="sec-head">
+            <h2 id={`h-${v.key}`}>{v.name}</h2>
+          </div>
+          <div class="panel venue">
+            <p class="addr">{v.address}</p>
+            {v.key === 'neuro-io-arena' && halls.length > 0 && (
+              <p class="small dim">
+                {de ? 'Diese Saison spielen wir in: ' : 'This season we play in: '}
+                {halls.join(', ')}. {de ? 'Die Halle steht beim jeweiligen Spiel im Spielplan.' : 'The hall for each game is listed in the schedule.'}
+              </p>
+            )}
+            {v.notes && v.notes[lang].length > 0 && (
+              <ul class="notes">
+                {v.notes[lang].map((n) => (
+                  <li>{n}</li>
+                ))}
+              </ul>
+            )}
+            {v.transit && (
+              <>
+                <p class="eyebrow">{de ? 'Öffentlich' : 'Public transport'}</p>
+                <ul class="list">
+                  {v.transit[lang].map((x) => (
+                    <li>{x}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {v.parking && (
+              <>
+                <p class="eyebrow">{de ? 'Auto & Parken' : 'Car & parking'}</p>
+                <ul class="list">
+                  {v.parking[lang].map((x) => (
+                    <li>{x}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+            <div class="row-btns">
+              {dirs && (
+                <a class="btn btn-ghost" href={dirs} target="_blank" rel="noopener">
+                  {de ? 'Route planen' : 'Get directions'}
+                </a>
+              )}
+              {v.website && (
+                <a class="btn btn-ghost" href={v.website} target="_blank" rel="noopener">
+                  {de ? 'Website der Halle' : 'Venue website'}
+                </a>
+              )}
+            </div>
+          </div>
+        </section>
+      );
+    })
+  }
+
+  <p class="small dim src">
+    {de ? 'Anreise-Infos laut Website der Halle; bitte vor der Fahrt kurz prüfen.' : "Travel info from the venue's website; please double-check before you go."}
+  </p>
+</Base>
+
+<style>
+  .facts {
+    display: grid;
+    gap: 10px;
+    margin-top: 1rem;
+  }
+  @media (min-width: 720px) {
+    .facts {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .fact {
+    display: flex;
+    gap: 0.9rem;
+    align-items: center;
+    padding: 1rem 1.1rem;
+    border-radius: var(--radius);
+    background: var(--panel);
+    box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), 0.35);
+  }
+  .fi svg {
+    width: 30px;
+    height: 30px;
+    fill: none;
+    stroke: var(--accent-text);
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .ft {
+    margin: 0;
+    font: 800 1.25rem/1.1 var(--display);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .fx {
+    margin: 0.2rem 0 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .next {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--text);
+  }
+  .nx {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+  .row-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 0.9rem;
+  }
+  .venue .addr {
+    margin: 0 0 0.4rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+  .venue .eyebrow {
+    margin-top: 1rem;
+  }
+  .list,
+  .notes {
+    margin: 0.3rem 0 0;
+    padding-left: 1.1rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .src {
+    margin-top: 1.5rem;
+  }
+</style>

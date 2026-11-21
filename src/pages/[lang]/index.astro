@@ -140,7 +140,11 @@ import CalendarButton from '../../components/CalendarButton.astro';
 
       <div class="hero-cta">
         {upcoming[0] && <CalendarButton lang={lang} game={upcoming[0]} />}
-        <a class="btn btn-ghost" href={href(lang, 'schedule/')}>{t('nav.schedule')}</a>
+        {upcoming[0] ? (
+          <a class="btn btn-ghost" href={href(lang, `games/${upcoming[0].id}/`)}>{lang === 'de' ? 'Vorschau' : 'Preview'} →</a>
+        ) : (
+          <a class="btn btn-ghost" href={href(lang, 'schedule/')}>{t('nav.schedule')}</a>
+        )}
       </div>
     </div>
     <div class="hero-band" aria-hidden="true"></div>

@@ -3,7 +3,7 @@
 import type { GameSummary } from '../types/models.ts';
 import { type Lang, t, href } from '../i18n/index.ts';
 import { RESULT_FULL } from '../i18n/abbr.ts';
-import { opponent, ourScore, resultCode, resultClass, side, gamesWithHighlights } from '../lib/data.ts';
+import { opponent, ourScore, resultCode, resultClass, side, gamesWithHighlights, hasGamePage } from '../lib/data.ts';
 import Team from './Team.astro';
 interface Props {
   lang: Lang;
@@ -32,7 +32,7 @@ const parts = (iso: string) => {
       const { us, them } = ourScore(g);
       const r = resultCode(g);
       const played = g.status === 'final' || g.status === 'live';
-      const linkable = played || g.hasReport;
+      const linkable = hasGamePage(g);
       const p = g.date && !noDate ? parts(g.date) : null;
       const Row = linkable ? 'a' : 'div';
       return (
