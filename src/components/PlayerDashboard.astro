@@ -306,11 +306,11 @@ const iconPaths: Record<string, string> = {
   }
   .tv {
     font: 800 clamp(1.4rem, 7vw, 2.2rem) / 1 var(--display);
-    color: #fff;
+    color: var(--text);
     margin: 0.3rem 0 0.2rem;
   }
   .tile.accent .tv {
-    color: var(--orange);
+    color: var(--accent-text);
     text-shadow: 0 0 24px rgba(var(--accent-rgb), 0.35);
   }
   .ts {
@@ -378,7 +378,7 @@ const iconPaths: Record<string, string> = {
     color: var(--muted);
   }
   .avg-label b {
-    color: #fff;
+    color: var(--text);
     font-size: 1rem;
   }
   .bars {
@@ -403,7 +403,7 @@ const iconPaths: Record<string, string> = {
     position: absolute;
     left: 0;
     right: 0;
-    border-top: 1px dashed rgba(255, 255, 255, 0.5);
+    border-top: 1px dashed rgba(var(--fg-rgb), 0.5);
     transition: bottom 0.3s;
   }
   .bl,
@@ -433,7 +433,7 @@ const iconPaths: Record<string, string> = {
     width: min(100%, 38px);
     border-radius: 6px 6px 2px 2px;
     /* Jersey blue for data; orange stays reserved for "selected / ours" (the toggles). */
-    background: linear-gradient(180deg, #3d8bff, var(--blue));
+    background: linear-gradient(180deg, var(--blue-hi), var(--blue));
     box-shadow: 0 0 18px -6px rgba(24, 112, 224, 0.75);
     transition: height 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
@@ -448,7 +448,7 @@ const iconPaths: Record<string, string> = {
     transform: translateX(-50%);
     margin-bottom: 3px;
     font: 800 0.95rem/1 var(--display);
-    color: #fff;
+    color: var(--text);
   }
   .bar.zero .bv {
     color: var(--dim);
@@ -531,7 +531,7 @@ const iconPaths: Record<string, string> = {
   }
   .sm {
     font: 800 1.8rem/1 var(--display);
-    color: #fff;
+    color: var(--text);
   }
   .sm small {
     font-size: 0.7rem;
@@ -545,7 +545,7 @@ const iconPaths: Record<string, string> = {
     color: var(--loss);
   }
   .split.accent .sm {
-    color: var(--orange);
+    color: var(--accent-text);
   }
   .sd {
     font-size: 0.75rem;
@@ -577,7 +577,7 @@ const iconPaths: Record<string, string> = {
     height: 22px;
     margin-top: 2px;
     fill: none;
-    stroke: var(--orange);
+    stroke: var(--accent-text);
     stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -600,7 +600,7 @@ const iconPaths: Record<string, string> = {
     border: 0;
     padding: 0.4rem 0;
     cursor: pointer;
-    color: var(--orange);
+    color: var(--accent-text);
     font: 700 0.85rem/1 var(--display);
     letter-spacing: 0.1em;
     text-transform: uppercase;

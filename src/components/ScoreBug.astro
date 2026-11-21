@@ -81,7 +81,7 @@ const otherSeason = g.season !== currentSeasonId ? g.season.slice(2).replace('-'
   .sn {
     padding: 2px 5px 1px;
     border-radius: 4px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(var(--fg-rgb), 0.08);
     color: var(--muted);
     font-size: 0.68rem;
     letter-spacing: 0.06em;
@@ -98,10 +98,10 @@ const otherSeason = g.season !== currentSeasonId ? g.season.slice(2).replace('-'
     letter-spacing: 0.04em;
   }
   .line.us {
-    color: #fff;
+    color: var(--text);
   }
   .line.us :global(.name) {
-    color: var(--orange);
+    color: var(--accent-text);
   }
   .sc {
     font: 800 1.35rem/1 var(--display);
@@ -109,6 +109,6 @@ const otherSeason = g.season !== currentSeasonId ? g.season.slice(2).replace('-'
     text-align: right;
   }
   .line.win .sc {
-    color: #fff;
+    color: var(--text);
   }
 </style>

@@ -133,7 +133,7 @@ const groups = (['forwards', 'defense', 'goalies', 'other'] as const)
     overflow: hidden;
   }
   .roster a:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(var(--fg-rgb), 0.03);
     color: var(--text);
   }
   .jn {
@@ -182,10 +182,10 @@ const groups = (['forwards', 'defense', 'goalies', 'other'] as const)
   }
   .line b {
     font: 800 1.15rem/1 var(--display);
-    color: #fff;
+    color: var(--text);
   }
   .line .hi b {
-    color: var(--orange);
+    color: var(--accent-text);
   }
   @media (min-width: 720px) {
     .roster a {

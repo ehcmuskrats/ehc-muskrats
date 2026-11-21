@@ -266,7 +266,7 @@ const looseRound = dated.filter((g) => g.playoff && !inSeries.has(g.id));
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.22) 45%, transparent 60%);
+    background: linear-gradient(100deg, transparent 30%, rgba(var(--fg-rgb), 0.22) 45%, transparent 60%);
     transform: translateX(-100%);
     animation: sheen 3.6s ease-in-out 0.6s infinite;
     pointer-events: none;
@@ -285,7 +285,7 @@ const looseRound = dated.filter((g) => g.playoff && !inSeries.has(g.id));
     width: 44px;
     height: 44px;
     fill: none;
-    stroke: var(--orange);
+    stroke: var(--accent-text);
     stroke-width: 1.6;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -309,7 +309,7 @@ const looseRound = dated.filter((g) => g.playoff && !inSeries.has(g.id));
     font: 800 clamp(1.5rem, 6vw, 2.1rem) / 1 var(--display);
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--orange);
+    color: var(--accent-text);
   }
   .champs-sub {
     margin: 0.3rem 0 0;
@@ -340,11 +340,11 @@ const looseRound = dated.filter((g) => g.playoff && !inSeries.has(g.id));
     font: 800 1.05rem/1 var(--display);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--orange);
+    color: var(--accent-text);
   }
   .ss {
     font: 800 1.05rem/1 var(--display);
-    color: #fff;
+    color: var(--text);
   }
   .series-head .res {
     width: auto;

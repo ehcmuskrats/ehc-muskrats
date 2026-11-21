@@ -59,19 +59,32 @@ import CalendarButton from '../../components/CalendarButton.astro';
   <section class="hero" aria-labelledby="h-next">
     <svg class="rink" viewBox="0 0 1400 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <g class="scratches">
-        {scratches.map((s) => <path d={s.d} stroke={`rgba(255,255,255,${s.o})`} stroke-width={s.w} fill="none" />)}
+        {scratches.map((s) => <path d={s.d} stroke="currentColor" stroke-opacity={s.o} stroke-width={s.w} fill="none" />)}
       </g>
-      <line x1="700" y1="0" x2="700" y2="560" stroke="rgba(247,122,26,0.22)" stroke-width="5"></line>
-      <line x1="700" y1="0" x2="700" y2="560" stroke="rgba(255,255,255,0.05)" stroke-width="1" stroke-dasharray="14 10"></line>
-      <line x1="330" y1="0" x2="330" y2="560" stroke="rgba(24,112,224,0.28)" stroke-width="9"></line>
-      <line x1="1070" y1="0" x2="1070" y2="560" stroke="rgba(24,112,224,0.28)" stroke-width="9"></line>
-      <circle cx="700" cy="280" r="190" stroke="rgba(255,255,255,0.09)" stroke-width="2" fill="none"></circle>
-      <circle cx="700" cy="280" r="7" fill="rgba(24,112,224,0.5)"></circle>
-      <circle cx="190" cy="140" r="5" fill="rgba(247,122,26,0.35)"></circle>
-      <circle cx="190" cy="420" r="5" fill="rgba(247,122,26,0.35)"></circle>
-      <circle cx="1210" cy="140" r="5" fill="rgba(247,122,26,0.35)"></circle>
-      <circle cx="1210" cy="420" r="5" fill="rgba(247,122,26,0.35)"></circle>
+      <line x1="700" y1="0" x2="700" y2="560" stroke="rgba(232,180,20,0.22)" stroke-width="5"></line>
+      <line x1="700" y1="0" x2="700" y2="560" stroke="currentColor" stroke-opacity="0.05" stroke-width="1" stroke-dasharray="14 10"></line>
+      <line x1="330" y1="0" x2="330" y2="560" stroke="rgba(42,65,139,0.45)" stroke-width="9"></line>
+      <line x1="1070" y1="0" x2="1070" y2="560" stroke="rgba(42,65,139,0.45)" stroke-width="9"></line>
+      <circle cx="700" cy="280" r="190" stroke="currentColor" stroke-opacity="0.09" stroke-width="2" fill="none"></circle>
+      <circle cx="700" cy="280" r="7" fill="rgba(42,65,139,0.7)"></circle>
+      <circle cx="190" cy="140" r="5" fill="rgba(232,180,20,0.4)"></circle>
+      <circle cx="190" cy="420" r="5" fill="rgba(232,180,20,0.4)"></circle>
+      <circle cx="1210" cy="140" r="5" fill="rgba(232,180,20,0.4)"></circle>
+      <circle cx="1210" cy="420" r="5" fill="rgba(232,180,20,0.4)"></circle>
     </svg>
+    <img
+      class="hero-photo"
+      src={url('hero/team-2025-1280.webp')}
+      srcset={`${url('hero/team-2025-768.webp')} 768w, ${url('hero/team-2025-1280.webp')} 1280w`}
+      sizes="100vw"
+      width="1280"
+      height="711"
+      alt=""
+      fetchpriority="high"
+      decoding="async"
+      onerror="this.remove()"
+    />
+    <div class="hero-scrim" aria-hidden="true"></div>
     <div class="hero-inner">
       <p class="hero-top rise">
         <span class="tag" id="h-next">{t('home.nextGame')}</span>
@@ -366,9 +379,36 @@ import CalendarButton from '../../components/CalendarButton.astro';
     margin: 0 calc(-1 * var(--gutter));
     padding: 1.6rem var(--gutter) 1.4rem;
     overflow: hidden;
+    color: var(--text);
     background:
-      radial-gradient(70% 90% at 50% 50%, rgba(201, 225, 248, 0.05), transparent 70%),
-      linear-gradient(165deg, #1c1d1f 0%, #131415 60%, var(--bg) 100%);
+      radial-gradient(70% 90% at 50% 50%, rgba(188, 204, 234, 0.06), transparent 70%),
+      linear-gradient(165deg, var(--hero-a) 0%, var(--hero-b) 60%, var(--bg) 100%);
+  }
+  /* Team photo (Rob Kona). Darkened in dark mode, washed to ice in light mode, so the scoreboard stays readable. */
+  .hero-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 38%;
+    pointer-events: none;
+  }
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(120% 70% at 50% 55%, rgba(var(--bg-rgb), 0.55), rgba(var(--bg-rgb), 0.82) 70%),
+      linear-gradient(180deg, rgba(var(--bg-rgb), 0.55) 0%, rgba(var(--bg-rgb), 0.35) 35%, rgba(var(--bg-rgb), 0.92) 100%);
+  }
+  :global(html[data-theme='light']) .hero-scrim {
+    background:
+      radial-gradient(120% 70% at 50% 55%, rgba(var(--bg-rgb), 0.72), rgba(var(--bg-rgb), 0.88) 70%),
+      linear-gradient(180deg, rgba(var(--bg-rgb), 0.7) 0%, rgba(var(--bg-rgb), 0.55) 35%, rgba(var(--bg-rgb), 0.96) 100%);
+  }
+  :global(html[data-theme='light']) .hero-photo {
+    filter: grayscale(0.35) contrast(0.9);
   }
   /* Center ice: faint rink markings + skate scratches behind the matchup. */
   .rink {
@@ -425,10 +465,10 @@ import CalendarButton from '../../components/CalendarButton.astro';
   .code {
     font: 800 clamp(2.6rem, 14vw, 4.2rem) / 0.9 var(--display);
     letter-spacing: 0.02em;
-    color: #fff;
+    color: var(--text);
   }
   .side.us .code {
-    color: var(--orange);
+    color: var(--accent-text);
   }
   .full {
     font-size: 0.78rem;
@@ -455,7 +495,7 @@ import CalendarButton from '../../components/CalendarButton.astro';
     font-weight: 800;
   }
   .dot {
-    color: var(--orange);
+    color: var(--accent-text);
     margin: 0 0.4rem;
   }
   .where {
@@ -480,14 +520,14 @@ import CalendarButton from '../../components/CalendarButton.astro';
     align-items: center;
     padding: 0.55rem 0 0.45rem;
     border-radius: 10px;
-    background: rgba(0, 0, 0, 0.35);
+    background: var(--chip-bg);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      inset 0 1px 0 rgba(var(--fg-rgb), 0.06),
       inset 0 -2px 0 rgba(var(--accent-rgb), 0.6);
   }
   .seg-digit .v {
     font: 800 2rem/1 var(--display);
-    color: #fff;
+    color: var(--text);
   }
   .seg-digit .k {
     font: 700 0.68rem/1 var(--display);
@@ -603,7 +643,7 @@ import CalendarButton from '../../components/CalendarButton.astro';
   }
   .last-score .big {
     font: 800 3.6rem/1 var(--display);
-    color: #fff;
+    color: var(--text);
   }
   .last-score i {
     font-style: normal;
@@ -667,7 +707,7 @@ import CalendarButton from '../../components/CalendarButton.astro';
       padding-left: 0.6rem;
     }
     .goal-sum li.us .gn {
-      color: var(--orange);
+      color: var(--accent-text);
     }
     .gt {
       font: 800 0.95rem/1 var(--display);
@@ -682,7 +722,7 @@ import CalendarButton from '../../components/CalendarButton.astro';
     }
     .gn {
       font-weight: 700;
-      color: #fff;
+      color: var(--text);
     }
     .ga2 {
       font-size: 0.78rem;
@@ -698,7 +738,7 @@ import CalendarButton from '../../components/CalendarButton.astro';
       text-transform: uppercase;
       padding: 3px 6px;
       border-radius: 4px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(var(--fg-rgb), 0.1);
       color: var(--text);
     }
     .gtag.gwg {
@@ -707,7 +747,7 @@ import CalendarButton from '../../components/CalendarButton.astro';
     }
     .gs {
       font: 800 1.05rem/1 var(--display);
-      color: #fff;
+      color: var(--text);
     }
     .goal-more {
       position: absolute;
@@ -754,7 +794,7 @@ import CalendarButton from '../../components/CalendarButton.astro';
     color: var(--text);
   }
   .leaders a:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(var(--fg-rgb), 0.03);
     color: var(--text);
   }
   .rk {
@@ -762,7 +802,7 @@ import CalendarButton from '../../components/CalendarButton.astro';
     color: var(--dim);
   }
   .first .rk {
-    color: var(--orange);
+    color: var(--accent-text);
   }
   .nm {
     display: flex;
@@ -789,7 +829,7 @@ import CalendarButton from '../../components/CalendarButton.astro';
   }
   .pt {
     font: 800 1.8rem/1 var(--display);
-    color: #fff;
+    color: var(--text);
     min-width: 2.2ch;
     text-align: right;
   }
@@ -800,7 +840,7 @@ import CalendarButton from '../../components/CalendarButton.astro';
     margin-left: 2px;
   }
   .first .pt {
-    color: var(--orange);
+    color: var(--accent-text);
   }
 
   /* ---------- Recap ---------- */

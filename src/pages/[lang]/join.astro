@@ -78,7 +78,7 @@ const facts = [
     overflow: hidden;
     background:
       radial-gradient(80% 70% at 50% 0%, rgba(var(--accent-rgb), 0.22), transparent 70%),
-      linear-gradient(170deg, #1f1f1f, #141414 60%, var(--bg));
+      linear-gradient(170deg, var(--hero-a), var(--hero-b) 60%, var(--bg));
   }
   @media (min-width: 1180px) {
     .hero {
@@ -124,7 +124,7 @@ const facts = [
   }
   .amount {
     font: 800 4rem/1 var(--display);
-    color: var(--orange);
+    color: var(--accent-text);
     margin: 0.2rem 0 0.3rem;
     text-shadow: 0 0 40px rgba(var(--accent-rgb), 0.35);
   }
