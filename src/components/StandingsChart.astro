@@ -1,9 +1,9 @@
 ---
-// Table position over the season (#11): a bump chart, one line per team, logos at the end of each line.
-// Positions are replayed game day by game day from the results (win 2, tie or OT/SO loss 1, as in this
-// league); the last point uses the official table. Logos sit in an HTML column so they stay readable on
-// phones; tap or hover a logo to highlight that team.
-import { type Lang, url, formatDate } from '../i18n/index.ts';
+// Table race (#11), MoneyPuck style: x = games played, y = points above a 1-point-per-game pace
+// (wins are 2 points in this league, so "pace" is a .500 team). One line per team with a dot per game,
+// logos at the end of each line. Our line is the brand yellow; tap a logo to highlight a team.
+// Built for phones first: the SVG is drawn at phone proportions and scales up to a capped width.
+import { type Lang, url } from '../i18n/index.ts';
 import { season as getSeason, teamName } from '../lib/data.ts';
 import { teamKey } from '../lib/teams.ts';
 import { isOurTeam } from '../config/team.ts';
@@ -19,220 +19,231 @@ const de = lang === 'de';
 const s = getSeason(season);
 const st = s?.standings.find((x) => x.divisionId === divisionId);
 const played = (s?.games ?? [])
-  .filter((g) => g.divisionId === divisionId && g.status === 'final' && g.homeScore != null && g.awayScore != null && g.date)
+  .filter((g) => g.divisionId === divisionId && g.status === 'final' && g.homeScore != null && g.awayScore != null)
   .sort((a, b) => (a.timestamp ?? 0) - (b.timestamp ?? 0));
-// One point per week: teams play on different dates, so per-date positions would just zigzag.
-const weekOf = (iso: string) => {
-  const d = new Date(iso + 'T12:00:00Z');
-  d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7));
-  return d.toISOString().slice(0, 10);
-};
-const days = [...new Set(played.map((g) => weekOf(g.date!)))];
 
-type Row = { key: string; team: TeamRef; pts: number; gf: number; ga: number };
-const rows = new Map<string, Row>();
-for (const r of st?.rows ?? []) rows.set(teamKey(r.team), { key: teamKey(r.team), team: r.team, pts: 0, gf: 0, ga: 0 });
-const series = new Map<string, number[]>([...rows.keys()].map((k) => [k, []]));
-for (const day of days) {
-  for (const g of played.filter((x) => weekOf(x.date!) === day)) {
-    const h = rows.get(teamKey(g.home));
-    const a = rows.get(teamKey(g.away));
-    if (!h || !a) continue;
-    const hs = g.homeScore!;
-    const as = g.awayScore!;
-    h.gf += hs;
-    h.ga += as;
-    a.gf += as;
-    a.ga += hs;
-    const extra = g.overtime || g.shootout;
-    if (hs > as) {
-      h.pts += 2;
-      if (extra) a.pts += 1;
-    } else if (as > hs) {
-      a.pts += 2;
-      if (extra) h.pts += 1;
-    } else {
-      h.pts += 1;
-      a.pts += 1;
-    }
+// Per team: running "points minus games played" after each of its games.
+type Team = { key: string; team: TeamRef; pts: number; gp: number; path: number[] };
+const teams = new Map<string, Team>();
+for (const r of st?.rows ?? []) teams.set(teamKey(r.team), { key: teamKey(r.team), team: r.team, pts: 0, gp: 0, path: [0] });
+for (const g of played) {
+  const h = teams.get(teamKey(g.home));
+  const a = teams.get(teamKey(g.away));
+  if (!h || !a) continue;
+  const extra = g.overtime || g.shootout;
+  const hs = g.homeScore!;
+  const as = g.awayScore!;
+  const hp = hs > as ? 2 : hs === as || extra ? 1 : 0;
+  const ap = as > hs ? 2 : hs === as || extra ? 1 : 0;
+  for (const [t, p] of [
+    [h, hp],
+    [a, ap],
+  ] as const) {
+    t.pts += p;
+    t.gp += 1;
+    t.path.push(t.pts - t.gp);
   }
-  const order = [...rows.values()].sort((x, y) => y.pts - x.pts || y.gf - y.ga - (x.gf - x.ga) || y.gf - x.gf || teamName(x.team).localeCompare(teamName(y.team)));
-  order.forEach((r, i) => series.get(r.key)!.push(i + 1));
 }
-// Last point = official table.
-for (const r of st?.rows ?? []) {
-  const list = series.get(teamKey(r.team));
-  if (list?.length) list[list.length - 1] = r.rank;
-}
-const n = rows.size;
-const W = 640;
-const H = n * 28;
-const padY = 12;
-const x = (i: number) => (days.length <= 1 ? W / 2 : (i / (days.length - 1)) * (W - 8) + 4);
-const y = (rank: number) => padY + ((rank - 1) / Math.max(1, n - 1)) * (H - 2 * padY);
-const lines = [...series.entries()].map(([k, pts]) => ({
-  key: k,
-  team: rows.get(k)!.team,
-  us: isOurTeam(rows.get(k)!.team),
-  d: pts.map((r, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(r).toFixed(1)}`).join(' '),
-  last: pts.at(-1) ?? n,
-}));
-const show = days.length >= 2 && n >= 3;
+const list = [...teams.values()].filter((t) => t.gp > 0);
+const maxGp = Math.max(1, ...list.map((t) => t.gp));
+const vals = list.flatMap((t) => t.path);
+const yMax = Math.max(2, ...vals);
+const yMin = Math.min(-2, ...vals);
+
+// Phone-first canvas; the CSS caps the width on desktop so labels stay readable.
+const W = 360;
+const H = 360;
+const L = 26; // left axis
+const R = 38; // room for logos
+const T = 10;
+const B = 22;
+const x = (i: number) => L + (i / maxGp) * (W - L - R);
+const y = (v: number) => T + ((yMax - v) / (yMax - yMin)) * (H - T - B);
+const yStep = yMax - yMin > 12 ? 4 : 2;
+const yTicks: number[] = [];
+for (let v = Math.ceil(yMin / yStep) * yStep; v <= yMax; v += yStep) yTicks.push(v);
+const xStep = maxGp > 15 ? 5 : maxGp > 6 ? 2 : 1;
+const xTicks: number[] = [];
+for (let v = 0; v <= maxGp; v += xStep) xTicks.push(v);
+
+// Distinct colours that work on dark and light; ours is the brand yellow.
+const PALETTE = ['#4766c4', '#d1495b', '#2a9d8f', '#8e6fd8', '#e07a5f', '#3d9be9', '#6a994e', '#c05299', '#8d99ae', '#00a6a6', '#b5838d'];
+let pi = 0;
+const lines = list
+  .sort((a, b) => Number(isOurTeam(a.team)) - Number(isOurTeam(b.team)))
+  .map((t, i) => {
+    const us = isOurTeam(t.team);
+    const color = us ? 'var(--orange)' : PALETTE[pi++ % PALETTE.length];
+    const pts = t.path.map((v, k) => [x(k), y(v)] as const);
+    return { ...t, us, color, dashed: !us && i % 2 === 1, d: pts.map(([px, py], k) => `${k ? 'L' : 'M'}${px.toFixed(1)} ${py.toFixed(1)}`).join(' '), pts, end: pts.at(-1)! };
+  });
+// End logos: keep them from overlapping (min 15 units apart), nudged within the chart.
+const ends = [...lines].sort((a, b) => a.end[1] - b.end[1]).map((l) => ({ l, y: l.end[1] }));
+for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 19) ends[i].y = ends[i - 1].y + 19;
+const overflow = (ends.at(-1)?.y ?? 0) - (H - B);
+if (overflow > 0) for (const e of ends) e.y -= overflow;
+const endY = new Map(ends.map((e) => [e.l.key, e.y]));
+const show = maxGp >= 2 && list.length >= 3;
 ---
 
 {
   show && (
     <section class="chart-sec" aria-labelledby={`h-bump-${divisionId}`} data-pagefind-ignore>
       <div class="sec-head">
-        <h2 id={`h-bump-${divisionId}`}>{de ? 'Tabellenverlauf' : 'Table over time'}</h2>
+        <h2 id={`h-bump-${divisionId}`}>{de ? 'Tabellenverlauf' : 'Table race'}</h2>
       </div>
-      <div class="panel bump" data-bump style={`--ch:${n * 28}px`}>
-        <div class="plot">
-          <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" role="img" aria-label={de ? 'Tabellenplatz je Woche' : 'Table position per week'}>
-            {Array.from({ length: n }, (_, i) => (
-              <line x1="0" x2={W} y1={y(i + 1)} y2={y(i + 1)} class="grid" />
-            ))}
-            {lines
-              .filter((l) => !l.us)
-              .map((l) => (
-                <path d={l.d} class="ln" data-key={l.key} vector-effect="non-scaling-stroke" />
+      <div class="panel race" data-race>
+        <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={de ? 'Punkte über einem Punkt pro Spiel, je Team und Spiel' : 'Points above one point per game, per team and game'}>
+          {yTicks.map((v) => (
+            <g>
+              <line x1={L} x2={W - R} y1={y(v)} y2={y(v)} class:list={['grid', { zero: v === 0 }]} />
+              <text x={L - 5} y={y(v) + 3} class="ax" text-anchor="end">
+                {v > 0 ? `+${v}` : v}
+              </text>
+            </g>
+          ))}
+          {xTicks.map((v) => (
+            <text x={x(v)} y={H - 6} class="ax" text-anchor="middle">
+              {v}
+            </text>
+          ))}
+          {lines.map((l) => (
+            <g class:list={['ln', { us: l.us }]} data-key={l.key} style={`--c:${l.color}`}>
+              <path d={l.d} class:list={{ dash: l.dashed }} />
+              {l.pts.slice(1).map(([px, py]) => (
+                <circle cx={px} cy={py} r={l.us ? 2.6 : 1.9} />
               ))}
-            {lines
-              .filter((l) => l.us)
-              .map((l) => (
-                <path d={l.d} class="ln us" data-key={l.key} vector-effect="non-scaling-stroke" />
-              ))}
-          </svg>
-          <div class="axis small dim">
-            <span>{formatDate(lang, played[0]?.date)}</span>
-            <span>{`${days.length} ${de ? 'Wochen' : 'weeks'}`}</span>
-            <span>{formatDate(lang, played.at(-1)?.date)}</span>
-          </div>
-        </div>
-        <ol class="logos">
-          {[...lines]
-            .sort((a, b) => a.last - b.last)
-            .map((l) => (
-              <li style={`top:${((y(l.last) / H) * 100).toFixed(2)}%`}>
-                <button type="button" data-key={l.key} class:list={{ us: l.us }} title={`${l.last}. ${teamName(l.team)}`} aria-pressed={l.us ? 'true' : 'false'}>
-                  {l.team.logo ? (
-                    <img src={url(l.team.logo)} alt={teamName(l.team)} width="24" height="24" loading="lazy" />
-                  ) : (
-                    <span class="ph">{(l.team.short || teamName(l.team)).slice(0, 3)}</span>
-                  )}
-                </button>
-              </li>
-            ))}
-        </ol>
+              {endY.get(l.key)! !== l.end[1] && <line x1={l.end[0]} y1={l.end[1]} x2={l.end[0] + 6} y2={endY.get(l.key)} class="lead" />}
+            </g>
+          ))}
+          {lines.map((l) => (
+            <g class:list={['logo', { us: l.us }]} data-key={l.key} role="button" tabindex="0" aria-label={teamName(l.team)}>
+              <title>{teamName(l.team)}</title>
+              <circle cx={l.end[0] + 17} cy={endY.get(l.key)} r="10.5" class="ring" />
+              {l.team.logo ? (
+                <image href={url(l.team.logo)} x={l.end[0] + 8} y={endY.get(l.key)! - 9} width="18" height="18" preserveAspectRatio="xMidYMid meet" />
+              ) : (
+                <text x={l.end[0] + 17} y={endY.get(l.key)! + 3} class="ax" text-anchor="middle">
+                  {(l.team.short || teamName(l.team)).slice(0, 3)}
+                </text>
+              )}
+            </g>
+          ))}
+        </svg>
+        <p class="axis-lab small dim">
+          <span>{de ? '↑ Punkte über Schnitt (1 Punkt pro Spiel)' : '↑ Points above 1 point per game'}</span>
+          <span>{de ? 'Spiele →' : 'Games →'}</span>
+        </p>
       </div>
       <p class="small dim note">
         {de
-          ? 'Platzierung nach jeder Woche, aus den Ergebnissen berechnet (Sieg 2 Punkte, Unentschieden 1). Logo antippen, um ein Team hervorzuheben.'
-          : 'Position after each week, calculated from the results (win 2 points, tie 1). Tap a logo to highlight a team.'}
+          ? 'Steigt eine Linie, holt das Team mehr als einen Punkt pro Spiel (Sieg 2, Unentschieden 1). Logo antippen, um ein Team hervorzuheben.'
+          : 'A rising line means more than one point per game (win 2, tie 1). Tap a logo to highlight a team.'}
       </p>
     </section>
   )
 }
 
 <script>
-  document.querySelectorAll<HTMLElement>('[data-bump]').forEach((root) => {
-    const pick = (key: string | null) => {
-      root.classList.toggle('picking', !!key);
-      root.querySelectorAll<SVGPathElement>('path.ln').forEach((p) => p.classList.toggle('on', p.dataset.key === key));
-      root.querySelectorAll<HTMLButtonElement>('.logos button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.key === key || (!key && b.classList.contains('us')))));
-    };
+  document.querySelectorAll<HTMLElement>('[data-race]').forEach((root) => {
     let cur: string | null = null;
-    root.querySelectorAll<HTMLButtonElement>('.logos button').forEach((b) =>
-      b.addEventListener('click', () => {
-        cur = cur === b.dataset.key ? null : b.dataset.key!;
-        pick(cur);
-      }),
-    );
+    const pick = (key: string | null) => {
+      cur = cur === key ? null : key;
+      root.classList.toggle('picking', !!cur);
+      root.querySelectorAll<SVGGElement>('g.ln, g.logo').forEach((g) => g.classList.toggle('on', g.dataset.key === cur));
+    };
+    root.querySelectorAll<SVGGElement>('g.logo').forEach((g) => {
+      g.addEventListener('click', () => pick(g.dataset.key!));
+      g.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          pick(g.dataset.key!);
+        }
+      });
+    });
   });
 </script>
 
 <style>
-  .bump {
-    display: grid;
-    grid-template-columns: 1fr 34px;
-    gap: 8px;
-    padding-right: 10px;
+  .race {
+    padding: 12px 8px 8px;
   }
-  .plot {
-    min-width: 0;
-  }
-  .plot svg {
+  .race svg {
     display: block;
     width: 100%;
-    height: var(--ch);
+    max-width: 760px;
+    margin: 0 auto;
+    overflow: visible;
   }
   .grid {
     stroke: var(--line);
+    stroke-width: 0.6;
+  }
+  .grid.zero {
+    stroke: var(--line-strong);
     stroke-width: 1;
-    vector-effect: non-scaling-stroke;
   }
-  .ln {
+  .ax {
+    font: 600 8.5px var(--font);
+    fill: var(--dim);
+  }
+  .ln path {
     fill: none;
-    stroke: rgba(var(--fg-rgb), 0.22);
-    stroke-width: 2;
+    stroke: var(--c);
+    stroke-width: 1.6;
     stroke-linejoin: round;
-    transition: stroke 0.2s, opacity 0.2s;
+    stroke-linecap: round;
+    opacity: 0.85;
   }
-  .ln.us {
+  .ln path.dash {
+    stroke-dasharray: 2 2.5;
+  }
+  .ln circle {
+    fill: var(--c);
+  }
+  .ln.us path {
+    stroke-width: 2.8;
+    opacity: 1;
+  }
+  .ln .lead {
+    stroke: var(--c);
+    stroke-width: 0.6;
+    opacity: 0.6;
+  }
+  .ring {
+    fill: var(--panel);
+    stroke: var(--line-strong);
+    stroke-width: 0.8;
+  }
+  .logo {
+    cursor: pointer;
+  }
+  .logo.us .ring {
     stroke: var(--orange);
-    stroke-width: 3.5;
+    stroke-width: 1.4;
+  }
+  .logo:focus-visible .ring {
+    stroke: var(--text);
+    stroke-width: 1.6;
   }
   .picking .ln {
-    opacity: 0.35;
+    opacity: 0.18;
   }
-  .picking .ln.on {
+  .picking .ln.on,
+  .picking .ln.us {
     opacity: 1;
-    stroke: var(--blue-hi);
-    stroke-width: 3.5;
   }
-  .picking .ln.us.on {
-    stroke: var(--orange);
+  .picking .ln.on path {
+    stroke-width: 2.8;
   }
-  .axis {
+  .picking .logo.on .ring {
+    stroke: var(--c, var(--text));
+    stroke-width: 1.8;
+  }
+  .axis-lab {
     display: flex;
     justify-content: space-between;
-    margin-top: 0.4rem;
-  }
-  .logos {
-    position: relative;
-    height: var(--ch);
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .logos li {
-    position: absolute;
-    left: 0;
-    transform: translateY(-50%);
-  }
-  .logos button {
-    display: grid;
-    place-items: center;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    border: 0;
-    border-radius: 50%;
-    background: none;
-    cursor: pointer;
-    opacity: 0.8;
-  }
-  .logos button[aria-pressed='true'] {
-    opacity: 1;
-    box-shadow: 0 0 0 2px var(--orange);
-  }
-  .logos img {
-    width: 24px;
-    height: 24px;
-    object-fit: contain;
-  }
-  .ph {
-    font: 800 0.6rem/1 var(--display);
+    margin: 0.3rem 0.25rem 0;
   }
   .note {
     margin-top: 0.6rem;

@@ -137,7 +137,7 @@ const chip = (r: TeamResult) => r.result;
                   <span class="d small dim tnum">{formatDate(lang, r.game.date)}</span>
                   <span class={`res res-${resultClass(r.result)}`}>{r.result}</span>
                   <span class="sc tnum">{r.gf}:{r.ga}</span>
-                  <span class="small dim">{r.home ? (de ? 'Heim' : 'Home') : de ? 'Auswärts' : 'Away'}</span>
+                  <span class="small dim">{r.game.playoff ? 'Playoffs' : r.game.divisionName}</span>
                 </a>
               </li>
             ))}

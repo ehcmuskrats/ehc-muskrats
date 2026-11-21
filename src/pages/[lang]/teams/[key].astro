@@ -1,14 +1,12 @@
 ---
 // Opponent profile (#16): who they are this season (position, record, form, special teams) and our
-// complete history against them, with a this-season comparison. All from WEHV data.
+// complete history against them. The head-to-head card compares both teams this season. All from WEHV data.
 import Base from '../../../layouts/Base.astro';
-import Team from '../../../components/Team.astro';
 import DataCredit from '../../../components/DataCredit.astro';
-import { type Lang, LANGS, href, formatDate, formatNumber } from '../../../i18n/index.ts';
-import { RESULT_FULL } from '../../../i18n/abbr.ts';
-import { currentSeasonId, resultClass, teamName, ourGames, hasGamePage } from '../../../lib/data.ts';
-import { opponents, headToHead, tally, form, standing, teamStats, seasonsOf, teamKey, type TeamInfo } from '../../../lib/teams.ts';
-import { isOurTeam } from '../../../config/team.ts';
+import H2HCard from '../../../components/H2HCard.astro';
+import { type Lang, LANGS, href, formatDate } from '../../../i18n/index.ts';
+import { currentSeasonId, resultClass, ourGames, hasGamePage } from '../../../lib/data.ts';
+import { opponents, headToHead, tally, standing, seasonsOf, teamKey, type TeamInfo } from '../../../lib/teams.ts';
 
 export function getStaticPaths() {
   return LANGS.flatMap((lang) => opponents().map((o) => ({ params: { lang, key: o.key }, props: { o } })));
@@ -17,18 +15,14 @@ const { o } = Astro.props as { o: TeamInfo };
 const lang = Astro.params.lang as Lang;
 const de = lang === 'de';
 const label = (sid: string) => sid.replace('-', '/');
-const pct = (n: number | null | undefined) => (n == null ? '–' : `${formatNumber(lang, n, 1)}%`);
 
 const inLeague = seasonsOf(o.key);
 const sid = inLeague.includes(currentSeasonId) ? currentSeasonId : inLeague[0];
 const st = standing(o.key, sid);
-const frm = form(o.key, sid, 5);
-const special = teamStats(o.key, sid);
 const usSt = standing('ehc-muskrats', sid);
-const usSpecial = teamStats('ehc-muskrats', sid);
+const usTeam = usSt?.row.team ?? ourGames(sid)[0]?.home;
 
 const h2h = headToHead(o.key);
-const all = tally(h2h);
 const bySeason = [...new Set(h2h.map((r) => r.game.season))].map((s) => ({ s, t: tally(h2h.filter((r) => r.game.season === s)) }));
 const biggestWin = [...h2h].filter((r) => r.gf > r.ga).sort((a, b) => b.gf - b.ga - (a.gf - a.ga))[0];
 const biggestLoss = [...h2h].filter((r) => r.gf < r.ga).sort((a, b) => b.ga - b.gf - (a.ga - a.gf))[0];
@@ -37,89 +31,34 @@ const next = ourGames(currentSeasonId)
   .filter((g) => teamKey(g.home) === o.key || teamKey(g.away) === o.key)
   .sort((a, b) => a.timestamp! - b.timestamp!)[0];
 
-// This-season comparison: [label, us, them, higher is better?, formatted us, formatted them]
-const cmp: [string, number, number, boolean, string, string][] = [];
-if (st && usSt) {
-  const a = usSt.row;
-  const b = st.row;
-  const per = (x: number, gp: number) => (gp ? x / gp : 0);
-  cmp.push([de ? 'Punkte pro Spiel' : 'Points per game', per(a.pts, a.gp), per(b.pts, b.gp), true, formatNumber(lang, per(a.pts, a.gp), 2), formatNumber(lang, per(b.pts, b.gp), 2)]);
-  cmp.push([de ? 'Tore pro Spiel' : 'Goals per game', per(a.gf, a.gp), per(b.gf, b.gp), true, formatNumber(lang, per(a.gf, a.gp), 2), formatNumber(lang, per(b.gf, b.gp), 2)]);
-  cmp.push([de ? 'Gegentore pro Spiel' : 'Goals against per game', per(a.ga, a.gp), per(b.ga, b.gp), false, formatNumber(lang, per(a.ga, a.gp), 2), formatNumber(lang, per(b.ga, b.gp), 2)]);
-}
-if (special && usSpecial) {
-  cmp.push(['Power Play', usSpecial.ppPct ?? 0, special.ppPct ?? 0, true, pct(usSpecial.ppPct), pct(special.ppPct)]);
-  cmp.push(['Penalty Kill', usSpecial.pkPct ?? 0, special.pkPct ?? 0, true, pct(usSpecial.pkPct), pct(special.pkPct)]);
-  cmp.push([de ? 'Strafminuten pro Spiel' : 'PIM per game', usSpecial.gp ? usSpecial.pim / usSpecial.gp : 0, special.gp ? special.pim / special.gp : 0, false, formatNumber(lang, usSpecial.gp ? usSpecial.pim / usSpecial.gp : 0, 1), formatNumber(lang, special.gp ? special.pim / special.gp : 0, 1)]);
-}
 ---
 
 <Base lang={lang} title={o.name} path={`teams/${o.key}/`} active="nav.standings" leagueData>
   <a class="back small" href={href(lang, 'teams/')}>← {de ? 'Alle Gegner' : 'All opponents'}</a>
-  <header class="t-hero">
-    <Team team={o.team} logoOnly size={84} />
-    <div>
-      <span class="tag">{st ? `${st.division} ${label(sid)}` : label(sid)}</span>
-      <h1>{o.name}</h1>
-      {
-        st && (
-          <p class="sub tnum">
-            <strong>#{st.row.rank}</strong> {de ? 'von' : 'of'} {st.teams} · {st.row.pts} PTS · {st.row.w}–{st.row.l}
-            {st.row.ties ? `–${st.row.ties}` : ''} · {st.row.gf}:{st.row.ga}
-          </p>
-        )
-      }
-    </div>
+  <header class="t-head">
+    <span class="tag">{st ? `${st.division} ${label(sid)}` : label(sid)}</span>
+    <h1>{o.name}</h1>
   </header>
 
-  <div class="grid2">
-    <div class="panel">
-      <p class="eyebrow">{de ? `Form ${label(sid)}` : `Form ${label(sid)}`}</p>
-      <div class="form">
-        {
-          frm.length ? (
-            frm.map((r) => (
-              <span class={`res res-${resultClass(r.result)}`} title={`${RESULT_FULL[r.result][lang]} ${r.gf}:${r.ga} vs ${teamName(r.opponent)}`}>
-                {r.result}
-              </span>
-            ))
-          ) : (
-            <span class="small dim">{de ? 'Noch keine Spiele' : 'No games yet'}</span>
-          )
-        }
-      </div>
-      {
-        special && (
-          <p class="small dim pp tnum">
-            PP {pct(special.ppPct)} · PK {pct(special.pkPct)} · PIM {special.pim}
-          </p>
-        )
-      }
-    </div>
-    {
-      next && (
-        <a class="panel nextg" href={hasGamePage(next) ? href(lang, `games/${next.id}/`) : href(lang, 'schedule/')}>
-          <p class="eyebrow">{de ? 'Nächstes Duell' : 'Next meeting'}</p>
-          <strong>{formatDate(lang, next.date, { weekday: true })} · {next.time ?? ''}</strong>
-          <span class="small dim">{next.venue?.replace(/^Wien - /, '')}</span>
-          <span class="small">{de ? 'Zur Vorschau' : 'Preview'} →</span>
-        </a>
-      )
-    }
-  </div>
+  {usTeam && <H2HCard lang={lang} o={o} season={sid} usTeam={usTeam} />}
+
+  {
+    next && (
+      <a class="panel nextg" href={hasGamePage(next) ? href(lang, `games/${next.id}/`) : href(lang, 'schedule/')}>
+        <span class="eyebrow">{de ? 'Nächstes Duell' : 'Next meeting'}</span>
+        <strong>
+          {formatDate(lang, next.date, { weekday: true })}
+          {next.time ? ` · ${next.time}` : ''}
+        </strong>
+        <span class="small">{de ? 'Zur Vorschau' : 'Preview'} →</span>
+      </a>
+    )
+  }
 
   <section aria-labelledby="h-h2h">
     <div class="sec-head">
       <h2 id="h-h2h">{de ? 'Bilanz gegen die Muskrats' : 'Record vs the Muskrats'}</h2>
     </div>
-    <p class="h2h-sum tnum">
-      <span class="w">{all.w} W</span>
-      <span class="l">{all.l} L</span>
-      {all.t > 0 && <span class="t">{all.t} T</span>}
-      <span class="dim small">
-        · {all.gf}:{all.ga} · {all.gp} {de ? 'Spiele (aus unserer Sicht)' : 'games (our perspective)'}
-      </span>
-    </p>
     <div class="grid2">
       {
         biggestWin && (
@@ -195,40 +134,6 @@ if (special && usSpecial) {
       }
     </ul>
   </section>
-
-  {
-    cmp.length > 0 && (
-      <section aria-labelledby="h-cmp">
-        <div class="sec-head">
-          <h2 id="h-cmp">{de ? `Vergleich ${label(sid)}` : `Comparison ${label(sid)}`}</h2>
-        </div>
-        <div class="cmp-head small">
-          <span>EHC Muskrats</span>
-          <span>{o.short || o.name}</span>
-        </div>
-        <ul class="cmp">
-          {cmp.map(([lab, a, b, higher, fa, fb]) => {
-            const total = Math.abs(a) + Math.abs(b) || 1;
-            const usBetter = higher ? a > b : a < b;
-            const themBetter = higher ? b > a : b < a;
-            return (
-              <li>
-                <span class:list={['v tnum', { better: usBetter }]}>{fa}</span>
-                <span class="lab">
-                  <span class="small">{lab}</span>
-                  <span class="bar">
-                    <span class="a" style={`width:${(Math.abs(a) / total) * 100}%`} />
-                    <span class="b" style={`width:${(Math.abs(b) / total) * 100}%`} />
-                  </span>
-                </span>
-                <span class:list={['v tnum r', { better: themBetter }]}>{fb}</span>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-    )
-  }
 
   <DataCredit lang={lang} />
 </Base>
