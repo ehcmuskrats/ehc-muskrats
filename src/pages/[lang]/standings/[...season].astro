@@ -28,6 +28,8 @@ const gameById = new Map((s?.games ?? []).map((g) => [g.id, g]));
 const ourIds = new Set(ourGames(seasonId).map((g) => g.id));
 void reports;
 import { teamHref } from '../../../lib/teams.ts';
+import StandingsChart from '../../../components/StandingsChart.astro';
+const regularDiv = s?.standings.find((x) => s.info.divisions.find((d) => d.id === x.divisionId)?.kind === 'regular')?.divisionId ?? null;
 ---
 
 <Base lang={lang} title={`${t('standings.title')} ${seasonId.replace('-', '/')}`} path={Astro.params.season ? `standings/${seasonId}/` : 'standings/'} active="nav.standings" leagueData>
@@ -126,6 +128,8 @@ import { teamHref } from '../../../lib/teams.ts';
       </section>
     ))
   }
+
+  {regularDiv != null && <StandingsChart lang={lang} season={seasonId} divisionId={regularDiv} />}
 
   {
     bracket && bracket.phases.length > 0 && (
