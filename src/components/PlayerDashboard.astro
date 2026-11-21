@@ -182,7 +182,7 @@ const iconPaths: Record<string, string> = {
 
     {
       ins.facts.length > 0 && (
-        <aside class="panel facts" aria-labelledby={`facts-${p.id}`}>
+        <div class="panel facts" role="group" aria-labelledby={`facts-${p.id}`}>
           <p class="eyebrow" id={`facts-${p.id}`}>
             {t(lang, 'player.facts')}
           </p>
@@ -204,7 +204,7 @@ const iconPaths: Record<string, string> = {
               {de ? 'Neue Fakten' : 'More facts'} ↻
             </button>
           )}
-        </aside>
+        </div>
       )
     }
   </div>

@@ -83,6 +83,7 @@ const sections = game
 
 <Base lang={lang} title={title} description={`${formatDate(lang, g.date)} · ${g.venue ?? ''}`} path={`games/${g.id}/`} active="nav.schedule" leagueData>
   <!-- SCORE BUG -->
+  <h1 class="visually-hidden">{title}</h1>
   <section class="bug-hero" aria-label={t('game.title')}>
     <a class="back" href={href(lang, `schedule/${g.season}/`)}>← {t('nav.schedule')} {g.season.replace('-', '/')}</a>
     <p class="meta">
@@ -448,6 +449,12 @@ const sections = game
 </Base>
 
 <style>
+  /* WCAG 2.2 target size for the small assist links */
+  .as :global(a) {
+    display: inline-block;
+    min-height: 24px;
+    line-height: 24px;
+  }
   /* ---------- Score bug hero ---------- */
   .bug-hero {
     position: relative;

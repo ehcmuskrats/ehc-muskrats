@@ -39,6 +39,7 @@
   --bg-rgb: 14, 14, 14;
   --bar-rgb: 20, 20, 20;
   --chip-bg: rgba(0, 0, 0, 0.45);
+  --ours-sticky: #2a2511; /* opaque version of the yellow row tint (sticky first column) */
 
   /* surfaces */
   --bg: #0e0e0e;
@@ -123,6 +124,7 @@
   --bg-rgb: 247, 241, 233;
   --bar-rgb: 255, 252, 246;
   --chip-bg: rgba(255, 253, 249, 0.8);
+  --ours-sticky: #f6ead0;
   --glow-blue: 0 0 0 1px rgba(var(--fg-rgb), 0.16), 0 10px 28px -14px rgba(80, 60, 20, 0.35);
 }
 /* Without JS: follow the device setting. */
@@ -156,6 +158,7 @@
   --bg-rgb: 247, 241, 233;
   --bar-rgb: 255, 252, 246;
   --chip-bg: rgba(255, 253, 249, 0.8);
+  --ours-sticky: #f6ead0;
     --glow-blue: 0 0 0 1px rgba(var(--fg-rgb), 0.16), 0 10px 28px -14px rgba(80, 60, 20, 0.35);
   }
 }
@@ -633,11 +636,16 @@ thead .sticky-col {
   z-index: 2;
 }
 tr.ours .sticky-col {
-  background: #2a1f17;
+  background: var(--ours-sticky);
 }
 th[data-sort] button {
   all: unset;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
 }
 th[aria-sort] {
   color: var(--accent-text);

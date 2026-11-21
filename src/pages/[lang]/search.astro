@@ -40,6 +40,8 @@ const bundle = url('pagefind/');
             ? { placeholder: 'Spieler, Team, Datum …', zero_results: 'Nichts gefunden für [SEARCH_TERM]', clear_search: 'Löschen', load_more: 'Mehr anzeigen' }
             : { placeholder: 'Player, team, date …' },
         });
+        var inp = document.querySelector('#search input');
+        if (inp) inp.setAttribute('aria-label', de ? 'Suchbegriff' : 'Search term');
         var q = new URLSearchParams(location.search).get('q');
         if (q) {
           var i = document.querySelector('#search input');

@@ -178,7 +178,7 @@ const of = de ? 'von' : 'of';
             </button>
           </div>
 
-          <div class="table-wrap" data-gl-panel="goalies">
+          <div class="table-wrap" data-gl-panel="goalies" tabindex="0" aria-label={de ? 'Goalies der Liga' : 'League goalies'}>
             <table class="gl-table">
               <thead>
                 <tr>
@@ -228,7 +228,7 @@ const of = de ? 'von' : 'of';
             </table>
           </div>
 
-          <div class="table-wrap" data-gl-panel="teams" hidden>
+          <div class="table-wrap" data-gl-panel="teams" hidden tabindex="0" aria-label={de ? 'Teams der Liga' : 'League teams'}>
             {v.teams.length > 0 ? (
               <table class="gl-table">
                 <thead>
