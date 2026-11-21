@@ -2,7 +2,9 @@
 import '../styles/global.css';
 import { TEAM } from '../config/team.ts';
 import { type Lang, useT, href, url, otherLang, formatDate } from '../i18n/index.ts';
-import { syncStatus } from '../lib/data.ts';
+import { syncStatus, season as getSeason, currentSeasonId, teamName } from '../lib/data.ts';
+import { teamHref } from '../lib/teams.ts';
+import Team from '../components/Team.astro';
 
 interface Props {
   lang: Lang;
@@ -32,6 +34,7 @@ const icons: Record<string, string> = {
   roster: 'M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.3a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.7.8 2.8 2.6 3 5.2',
   highlights: 'M4 5.5h16v13H4zM10 9.5v5l4.5-2.5z',
   news: 'M5 4.5h11v15H5zM16 8.5h3v9.5a1.5 1.5 0 0 1-3 0M8 8.5h5M8 12h5M8 15.5h3',
+  teams: 'M12 3l7.5 3v5.5c0 4.6-3.2 8.2-7.5 9.5-4.3-1.3-7.5-4.9-7.5-9.5V6z',
   matchday: 'M12 21s-6.5-5.6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5.4-6.5 11-6.5 11zM12 12.3a2.3 2.3 0 1 0 0-4.6 2.3 2.3 0 0 0 0 4.6z',
   about: 'M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z',
   join: 'M12 20.5s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.9c0 5.4-7.5 10-7.5 10z',
@@ -46,12 +49,19 @@ const secondary = [
   ['roster/', 'nav.roster', 'roster'],
   ['highlights/', 'nav.highlights', 'highlights'],
   ['news/', 'nav.news', 'news'],
+  ['teams/', 'nav.teams', 'teams'],
   ['matchday/', 'nav.matchday', 'matchday'],
   ['about/', 'nav.about', 'about'],
   ['join/', 'nav.join', 'join'],
 ] as const;
 // Matchday info is in the phone menu and the footer; the desktop bar stays at nine links.
-const all = [...primary, ...secondary].filter(([p]) => p !== 'matchday/');
+const all = [...primary, ...secondary].filter(([p]) => p !== 'matchday/' && p !== 'teams/');
+// Desktop "Tabelle" dropdown: this season's league teams in table order, each linking to its team page.
+const cur = getSeason(currentSeasonId);
+const regular = cur?.standings.find((st) => cur.info.divisions.find((d) => d.id === st.divisionId)?.kind === 'regular') ?? cur?.standings[0];
+const leagueTeams = (regular?.rows ?? [])
+  .map((r) => ({ team: r.team, name: teamName(r.team), href: teamHref(r.team) }))
+  .filter((x): x is { team: typeof x.team; name: string; href: string } => !!x.href);
 const moreActive = secondary.some(([, key]) => key === active);
 ---
 
@@ -105,11 +115,43 @@ const moreActive = secondary.some(([, key]) => key === active);
         </a>
         <nav class="desk-nav" aria-label={t('nav.menu')}>
           {
-            all.map(([p, key]) => (
-              <a href={href(lang, p)} aria-current={active === key ? 'page' : undefined}>
-                {t(key)}
-              </a>
-            ))
+            all.map(([p, key]) =>
+              p === 'standings/' ? (
+                <div class="dd">
+                  <a href={href(lang, p)} aria-current={active === key || active === 'nav.teams' ? 'page' : undefined} aria-haspopup="true">
+                    {t(key)}
+                    <svg class="chev" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </a>
+                  <div class="dd-menu">
+                    <a class="dd-main" href={href(lang, 'standings/')}>
+                      {t('nav.standings')}
+                    </a>
+                    <a class="dd-main" href={href(lang, 'teams/')}>
+                      {t('nav.teams')}
+                      <span>{lang === 'de' ? 'Alle Duelle & Bilanzen' : 'Every head-to-head'}</span>
+                    </a>
+                    {leagueTeams.length > 0 && (
+                      <ul class="dd-teams">
+                        {leagueTeams.map((x) => (
+                          <li>
+                            <a href={href(lang, x.href)}>
+                              <Team team={x.team} logoOnly size={22} />
+                              <span>{x.name}</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <a href={href(lang, p)} aria-current={active === key ? 'page' : undefined}>
+                  {t(key)}
+                </a>
+              ),
+            )
           }
         </nav>
         <a class="theme" href={href(lang, 'search/')} aria-label={lang === 'de' ? 'Suche' : 'Search'}>
@@ -371,11 +413,94 @@ const moreActive = secondary.some(([, key]) => key === active);
       letter-spacing: 0.08em;
       text-transform: uppercase;
       position: relative;
+      white-space: nowrap;
     }
     .desk-nav a:hover {
       color: var(--text);
     }
     .desk-nav a[aria-current='page'] {
+      color: var(--text);
+    }
+    /* "Tabelle" dropdown: opens on hover and on keyboard focus. */
+    .dd {
+      position: relative;
+      display: flex;
+    }
+    .dd > a .chev {
+      width: 14px;
+      height: 14px;
+      margin-left: 0.25rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform 0.15s;
+    }
+    .dd:hover > a .chev,
+    .dd:focus-within > a .chev {
+      transform: rotate(180deg);
+    }
+    .dd-menu {
+      position: absolute;
+      top: calc(100% - 6px);
+      left: 0;
+      z-index: 70;
+      display: none;
+      min-width: 300px;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      background: var(--panel-2);
+      box-shadow:
+        0 0 0 1px var(--line-strong),
+        0 18px 40px -14px rgba(0, 0, 0, 0.6);
+    }
+    .dd:hover .dd-menu,
+    .dd:focus-within .dd-menu {
+      display: block;
+    }
+    .desk-nav .dd-menu a {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-height: 40px;
+      padding: 0 0.6rem;
+      border-radius: 6px;
+      color: var(--text);
+      letter-spacing: 0.05em;
+    }
+    .desk-nav .dd-menu a:hover {
+      background: rgba(var(--fg-rgb), 0.07);
+    }
+    .desk-nav .dd-menu a::after {
+      display: none;
+    }
+    .desk-nav .dd-main {
+      flex-wrap: wrap;
+      row-gap: 0.15rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+    .dd-main span {
+      flex-basis: 100%;
+      font: 500 0.75rem/1.2 var(--font);
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--dim);
+    }
+    .dd-teams {
+      list-style: none;
+      margin: 6px 0 0;
+      padding: 6px 0 0;
+      border-top: 1px solid var(--line);
+    }
+    .desk-nav .dd-teams a {
+      font: 600 0.88rem/1.2 var(--font);
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--muted);
+    }
+    .desk-nav .dd-teams a:hover {
       color: var(--text);
     }
     .desk-nav a[aria-current='page']::after {
@@ -514,6 +639,10 @@ const moreActive = secondary.some(([, key]) => key === active);
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
+  }
+  /* Odd number of tiles: the last one spans the full width. */
+  .sheet li:last-child:nth-child(odd) {
+    grid-column: span 2;
   }
   .sheet li a {
     display: flex;

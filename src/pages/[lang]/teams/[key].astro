@@ -33,8 +33,8 @@ const next = ourGames(currentSeasonId)
 
 ---
 
-<Base lang={lang} title={o.name} path={`teams/${o.key}/`} active="nav.standings" leagueData>
-  <a class="back small" href={href(lang, 'teams/')}>← {de ? 'Alle Gegner' : 'All opponents'}</a>
+<Base lang={lang} title={o.name} path={`teams/${o.key}/`} active="nav.teams" leagueData>
+  <a class="back small" href={href(lang, 'teams/')}>← {de ? 'Alle Liga-Teams' : 'All league teams'}</a>
   <header class="t-head">
     <span class="tag">{st ? `${st.division} ${label(sid)}` : label(sid)}</span>
     <h1>{o.name}</h1>

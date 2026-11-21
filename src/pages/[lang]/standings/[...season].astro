@@ -36,7 +36,7 @@ const regularDiv = s?.standings.find((x) => s.info.divisions.find((d) => d.id ==
   <header class="page-head">
     <span class="tag">{t('common.season')} {seasonId.replace('-', '/')}</span>
     <h1>{t('standings.title')}</h1>
-    <a class="opp-link small" href={href(lang, 'teams/')}>{lang === 'de' ? 'Alle Gegner & direkte Duelle' : 'All opponents & head-to-head'} →</a>
+    <a class="btn btn-ghost opp-link" href={href(lang, 'teams/')}>{lang === 'de' ? 'Liga-Teams & direkte Duelle' : 'League teams & head-to-head'} →</a>
   </header>
   <SeasonPicker lang={lang} section="standings" seasons={ourSeasons.map((x) => x.info.id)} current={seasonId} />
 
@@ -183,6 +183,9 @@ const regularDiv = s?.standings.find((x) => s.info.divisions.find((d) => d.id ==
 </Base>
 
 <style>
+  .opp-link {
+    margin-top: 0.9rem;
+  }
   .tlink {
     color: var(--text);
   }

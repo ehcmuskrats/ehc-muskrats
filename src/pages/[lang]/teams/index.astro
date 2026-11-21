@@ -24,10 +24,10 @@ const worst = [...rows].filter((x) => x.t.gp >= 4 && x.pct < 0.5).sort((a, b) =>
 const most = [...rows].sort((a, b) => b.t.gp - a.t.gp)[0];
 ---
 
-<Base lang={lang} title={de ? 'Gegner' : 'Opponents'} path="teams/" active="nav.standings" leagueData>
+<Base lang={lang} title={de ? 'Liga-Teams' : 'League teams'} path="teams/" active="nav.teams" leagueData>
   <header class="page-head">
     <span class="tag">{de ? 'Alle Duelle seit 2015/16' : 'Every meeting since 2015/16'}</span>
-    <h1>{de ? 'Gegner' : 'Opponents'}</h1>
+    <h1>{de ? 'Liga-Teams' : 'League teams'}</h1>
   </header>
 
   <div class="hl">
