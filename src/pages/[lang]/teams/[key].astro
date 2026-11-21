@@ -2,6 +2,7 @@
 // Opponent profile (#16): who they are this season (position, record, form, special teams) and our
 // complete history against them. The head-to-head card compares both teams this season. All from WEHV data.
 import Base from '../../../layouts/Base.astro';
+import { roundName } from '../../../i18n/rounds.ts';
 import DataCredit from '../../../components/DataCredit.astro';
 import H2HCard from '../../../components/H2HCard.astro';
 import { type Lang, LANGS, href, formatDate } from '../../../i18n/index.ts';
@@ -36,7 +37,7 @@ const next = ourGames(currentSeasonId)
 <Base lang={lang} title={o.name} path={`teams/${o.key}/`} active="nav.teams" leagueData>
   <a class="back small" href={href(lang, 'teams/')}>← {de ? 'Alle Liga-Teams' : 'All league teams'}</a>
   <header class="t-head">
-    <span class="tag">{st ? `${st.division} ${label(sid)}` : label(sid)}</span>
+    <span class="tag">{st ? `${roundName(st.division, lang)} ${label(sid)}` : label(sid)}</span>
     <h1>{o.name}</h1>
   </header>
 
@@ -127,7 +128,7 @@ const next = ourGames(currentSeasonId)
               <span class="sc tnum">
                 {r.gf}:{r.ga}
               </span>
-              <span class="small dim">{r.game.playoff ? 'Playoffs' : r.game.divisionName}</span>
+              <span class="small dim">{r.game.playoff ? 'Playoffs' : roundName(r.game.divisionName, lang)}</span>
             </a>
           </li>
         ))

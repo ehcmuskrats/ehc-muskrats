@@ -4,6 +4,7 @@
 // power play / penalty kill rings and both teams' last five results. Phone first: a 3-column grid
 // (us · label · them) that stays readable at 360px.
 import Team from './Team.astro';
+import { roundName } from '../i18n/rounds.ts';
 import { type Lang, formatNumber } from '../i18n/index.ts';
 import { teamName } from '../lib/data.ts';
 import { form, standing, teamStats, headToHead, tally, type TeamInfo, type TeamResult } from '../lib/teams.ts';
@@ -48,7 +49,7 @@ const label = season.replace('-', '/');
       sides.map((x, i) => (
         <div class:list={['head', i ? 'r' : 'l', { us: x.us }]}>
           <Team team={x.team} logoOnly size={56} />
-          <span class="rank tnum" title={x.st ? `${x.st.division} ${label}` : ''}>
+          <span class="rank tnum" title={x.st ? `${roundName(x.st.division, lang)} ${label}` : ''}>
             {x.st ? `#${x.st.row.rank}` : '–'}
           </span>
         </div>

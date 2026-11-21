@@ -1,6 +1,7 @@
 ---
 // Schedule rows, designed for phones: date block | opponent | score.
 import type { GameSummary } from '../types/models.ts';
+import { roundName } from '../i18n/rounds.ts';
 import { type Lang, t, href } from '../i18n/index.ts';
 import { RESULT_FULL } from '../i18n/abbr.ts';
 import { opponent, ourScore, resultCode, resultClass, side, gamesWithHighlights, hasGamePage } from '../lib/data.ts';
@@ -60,7 +61,7 @@ const parts = (iso: string) => {
             <span class="who">
               {g.playoff && (
                 <span class="meta">
-                  <span class="po">{g.playoff.encounter ?? g.playoff.roundLabel}</span>
+                  <span class="po">{roundName(g.playoff.encounter ?? g.playoff.roundLabel, lang)}</span>
                 </span>
               )}
               <Team team={opp} size={28} />

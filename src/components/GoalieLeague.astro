@@ -4,6 +4,7 @@
 // (ours highlighted) and a per-team view (goals against per game, from the standings).
 // GAA = goals against per game played, the same definition as everywhere else on the site.
 import Team from './Team.astro';
+import { roundName } from '../i18n/rounds.ts';
 import Abbr from './Abbr.astro';
 import { type Lang, href, formatNumber } from '../i18n/index.ts';
 import { seasons, derived } from '../lib/data.ts';
@@ -87,7 +88,7 @@ for (const s of seasons) {
       .map((row) => ({ row, gaPer: row.ga / row.gp, goalies: list.filter((g) => g.teamId === row.team.id).length, rank: 0 }))
       .sort((a, b) => a.gaPer - b.gaPer);
     teams.forEach((x, i) => (x.rank = i + 1));
-    const phase = div?.kind === 'playoffs' ? 'Playoffs' : (div?.name ?? st.divisionId);
+    const phase = div?.kind === 'playoffs' ? 'Playoffs' : roundName(div?.name ?? String(st.divisionId), lang);
     views.push({
       id: `${s.info.id}-${st.divisionId}`,
       season: s.info.id,

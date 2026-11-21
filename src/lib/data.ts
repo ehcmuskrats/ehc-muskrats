@@ -22,7 +22,9 @@ const aliasesFile = import.meta.glob<{ names?: Record<string, { first?: string; 
   eager: true,
   import: 'default',
 });
-const extrasFile = import.meta.glob<{ players: Record<string, { photo?: string; bio?: { de?: string; en?: string } }> }>(
+const extrasFile = import.meta.glob<{
+  players: Record<string, { photo?: string; bio?: { de?: string; en?: string }; nation?: string; shoots?: string; catches?: string }>;
+}>(
   '/data/player-extras.json',
   { eager: true, import: 'default' },
 );

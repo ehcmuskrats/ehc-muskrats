@@ -1,4 +1,4 @@
 {
-  "_comment": "Optional extras per player id. photo: path under public/ (e.g. \"players/111830.jpg\"). bio: { de, en }. Only add what the player agreed to publish. nation: 3-letter code overriding the league's (\"\" hides the flag).",
+  "_comment": "Optional extras per player id. photo: path under public/ (e.g. \"players/111830.jpg\"). bio: { de, en }. Only add what the player agreed to publish. nation: 3-letter code overriding the league's (\"\" hides the flag). shoots / catches: \"L\" or \"R\" (shown as Schießt links / Catches right; WEHV does not record it).",
   "players": {}
 }

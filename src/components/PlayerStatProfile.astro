@@ -1,0 +1,266 @@
+---
+// Skater stat profile (career, from WEHV game data only, no personal data): points per game, how his goals
+// come (even strength / power play / shorthanded / empty net / penalty shot), which period he scores in,
+// his share of the team's goals, the team's record when he scores, and his most common penalties.
+// Phone first: 2-column grid of compact panels.
+import { type Lang, formatNumber } from '../i18n/index.ts';
+import { games } from '../lib/data.ts';
+import { penaltyLabel } from '../config/penalties.ts';
+import type { PlayerProfile } from '../types/models.ts';
+
+interface Props {
+  lang: Lang;
+  p: PlayerProfile;
+}
+const { lang, p } = Astro.props;
+const de = lang === 'de';
+const L = (a: string, b: string) => (de ? a : b);
+const c = p.career;
+const played = p.games.filter((g) => g.goalie == null);
+
+// Goals by situation.
+const sit = { EV: 0, PP: 0, SH: 0, EN: 0, PS: 0 };
+for (const g of p.goals) {
+  const s = g.situation ?? '';
+  if (s === 'EN') sit.EN++;
+  else if (s === 'PS') sit.PS++;
+  else if (/^PP/.test(s)) sit.PP++;
+  else if (/^SH/.test(s)) sit.SH++;
+  else sit.EV++;
+}
+const sitRows = (
+  [
+    ['EV', 'Even Strength'],
+    ['PP', 'Power Play'],
+    ['SH', 'Shorthanded'],
+    ['EN', 'Empty Net'],
+    ['PS', L('Penalty', 'Penalty shot')],
+  ] as const
+).filter(([k]) => sit[k] > 0 || k === 'EV' || k === 'PP');
+
+// Goals by period.
+const per = new Map<string, number>();
+for (const g of p.goals) per.set(g.period, (per.get(g.period) ?? 0) + 1);
+const periods = ['1', '2', '3', 'OT'].filter((k) => k !== 'OT' || per.get('OT'));
+const PER_EN: Record<string, string> = { '1': '1st', '2': '2nd', '3': '3rd', OT: 'OT' };
+const perLabel = (k: string) => (k === 'OT' ? 'OT' : de ? k + '.' : PER_EN[k]);
+const perMax = Math.max(1, ...periods.map((k) => per.get(k) ?? 0));
+
+// Share of team goals in games he played (goals + assists / team goals).
+let teamGoals = 0;
+let pts = 0;
+for (const g of played) {
+  const us = Number(g.score.split(':')[0]);
+  if (Number.isFinite(us)) teamGoals += us;
+  pts += g.g + g.a;
+}
+const share = teamGoals ? pts / teamGoals : null;
+
+// Team record when he scores.
+const scored = played.filter((g) => g.g > 0 && g.result);
+const w = scored.filter((g) => g.result === 'W' || g.result === 'OTW').length;
+const l = scored.filter((g) => g.result === 'L' || g.result === 'OTL').length;
+const t = scored.length - w - l;
+
+// Most common penalties (from the game reports; matched by id or name, since WEHV re-issued ids).
+const key = `${p.first} ${p.last}`.toLowerCase();
+const pen = new Map<string, number>();
+for (const gl of played) {
+  const game = games.get(gl.gameId);
+  for (const x of game?.penalties ?? []) {
+    const pl = x.player;
+    if (!pl || !(pl.id === p.id || `${pl.first} ${pl.last}`.toLowerCase() === key)) continue;
+    const label = penaltyLabel(x.code, lang);
+    pen.set(label, (pen.get(label) ?? 0) + 1);
+  }
+}
+const topPen = [...pen.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3);
+const show = played.length >= 3;
+---
+
+{
+  show && (
+    <section class="prof" aria-labelledby={`h-prof-${p.id}`}>
+      <div class="sec-head">
+        <h2 id={`h-prof-${p.id}`}>{L('Spielerprofil', 'Player profile')}</h2>
+        <span class="small dim">{L('Karriere', 'Career')}</span>
+      </div>
+      <div class="grid">
+        <div class="panel box">
+          <p class="eyebrow">{L('Punkte pro Spiel', 'Points per game')}</p>
+          <span class="big tnum">{formatNumber(lang, c.gp ? c.p / c.gp : 0, 2)}</span>
+          <span class="small dim tnum">
+            {`${formatNumber(lang, c.gp ? c.g / c.gp : 0, 2)} G · ${formatNumber(lang, c.gp ? c.a / c.gp : 0, 2)} A`}
+          </span>
+        </div>
+        <div class="panel box">
+          <p class="eyebrow">{L('Beteiligung', 'Involvement')}</p>
+          <span class="big tnum">{share == null ? '–' : `${formatNumber(lang, share * 100, 0)}%`}</span>
+          <span class="small dim">{L('der Teamtore in seinen Spielen', "of the team's goals in his games")}</span>
+        </div>
+
+        {c.g > 0 && (
+          <div class="panel box wide">
+            <p class="eyebrow">{L('So fallen seine Tore', 'How he scores')}</p>
+            <ul class="bars">
+              {sitRows.map(([k, label]) => (
+                <li>
+                  <span class="bl">{label}</span>
+                  <span class="bt">
+                    <span class="bf" style={`width:${(sit[k] / c.g) * 100}%`} />
+                  </span>
+                  <span class="bv tnum">{sit[k]}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {c.g > 0 && (
+          <div class="panel box">
+            <p class="eyebrow">{L('Tore je Drittel', 'Goals by period')}</p>
+            <div class="cols" aria-label={periods.map((k) => `${k}: ${per.get(k) ?? 0}`).join(', ')}>
+              {periods.map((k) => (
+                <span class="col">
+                  <span class="cv tnum">{per.get(k) ?? 0}</span>
+                  <span class="cb" style={`height:${((per.get(k) ?? 0) / perMax) * 100}%`} />
+                  <span class="ck">{perLabel(k)}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {scored.length > 0 && (
+          <div class="panel box">
+            <p class="eyebrow">{L('Wenn er trifft', 'When he scores')}</p>
+            <span class="big tnum">{`${w}–${l}${t ? `–${t}` : ''}`}</span>
+            <span class="small dim">
+              {L(`Bilanz der Muskrats in ${scored.length} Spielen`, `Muskrats record in ${scored.length} games`)}
+            </span>
+          </div>
+        )}
+
+        {topPen.length > 0 && (
+          <div class="panel box wide">
+            <p class="eyebrow">{L('Häufigste Strafen', 'Most common penalties')}</p>
+            <ul class="pens">
+              {topPen.map(([label, n]) => (
+                <li>
+                  <span>{label}</span>
+                  <span class="tnum dim">{`${n}×`}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  @media (min-width: 900px) {
+    .grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+  }
+  .box.wide {
+    grid-column: 1 / -1;
+  }
+  @media (min-width: 900px) {
+    .box.wide {
+      grid-column: span 2;
+    }
+  }
+  .big {
+    font: 800 2rem/1 var(--display);
+  }
+  .bars,
+  .pens {
+    list-style: none;
+    margin: 0.2rem 0 0;
+    padding: 0;
+  }
+  .bars li {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr 1.8rem;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 26px;
+    font-size: 0.85rem;
+  }
+  .bt {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--panel-hi);
+    overflow: hidden;
+  }
+  .bf {
+    display: block;
+    height: 100%;
+    background: var(--blue-hi);
+    border-radius: 4px;
+  }
+  .bars li:first-child .bf {
+    background: var(--orange);
+  }
+  .bv {
+    text-align: right;
+    font: 800 1rem/1 var(--display);
+  }
+  .cols {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    gap: 8px;
+    height: 92px;
+    margin-top: 0.2rem;
+  }
+  .col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+    flex: 1;
+    height: 100%;
+  }
+  .cb {
+    display: block;
+    width: 100%;
+    max-width: 28px;
+    min-height: 3px;
+    border-radius: 4px 4px 0 0;
+    background: var(--blue-hi);
+  }
+  .cv {
+    font: 800 0.9rem/1 var(--display);
+  }
+  .ck {
+    font: 700 0.7rem/1 var(--display);
+    color: var(--dim);
+  }
+  .pens li {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.35rem 0;
+    border-top: 1px solid var(--line);
+    font-size: 0.88rem;
+  }
+  .pens li:first-child {
+    border-top: 0;
+  }
+</style>

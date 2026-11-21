@@ -1,5 +1,6 @@
 ---
 import Base from '../../../layouts/Base.astro';
+import { roundName } from '../../../i18n/rounds.ts';
 import Team from '../../../components/Team.astro';
 import SeasonPicker from '../../../components/SeasonPicker.astro';
 import DataCredit from '../../../components/DataCredit.astro';
@@ -80,7 +81,7 @@ const penalties = [...penMap.values()].filter((r) => r.pim > 0).sort((a, b) => b
 const slugOf = (id: number) => derived.players.find((p) => p.id === id)?.slug;
 const teamTables: { name: string; rows: TeamSeasonStats[] }[] = (s?.stats ?? [])
   .filter((st) => divInPhase(st.divisionId) && st.teams.some((r) => isOurTeam(r.team)))
-  .map((st) => ({ name: s!.info.divisions.find((d) => d.id === st.divisionId)?.name ?? '', rows: st.teams }));
+  .map((st) => ({ name: roundName(s!.info.divisions.find((d) => d.id === st.divisionId)?.name ?? '', lang), rows: st.teams }));
 const pct = (n: number | null) => (n == null ? '–' : `${formatNumber(lang, n, 1)}%`);
 const leader = skaters[0];
 

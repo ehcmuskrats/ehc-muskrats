@@ -1,5 +1,6 @@
 ---
 import Base from '../../../layouts/Base.astro';
+import { roundName } from '../../../i18n/rounds.ts';
 import Team from '../../../components/Team.astro';
 import SeasonPicker from '../../../components/SeasonPicker.astro';
 import DataCredit from '../../../components/DataCredit.astro';
@@ -46,7 +47,7 @@ const regularDiv = s?.standings.find((x) => s.info.divisions.find((d) => d.id ==
     tables.map((st) => (
       <section aria-labelledby={`h-${st.divisionId}`}>
         <div class="sec-head">
-          <h2 id={`h-${st.divisionId}`}>{st.divisionName}</h2>
+          <h2 id={`h-${st.divisionId}`}>{roundName(st.divisionName, lang)}</h2>
           {st.unofficial && <span class="tag ghost">{t('standings.unofficial')}</span>}
         </div>
         <div class="table-wrap">
@@ -140,7 +141,7 @@ const regularDiv = s?.standings.find((x) => s.info.divisions.find((d) => d.id ==
         <div class="bracket">
           {bracket.phases.map((ph) => (
             <div class="round">
-              <p class="eyebrow">{ph.label}</p>
+              <p class="eyebrow">{roundName(ph.label, lang)}</p>
               {ph.encounters.map((enc) => {
                 const mine = enc.teams.some((x) => isOurTeam(x.team));
                 const encGames = enc.gameIds.map((id) => gameById.get(id)).filter((g) => g && g.status === 'final');
@@ -149,7 +150,7 @@ const regularDiv = s?.standings.find((x) => s.info.divisions.find((d) => d.id ==
                     <ul>
                       {enc.teams.map((x) => (
                         <li class={`${x.winner ? 'winner' : ''} ${isOurTeam(x.team) ? 'us' : ''}`}>
-                          <Team team={x.team} />
+                          <Team team={/Team \d+$/.test(x.team.name) ? { ...x.team, name: roundName(x.team.name, lang) } : x.team} />
                           <span class="wins tnum">{enc.bestOf > 1 ? x.wins : x.winner ? '✓' : ''}</span>
                         </li>
                       ))}

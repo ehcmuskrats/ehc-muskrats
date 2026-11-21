@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { roundName } from '../../i18n/rounds.ts';
 import Team from '../../components/Team.astro';
 import ScoreBug from '../../components/ScoreBug.astro';
 import VideoEmbed from '../../components/VideoEmbed.astro';
@@ -244,7 +245,7 @@ import CalendarButton from '../../components/CalendarButton.astro';
         <h2 id="h-table">{t('home.standings')}</h2>
         <a href={href(lang, 'standings/')}>{t('home.fullTable')}</a>
       </div>
-      {standings && <p class="eyebrow">{standings.divisionName}</p>}
+      {standings && <p class="eyebrow">{roundName(standings.divisionName, lang)}</p>}
       {
         standings ? (
           <div class="table-wrap">

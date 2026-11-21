@@ -1,4 +1,5 @@
 ---
+import { roundName } from '../../../i18n/rounds.ts';
 import Base from '../../../layouts/Base.astro';
 import GameList from '../../../components/GameList.astro';
 import SeasonPicker from '../../../components/SeasonPicker.astro';
@@ -35,7 +36,7 @@ const played = rec.W + rec.L + rec.T;
 const phases: { value: string; label: string }[] = [];
 for (const d of [...(s?.info.divisions ?? [])].sort((a, b) => a.id - b.id)) {
   if (d.kind === 'playoffs') continue;
-  if (games.some((g) => !g.playoff && g.divisionId === d.id)) phases.push({ value: String(d.id), label: d.name });
+  if (games.some((g) => !g.playoff && g.divisionId === d.id)) phases.push({ value: String(d.id), label: roundName(d.name, lang) });
 }
 if (games.some((g) => g.playoff)) phases.push({ value: 'playoffs', label: t('common.playoffs') });
 
@@ -54,7 +55,7 @@ for (const ph of s?.playoffs?.phases ?? []) {
     const theirs = enc.teams.filter((x) => !isOurTeam(x.team));
     const anyWinner = enc.teams.some((x) => x.winner);
     series.push({
-      label: enc.label || ph.label,
+      label: roundName(enc.label || ph.label, lang),
       games: encGames,
       us: ours?.wins ?? 0,
       them: Math.max(0, ...theirs.map((x) => x.wins)),

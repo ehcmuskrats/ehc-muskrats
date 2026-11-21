@@ -2,6 +2,7 @@
 // Match preview for an upcoming game (#14, #22): where and when, directions and calendar, both teams'
 // table position and form, and the head-to-head history. Everything comes from the synced WEHV data.
 import Team from './Team.astro';
+import { roundName } from '../i18n/rounds.ts';
 import CalendarButton from './CalendarButton.astro';
 import { type Lang, href, formatDate } from '../i18n/index.ts';
 import { RESULT_FULL } from '../i18n/abbr.ts';
@@ -137,7 +138,7 @@ const chip = (r: TeamResult) => r.result;
                   <span class="d small dim tnum">{formatDate(lang, r.game.date)}</span>
                   <span class={`res res-${resultClass(r.result)}`}>{r.result}</span>
                   <span class="sc tnum">{r.gf}:{r.ga}</span>
-                  <span class="small dim">{r.game.playoff ? 'Playoffs' : r.game.divisionName}</span>
+                  <span class="small dim">{r.game.playoff ? 'Playoffs' : roundName(r.game.divisionName, lang)}</span>
                 </a>
               </li>
             ))}

@@ -2,6 +2,7 @@
 // Rotating team records (all-time stats page): a random 3 per visit plus a shuffle button.
 // Every card comes from data/derived.json (records.cards), computed from league data only.
 // No-JS fallback: the first 3 (biggest win, most goals, best season).
+import { roundName } from '../i18n/rounds.ts';
 import Team from './Team.astro';
 import { type Lang, href, formatDate } from '../i18n/index.ts';
 import { abbr } from '../i18n/abbr.ts';
@@ -92,7 +93,7 @@ const link = (c: TeamRecordCard) =>
                   <span class="rd tnum">
                     {pts} {abbr(lang, 'pts').short} / {gp} {abbr(lang, 'gp').short} · #{c.n}
                   </span>
-                  <span class="small dim">{div}</span>
+                  <span class="small dim">{roundName(div, lang)}</span>
                 </>
               ) : (
                 <>

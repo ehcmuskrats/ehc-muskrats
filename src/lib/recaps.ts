@@ -1,3 +1,4 @@
+import { roundName } from '../i18n/rounds.ts';
 // Automatic game recaps (#10), written from the WEHV game report only: intro, period by period,
 // key players, turning points, an optional quote (data/recap-quotes.json), highlights and a stats link.
 // Generated for every played game of the current season. A hand-written news post with the same gameId wins.
@@ -87,7 +88,7 @@ export function buildRecap(game: Game, lang: Lang): Recap | null {
 
   // Intro: when, where, what, and the table afterwards.
   const venue = game.venue?.replace(/^Wien - /, '') ?? '';
-  const round = game.playoff ? (game.playoff.encounter ?? 'Playoffs') : game.divisionName;
+  const round = roundName(game.playoff ? (game.playoff.encounter ?? 'Playoffs') : game.divisionName, lang);
   const st = standing('ehc-muskrats', game.season, game.divisionId);
   const table =
     st && !game.playoff

@@ -2,6 +2,7 @@
 // Über uns / About us (#23, #24): the club's story (text from src/config/site.ts), achievements and a
 // season-by-season timeline. Everything except the story text is computed from WEHV data.
 import Base from '../../layouts/Base.astro';
+import { roundName } from '../../i18n/rounds.ts';
 import DataCredit from '../../components/DataCredit.astro';
 import { type Lang, langPaths, useT, href, url } from '../../i18n/index.ts';
 import { SITE } from '../../config/site.ts';
@@ -120,7 +121,7 @@ const cards = [
                   {h.placement && (
                     <>
                       {' '}
-                      · {h.placement.name} #{h.placement.rank}
+                      · {roundName(h.placement.name, lang)} #{h.placement.rank}
                     </>
                   )}
                 </span>

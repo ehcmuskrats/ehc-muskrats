@@ -6,6 +6,7 @@ import Abbr from '../../../components/Abbr.astro';
 import PlayerDashboard from '../../../components/PlayerDashboard.astro';
 import GoalieLeague from '../../../components/GoalieLeague.astro';
 import Flag from '../../../components/Flag.astro';
+import PlayerStatProfile from '../../../components/PlayerStatProfile.astro';
 import { type Lang, LANGS, useT, href, url, formatDate, formatNumber, mmss } from '../../../i18n/index.ts';
 import { RESULT_FULL, posCode } from '../../../i18n/abbr.ts';
 import { derived, playerExtras, columns, resultClass } from '../../../lib/data.ts';
@@ -18,6 +19,16 @@ const { p } = Astro.props as { p: PlayerProfile };
 const lang = Astro.params.lang as Lang;
 const t = useT(lang);
 const extra = playerExtras[String(p.id)];
+// Handedness is not in the WEHV data; optional in data/player-extras.json (shoots / catches: "L" or "R").
+const side = (v?: string) => (v?.toUpperCase().startsWith('L') ? 'L' : v?.toUpperCase().startsWith('R') ? 'R' : null);
+const shoots = side(extra?.shoots);
+const catches = side(extra?.catches);
+const de = lang === 'de';
+const hand = catches
+  ? de ? 'Fängt ' + (catches === 'L' ? 'links' : 'rechts') : 'Catches ' + (catches === 'L' ? 'left' : 'right')
+  : shoots
+    ? de ? 'Schießt ' + (shoots === 'L' ? 'links' : 'rechts') : 'Shoots ' + (shoots === 'L' ? 'left' : 'right')
+    : null;
 const bio = extra?.bio?.[lang] ?? extra?.bio?.de;
 const skaterSeasons = p.seasons.filter((s) => s.gp > 0);
 const goalieSeasons = p.seasons.filter((s) => s.goalieGp > 0);
@@ -51,6 +62,7 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
             {numbers.length ? `#${numbers[0]}` : '#–'}{p.currentPosition && ` · ${posCode(p.currentPosition)}`}
           </span>
           <Flag code={p.nation} lang={lang} size={22} />
+          {hand && <span class="hand">{hand}</span>}
         </div>
         <h1>
           <span class="fn">{p.first}</span>
@@ -70,6 +82,8 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
   <PlayerDashboard lang={lang} p={p} />
 
   {goalieSeasons.length > 0 && <GoalieLeague lang={lang} p={p} />}
+
+  {skaterSeasons.length > 0 && <PlayerStatProfile lang={lang} p={p} />}
 
   {
     skaterSeasons.length > 0 && (
@@ -399,6 +413,12 @@ const lastS = p.seasons[0]?.season.replace('-', '/');
     border-radius: 50%;
     object-fit: cover;
     box-shadow: 0 0 0 3px var(--orange);
+  }
+  .hand {
+    font: 700 0.75rem/1 var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
   .tagline {
     display: flex;
