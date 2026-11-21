@@ -109,7 +109,7 @@ const of = de ? 'von' : 'of';
 
 {
   views.length > 0 && (
-    <section class="gl" aria-labelledby={`h-gl-${p.id}`} data-gl>
+    <section class="gl" aria-labelledby={`h-gl-${p.id}`} data-gl data-pagefind-ignore>
       <div class="sec-head">
         <h2 id={`h-gl-${p.id}`}>{de ? 'Ligavergleich' : 'League comparison'}</h2>
         {views.length > 1 && (

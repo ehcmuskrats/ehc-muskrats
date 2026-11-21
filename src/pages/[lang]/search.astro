@@ -1,0 +1,87 @@
+---
+// Site search (#18): Pagefind builds a static index of every page after `astro build` (see package.json),
+// one per language. Players, teams, results, dates, news and videos are all searchable; nothing is sent
+// to a server. The index only exists in a production build, so `npm run dev` shows a note instead.
+import Base from '../../layouts/Base.astro';
+import { type Lang, langPaths, url } from '../../i18n/index.ts';
+
+export const getStaticPaths = langPaths;
+const lang = Astro.params.lang as Lang;
+const de = lang === 'de';
+const bundle = url('pagefind/');
+---
+
+<Base lang={lang} title={de ? 'Suche' : 'Search'} path="search/" description={de ? 'Spieler, Teams, Ergebnisse und News durchsuchen' : 'Search players, teams, results and news'}>
+  <div data-pagefind-ignore="all">
+    <header class="page-head">
+      <h1>{de ? 'Suche' : 'Search'}</h1>
+      <p class="muted">{de ? 'Spieler, Teams, Ergebnisse, Daten, News und Videos.' : 'Players, teams, results, dates, news and videos.'}</p>
+    </header>
+    <div id="search" data-bundle={bundle} data-lang={lang}></div>
+    <p class="small dim nojs" id="search-missing" hidden>
+      {de ? 'Die Suche ist erst auf der veröffentlichten Website verfügbar.' : 'Search is only available on the published site.'}
+    </p>
+  </div>
+  <link rel="stylesheet" href={`${bundle}pagefind-ui.css`} />
+  <script is:inline define:vars={{ bundle, de }}>
+    (function () {
+      var s = document.createElement('script');
+      s.src = bundle + 'pagefind-ui.js';
+      s.onload = function () {
+        // eslint-disable-next-line no-undef
+        new PagefindUI({
+          element: '#search',
+          bundlePath: bundle,
+          showSubResults: true,
+          showImages: false,
+          resetStyles: false,
+          autofocus: true,
+          translations: de
+            ? { placeholder: 'Spieler, Team, Datum …', zero_results: 'Nichts gefunden für [SEARCH_TERM]', clear_search: 'Löschen', load_more: 'Mehr anzeigen' }
+            : { placeholder: 'Player, team, date …' },
+        });
+        var q = new URLSearchParams(location.search).get('q');
+        if (q) {
+          var i = document.querySelector('#search input');
+          if (i) {
+            i.value = q;
+            i.dispatchEvent(new Event('input'));
+          }
+        }
+      };
+      s.onerror = function () {
+        document.getElementById('search-missing').hidden = false;
+      };
+      document.head.appendChild(s);
+    })();
+  </script>
+</Base>
+
+
+
+<style is:global>
+  #search {
+    --pagefind-ui-primary: var(--accent-text);
+    --pagefind-ui-text: var(--text);
+    --pagefind-ui-background: var(--panel);
+    --pagefind-ui-border: var(--line-strong);
+    --pagefind-ui-tag: var(--panel-hi);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 12px;
+    --pagefind-ui-image-border-radius: 8px;
+    --pagefind-ui-font: var(--font);
+    --pagefind-ui-scale: 0.9;
+    margin-top: 1rem;
+  }
+  #search .pagefind-ui__search-input {
+    font-size: 1rem;
+    min-height: 52px;
+  }
+  #search .pagefind-ui__result-link {
+    color: var(--text);
+  }
+  #search mark {
+    background: rgba(var(--accent-rgb), 0.35);
+    color: inherit;
+  }
+</style>

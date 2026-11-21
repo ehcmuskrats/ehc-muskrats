@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "prebuild": "tsx scripts/sync-data.ts --derive-only",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "check": "astro check",
     "sync": "tsx scripts/sync-data.ts",
@@ -26,6 +26,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "@types/node": "^26.6.6",
+    "pagefind": "^1.5.2",
     "playwright": "^1.65.1",
     "tsx": "^4.23.15",
     "typescript": "^5.9.3"

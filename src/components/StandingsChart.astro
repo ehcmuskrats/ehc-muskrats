@@ -82,7 +82,7 @@ const show = days.length >= 2 && n >= 3;
 
 {
   show && (
-    <section class="chart-sec" aria-labelledby={`h-bump-${divisionId}`}>
+    <section class="chart-sec" aria-labelledby={`h-bump-${divisionId}`} data-pagefind-ignore>
       <div class="sec-head">
         <h2 id={`h-bump-${divisionId}`}>{de ? 'Tabellenverlauf' : 'Table over time'}</h2>
       </div>
