@@ -319,6 +319,7 @@ const moreActive = secondary.some(([, key]) => key === active);
     opacity: 0.9;
   }
   .brand {
+    flex: none; /* never squeezed by the nav */
     display: flex;
     align-items: center;
     gap: 0.55rem;
@@ -398,7 +399,7 @@ const moreActive = secondary.some(([, key]) => key === active);
   .desk-nav {
     display: none;
   }
-  @media (min-width: 960px) {
+  @media (min-width: 1120px) {
     .desk-nav {
       display: flex;
       gap: 0.15rem;
@@ -407,7 +408,8 @@ const moreActive = secondary.some(([, key]) => key === active);
     .desk-nav a {
       display: flex;
       align-items: center;
-      padding: 0 0.75rem;
+      /* Tighter on narrower desktops (German labels are longer). */
+      padding: 0 clamp(0.45rem, 1.1vw - 0.3rem, 0.75rem);
       color: var(--muted);
       font: 700 1rem/1 var(--display);
       letter-spacing: 0.08em;
@@ -578,7 +580,7 @@ const moreActive = secondary.some(([, key]) => key === active);
   .tabbar [aria-current='page'] svg {
     stroke: var(--accent-text);
   }
-  @media (min-width: 960px) {
+  @media (min-width: 1120px) {
     .tabbar {
       display: none;
     }

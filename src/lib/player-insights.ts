@@ -3,7 +3,7 @@
 import type { GameSummary, PlayerGameLine, PlayerProfile, TeamRef } from '../types/models.ts';
 import type { Lang } from '../i18n/index.ts';
 import { formatDate, formatNumber } from '../i18n/index.ts';
-import { games, ourGames, sortByDate, opponent, teamName, currentSeasonId } from './data.ts';
+import { games, ourGames, sortByDate, opponent, teamName, currentSeasonId, derived } from './data.ts';
 
 export type Metric = 'p' | 'g' | 'a' | 'pim' | 'ga';
 
@@ -379,8 +379,190 @@ export function playerInsights(p: PlayerProfile, lang: Lang, sid?: string) {
     });
   }
 
+  facts.push(...historyFacts(p, lang));
+
   facts.sort((a, b) => b.weight - a.weight);
   return { tiles, recent, seasonBars, splits, facts, isGoalie };
+}
+
+/**
+ * Club-history facts: where the player ranks among every Muskrats player ever (points, goals, assists,
+ * games, PIM, playoff points, best single season, games in net), who he is chasing, and the next milestone.
+ * Chases and milestones are only shown for players active this season.
+ */
+function historyFacts(p: PlayerProfile, lang: Lang): Fact[] {
+  const de = lang === 'de';
+  const L = (d: string, e: string) => (de ? d : e);
+  const out: Fact[] = [];
+  const all = derived.players;
+  const active = p.seasons.some((s) => s.season === currentSeasonId);
+  const name = (x: PlayerProfile) => `${x.first} ${x.last}`;
+  const ord = (n: number) => (de ? `${n}.` : n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : `${n}th`);
+
+  // de: [plural, record title, dative plural, singular]; en: [plural, record title, singular]
+  type Metric = { key: string; val: (x: PlayerProfile) => number; de: [string, string, string, string]; en: [string, string, string]; min: number; chase: number; steps: number[] };
+  const metrics: Metric[] = [
+    { key: 'p', val: (x) => x.career.p, de: ['Punkte', 'Topscorer', 'Punkten', 'Punkt'], en: ['points', 'scorer', 'point'], min: 10, chase: 15, steps: [50, 100, 150, 200, 250, 300] },
+    { key: 'g', val: (x) => x.career.g, de: ['Tore', 'Torschütze', 'Toren', 'Tor'], en: ['goals', 'goal scorer', 'goal'], min: 5, chase: 8, steps: [25, 50, 75, 100, 150, 200] },
+    { key: 'a', val: (x) => x.career.a, de: ['Assists', 'Vorlagengeber', 'Assists', 'Assist'], en: ['assists', 'playmaker', 'assist'], min: 5, chase: 8, steps: [25, 50, 75, 100, 150] },
+    { key: 'gp', val: (x) => x.career.gp + x.career.goalieGp, de: ['Spiele', 'Dauerbrenner', 'Spielen', 'Spiel'], en: ['games', 'ever-present', 'game'], min: 10, chase: 6, steps: [50, 100, 150, 200] },
+    { key: 'pim', val: (x) => x.career.pim, de: ['Strafminuten', 'Bad Boy', 'Strafminuten', 'Strafminute'], en: ['penalty minutes', 'bad boy', 'penalty minute'], min: 20, chase: 0, steps: [] },
+  ];
+
+  let rankFacts = 0;
+  for (const m of metrics) {
+    const mine = m.val(p);
+    if (mine < m.min) continue;
+    const sorted = [...all].filter((x) => m.val(x) > 0).sort((a, b) => m.val(b) - m.val(a));
+    const rank = 1 + sorted.filter((x) => m.val(x) > mine).length;
+    const label = de ? m.de[0] : m.en[0];
+    const dat = de ? m.de[2] : m.en[0];
+    const count = (n: number) => `${n} ${n === 1 ? (de ? m.de[3] : m.en[2]) : label}`;
+
+    // Rank in club history (top 10), at most two of these per player.
+    if (rank <= 10 && rankFacts < 2) {
+      rankFacts++;
+      out.push({
+        weight: rank === 1 ? 10 : rank <= 3 ? 9 : 6,
+        icon: rank === 1 ? 'trophy' : 'star',
+        title: rank === 1 ? L(`Rekord-${m.de[1]}`, `Record ${m.en[1]}`) : L('Vereinsgeschichte', 'Club history'),
+        text:
+          rank === 1
+            ? L(`Die meisten ${label} in der Geschichte der Muskrats: ${mine}.`, `The most ${label} in Muskrats history: ${mine}.`)
+            : L(`Platz ${rank} der ewigen Muskrats-Liste bei den ${dat} (${mine}).`, `${ord(rank)} on the Muskrats all-time ${label} list (${mine}).`),
+      });
+    }
+
+    // The chase: who is just ahead (or just behind the leader).
+    if (active && m.chase > 0) {
+      if (rank > 1) {
+        const ahead = sorted.filter((x) => m.val(x) > mine).at(-1)!;
+        const gap = m.val(ahead) - mine;
+        const targetRank = 1 + sorted.filter((x) => m.val(x) > m.val(ahead)).length;
+        if (gap <= m.chase && targetRank <= 10) {
+          out.push({
+            weight: targetRank === 1 ? 10 : 8,
+            icon: 'fire',
+            title: L('Auf der Jagd', 'The chase'),
+            text:
+              targetRank === 1
+                ? L(
+                    `Nur noch ${count(gap)} hinter ${name(ahead)} – dann ist er die Nummer 1 der Muskrats-Geschichte.`,
+                    `Just ${count(gap)} behind ${name(ahead)} – then he is number one in Muskrats history.`,
+                  )
+                : L(
+                    `${count(gap)} ${gap === 1 ? 'fehlt' : 'fehlen'} noch auf ${name(ahead)} (Platz ${targetRank} der ewigen Liste).`,
+                    `${count(gap)} behind ${name(ahead)} (${ord(targetRank)} all-time).`,
+                  ),
+          });
+        }
+      } else {
+        const next = sorted.find((x) => x.id !== p.id && m.val(x) <= mine);
+        const lead = next ? mine - m.val(next) : 0;
+        const chaserActive = next?.seasons.some((s) => s.season === currentSeasonId);
+        if (next && chaserActive && lead <= m.chase) {
+          out.push({
+            weight: 9,
+            icon: 'fire',
+            title: L('Unter Druck', 'Under pressure'),
+            text: L(
+              `${name(next)} ist ihm bei den ${dat} dicht auf den Fersen: nur ${count(lead)} Rückstand.`,
+              `${name(next)} is only ${count(lead)} behind him on the all-time list.`,
+            ),
+          });
+        }
+      }
+    }
+
+    // Next round-number milestone.
+    const nextStep = m.steps.find((s) => s > mine);
+    if (active && nextStep && nextStep - mine <= Math.max(5, Math.round(nextStep * 0.1))) {
+      out.push({
+        weight: 7,
+        icon: 'target',
+        title: L('Meilenstein', 'Milestone'),
+        text: L(
+          `Noch ${nextStep - mine} bis zu ${nextStep} ${dat} für die Muskrats.`,
+          `${nextStep - mine} more to reach ${nextStep} Muskrats ${label}.`,
+        ),
+      });
+    }
+  }
+
+  // Best single season vs every Muskrats season ever.
+  const seasonsAll = all.flatMap((x) => x.seasons.map((s) => ({ x, s })));
+  const best = [...p.seasons].sort((a, b) => b.p - a.p)[0];
+  if (best && best.p >= 10) {
+    const rank = 1 + seasonsAll.filter((r) => r.s.p > best.p).length;
+    if (rank <= 5) {
+      out.push({
+        weight: rank === 1 ? 10 : 8,
+        icon: 'trophy',
+        title: L('Rekordsaison', 'Record season'),
+        text:
+          rank === 1
+            ? L(
+                `${best.p} Punkte in ${best.season.replace('-', '/')} – die beste Saison, die je ein Muskrat gespielt hat.`,
+                `${best.p} points in ${best.season.replace('-', '/')} – the best season any Muskrat has ever had.`,
+              )
+            : L(
+                `${best.p} Punkte in ${best.season.replace('-', '/')} – Platz ${rank} der besten Muskrats-Saisonen aller Zeiten.`,
+                `${best.p} points in ${best.season.replace('-', '/')} – the ${ord(rank)} best Muskrats season of all time.`,
+              ),
+      });
+    }
+  }
+
+  // Playoff scoring.
+  const po = p.playoffs.career.p;
+  if (po >= 3) {
+    const rank = 1 + all.filter((x) => x.playoffs.career.p > po).length;
+    if (rank <= 5) {
+      out.push({
+        weight: rank === 1 ? 9 : 7,
+        icon: 'trophy',
+        title: L('Playoff-Spezialist', 'Playoff performer'),
+        text:
+          rank === 1
+            ? L(`Die meisten Playoff-Punkte der Vereinsgeschichte: ${po}.`, `The most playoff points in club history: ${po}.`)
+            : L(`Platz ${rank} der ewigen Playoff-Scorerliste (${po} Punkte).`, `${ord(rank)} on the all-time playoff scoring list (${po} points).`),
+      });
+    }
+  }
+
+  // Goalies: games in net all-time.
+  if (p.career.goalieGp >= 5) {
+    const rank = 1 + all.filter((x) => x.career.goalieGp > p.career.goalieGp).length;
+    if (rank <= 3) {
+      out.push({
+        weight: rank === 1 ? 10 : 8,
+        icon: 'shield',
+        title: rank === 1 ? L('Rekord-Goalie', 'Record goalie') : L('Vereinsgeschichte', 'Club history'),
+        text:
+          rank === 1
+            ? L(`Die meisten Spiele im Muskrats-Tor: ${p.career.goalieGp}.`, `The most games in the Muskrats net: ${p.career.goalieGp}.`)
+            : L(`Platz ${rank} bei den Spielen im Muskrats-Tor (${p.career.goalieGp}).`, `${ord(rank)} for games in the Muskrats net (${p.career.goalieGp}).`),
+      });
+    }
+  }
+
+  // Longevity.
+  const n = p.seasons.length;
+  if (n >= 4) {
+    const rank = 1 + all.filter((x) => x.seasons.length > n).length;
+    if (rank <= 5) {
+      out.push({
+        weight: rank === 1 ? 8 : 5,
+        icon: 'star',
+        title: L('Urgestein', 'Club legend'),
+        text:
+          rank === 1
+            ? L(`${n} Saisonen im Muskrats-Trikot – mehr als jeder andere.`, `${n} seasons in a Muskrats jersey – more than anyone else.`)
+            : L(`${n} Saisonen im Muskrats-Trikot – Platz ${rank} der Vereinsgeschichte.`, `${n} seasons in a Muskrats jersey – ${ord(rank)} in club history.`),
+      });
+    }
+  }
+  return out;
 }
 
 export { round };

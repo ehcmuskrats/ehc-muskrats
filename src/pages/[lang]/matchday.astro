@@ -21,7 +21,9 @@ const next = season
 const usedKeys = new Set(season.map((g) => venueFor(g.venue)?.key).filter(Boolean));
 const venues = VENUES.filter((v) => usedKeys.has(v.key));
 const show = venues.length ? venues : VENUES;
-const halls = [...new Set(season.map((g) => hallOf(g.venue)).filter(Boolean))];
+// Main hall first, then Halle 2, Halle 3 … (the Haupthalle is Halle 1).
+const hallRank = (h: string) => (/haupt/i.test(h) ? 1 : Number(h.match(/\d+/)?.[0] ?? 99));
+const halls = [...new Set(season.map((g) => hallOf(g.venue)).filter((h): h is string => !!h))].sort((a, b) => hallRank(a) - hallRank(b));
 ---
 
 <Base lang={lang} title={de ? 'Spieltag-Infos' : 'Matchday info'} path="matchday/" active="nav.matchday">

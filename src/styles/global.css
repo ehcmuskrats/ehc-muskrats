@@ -191,8 +191,13 @@ body {
 }
 @media (min-width: 960px) {
   body {
-    padding-bottom: 0;
     font-size: 16px;
+  }
+}
+/* Desktop top nav from 1120px (matches Base.astro); below that the phone tab bar is shown. */
+@media (min-width: 1120px) {
+  body {
+    padding-bottom: 0;
   }
 }
 main {

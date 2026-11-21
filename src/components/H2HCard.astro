@@ -6,7 +6,7 @@
 import Team from './Team.astro';
 import { roundName } from '../i18n/rounds.ts';
 import { type Lang, formatNumber } from '../i18n/index.ts';
-import { teamName } from '../lib/data.ts';
+import { teamName, currentSeasonId } from '../lib/data.ts';
 import { form, standing, teamStats, headToHead, tally, type TeamInfo, type TeamResult } from '../lib/teams.ts';
 import { TEAM } from '../config/team.ts';
 import type { SeasonId, TeamRef } from '../types/models.ts';
@@ -41,6 +41,9 @@ const ring = (v: number | null) => {
   return { dash: v == null ? 0 : (Math.min(100, v) / 100) * C, C };
 };
 const label = season.replace('-', '/');
+const isCurrent = season === currentSeasonId;
+/** Short season tag for the centre labels, e.g. 26/27. */
+const tag = label.replace(/^20/, '').replace('/20', '/');
 ---
 
 <section class="h2h-card" aria-label={de ? `EHC Muskrats gegen ${o.name}` : `EHC Muskrats vs ${o.name}`}>
@@ -60,13 +63,20 @@ const label = season.replace('-', '/');
       <span class="cap">{de ? `Tabelle ${label}` : `Table ${label}`}</span>
     </div>
   </div>
+  {
+    !isCurrent && (
+      <p class="past">
+        {de ? `Zuletzt in der Liga: ${label}. Die Werte unten sind aus dieser Saison.` : `Last in the league: ${label}. The figures below are from that season.`}
+      </p>
+    )
+  }
 
   <div class="split" aria-label={de ? `Siege im direkten Duell: Muskrats ${all.w}, ${o.name} ${all.l}` : `Head-to-head wins: Muskrats ${all.w}, ${o.name} ${all.l}`}>
     <span class="a tnum" style={`flex:${Math.max(all.w, 0.0001) / totalW}`}>{all.w}</span>
     <span class="b tnum" style={`flex:${Math.max(all.l, 0.0001) / totalW}`}>{all.l}</span>
   </div>
   <p class="split-cap">
-    {de ? 'Siege im direkten Duell' : 'Head-to-head wins'}
+    {de ? 'Siege im direkten Duell · alle Saisonen' : 'Head-to-head wins · all seasons'}
     {all.t > 0 && <span class="dim">{de ? ` · ${all.t} Unentschieden` : ` · ${all.t} ties`}</span>}
   </p>
 
@@ -75,7 +85,7 @@ const label = season.replace('-', '/');
       <strong class="tnum">{us.st?.row.gp ?? '–'}</strong>
       <span class="sub tnum">({rec(us)})</span>
     </div>
-    <div class="lab">{de ? 'Spiele' : 'Games'}<span>W–L–T</span></div>
+    <div class="lab">{de ? 'Spiele' : 'Games'}<span class="stag">{tag}</span><span>W–L–T</span></div>
     <div class="v r">
       <strong class="tnum">{them.st?.row.gp ?? '–'}</strong>
       <span class="sub tnum">({rec(them)})</span>
@@ -86,7 +96,7 @@ const label = season.replace('-', '/');
       <strong class="tnum">{sign(gd(us))}</strong>
       <span class="sub tnum">{us.st ? `(${us.st.row.gf}/${us.st.row.ga})` : ''}</span>
     </div>
-    <div class="lab">{de ? 'Tordifferenz' : 'Goal diff.'}<span>GF/GA</span></div>
+    <div class="lab">{de ? 'Tordifferenz' : 'Goal diff.'}<span class="stag">{tag}</span><span>GF/GA</span></div>
     <div class="v r">
       <strong class="tnum">{sign(gd(them))}</strong>
       <span class="sub tnum">{them.st ? `(${them.st.row.gf}/${them.st.row.ga})` : ''}</span>
@@ -120,6 +130,9 @@ const label = season.replace('-', '/');
             })}
           </div>
         ))}
+        <p class="rings-cap">
+          Special Teams <span class="stag">{tag}</span>
+        </p>
       </div>
     )
   }
@@ -140,7 +153,7 @@ const label = season.replace('-', '/');
         </div>
       ))
     }
-    <div class="lab">{de ? 'Letzte 5' : 'Last 5'}</div>
+    <div class="lab">{de ? 'Letzte 5' : 'Last 5'}<span class="stag">{tag}</span></div>
   </div>
 </section>
 
@@ -223,6 +236,23 @@ const label = season.replace('-', '/');
     color: var(--text);
     text-align: right;
   }
+  .past {
+    margin: 0.7rem 0 0;
+    padding: 0.45rem 0.7rem;
+    border-radius: 8px;
+    background: rgba(var(--fg-rgb), 0.06);
+    font-size: 0.8rem;
+    text-align: center;
+    color: var(--muted);
+  }
+  .lab .stag {
+    margin: 0.2rem 0 0.15rem;
+    padding: 0.12rem 0.4rem;
+    border-radius: 4px;
+    background: rgba(var(--accent-rgb), 0.16);
+    color: var(--text);
+    letter-spacing: 0.08em;
+  }
   .split-cap {
     margin: 0.4rem 0 0.9rem;
     text-align: center;
@@ -258,6 +288,22 @@ const label = season.replace('-', '/');
     text-transform: uppercase;
     text-align: center;
     min-width: 5.5rem;
+  }
+  .rings-cap {
+    grid-column: 1 / -1;
+    margin: 0.1rem 0 0;
+    text-align: center;
+    font: 700 0.62rem/1 var(--display);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .rings-cap .stag {
+    margin-left: 0.3rem;
+    padding: 0.12rem 0.4rem;
+    border-radius: 4px;
+    background: rgba(var(--accent-rgb), 0.16);
+    color: var(--text);
   }
   .rings {
     display: grid;
@@ -312,7 +358,8 @@ const label = season.replace('-', '/');
   }
   .chips {
     display: flex;
-    gap: 3px;
+    gap: 2px;
+    min-width: 0;
   }
   .chips.l {
     grid-column: 1;
@@ -324,13 +371,14 @@ const label = season.replace('-', '/');
     justify-content: flex-end;
   }
   .last5 .lab {
+    min-width: 3.6rem;
     grid-column: 2;
     grid-row: 1;
   }
   .chips :global(.res) {
-    min-width: 21px;
+    min-width: 19px;
     height: 22px;
-    padding: 0 3px;
+    padding: 0 2px;
     font-size: 0.72rem;
   }
 </style>
