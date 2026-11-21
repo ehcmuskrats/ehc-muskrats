@@ -87,9 +87,12 @@ const most = [...rows].sort((a, b) => b.t.gp - a.t.gp)[0];
             <tr>
               <td class="sticky-col">
                 <a href={href(lang, `teams/${x.o.key}/`)} class="tl">
+                  {/* Fixed slot before the logo so every dot lines up in one column. */}
+                  <span class="slot" aria-hidden={x.current ? undefined : 'true'}>
+                    {x.current && <span class="cur" role="img" aria-label={de ? 'Diese Saison in der Liga' : 'In the league this season'} title={de ? 'Diese Saison in der Liga' : 'In the league this season'} />}
+                  </span>
                   <Team team={x.o.team} responsive />
                 </a>
-                {x.current && <span class="cur" title={de ? 'Diese Saison in der Liga' : 'In the league this season'} />}
               </td>
               <td class="num" data-v={x.t.gp}>{x.t.gp}</td>
               <td class="num" data-v={x.t.w}>{x.t.w}</td>
@@ -131,16 +134,24 @@ const most = [...rows].sort((a, b) => b.t.gp - a.t.gp)[0];
     color: var(--text);
   }
   .tl {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     color: var(--text);
   }
+  .slot {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 8px;
+  }
   .cur {
-    display: inline-block;
+    display: block;
     width: 7px;
     height: 7px;
-    margin-left: 0.4rem;
     border-radius: 50%;
     background: var(--orange);
-    vertical-align: middle;
   }
   .note {
     margin-top: 0.75rem;
