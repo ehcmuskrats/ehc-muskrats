@@ -7,6 +7,32 @@ Collected while reviewing the site. Fixed together when the user says "go".
   stats Gesamt / Grunddurchgang / Playoffs switch, playoff table on player profiles, all-time playoff points leaderboard).
 
 ## Round 4 — DONE (24–31). 31 = "Meister 2024/25" banner with sheen above the won final series.
+## Round 7 — "Feedback 20 Nov" (built 2026-11-21, pushed live)
+
+Brand: official logo SVG everywhere (also our team badge), yellow #e8b414 replaces orange, stripes in logo blue #2a418b.
+
+- DONE 1 Light mode "ice" #f7f1e9: follows the device, sun/moon switch in the top bar (remembered per visitor).
+- DONE 1.1 Impressum + Datenschutz (and Spieltag) in the mobile "More" sheet.
+- DONE 2 Rob's team photo as home hero (dark scrim / ice wash in light mode); rink drawing is the fallback.
+- DONE 3/4/6 Moskalenko Jr., goalie league comparison, rotating team records (14 records, forfeits excluded).
+- DONE 5 Backup: data/archive/ (every WEHV response, gzipped, birthdates removed), updated by the nightly sync.
+- DONE 8 Meiste Spiele back to top 10.
+- DONE 9 Nationality flags from WEHV data (all seasons); override in data/player-extras.json.
+- DONE 10 Automatic recaps in News for this season's games; optional quotes in data/recap-quotes.json.
+- DONE 11 Weekly table-position chart (bump chart, logos, tap to highlight) on the standings page.
+- DONE 13 Calendar: per game (Google / .ics) + subscription feed /calendar/muskrats.ics.
+- DONE 14/15/22 Preview pages for upcoming games (form, table, H2H, directions, calendar) + Spieltag-Infos page.
+  Venue facts from neuroarena.at; your own entrance/hall tips go in src/config/venues.ts (notes).
+- DONE 16/22 Opponent pages + "Gegner" rivalry table; season summaries on the schedule; playoff history on Über uns.
+- DONE 18 Site search (Pagefind).
+- DONE 19 Accessibility: axe WCAG 2.2 AA clean on all page types, both themes. Performance: 168 KB first load,
+  CLS 0.003. Lighthouse/PSI score still to run (quota was used up) - pagespeed.web.dev.
+- OPEN 21 Typography: 3 options shown, waiting for a pick.
+- DONE 23/24 Über uns page (story text slot in src/config/site.ts) with achievements + season timeline.
+- WRITE-UP 7 (Stack Team App portal) and 25 (shop): docs/proposals-round6.md.
+- SKIPPED (not ticked) 12 fantasy, 17 POTM voting, 20 sponsors.
+- Note: WEHV 2022/23 final has no winner flag (1 game, best of 3) - counted as lost final (HZB won the game).
+
 ## Round 6 (done 2026-11-21)
 
 _Done: #35 record pool of 14 in derive.ts (forfeits excluded from score records) + RecordCards.astro; #36 GoalieLeague.astro on goalie profiles (season/round picker, Goalies/Teams views); #37 names override in data/player-aliases.json applied to every player reference in src/lib/data.ts. New profile URL: /players/115795-aleksei-moskalenko-jr/._
