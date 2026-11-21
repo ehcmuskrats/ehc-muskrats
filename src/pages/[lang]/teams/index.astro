@@ -1,0 +1,148 @@
+---
+// Opponents index (#16, #22 "rivalry records"): every team we have played, with the all-time head-to-head.
+import Base from '../../../layouts/Base.astro';
+import Team from '../../../components/Team.astro';
+import DataCredit from '../../../components/DataCredit.astro';
+import { type Lang, langPaths, href, formatNumber } from '../../../i18n/index.ts';
+import { currentSeasonId } from '../../../lib/data.ts';
+import { opponents, headToHead, tally } from '../../../lib/teams.ts';
+
+export const getStaticPaths = langPaths;
+const lang = Astro.params.lang as Lang;
+const de = lang === 'de';
+const rows = opponents()
+  .map((o) => {
+    const h = headToHead(o.key);
+    const t = tally(h);
+    return { o, t, pct: t.gp ? (t.w + t.t / 2) / t.gp : 0, current: o.seasons.includes(currentSeasonId), last: h[0] };
+  })
+  .filter((x) => x.t.gp > 0)
+  .sort((a, b) => Number(b.current) - Number(a.current) || b.t.gp - a.t.gp);
+const best = [...rows].filter((x) => x.t.gp >= 4).sort((a, b) => b.pct - a.pct)[0];
+// Only a real nemesis: a team we have a losing record against.
+const worst = [...rows].filter((x) => x.t.gp >= 4 && x.pct < 0.5).sort((a, b) => a.pct - b.pct)[0];
+const most = [...rows].sort((a, b) => b.t.gp - a.t.gp)[0];
+---
+
+<Base lang={lang} title={de ? 'Gegner' : 'Opponents'} path="teams/" active="nav.standings" leagueData>
+  <header class="page-head">
+    <span class="tag">{de ? 'Alle Duelle seit 2015/16' : 'Every meeting since 2015/16'}</span>
+    <h1>{de ? 'Gegner' : 'Opponents'}</h1>
+  </header>
+
+  <div class="hl">
+    {
+      most && (
+        <a class="panel" href={href(lang, `teams/${most.o.key}/`)}>
+          <p class="eyebrow">{de ? 'Häufigster Gegner' : 'Most played'}</p>
+          <Team team={most.o.team} />
+          <span class="small dim tnum">
+            {most.t.gp} {de ? 'Spiele' : 'games'}
+          </span>
+        </a>
+      )
+    }
+    {
+      best && (
+        <a class="panel" href={href(lang, `teams/${best.o.key}/`)}>
+          <p class="eyebrow">{de ? 'Liegt uns' : 'Favourite opponent'}</p>
+          <Team team={best.o.team} />
+          <span class="small dim tnum">
+            {best.t.w}–{best.t.l}
+            {best.t.t ? `–${best.t.t}` : ''} · {formatNumber(lang, best.pct * 100, 0)}%
+          </span>
+        </a>
+      )
+    }
+    {
+      worst && worst !== best && (
+        <a class="panel" href={href(lang, `teams/${worst.o.key}/`)}>
+          <p class="eyebrow">{de ? 'Angstgegner' : 'Toughest opponent'}</p>
+          <Team team={worst.o.team} />
+          <span class="small dim tnum">
+            {worst.t.w}–{worst.t.l}
+            {worst.t.t ? `–${worst.t.t}` : ''} · {formatNumber(lang, worst.pct * 100, 0)}%
+          </span>
+        </a>
+      )
+    }
+  </div>
+
+  <div class="table-wrap">
+    <table data-sortable>
+      <thead>
+        <tr>
+          <th class="sticky-col" scope="col">Team</th>
+          <th class="num" scope="col" data-sort="num"><button type="button">GP</button></th>
+          <th class="num" scope="col" data-sort="num"><button type="button">W</button></th>
+          <th class="num" scope="col" data-sort="num"><button type="button">L</button></th>
+          <th class="num" scope="col" data-sort="num"><button type="button">T</button></th>
+          <th class="num" scope="col" data-sort="num"><button type="button">%</button></th>
+          <th class="num" scope="col">GF:GA</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map((x) => (
+            <tr>
+              <td class="sticky-col">
+                <a href={href(lang, `teams/${x.o.key}/`)} class="tl">
+                  <Team team={x.o.team} responsive />
+                </a>
+                {x.current && <span class="cur" title={de ? 'Diese Saison in der Liga' : 'In the league this season'} />}
+              </td>
+              <td class="num" data-v={x.t.gp}>{x.t.gp}</td>
+              <td class="num" data-v={x.t.w}>{x.t.w}</td>
+              <td class="num" data-v={x.t.l}>{x.t.l}</td>
+              <td class="num" data-v={x.t.t}>{x.t.t}</td>
+              <td class="num big" data-v={x.pct}>{formatNumber(lang, x.pct * 100, 0)}</td>
+              <td class="num tnum">
+                {x.t.gf}:{x.t.ga}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="small dim note">
+    {de
+      ? '% = Punktequote aus unserer Sicht (Sieg 1, Unentschieden ½). Punkt = diese Saison in der Liga.'
+      : '% = our win rate (win 1, tie ½). Dot = in the league this season.'}
+  </p>
+  <DataCredit lang={lang} />
+</Base>
+
+<style>
+  .hl {
+    display: grid;
+    gap: 10px;
+    margin: 1rem 0 1.25rem;
+  }
+  @media (min-width: 720px) {
+    .hl {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .hl .panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    color: var(--text);
+  }
+  .tl {
+    color: var(--text);
+  }
+  .cur {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-left: 0.4rem;
+    border-radius: 50%;
+    background: var(--orange);
+    vertical-align: middle;
+  }
+  .note {
+    margin-top: 0.75rem;
+  }
+</style>

@@ -46,7 +46,7 @@ export function seasonHistory(): SeasonHistory[] {
       series.push({
         round: ph.round,
         result,
-        opponent: them?.team.name ?? '',
+        opponent: them?.team.short || them?.team.name || '',
         score: `${us.wins}:${them?.wins ?? 0}`,
       });
     }

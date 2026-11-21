@@ -1,0 +1,200 @@
+---
+// Season summary (#22) above the schedule: record, table position, playoff run, top scorer, top goalie and the
+// biggest win. Computed for every season from WEHV data; for the current season it reads "so far".
+import { type Lang, href, formatDate, formatNumber } from '../i18n/index.ts';
+import { derived, ourGames, teamName } from '../lib/data.ts';
+import { seasonHistory } from '../lib/history.ts';
+import { isOurTeam } from '../config/team.ts';
+import type { SeasonId } from '../types/models.ts';
+
+interface Props {
+  lang: Lang;
+  season: SeasonId;
+}
+const { lang, season } = Astro.props;
+const de = lang === 'de';
+const h = seasonHistory().find((x) => x.season === season);
+const lines = derived.players
+  .map((p) => ({ p, l: p.seasons.find((x) => x.season === season) }))
+  .filter((x) => x.l);
+const scorer = [...lines].sort((a, b) => b.l!.p - a.l!.p || b.l!.g - a.l!.g)[0];
+const sniper = [...lines].sort((a, b) => b.l!.g - a.l!.g)[0];
+const goalie = [...lines].filter((x) => x.l!.goalieGp > 0).sort((a, b) => b.l!.goalieGp - a.l!.goalieGp)[0];
+let bestWin: { id: string; date: string | null; us: number; them: number; opp: string } | null = null;
+for (const g of ourGames(season)) {
+  if (g.status !== 'final' || g.homeScore == null || g.awayScore == null) continue;
+  const home = isOurTeam(g.home);
+  const us = home ? g.homeScore : g.awayScore;
+  const them = home ? g.awayScore : g.homeScore;
+  if (us > them && (!bestWin || us - them > bestWin.us - bestWin.them)) bestWin = { id: g.id, date: g.date, us, them, opp: teamName(home ? g.away : g.home) };
+}
+const outcome: Record<string, [string, string]> = {
+  champion: ['Meister', 'Champions'],
+  final: ['Finale', 'Final'],
+  semifinal: ['Halbfinale', 'Semifinal'],
+  quarterfinal: ['Viertelfinale', 'Quarterfinal'],
+  cancelled: ['Abgebrochen', 'Cancelled'],
+};
+const roundShort: Record<string, [string, string]> = {
+  quarterfinal: ['VF', 'QF'],
+  semifinal: ['HF', 'SF'],
+  final: ['F', 'F'],
+  third: ['P3', '3rd'],
+  other: ['PO', 'PO'],
+};
+const playerHref = (slug: string) => href(lang, `players/${slug}/`) + (h?.inProgress ? '' : `?saison=${season}`);
+---
+
+{
+  h && h.record.gp > 0 && (
+    <section class="panel summ" aria-label={de ? 'Saisonbilanz' : 'Season summary'}>
+      <p class="eyebrow">{h.inProgress ? (de ? 'Bisher in dieser Saison' : 'Season so far') : de ? 'Saisonbilanz' : 'Season summary'}</p>
+      <div class="tiles">
+        <div class="t">
+          <span class="v tnum">
+            {h.record.w}–{h.record.l}
+            {h.record.t ? `–${h.record.t}` : ''}
+          </span>
+          <span class="k">W–L{h.record.t ? '–T' : ''}</span>
+        </div>
+        <div class="t">
+          <span class="v tnum">{h.regular ? `#${h.regular.rank}` : '–'}</span>
+          <span class="k">{de ? 'Tabelle' : 'Table'}</span>
+        </div>
+        <div class="t">
+          <span class:list={['v', { gold: h.playoffs === 'champion' }]}>
+            {h.playoffs ? outcome[h.playoffs][de ? 0 : 1] : '–'}
+          </span>
+          <span class="k">Playoffs</span>
+        </div>
+        <div class="t">
+          <span class="v tnum">
+            {h.record.gf}:{h.record.ga}
+          </span>
+          <span class="k">{de ? 'Tore' : 'Goals'}</span>
+        </div>
+      </div>
+      {
+        h.series.length > 0 && (
+          <p class="series small">
+            {h.series.map((x) => (
+              <span class:list={['s', x.result]}>
+                {`${roundShort[x.round][de ? 0 : 1]} ${x.result === 'W' ? '✓' : x.result === 'L' ? '✗' : '–'} ${x.opponent}${x.result !== 'C' ? ' ' + x.score : ''}`}
+              </span>
+            ))}
+          </p>
+        )
+      }
+      <ul class="facts small">
+        {scorer && scorer.l!.p > 0 && (
+          <li>
+            <span class="dim">{de ? 'Topscorer' : 'Top scorer'}</span>
+            <a href={playerHref(scorer.p.slug)}>
+              {`${scorer.p.first} ${scorer.p.last}`}
+            </a>
+            <span class="tnum">
+              {`${scorer.l!.p} PTS (${scorer.l!.g} G, ${scorer.l!.a} A)`}
+            </span>
+          </li>
+        )}
+        {sniper && sniper.p !== scorer?.p && sniper.l!.g > 0 && (
+          <li>
+            <span class="dim">{de ? 'Meiste Tore' : 'Most goals'}</span>
+            <a href={playerHref(sniper.p.slug)}>
+              {`${sniper.p.first} ${sniper.p.last}`}
+            </a>
+            <span class="tnum">{sniper.l!.g} G</span>
+          </li>
+        )}
+        {goalie && (
+          <li>
+            <span class="dim">Goalie</span>
+            <a href={playerHref(goalie.p.slug)}>
+              {`${goalie.p.first} ${goalie.p.last}`}
+            </a>
+            <span class="tnum">
+              {`${goalie.l!.goalieGp} GP · ${formatNumber(lang, goalie.l!.gaa, 2)} GAA`}
+            </span>
+          </li>
+        )}
+        {bestWin && (
+          <li>
+            <span class="dim">{de ? 'Höchster Sieg' : 'Biggest win'}</span>
+            <a href={href(lang, `games/${bestWin.id}/`)} class="tnum">
+              {`${bestWin.us}:${bestWin.them} vs ${bestWin.opp}`}
+            </a>
+            <span class="dim">{formatDate(lang, bestWin.date)}</span>
+          </li>
+        )}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .summ {
+    margin: 1rem 0 0.5rem;
+  }
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin: 0.5rem 0 0.75rem;
+  }
+  .t {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+  .v {
+    font: 800 clamp(1.15rem, 5vw, 1.7rem) / 1 var(--display);
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .v.gold {
+    color: var(--accent-text);
+  }
+  .k {
+    font: 700 0.66rem/1.1 var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+  .series {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0 0 0.6rem;
+  }
+  .series .s {
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    background: rgba(var(--fg-rgb), 0.06);
+  }
+  .series .s.W {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--win) 55%, transparent);
+  }
+  .facts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .facts li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.2rem 0.6rem;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .facts li .dim:first-child {
+    min-width: 6.5rem;
+  }
+  .facts a {
+    font-weight: 700;
+    color: var(--text);
+  }
+</style>

@@ -41,6 +41,15 @@ export function opponents(): TeamInfo[] {
   return [...m.values()].sort((a, b) => a.name.localeCompare(b.name));
 }
 
+let _keys: Set<string> | null = null;
+/** Link target for a team in the league tables, or null when we have never played them. */
+export function teamHref(t: TeamRef): string | null {
+  if (isOurTeam(t)) return null;
+  _keys ??= new Set(opponents().map((o) => o.key));
+  const k = teamKey(t);
+  return _keys.has(k) ? `teams/${k}/` : null;
+}
+
 export function opponent(key: string): TeamInfo | undefined {
   return opponents().find((x) => x.key === key);
 }

@@ -117,6 +117,13 @@ const cards = [
                     </>
                   )}
                 </span>
+                {h.series.length > 0 && (
+                  <span class="ser small">
+                    {h.series
+                      .map((x) => `${{ quarterfinal: de ? 'VF' : 'QF', semifinal: de ? 'HF' : 'SF', final: 'F', third: 'P3', other: 'PO' }[x.round]} ${x.result === 'W' ? '✓' : x.result === 'L' ? '✗' : '–'} ${x.opponent}${x.result !== 'C' ? ' ' + x.score : ''}`)
+                      .join(' · ')}
+                  </span>
+                )}
               </span>
               <span class="rec small tnum" title={de ? "Siege–Niederlagen–Unentschieden" : "Wins–losses–ties"}>
                 {[h.record.w, h.record.l, ...(h.record.t > 0 ? [h.record.t] : [])].join('–')}
@@ -242,6 +249,9 @@ const cards = [
   }
   .champ .out {
     color: var(--accent-text);
+  }
+  .ser {
+    color: var(--muted);
   }
   .meta,
   .rec {

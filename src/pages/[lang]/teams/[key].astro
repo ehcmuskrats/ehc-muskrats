@@ -1,0 +1,380 @@
+---
+// Opponent profile (#16): who they are this season (position, record, form, special teams) and our
+// complete history against them, with a this-season comparison. All from WEHV data.
+import Base from '../../../layouts/Base.astro';
+import Team from '../../../components/Team.astro';
+import DataCredit from '../../../components/DataCredit.astro';
+import { type Lang, LANGS, href, formatDate, formatNumber } from '../../../i18n/index.ts';
+import { RESULT_FULL } from '../../../i18n/abbr.ts';
+import { currentSeasonId, resultClass, teamName, ourGames, hasGamePage } from '../../../lib/data.ts';
+import { opponents, headToHead, tally, form, standing, teamStats, seasonsOf, teamKey, type TeamInfo } from '../../../lib/teams.ts';
+import { isOurTeam } from '../../../config/team.ts';
+
+export function getStaticPaths() {
+  return LANGS.flatMap((lang) => opponents().map((o) => ({ params: { lang, key: o.key }, props: { o } })));
+}
+const { o } = Astro.props as { o: TeamInfo };
+const lang = Astro.params.lang as Lang;
+const de = lang === 'de';
+const label = (sid: string) => sid.replace('-', '/');
+const pct = (n: number | null | undefined) => (n == null ? '–' : `${formatNumber(lang, n, 1)}%`);
+
+const inLeague = seasonsOf(o.key);
+const sid = inLeague.includes(currentSeasonId) ? currentSeasonId : inLeague[0];
+const st = standing(o.key, sid);
+const frm = form(o.key, sid, 5);
+const special = teamStats(o.key, sid);
+const usSt = standing('ehc-muskrats', sid);
+const usSpecial = teamStats('ehc-muskrats', sid);
+
+const h2h = headToHead(o.key);
+const all = tally(h2h);
+const bySeason = [...new Set(h2h.map((r) => r.game.season))].map((s) => ({ s, t: tally(h2h.filter((r) => r.game.season === s)) }));
+const biggestWin = [...h2h].filter((r) => r.gf > r.ga).sort((a, b) => b.gf - b.ga - (a.gf - a.ga))[0];
+const biggestLoss = [...h2h].filter((r) => r.gf < r.ga).sort((a, b) => b.ga - b.gf - (a.ga - a.gf))[0];
+const next = ourGames(currentSeasonId)
+  .filter((g) => g.status === 'scheduled' && g.timestamp != null && g.timestamp > Date.now() - 3 * 3600_000)
+  .filter((g) => teamKey(g.home) === o.key || teamKey(g.away) === o.key)
+  .sort((a, b) => a.timestamp! - b.timestamp!)[0];
+
+// This-season comparison: [label, us, them, higher is better?, formatted us, formatted them]
+const cmp: [string, number, number, boolean, string, string][] = [];
+if (st && usSt) {
+  const a = usSt.row;
+  const b = st.row;
+  const per = (x: number, gp: number) => (gp ? x / gp : 0);
+  cmp.push([de ? 'Punkte pro Spiel' : 'Points per game', per(a.pts, a.gp), per(b.pts, b.gp), true, formatNumber(lang, per(a.pts, a.gp), 2), formatNumber(lang, per(b.pts, b.gp), 2)]);
+  cmp.push([de ? 'Tore pro Spiel' : 'Goals per game', per(a.gf, a.gp), per(b.gf, b.gp), true, formatNumber(lang, per(a.gf, a.gp), 2), formatNumber(lang, per(b.gf, b.gp), 2)]);
+  cmp.push([de ? 'Gegentore pro Spiel' : 'Goals against per game', per(a.ga, a.gp), per(b.ga, b.gp), false, formatNumber(lang, per(a.ga, a.gp), 2), formatNumber(lang, per(b.ga, b.gp), 2)]);
+}
+if (special && usSpecial) {
+  cmp.push(['Power Play', usSpecial.ppPct ?? 0, special.ppPct ?? 0, true, pct(usSpecial.ppPct), pct(special.ppPct)]);
+  cmp.push(['Penalty Kill', usSpecial.pkPct ?? 0, special.pkPct ?? 0, true, pct(usSpecial.pkPct), pct(special.pkPct)]);
+  cmp.push([de ? 'Strafminuten pro Spiel' : 'PIM per game', usSpecial.gp ? usSpecial.pim / usSpecial.gp : 0, special.gp ? special.pim / special.gp : 0, false, formatNumber(lang, usSpecial.gp ? usSpecial.pim / usSpecial.gp : 0, 1), formatNumber(lang, special.gp ? special.pim / special.gp : 0, 1)]);
+}
+---
+
+<Base lang={lang} title={o.name} path={`teams/${o.key}/`} active="nav.standings" leagueData>
+  <a class="back small" href={href(lang, 'teams/')}>← {de ? 'Alle Gegner' : 'All opponents'}</a>
+  <header class="t-hero">
+    <Team team={o.team} logoOnly size={84} />
+    <div>
+      <span class="tag">{st ? `${st.division} ${label(sid)}` : label(sid)}</span>
+      <h1>{o.name}</h1>
+      {
+        st && (
+          <p class="sub tnum">
+            <strong>#{st.row.rank}</strong> {de ? 'von' : 'of'} {st.teams} · {st.row.pts} PTS · {st.row.w}–{st.row.l}
+            {st.row.ties ? `–${st.row.ties}` : ''} · {st.row.gf}:{st.row.ga}
+          </p>
+        )
+      }
+    </div>
+  </header>
+
+  <div class="grid2">
+    <div class="panel">
+      <p class="eyebrow">{de ? `Form ${label(sid)}` : `Form ${label(sid)}`}</p>
+      <div class="form">
+        {
+          frm.length ? (
+            frm.map((r) => (
+              <span class={`res res-${resultClass(r.result)}`} title={`${RESULT_FULL[r.result][lang]} ${r.gf}:${r.ga} vs ${teamName(r.opponent)}`}>
+                {r.result}
+              </span>
+            ))
+          ) : (
+            <span class="small dim">{de ? 'Noch keine Spiele' : 'No games yet'}</span>
+          )
+        }
+      </div>
+      {
+        special && (
+          <p class="small dim pp tnum">
+            PP {pct(special.ppPct)} · PK {pct(special.pkPct)} · PIM {special.pim}
+          </p>
+        )
+      }
+    </div>
+    {
+      next && (
+        <a class="panel nextg" href={hasGamePage(next) ? href(lang, `games/${next.id}/`) : href(lang, 'schedule/')}>
+          <p class="eyebrow">{de ? 'Nächstes Duell' : 'Next meeting'}</p>
+          <strong>{formatDate(lang, next.date, { weekday: true })} · {next.time ?? ''}</strong>
+          <span class="small dim">{next.venue?.replace(/^Wien - /, '')}</span>
+          <span class="small">{de ? 'Zur Vorschau' : 'Preview'} →</span>
+        </a>
+      )
+    }
+  </div>
+
+  <section aria-labelledby="h-h2h">
+    <div class="sec-head">
+      <h2 id="h-h2h">{de ? 'Bilanz gegen die Muskrats' : 'Record vs the Muskrats'}</h2>
+    </div>
+    <p class="h2h-sum tnum">
+      <span class="w">{all.w} W</span>
+      <span class="l">{all.l} L</span>
+      {all.t > 0 && <span class="t">{all.t} T</span>}
+      <span class="dim small">
+        · {all.gf}:{all.ga} · {all.gp} {de ? 'Spiele (aus unserer Sicht)' : 'games (our perspective)'}
+      </span>
+    </p>
+    <div class="grid2">
+      {
+        biggestWin && (
+          <a class="panel rec" href={href(lang, `games/${biggestWin.game.id}/`)}>
+            <p class="eyebrow">{de ? 'Höchster Sieg' : 'Biggest win'}</p>
+            <span class="rv tnum">
+              {biggestWin.gf}:{biggestWin.ga}
+            </span>
+            <span class="small dim">{formatDate(lang, biggestWin.game.date)}</span>
+          </a>
+        )
+      }
+      {
+        biggestLoss && (
+          <a class="panel rec" href={href(lang, `games/${biggestLoss.game.id}/`)}>
+            <p class="eyebrow">{de ? 'Höchste Niederlage' : 'Heaviest defeat'}</p>
+            <span class="rv tnum loss">
+              {biggestLoss.gf}:{biggestLoss.ga}
+            </span>
+            <span class="small dim">{formatDate(lang, biggestLoss.game.date)}</span>
+          </a>
+        )
+      }
+    </div>
+
+    {
+      bySeason.length > 1 && (
+        <div class="table-wrap seasons">
+          <table>
+            <thead>
+              <tr>
+                <th class="sticky-col" scope="col">{de ? 'Saison' : 'Season'}</th>
+                <th class="num" scope="col">GP</th>
+                <th class="num" scope="col">W</th>
+                <th class="num" scope="col">L</th>
+                <th class="num" scope="col">T</th>
+                <th class="num" scope="col">GF:GA</th>
+              </tr>
+            </thead>
+            <tbody>
+              {bySeason.map(({ s, t }) => (
+                <tr>
+                  <td class="sticky-col">{label(s)}</td>
+                  <td class="num">{t.gp}</td>
+                  <td class="num">{t.w}</td>
+                  <td class="num">{t.l}</td>
+                  <td class="num">{t.t}</td>
+                  <td class="num tnum">
+                    {t.gf}:{t.ga}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    }
+
+    <ul class="games">
+      {
+        h2h.slice(0, 10).map((r) => (
+          <li>
+            <a href={href(lang, `games/${r.game.id}/`)}>
+              <span class="small dim tnum">{formatDate(lang, r.game.date)}</span>
+              <span class={`res res-${resultClass(r.result)}`}>{r.result}</span>
+              <span class="sc tnum">
+                {r.gf}:{r.ga}
+              </span>
+              <span class="small dim">{r.game.playoff ? 'Playoffs' : r.game.divisionName}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  {
+    cmp.length > 0 && (
+      <section aria-labelledby="h-cmp">
+        <div class="sec-head">
+          <h2 id="h-cmp">{de ? `Vergleich ${label(sid)}` : `Comparison ${label(sid)}`}</h2>
+        </div>
+        <div class="cmp-head small">
+          <span>EHC Muskrats</span>
+          <span>{o.short || o.name}</span>
+        </div>
+        <ul class="cmp">
+          {cmp.map(([lab, a, b, higher, fa, fb]) => {
+            const total = Math.abs(a) + Math.abs(b) || 1;
+            const usBetter = higher ? a > b : a < b;
+            const themBetter = higher ? b > a : b < a;
+            return (
+              <li>
+                <span class:list={['v tnum', { better: usBetter }]}>{fa}</span>
+                <span class="lab">
+                  <span class="small">{lab}</span>
+                  <span class="bar">
+                    <span class="a" style={`width:${(Math.abs(a) / total) * 100}%`} />
+                    <span class="b" style={`width:${(Math.abs(b) / total) * 100}%`} />
+                  </span>
+                </span>
+                <span class:list={['v tnum r', { better: themBetter }]}>{fb}</span>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    )
+  }
+
+  <DataCredit lang={lang} />
+</Base>
+
+<style>
+  .back {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-top: 0.5rem;
+    color: var(--muted);
+  }
+  .t-hero {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0.5rem 0 1.25rem;
+  }
+  .t-hero h1 {
+    margin: 0.4rem 0 0.25rem;
+    font-size: clamp(1.8rem, 7vw, 3rem);
+    line-height: 1;
+  }
+  .sub {
+    margin: 0;
+    color: var(--muted);
+  }
+  .grid2 {
+    display: grid;
+    gap: 10px;
+  }
+  @media (min-width: 720px) {
+    .grid2 {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .form {
+    display: flex;
+    gap: 4px;
+    margin-top: 0.4rem;
+  }
+  .pp {
+    margin: 0.7rem 0 0;
+  }
+  .nextg {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    color: var(--text);
+  }
+  .h2h-sum {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin: 0 0 0.9rem;
+    font: 800 1.6rem/1 var(--display);
+  }
+  .h2h-sum .w {
+    color: var(--win);
+  }
+  .h2h-sum .l {
+    color: var(--loss);
+  }
+  .rec {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    color: var(--text);
+  }
+  .rv {
+    font: 800 2.4rem/1 var(--display);
+    color: var(--accent-text);
+  }
+  .rv.loss {
+    color: var(--text);
+  }
+  .seasons {
+    margin-top: 1rem;
+  }
+  .games {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+  }
+  .games a {
+    display: grid;
+    grid-template-columns: 6.2rem auto 3rem 1fr;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 48px;
+    border-top: 1px solid var(--line);
+    color: var(--text);
+  }
+  .sc {
+    font: 800 1.05rem/1 var(--display);
+  }
+  .cmp-head {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+  .cmp {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .cmp li {
+    display: grid;
+    grid-template-columns: 3.6rem 1fr 3.6rem;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .cmp .v {
+    font: 800 1.05rem/1 var(--display);
+    color: var(--muted);
+  }
+  .cmp .v.r {
+    text-align: right;
+  }
+  .cmp .v.better {
+    color: var(--text);
+  }
+  .lab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    text-align: center;
+  }
+  .bar {
+    display: flex;
+    width: 100%;
+    height: 6px;
+    gap: 2px;
+  }
+  .bar .a {
+    background: var(--orange);
+    border-radius: 3px 0 0 3px;
+  }
+  .bar .b {
+    background: var(--panel-hi);
+    border-radius: 0 3px 3px 0;
+  }
+</style>

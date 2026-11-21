@@ -27,12 +27,14 @@ const bracket = s?.playoffs;
 const gameById = new Map((s?.games ?? []).map((g) => [g.id, g]));
 const ourIds = new Set(ourGames(seasonId).map((g) => g.id));
 void reports;
+import { teamHref } from '../../../lib/teams.ts';
 ---
 
 <Base lang={lang} title={`${t('standings.title')} ${seasonId.replace('-', '/')}`} path={Astro.params.season ? `standings/${seasonId}/` : 'standings/'} active="nav.standings" leagueData>
   <header class="page-head">
     <span class="tag">{t('common.season')} {seasonId.replace('-', '/')}</span>
     <h1>{t('standings.title')}</h1>
+    <a class="opp-link small" href={href(lang, 'teams/')}>{lang === 'de' ? 'Alle Gegner & direkte Duelle' : 'All opponents & head-to-head'} →</a>
   </header>
   <SeasonPicker lang={lang} section="standings" seasons={ourSeasons.map((x) => x.info.id)} current={seasonId} />
 
@@ -98,7 +100,13 @@ void reports;
                 <tr class={isOurTeam(r.team) ? 'ours' : undefined}>
                   <td class="num rank">{r.rank}</td>
                   <td class="sticky-col team-col">
-                    <Team team={r.team} responsive />
+                    {teamHref(r.team) ? (
+                      <a class="tlink" href={href(lang, teamHref(r.team)!)}>
+                        <Team team={r.team} responsive />
+                      </a>
+                    ) : (
+                      <Team team={r.team} responsive />
+                    )}
                   </td>
                   <td class="num">{r.gp}</td>
                   <td class="num">{r.w}</td>
@@ -171,6 +179,12 @@ void reports;
 </Base>
 
 <style>
+  .tlink {
+    color: var(--text);
+  }
+  .tlink:hover {
+    color: var(--accent-text);
+  }
   .rank {
     color: var(--dim);
     width: 2rem;

@@ -5,6 +5,7 @@ import SeasonPicker from '../../../components/SeasonPicker.astro';
 import DataCredit from '../../../components/DataCredit.astro';
 import VideoEmbed from '../../../components/VideoEmbed.astro';
 import CalendarButton from '../../../components/CalendarButton.astro';
+import SeasonSummary from '../../../components/SeasonSummary.astro';
 import { type Lang, LANGS, useT } from '../../../i18n/index.ts';
 import { ourSeasons, currentSeasonId, ourGames, sortByDate, highlights, season as getSeason, resultClass, resultCode, teamName } from '../../../lib/data.ts';
 import { isOurTeam } from '../../../config/team.ts';
@@ -85,6 +86,8 @@ const looseRound = dated.filter((g) => g.playoff && !inSeries.has(g.id));
   </header>
 
   <SeasonPicker lang={lang} section="schedule" seasons={ourSeasons.map((x) => x.info.id)} current={seasonId} />
+
+  <SeasonSummary lang={lang} season={seasonId} />
 
   {seasonId === currentSeasonId && (
     <div class="cal-row">
