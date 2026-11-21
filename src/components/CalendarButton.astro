@@ -10,8 +10,10 @@ interface Props {
   game?: GameSummary;
   feed?: boolean;
   class?: string;
+  /** Open the menu upwards (inside containers that clip overflow, e.g. the home hero). */
+  up?: boolean;
 }
-const { lang, game, feed = false, class: cls } = Astro.props;
+const { lang, game, feed = false, class: cls, up = false } = Astro.props;
 const de = lang === 'de';
 const site = Astro.site;
 const feedHttps = site ? new URL(url(feedPath), site).toString() : url(feedPath);
@@ -22,7 +24,7 @@ const show = feed || (game && game.timestamp != null);
 
 {
   show && (
-    <details class:list={['cal', cls]}>
+    <details class:list={['cal', cls, { up }]}>
       <summary class="btn btn-ghost">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" />
@@ -82,6 +84,10 @@ const show = feed || (game && game.timestamp != null);
     stroke-linecap: round;
     stroke-linejoin: round;
   }
+  .cal.up .cal-menu {
+    top: auto;
+    bottom: calc(100% + 6px);
+  }
   .cal-menu {
     position: absolute;
     z-index: 30;
@@ -118,3 +124,15 @@ const show = feed || (game && game.timestamp != null);
     line-height: 1.4;
   }
 </style>
+
+<script>
+  // Close an open calendar menu when tapping elsewhere or pressing Escape.
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll<HTMLDetailsElement>('details.cal[open]').forEach((d) => {
+      if (!d.contains(e.target as Node)) d.open = false;
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') document.querySelectorAll<HTMLDetailsElement>('details.cal[open]').forEach((d) => (d.open = false));
+  });
+</script>

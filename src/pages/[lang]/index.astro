@@ -140,7 +140,7 @@ import CalendarButton from '../../components/CalendarButton.astro';
       </div>
 
       <div class="hero-cta">
-        {upcoming[0] && <CalendarButton lang={lang} game={upcoming[0]} />}
+        {upcoming[0] && <CalendarButton lang={lang} game={upcoming[0]} up />}
         {upcoming[0] ? (
           <a class="btn btn-ghost" href={href(lang, `games/${upcoming[0].id}/`)}>{lang === 'de' ? 'Vorschau' : 'Preview'} →</a>
         ) : (
