@@ -14,6 +14,14 @@ export const SITE = {
     name: 'Christopher Bright',
     city: 'Wien',
   },
+  /**
+   * "Über uns / About us" page: the club's story in your own words. One paragraph per array entry.
+   * Empty = the page shows a short intro built from league data only.
+   */
+  about: {
+    de: [] as string[],
+    en: [] as string[],
+  },
   /** Leave empty to hide every email reference. When set, it is shown next to the Facebook button. */
   contactEmail: '',
   homeRink: 'neuro.io arena',

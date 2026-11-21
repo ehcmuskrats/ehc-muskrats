@@ -1,0 +1,120 @@
+---
+// "Add to calendar" for one game (Google Calendar link or .ics download for Apple/Outlook),
+// or, with `feed`, the season subscription (webcal://, updates itself). <details> so it works without JS.
+import type { GameSummary } from '../types/models.ts';
+import { type Lang, url } from '../i18n/index.ts';
+import { googleCalendarUrl, gameIcsPath, feedPath } from '../lib/calendar.ts';
+
+interface Props {
+  lang: Lang;
+  game?: GameSummary;
+  feed?: boolean;
+  class?: string;
+}
+const { lang, game, feed = false, class: cls } = Astro.props;
+const de = lang === 'de';
+const site = Astro.site;
+const feedHttps = site ? new URL(url(feedPath), site).toString() : url(feedPath);
+const feedWebcal = feedHttps.replace(/^https?:/, 'webcal:');
+const googleSubscribe = `https://calendar.google.com/calendar/render?cid=${encodeURIComponent(feedWebcal)}`;
+const show = feed || (game && game.timestamp != null);
+---
+
+{
+  show && (
+    <details class:list={['cal', cls]}>
+      <summary class="btn btn-ghost">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" />
+        </svg>
+        {feed ? (de ? 'Kalender abonnieren' : 'Subscribe') : de ? 'Zum Kalender' : 'Add to calendar'}
+      </summary>
+      <div class="cal-menu">
+        {feed ? (
+          <>
+            <a href={feedWebcal}>{de ? 'Apple / Outlook (abonnieren)' : 'Apple / Outlook (subscribe)'}</a>
+            <a href={googleSubscribe} target="_blank" rel="noopener">
+              Google Calendar
+            </a>
+            <a href={url(feedPath)} download="ehc-muskrats.ics">
+              {de ? '.ics herunterladen' : 'Download .ics'}
+            </a>
+            <p class="cal-note">
+              {de
+                ? 'Alle Spiele der Saison. Neue Termine und Änderungen kommen automatisch dazu.'
+                : 'Every game of the season. New dates and changes appear automatically.'}
+            </p>
+          </>
+        ) : (
+          <>
+            <a href={googleCalendarUrl(game!, site)} target="_blank" rel="noopener">
+              Google Calendar
+            </a>
+            <a href={url(gameIcsPath(game!.id))} download={`muskrats-${game!.date ?? 'spiel'}.ics`}>
+              {de ? 'Apple / Outlook (.ics)' : 'Apple / Outlook (.ics)'}
+            </a>
+          </>
+        )}
+      </div>
+    </details>
+  )
+}
+
+<style>
+  .cal {
+    position: relative;
+    display: inline-block;
+  }
+  .cal summary {
+    list-style: none;
+    cursor: pointer;
+    gap: 0.5rem;
+  }
+  .cal summary::-webkit-details-marker {
+    display: none;
+  }
+  .cal summary svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .cal-menu {
+    position: absolute;
+    z-index: 30;
+    top: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 230px;
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    background: var(--panel-2);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.7);
+    text-align: left;
+  }
+  .cal-menu a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 0.85rem;
+    border-radius: 6px;
+    color: var(--text);
+    font-weight: 600;
+  }
+  .cal-menu a:hover {
+    background: var(--panel-hi);
+    color: var(--text);
+  }
+  .cal-note {
+    margin: 0.3rem 0.85rem 0.4rem;
+    font-size: 0.78rem;
+    color: var(--dim);
+    line-height: 1.4;
+  }
+</style>

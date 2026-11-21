@@ -51,6 +51,7 @@ const scratches = Array.from({ length: 46 }, () => {
     w: (0.6 + rnd() * 1.2).toFixed(1),
   };
 });
+import CalendarButton from '../../components/CalendarButton.astro';
 ---
 
 <Base lang={lang} path="" active="nav.home" leagueData>
@@ -125,6 +126,7 @@ const scratches = Array.from({ length: 46 }, () => {
       </div>
 
       <div class="hero-cta">
+        {upcoming[0] && <CalendarButton lang={lang} game={upcoming[0]} />}
         <a class="btn btn-ghost" href={href(lang, 'schedule/')}>{t('nav.schedule')}</a>
       </div>
     </div>
@@ -496,6 +498,8 @@ const scratches = Array.from({ length: 46 }, () => {
   }
   .hero-cta {
     display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     justify-content: center;
     margin-top: 1.2rem;
   }

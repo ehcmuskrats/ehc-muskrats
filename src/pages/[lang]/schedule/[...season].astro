@@ -4,6 +4,7 @@ import GameList from '../../../components/GameList.astro';
 import SeasonPicker from '../../../components/SeasonPicker.astro';
 import DataCredit from '../../../components/DataCredit.astro';
 import VideoEmbed from '../../../components/VideoEmbed.astro';
+import CalendarButton from '../../../components/CalendarButton.astro';
 import { type Lang, LANGS, useT } from '../../../i18n/index.ts';
 import { ourSeasons, currentSeasonId, ourGames, sortByDate, highlights, season as getSeason, resultClass, resultCode, teamName } from '../../../lib/data.ts';
 import { isOurTeam } from '../../../config/team.ts';
@@ -84,6 +85,12 @@ const looseRound = dated.filter((g) => g.playoff && !inSeries.has(g.id));
   </header>
 
   <SeasonPicker lang={lang} section="schedule" seasons={ourSeasons.map((x) => x.info.id)} current={seasonId} />
+
+  {seasonId === currentSeasonId && (
+    <div class="cal-row">
+      <CalendarButton lang={lang} feed />
+    </div>
+  )}
 
   {
     !s?.info.muskratsPlays ? (
@@ -236,6 +243,9 @@ const looseRound = dated.filter((g) => g.playoff && !inSeries.has(g.id));
 </script>
 
 <style>
+  .cal-row {
+    margin: 0.75rem 0 0.25rem;
+  }
   /* Championship moment: only shown above a won final series. */
   .champs {
     position: relative;

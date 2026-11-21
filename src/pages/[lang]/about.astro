@@ -1,0 +1,250 @@
+---
+// Über uns / About us (#23, #24): the club's story (text from src/config/site.ts), achievements and a
+// season-by-season timeline. Everything except the story text is computed from WEHV data.
+import Base from '../../layouts/Base.astro';
+import DataCredit from '../../components/DataCredit.astro';
+import { type Lang, langPaths, useT, href, url } from '../../i18n/index.ts';
+import { SITE } from '../../config/site.ts';
+import { TEAM } from '../../config/team.ts';
+import { derived } from '../../lib/data.ts';
+const nations = new Set(derived.players.map((p) => p.nation).filter(Boolean)).size;
+import { seasonHistory, achievements, type SeasonHistory } from '../../lib/history.ts';
+
+export const getStaticPaths = langPaths;
+const lang = Astro.params.lang as Lang;
+const de = lang === 'de';
+const t = useT(lang);
+const story = SITE.about[lang].length ? SITE.about[lang] : SITE.about.de;
+const hist = seasonHistory();
+const ach = achievements(hist);
+const at = derived.records.allTime;
+const list = (xs: SeasonHistory[]) => xs.map((x) => x.label).join(', ');
+
+const outcome = (h: SeasonHistory): string => {
+  switch (h.playoffs) {
+    case 'champion':
+      return de ? 'Meister' : 'Champions';
+    case 'final':
+      return de ? 'Finale' : 'Final';
+    case 'semifinal':
+      return de ? 'Halbfinale' : 'Semifinal';
+    case 'quarterfinal':
+      return de ? 'Viertelfinale' : 'Quarterfinal';
+    case 'cancelled':
+      return de ? 'Playoffs abgebrochen' : 'Playoffs cancelled';
+    default:
+      return h.inProgress ? (de ? 'läuft' : 'in progress') : de ? 'keine Playoffs' : 'no playoffs';
+  }
+};
+
+const cards = [
+  ach.titles.length > 0 && { n: ach.titles.length, label: de ? 'Meistertitel' : 'Championship', sub: list(ach.titles), gold: true },
+  ach.finals.length > 0 && { n: ach.finals.length, label: de ? 'Finalteilnahmen (Vizemeister)' : 'Runner-up finishes', sub: list(ach.finals) },
+  ach.regularWins.length > 0 && { n: ach.regularWins.length, label: de ? 'Grunddurchgang gewonnen' : 'Regular-season titles', sub: list(ach.regularWins) },
+  ach.regularSecond.length > 0 && { n: ach.regularSecond.length, label: de ? 'Zweiter im Grunddurchgang' : 'Regular-season runner-up', sub: list(ach.regularSecond) },
+].filter(Boolean) as { n: number; label: string; sub: string; gold?: boolean }[];
+---
+
+<Base lang={lang} title={t('nav.about')} path="about/" active="nav.about" leagueData>
+  <header class="page-head">
+    <span class="tag">{TEAM.leagueName}</span>
+    <h1>{t('nav.about')}</h1>
+  </header>
+
+  <section class="story" aria-label={de ? 'Geschichte' : 'Our story'}>
+    <img src={url('logo.svg')} width="120" height="120" alt="" />
+    <div>
+      {
+        story.length > 0 ? (
+          story.map((p) => <p>{p}</p>)
+        ) : (
+          <p>
+            {de
+              ? `Der EHC Muskrats ist ein Amateur-Eishockeyteam aus Wien mit Spielern aus ${nations} Ländern. In den Ligadaten des WEHV seit ${ach.firstSeason}: ${ach.seasons} Saisonen, ${at.gp} Spiele und ${at.gf} Tore.`
+              : `EHC Muskrats are an amateur ice hockey team from Vienna with players from ${nations} countries. In the WEHV league data since ${ach.firstSeason}: ${ach.seasons} seasons, ${at.gp} games and ${at.gf} goals.`}
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  {
+    cards.length > 0 && (
+      <section aria-labelledby="h-ach">
+        <div class="sec-head">
+          <h2 id="h-ach">{de ? 'Erfolge' : 'Achievements'}</h2>
+        </div>
+        <div class="ach">
+          {cards.map((c) => (
+            <div class:list={['panel', 'ach-card', { gold: c.gold }]}>
+              <span class="n tnum">{c.n}×</span>
+              <span class="l">{c.label}</span>
+              <span class="s small dim">{c.sub}</span>
+            </div>
+          ))}
+        </div>
+        <p class="small dim note">
+          {de
+            ? `${ach.playoffSeasons} von ${ach.seasons} Saisonen mit Playoffs.`
+            : `Playoffs in ${ach.playoffSeasons} of ${ach.seasons} seasons.`}
+        </p>
+      </section>
+    )
+  }
+
+  <section aria-labelledby="h-time">
+    <div class="sec-head">
+      <h2 id="h-time">{de ? 'Saison für Saison' : 'Season by season'}</h2>
+    </div>
+    <ol class="timeline">
+      {
+        hist.map((h) => (
+          <li class:list={{ champ: h.playoffs === 'champion' }}>
+            <a href={href(lang, `schedule/${h.season}/`)}>
+              <span class="yr tnum">{h.label}</span>
+              <span class="body">
+                <span class="out">{outcome(h)}</span>
+                <span class="meta small">
+                  {h.regular && (
+                    <>
+                      {de ? 'Grunddurchgang' : 'Regular season'} #{h.regular.rank}/{h.regular.teams}
+                    </>
+                  )}
+                  {h.placement && (
+                    <>
+                      {' '}
+                      · {h.placement.name} #{h.placement.rank}
+                    </>
+                  )}
+                </span>
+              </span>
+              <span class="rec small tnum" title={de ? "Siege–Niederlagen–Unentschieden" : "Wins–losses–ties"}>
+                {[h.record.w, h.record.l, ...(h.record.t > 0 ? [h.record.t] : [])].join('–')}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <DataCredit lang={lang} />
+</Base>
+
+<style>
+  .story {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 1rem;
+    align-items: start;
+    margin: 1rem 0 0.5rem;
+  }
+  .story img {
+    width: 72px;
+    height: 72px;
+  }
+  .story p {
+    margin: 0 0 0.8rem;
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  @media (min-width: 720px) {
+    .story {
+      grid-template-columns: 120px 1fr;
+      gap: 1.5rem;
+    }
+    .story img {
+      width: 120px;
+      height: 120px;
+    }
+  }
+  .ach {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  @media (min-width: 900px) {
+    .ach {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .ach-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .ach-card .n {
+    font: 800 2.6rem/1 var(--display);
+    color: var(--text);
+  }
+  .ach-card.gold .n {
+    color: var(--orange);
+  }
+  .ach-card .l {
+    font: 700 0.95rem/1.15 var(--display);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .note {
+    margin-top: 0.75rem;
+  }
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 2px solid var(--line-strong);
+  }
+  .timeline li {
+    position: relative;
+  }
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    margin-top: -6px;
+    border-radius: 50%;
+    background: var(--panel-hi);
+    border: 2px solid var(--bg);
+  }
+  .timeline li.champ::before {
+    background: var(--orange);
+  }
+  .timeline a {
+    display: grid;
+    grid-template-columns: 4.6rem 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 60px;
+    padding: 0.5rem 0.25rem 0.5rem 1.1rem;
+    color: var(--text);
+    border-bottom: 1px solid var(--line);
+  }
+  .timeline a:hover {
+    background: var(--panel);
+    color: var(--text);
+  }
+  .yr {
+    font: 800 1.1rem/1 var(--display);
+  }
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .out {
+    font: 700 1rem/1.1 var(--display);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .champ .out {
+    color: var(--orange);
+  }
+  .meta,
+  .rec {
+    color: var(--dim);
+  }
+</style>
