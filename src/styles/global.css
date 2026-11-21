@@ -4,8 +4,8 @@
    Neutral near-black surfaces (like broadcast graphics); brand colours live in the jersey stripes and orange accents.
    Contrast (WCAG AA) on --bg #0e0e0e / --panel #171717:
      --text #f2f2f2 ≈ 17:1   --muted #a8a8a8 ≈ 7.8:1   --dim #8c8c8c ≈ 5.2:1
-     links are white; hover orange   --orange (Pantone 130 C #f2a900) ≈ 9.5:1 (fine as text on dark)
-     Yellow buttons use ink text (#111 on #f2a900 ≈ 9.5:1). */
+     links are white; hover orange   --orange (#f6a000) ≈ 9:1 (fine as text on dark)
+     Yellow buttons use ink text (#111 on #f6a000 ≈ 9:1). */
 
 @import '@fontsource/barlow-condensed/latin-700.css';
 @import '@fontsource/barlow-condensed/latin-800.css';
@@ -18,15 +18,16 @@
   --brand-blue: #2a418b; /* official logo blue (2024 colour sheet) */
   --blue: #4766c4; /* brand blue lifted for bars/accents on dark */
   --blue-hi: #8ea6ea;
-  /* --orange is the brand accent: Pantone 130 C (#F2A900) from the 2024 colour sheet (name kept so existing styles follow) */
-  --orange: #f2a900;
-  --accent-rgb: 242, 169, 0;
-  --orange-hi: #ffbe2e;
+  /* --orange is the brand accent: club orange #F6A000 (Pantone 130 C family, set by the club) (name kept so existing styles follow) */
+  --orange: #f6a000;
+  --accent-rgb: 246, 160, 0;
+  --orange-hi: #ffb83a;
   --ice: #bcccea;
   --brown: #e8a174;
   --ink: #111111;
   /* yellow as text (dark gold in light mode for contrast); text on yellow fills */
-  --accent-text: var(--orange);
+  --accent-text: var(--orange); /* large display text: MUS, ranks, records */
+  --accent-ink: var(--orange); /* small accent text; plain text colour in light mode (orange on cream is unreadable small) */
   --on-accent: #111111;
 
   /* theme plumbing: --fg-rgb tints lines/overlays, --hero-* page-head gradients, --pill-* the solid pill buttons */
@@ -99,7 +100,7 @@
   color-scheme: light;
   --blue: #2a418b;
   --blue-hi: #4766c4;
-  --accent-text: #845a00; /* Pantone 130 C darkened, ≈ 5.2:1 on --bg */
+  --accent-ink: var(--text);
   --brown: #8a5427;
   --bg: #f7f1e9;
   --bg-2: #f2ebe0;
@@ -133,7 +134,7 @@
     color-scheme: light;
     --blue: #2a418b;
     --blue-hi: #4766c4;
-    --accent-text: #845a00;
+    --accent-ink: var(--text);
     --brown: #8a5427;
     --bg: #f7f1e9;
     --bg-2: #f2ebe0;
@@ -648,7 +649,7 @@ th[data-sort] button {
   min-height: 24px;
 }
 th[aria-sort] {
-  color: var(--accent-text);
+  color: var(--accent-ink);
 }
 th[aria-sort='descending'] button::after {
   content: ' ▾';
