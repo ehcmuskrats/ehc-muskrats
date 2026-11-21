@@ -1,12 +1,12 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import { type Lang, langPaths, useT, href, formatDate } from '../../../i18n/index.ts';
-import { newsFor, newsSlug } from '../../../lib/news.ts';
+import { newsItems } from '../../../lib/news.ts';
 
 export const getStaticPaths = langPaths;
 const lang = Astro.params.lang as Lang;
 const t = useT(lang);
-const posts = await newsFor(lang);
+const posts = await newsItems(lang);
 ---
 
 <Base lang={lang} title={t('news.title')} path="news/" active="nav.news">
@@ -18,13 +18,13 @@ const posts = await newsFor(lang);
     {
       posts.map((p) => (
         <li>
-          <a href={href(lang, `news/${newsSlug(p)}/`)}>
+          <a href={href(lang, `news/${p.slug}/`)}>
             <span class="eyebrow">
-              {formatDate(lang, p.data.date.toISOString())}
-              {p.data.gameId && <span class="tag ghost">{lang === 'de' ? 'Spielbericht' : 'Recap'}</span>}
+              {formatDate(lang, p.date.toISOString().slice(0, 10))}
+              {p.gameId && <span class="tag ghost">{lang === 'de' ? 'Spielbericht' : 'Recap'}</span>}
             </span>
-            <span class="pt">{p.data.title}</span>
-            {p.data.summary && <span class="ps">{p.data.summary}</span>}
+            <span class="pt">{p.title}</span>
+            {p.summary && <span class="ps">{p.summary}</span>}
           </a>
         </li>
       ))

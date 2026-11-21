@@ -9,7 +9,7 @@ import Abbr from '../../../components/Abbr.astro';
 import { type Lang, LANGS, useT, href, formatDate, formatNumber, mmss } from '../../../i18n/index.ts';
 import { RESULT_FULL, abbr, posCode } from '../../../i18n/abbr.ts';
 import { ourGames, games, side, teamName, highlightFor, columns, resultCode, resultClass, hasGamePage } from '../../../lib/data.ts';
-import { recapForGame, newsSlug } from '../../../lib/news.ts';
+import { recapLink } from '../../../lib/news.ts';
 import { penaltyLabel } from '../../../config/penalties.ts';
 import { isOurTeam } from '../../../config/team.ts';
 import type { Game, GameSummary, PersonName, Goal, Penalty } from '../../../types/models.ts';
@@ -27,7 +27,7 @@ const g = game ?? summary;
 const ourSide = side(g);
 const cols = columns(g.season);
 const video = highlightFor(g.id);
-const recap = await recapForGame(lang, g.id);
+const recap = await recapLink(lang, g.id);
 const played = g.status === 'final' || g.status === 'live';
 const r = resultCode(g);
 const nPeriods = game?.numberOfPeriods ?? 3;
@@ -144,7 +144,7 @@ const sections = game
 
   {
     recap && (
-      <a class="btn btn-accent btn-block recap-btn" href={href(lang, `news/${newsSlug(recap)}/`)}>
+      <a class="btn btn-accent btn-block recap-btn" href={href(lang, `news/${recap}/`)}>
         {t('game.recap')} →
       </a>
     )

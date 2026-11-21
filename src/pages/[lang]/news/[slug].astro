@@ -2,41 +2,54 @@
 import { render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import Team from '../../../components/Team.astro';
+import VideoEmbed from '../../../components/VideoEmbed.astro';
 import { type Lang, LANGS, useT, href, formatDate } from '../../../i18n/index.ts';
-import { newsFor, newsSlug, type NewsEntry } from '../../../lib/news.ts';
-import { games } from '../../../lib/data.ts';
+import { newsFor, newsSlug, newsItems, type NewsItem } from '../../../lib/news.ts';
+import { games, highlightFor } from '../../../lib/data.ts';
 
 export async function getStaticPaths() {
   const out = [];
   for (const lang of LANGS) {
-    for (const post of await newsFor(lang)) out.push({ params: { lang, slug: newsSlug(post) }, props: { post } });
+    for (const item of await newsItems(lang)) out.push({ params: { lang, slug: item.slug }, props: { item } });
   }
   return out;
 }
-const { post } = Astro.props as { post: NewsEntry };
+const { item } = Astro.props as { item: NewsItem };
 const lang = Astro.params.lang as Lang;
+const de = lang === 'de';
 const t = useT(lang);
-const { Content } = await render(post);
-const game = post.data.gameId ? games.get(post.data.gameId) : undefined;
-// Language switch: the translation if one exists, else the other language's news list.
+const post = item.kind === 'post' ? item.post : null;
+const recap = item.kind === 'auto' ? item.recap : null;
+const Content = post ? (await render(post)).Content : null;
+const gameId = item.gameId;
+const game = gameId ? games.get(gameId) : undefined;
+const video = recap?.videoId && gameId ? highlightFor(gameId) : undefined;
+// Language switch: the translation if one exists, else the other language's version of the auto recap, else the list.
 const other = lang === 'de' ? 'en' : 'de';
-const translation = post.data.translationKey
-  ? (await newsFor(other)).find((p) => p.data.translationKey === post.data.translationKey)
-  : undefined;
-const switchPath = translation ? `news/${newsSlug(translation)}/` : 'news/';
+let switchPath = 'news/';
+if (post?.data.translationKey) {
+  const tr = (await newsFor(other)).find((p) => p.data.translationKey === post.data.translationKey);
+  if (tr) switchPath = `news/${newsSlug(tr)}/`;
+} else if (recap) {
+  const tr = (await newsItems(other)).find((i) => i.gameId === recap.gameId);
+  if (tr) switchPath = `news/${tr.slug}/`;
+}
 ---
 
-<Base lang={lang} title={post.data.title} description={post.data.summary} path={switchPath} active="nav.news" leagueData={!!game}>
+<Base lang={lang} title={item.title} description={item.summary} path={switchPath} active="nav.news" leagueData={!!game}>
   <article>
     <header class="page-head">
       <a class="back" href={href(lang, 'news/')}>← {t('news.title')}</a>
-      <p class="eyebrow">{formatDate(lang, post.data.date.toISOString())}{post.data.author && ` · ${post.data.author}`}</p>
-      <h1>{post.data.title}</h1>
-      {post.data.summary && <p class="sub lead">{post.data.summary}</p>}
+      <p class="eyebrow">
+        {formatDate(lang, item.date.toISOString().slice(0, 10))}{post?.data.author && ` · ${post.data.author}`}
+        {recap && ` · ${de ? 'Automatischer Spielbericht' : 'Automatic recap'}`}
+      </p>
+      <h1>{item.title}</h1>
+      {post?.data.summary && <p class="sub lead">{post.data.summary}</p>}
     </header>
     {
-      post.data.gameId && (
-        <a class="panel game-link" href={href(lang, `games/${post.data.gameId}/`)}>
+      gameId && (
+        <a class="panel game-link" href={href(lang, `games/${gameId}/`)}>
           {game ? (
             <>
               <Team team={game.home} short />
@@ -52,9 +65,66 @@ const switchPath = translation ? `news/${newsSlug(translation)}/` : 'news/';
         </a>
       )
     }
-    <div class="prose">
-      <Content />
-    </div>
+    {
+      Content && (
+        <div class="prose">
+          <Content />
+        </div>
+      )
+    }
+    {
+      recap && (
+        <div class="prose">
+          <p class="lead">{recap.intro}</p>
+          <h2>{de ? 'Drittel für Drittel' : 'Period by period'}</h2>
+          {recap.periods.map((p) => (
+            <p>
+              <strong>{p.label}:</strong> {p.text}
+            </p>
+          ))}
+          {recap.keyPlayers.length > 0 && (
+            <>
+              <h2>{de ? 'Die Besten' : 'Key players'}</h2>
+              <ul>
+                {recap.keyPlayers.map((k) => (
+                  <li>{k}</li>
+                ))}
+              </ul>
+            </>
+          )}
+          {recap.turningPoints.length > 0 && (
+            <>
+              <h2>{de ? 'Wendepunkte' : 'Turning points'}</h2>
+              <ul>
+                {recap.turningPoints.map((k) => (
+                  <li>{k}</li>
+                ))}
+              </ul>
+            </>
+          )}
+          {recap.quote && (
+            <blockquote>
+              <p>„{recap.quote.text}“</p>
+              {recap.quote.by && <cite>– {recap.quote.by}</cite>}
+            </blockquote>
+          )}
+          {video && (
+            <>
+              <h2>Highlights</h2>
+              <VideoEmbed lang={lang} video={video.video} />
+            </>
+          )}
+          <p>
+            <a href={href(lang, `games/${recap.gameId}/`)}>{de ? 'Alle Statistiken zum Spiel' : 'Full game stats'} →</a>
+          </p>
+          <p class="small dim">
+            {de
+              ? 'Dieser Bericht wird automatisch aus den Spieldaten des WEHV erstellt.'
+              : 'This recap is generated automatically from the WEHV game data.'}
+          </p>
+        </div>
+      )
+    }
   </article>
 </Base>
 
@@ -78,14 +148,23 @@ const switchPath = translation ? `news/${newsSlug(translation)}/` : 'news/';
     margin: 1rem 0 1.5rem;
     color: var(--text);
   }
-  .game-link:hover {
-    color: var(--text);
-    box-shadow: var(--glow-blue);
-  }
   .sc {
     font: 800 1.6rem/1 var(--display);
   }
   .d {
     margin-left: auto;
+  }
+  blockquote {
+    margin: 1.5rem 0;
+    padding: 0.5rem 0 0.5rem 1rem;
+    border-left: 3px solid var(--orange);
+  }
+  blockquote p {
+    margin: 0;
+    font-size: 1.15rem;
+  }
+  cite {
+    color: var(--muted);
+    font-style: normal;
   }
 </style>

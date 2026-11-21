@@ -1,0 +1,3 @@
+{
+  "_comment": "Optional quotes for the automatic game recaps. Key = game id (from the game page URL). Example: \"ee28cd83-f812-4418-b0da-433232e84b9c\": { \"de\": \"Starke Teamleistung!\", \"en\": \"Great team effort!\", \"by\": \"Name, Kapitän\" }"
+}
