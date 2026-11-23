@@ -657,7 +657,8 @@ th[data-sort] button {
   min-width: 24px;
   min-height: 24px;
 }
-th[aria-sort] {
+th[aria-sort='ascending'],
+th[aria-sort='descending'] {
   color: var(--accent-ink);
 }
 th[aria-sort='descending'] button::after {

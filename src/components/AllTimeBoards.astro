@@ -1,0 +1,196 @@
+---
+// All-time top-10 leaderboards (Points, Goals, Assists, PIM, Games) with a Combined / Regular season /
+// Playoffs toggle. Ties share a rank. Each board links to the full player table, sorted by that stat.
+import { type Lang, href } from '../i18n/index.ts';
+import { abbr } from '../i18n/abbr.ts';
+import { leaders, PHASES, STATS, type Phase, type StatKey } from '../lib/alltime.ts';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const de = lang === 'de';
+const PHASE_LABEL: Record<Phase, string> = {
+  all: de ? 'Gesamt' : 'Combined',
+  regular: 'Regular Season',
+  playoffs: 'Playoffs',
+};
+const TITLE: Record<StatKey, string> = {
+  p: de ? 'Meiste Punkte' : 'Most points',
+  g: de ? 'Meiste Tore' : 'Most goals',
+  a: de ? 'Meiste Assists' : 'Most assists',
+  pim: de ? 'Meiste Strafminuten' : 'Most penalty minutes',
+  gp: de ? 'Meiste Spiele' : 'Most games played',
+};
+const seeAll = de ? 'Alle Spieler ansehen' : 'See all players';
+---
+
+<section class="atb" data-atb aria-labelledby="h-atb">
+  <div class="sec-head">
+    <h2 id="h-atb">{de ? 'Ewige Bestenlisten' : 'All-time leaders'}</h2>
+  </div>
+  <div class="seg atb-seg" role="group" aria-label={de ? 'Spielphase' : 'Phase'}>
+    {
+      PHASES.map((ph, i) => (
+        <button type="button" data-atb-phase={ph} aria-pressed={i === 0 ? 'true' : 'false'}>
+          {PHASE_LABEL[ph]}
+        </button>
+      ))
+    }
+  </div>
+
+  {
+    PHASES.map((ph, pi) => (
+      <div class="boards" data-atb-view={ph} hidden={pi > 0}>
+        {STATS.map((key) => {
+          const full = leaders(key, ph);
+          // Ties at the cut-off can make the list long: show 10 rows and say how many more share the last rank.
+          const list = full.slice(0, 10);
+          const more = full.length - list.length;
+          return (
+            <section class="board">
+              <h3>{TITLE[key]}</h3>
+              {list.length ? (
+                <ol class="rows leaders">
+                  {list.map((r, i) => (
+                    <li>
+                      <a href={href(lang, `players/${r.p.slug}/`)} class={r.rank === 1 ? 'first' : undefined}>
+                        <span class="rk tnum">{r.rank}</span>
+                        <span class="nm">
+                          <span class="fn">{r.p.first}</span>
+                          <span class="ln">{r.p.last}</span>
+                        </span>
+                        <span class="sn small dim tnum">{key === 'gp' ? `${r.t.seasons} ${de ? 'Saisonen' : 'seasons'}` : `${r.t.gp} ${abbr(lang, 'gp').short}`}</span>
+                        <span class="pt tnum">
+                          {r.t[key]}
+                          <small>{abbr(lang, key).short}</small>
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <p class="small dim">–</p>
+              )}
+              {more > 0 && (
+                <p class="more small dim">
+                  {de ? `+${more} weitere mit ${list.at(-1)!.t[key]} ${abbr(lang, key).short}` : `+${more} more with ${list.at(-1)!.t[key]} ${abbr(lang, key).short}`}
+                </p>
+              )}
+              <a class="see-all" href={`${href(lang, 'stats/players/')}?sort=${key}&phase=${ph}`}>
+                {seeAll} →
+              </a>
+            </section>
+          );
+        })}
+      </div>
+    ))
+  }
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-atb]').forEach((root) => {
+    const btns = root.querySelectorAll<HTMLButtonElement>('[data-atb-phase]');
+    btns.forEach((b) =>
+      b.addEventListener('click', () => {
+        btns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        root.querySelectorAll<HTMLElement>('[data-atb-view]').forEach((v) => (v.hidden = v.dataset.atbView !== b.dataset.atbPhase));
+      }),
+    );
+  });
+</script>
+
+<style>
+  .atb-seg {
+    margin-bottom: 0.9rem;
+  }
+  .boards[hidden] {
+    display: none;
+  }
+  .boards {
+    display: grid;
+    gap: 0 24px;
+  }
+  @media (min-width: 900px) {
+    .boards {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .board h3 {
+    margin: 1.1rem 0 0.6rem;
+    font: 800 1.25rem/1.1 var(--display);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .more {
+    margin: 0.4rem 1rem 0;
+  }
+  .see-all {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font: 700 0.85rem/1 var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+  .leaders a {
+    display: grid;
+    grid-template-columns: 2rem 1fr auto auto;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 56px;
+    padding: 0.45rem 1rem;
+    color: var(--text);
+  }
+  .leaders a:hover {
+    background: rgba(var(--fg-rgb), 0.03);
+    color: var(--text);
+  }
+  .rk {
+    font: 800 1.45rem/1 var(--display);
+    color: var(--dim);
+  }
+  .first .rk,
+  .first .pt {
+    color: var(--accent-text);
+  }
+  .nm {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    min-width: 0;
+  }
+  .fn {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .ln {
+    font: 800 1.15rem/1.05 var(--display);
+    padding-top: 0.12em; /* room for Ü/Ö/Ä */
+    text-transform: uppercase;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sn {
+    white-space: nowrap;
+  }
+  .pt {
+    font: 800 1.7rem/1 var(--display);
+    color: var(--text);
+    text-align: right;
+    min-width: 3ch;
+  }
+  .pt small {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    margin-left: 3px;
+  }
+  @media (max-width: 400px) {
+    .sn {
+      display: none;
+    }
+  }
+</style>

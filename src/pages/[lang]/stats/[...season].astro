@@ -6,6 +6,7 @@ import SeasonPicker from '../../../components/SeasonPicker.astro';
 import DataCredit from '../../../components/DataCredit.astro';
 import Abbr from '../../../components/Abbr.astro';
 import RecordCards from '../../../components/RecordCards.astro';
+import AllTimeBoards from '../../../components/AllTimeBoards.astro';
 import { type Lang, LANGS, useT, href, formatNumber, formatDate, mmss } from '../../../i18n/index.ts';
 import { abbr, posCode } from '../../../i18n/abbr.ts';
 import { ourSeasons, currentSeasonId, derived, season as getSeason, columns } from '../../../lib/data.ts';
@@ -86,15 +87,6 @@ const pct = (n: number | null) => (n == null ? '–' : `${formatNumber(lang, n, 
 const leader = skaters[0];
 
 // ----- All-time view -----
-const career = derived.players.filter((p) => p.career.gp > 0 || p.career.goalieGp > 0);
-// "Games" counts every game played, as a skater or in net (otherwise goalies never appear).
-const careerValue = (p: (typeof career)[number], key: 'p' | 'gp' | 'g' | 'pim') =>
-  key === 'gp' ? p.career.gp + p.career.goalieGp : p.career[key];
-const top = (key: 'p' | 'gp' | 'g' | 'pim') =>
-  [...career]
-    .filter((p) => careerValue(p, key) > 0)
-    .sort((a, b) => careerValue(b, key) - careerValue(a, key) || b.career.g - a.career.g)
-    .slice(0, 10);
 // All-time goalies: games in net, wins, goals against, GA per game, shutouts (from the game log).
 const goalieBoard = derived.players
   .filter((p) => p.career.goalieGp > 0)
@@ -111,18 +103,8 @@ const goalieBoard = derived.players
   })
   .sort((a, b) => b.gp - a.gp)
   .slice(0, 10);
-const topPlayoffs = derived.players
-  .filter((p) => p.playoffs.career.p > 0)
-  .sort((a, b) => b.playoffs.career.p - a.playoffs.career.p || b.playoffs.career.g - a.playoffs.career.g)
-  .slice(0, 10);
 const rec = derived.records;
 const at = rec.allTime;
-const boards = [
-  ['stats.careerPoints', 'p'],
-  ['stats.careerGoals', 'g'],
-  ['stats.careerGames', 'gp'],
-  ['stats.careerPim', 'pim'],
-] as const;
 const tabs = [
   ['scorers', t('stats.scorers')],
   ['goalies', t('stats.goalies')],
@@ -438,37 +420,9 @@ const tabs = [
           <RecordCards lang={lang} cards={rec.cards ?? []} />
         </section>
 
+        <AllTimeBoards lang={lang} />
+
         <div class="boards">
-          {boards.map(([label, key]) => {
-            const list = top(key);
-            return (
-              <section>
-                <div class="sec-head">
-                  <h2>{t(label)}</h2>
-                </div>
-                <ol class="rows leaders">
-                  {list.map((p, i) => (
-                    <li>
-                      <a href={playerHref(p.slug)} class={i === 0 ? 'first' : undefined}>
-                        <span class="rk tnum">{i + 1}</span>
-                        <span class="nm">
-                          <span class="fn">{p.first}</span>
-                          <span class="ln">{p.last}</span>
-                        </span>
-                        <span class="sn small dim">
-                          {p.seasons.length} {t('player.seasons')}
-                        </span>
-                        <span class="pt tnum">
-                          {careerValue(p, key)}
-                          <small>{abbr(lang, key).short}</small>
-                        </span>
-                      </a>
-                    </li>
-                  ))}
-                </ol>
-              </section>
-            );
-          })}
           {goalieBoard.length > 0 && (
             <section class="goalie-board">
               <div class="sec-head">
@@ -506,34 +460,6 @@ const tabs = [
                   </tbody>
                 </table>
               </div>
-            </section>
-          )}
-          {topPlayoffs.length > 0 && (
-            <section>
-              <div class="sec-head">
-                <h2>{t('stats.careerPlayoffPoints')}</h2>
-              </div>
-              <ol class="rows leaders">
-                {topPlayoffs.map((p, i) => (
-                  <li>
-                    <a href={playerHref(p.slug)} class={i === 0 ? 'first' : undefined}>
-                      <span class="rk tnum">{i + 1}</span>
-                      <span class="nm">
-                        <span class="fn">{p.first}</span>
-                        <span class="ln">{p.last}</span>
-                      </span>
-                      <span class="sn small dim tnum">
-                        {p.playoffs.career.gp} {abbr(lang, 'gp').short} · {p.playoffs.career.g} {abbr(lang, 'g').short} · {p.playoffs.career.a}{' '}
-                        {abbr(lang, 'a').short}
-                      </span>
-                      <span class="pt tnum">
-                        {p.playoffs.career.p}
-                        <small>{abbr(lang, 'p').short}</small>
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ol>
             </section>
           )}
         </div>

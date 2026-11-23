@@ -1,0 +1,307 @@
+---
+// Every player who has ever played for the Muskrats (#2): rank, name, numbers, seasons, GP, G, A, PTS, PIM, PPG.
+// Sortable by any column (?sort=g), Regular season / Playoffs / Combined toggle (?phase=playoffs), tie-aware
+// ranks, search with highlight (last search remembered in this browser). Server-rendered sorted by points so it
+// works without JavaScript; the script re-sorts, re-ranks and switches phase in place.
+import Base from '../../../layouts/Base.astro';
+import DataCredit from '../../../components/DataCredit.astro';
+import Abbr from '../../../components/Abbr.astro';
+import { type Lang, langPaths, href, formatNumber } from '../../../i18n/index.ts';
+import { derived } from '../../../lib/data.ts';
+import { totals, tieRanks, PHASES, PPG_MIN_GP, type Phase } from '../../../lib/alltime.ts';
+
+export const getStaticPaths = langPaths;
+const lang = Astro.params.lang as Lang;
+const de = lang === 'de';
+const PHASE_LABEL: Record<Phase, string> = { all: de ? 'Gesamt' : 'Combined', regular: 'Regular Season', playoffs: 'Playoffs' };
+
+const rows = derived.players
+  .map((p) => {
+    const ph = Object.fromEntries(PHASES.map((x) => [x, totals(p, x)])) as Record<Phase, ReturnType<typeof totals>>;
+    return { p, ph };
+  })
+  .filter((r) => r.ph.all.gp > 0)
+  .sort((a, b) => b.ph.all.p - a.ph.all.p || b.ph.all.g - a.ph.all.g || a.p.last.localeCompare(b.p.last));
+const ranks = tieRanks(rows, (r) => r.ph.all.p);
+const ppg = (t: { gp: number; p: number }) => (t.gp >= PPG_MIN_GP ? t.p / t.gp : null);
+// Compact per-phase payload for the script: [seasons, gp, g, a, p, pim]
+const payload = (r: (typeof rows)[number]) => JSON.stringify(Object.fromEntries(PHASES.map((x) => [x, [r.ph[x].seasons, r.ph[x].gp, r.ph[x].g, r.ph[x].a, r.ph[x].p, r.ph[x].pim]])));
+const cols = [
+  ['seasons', de ? 'Saisonen' : 'Seasons', 'num'],
+  ['gp', 'gp', 'abbr'],
+  ['g', 'g', 'abbr'],
+  ['a', 'a', 'abbr'],
+  ['p', 'p', 'abbr'],
+  ['pim', 'pim', 'abbr'],
+  ['ppg', 'ppg', 'ppg'],
+] as const;
+---
+
+<Base lang={lang} title={de ? 'Alle Spieler' : 'All players'} path="stats/players/" active="nav.stats" leagueData description={de ? 'Jeder Muskrats-Spieler aller Zeiten mit Karrierestatistik' : 'Every Muskrats player of all time with career stats'}>
+  <a class="back small" href={href(lang, 'stats/all-time/')}>← {de ? 'Ewige Bestenliste' : 'All-time'}</a>
+  <header class="page-head">
+    <span class="tag">{de ? `${rows.length} Spieler seit 2015/16` : `${rows.length} players since 2015/16`}</span>
+    <h1>{de ? 'Alle Spieler' : 'All players'}</h1>
+  </header>
+
+  <div class="tools" data-pt-tools>
+    <div class="seg" role="group" aria-label={de ? 'Spielphase' : 'Phase'}>
+      {
+        PHASES.map((ph, i) => (
+          <button type="button" data-phase={ph} aria-pressed={i === 0 ? 'true' : 'false'}>
+            {PHASE_LABEL[ph]}
+          </button>
+        ))
+      }
+    </div>
+    <div class="search">
+      <label for="pt-q" class="visually-hidden">{de ? 'Spieler suchen' : 'Find a player'}</label>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6" /><path d="M15 15l5 5" /></svg>
+      <input id="pt-q" type="search" placeholder={de ? 'Spieler suchen …' : 'Find a player …'} autocomplete="off" data-pt-q />
+      <span class="small dim" data-pt-msg aria-live="polite"></span>
+    </div>
+  </div>
+
+  <div class="table-wrap" tabindex="0" aria-label={de ? 'Alle Spieler' : 'All players'}>
+    <table class="pt" data-pt data-ppg-min={PPG_MIN_GP} data-lang={lang}>
+      <thead>
+        <tr>
+          <th class="num rk" scope="col">#</th>
+          <th class="sticky-col" scope="col" data-sort="name" aria-sort="none"><button type="button" data-key="name">{de ? 'Spieler' : 'Player'}</button></th>
+          <th scope="col">{de ? 'Nr.' : 'No.'}</th>
+          {
+            cols.map(([k, label, kind]) => (
+              <th class="num" scope="col" data-sort={k} aria-sort={k === 'p' ? 'descending' : 'none'}>
+                <button type="button" data-key={k}>
+                  {kind === 'num' ? label : kind === 'ppg' ? <span title={de ? `Punkte pro Spiel (ab ${PPG_MIN_GP} Spielen)` : `Points per game (min. ${PPG_MIN_GP} games)`}>PTS/GP</span> : <Abbr lang={lang} k={label} />}
+                </button>
+              </th>
+            ))
+          }
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map((r, i) => (
+            <tr data-row data-name={`${r.p.first} ${r.p.last}`} data-last={r.p.last} data-s={payload(r)}>
+              <td class="num rk dim" data-c="rank">{ranks[i]}</td>
+              <td class="sticky-col nm">
+                <a href={href(lang, `players/${r.p.slug}/`)}>
+                  <span class="fn">{r.p.first}</span> <span class="ln">{r.p.last}</span>
+                </a>
+              </td>
+              <td class="no dim tnum">{r.p.numbers.length ? r.p.numbers.slice(0, 3).join(', ') : '–'}</td>
+              <td class="num" data-c="seasons">{r.ph.all.seasons}</td>
+              <td class="num" data-c="gp">{r.ph.all.gp}</td>
+              <td class="num" data-c="g">{r.ph.all.g}</td>
+              <td class="num" data-c="a">{r.ph.all.a}</td>
+              <td class="num big" data-c="p">{r.ph.all.p}</td>
+              <td class="num" data-c="pim">{r.ph.all.pim}</td>
+              <td class="num" data-c="ppg">{ppg(r.ph.all) == null ? '–' : formatNumber(lang, ppg(r.ph.all), 2)}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="small dim note">
+    {de
+      ? `Tippe auf eine Spaltenüberschrift zum Sortieren. GP zählt jedes Spiel, auch im Tor. PTS/GP = Punkte pro Spiel, gewertet ab ${PPG_MIN_GP} Spielen. Gleiche Werte teilen sich einen Rang.`
+      : `Tap a column header to sort. GP counts every game, including in net. PTS/GP = points per game, ranked from ${PPG_MIN_GP} games. Equal values share a rank.`}
+  </p>
+  <DataCredit lang={lang} />
+</Base>
+
+<script>
+  type Phase = 'all' | 'regular' | 'playoffs';
+  type Key = 'name' | 'seasons' | 'gp' | 'g' | 'a' | 'p' | 'pim' | 'ppg';
+  const IDX: Record<string, number> = { seasons: 0, gp: 1, g: 2, a: 3, p: 4, pim: 5 };
+  const STORE = 'muskrats-player-search';
+
+  const table = document.querySelector<HTMLTableElement>('[data-pt]');
+  if (table) {
+    const tbody = table.tBodies[0];
+    const min = Number(table.dataset.ppgMin ?? 3);
+    const nf = new Intl.NumberFormat(table.dataset.lang === 'de' ? 'de-AT' : 'en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const rows = Array.from(tbody.querySelectorAll<HTMLTableRowElement>('tr[data-row]')).map((tr) => ({
+      tr,
+      name: tr.dataset.name!,
+      last: tr.dataset.last!,
+      s: JSON.parse(tr.dataset.s!) as Record<Phase, number[]>,
+    }));
+    const params = new URLSearchParams(location.search);
+    let phase = (['all', 'regular', 'playoffs'].includes(params.get('phase') ?? '') ? params.get('phase') : 'all') as Phase;
+    let key = (['name', 'seasons', 'gp', 'g', 'a', 'p', 'pim', 'ppg'].includes(params.get('sort') ?? '') ? params.get('sort') : 'p') as Key;
+    let dir: 1 | -1 = key === 'name' ? 1 : -1;
+
+    const val = (r: (typeof rows)[number], k: Key): number | null => {
+      const v = r.s[phase];
+      if (k === 'ppg') return v[1] >= min ? v[4] / v[1] : null;
+      if (k === 'name') return null;
+      return v[IDX[k]];
+    };
+
+    const render = () => {
+      const visible = rows.filter((r) => r.s[phase][1] > 0);
+      visible.sort((a, b) => {
+        if (key === 'name') return dir * a.last.localeCompare(b.last, 'de');
+        const x = val(a, key);
+        const y = val(b, key);
+        if (x == null && y == null) return a.last.localeCompare(b.last, 'de');
+        if (x == null) return 1; // players without a value (e.g. PPG under the minimum) always go last
+        if (y == null) return -1;
+        return dir * (x - y) || (val(b, 'p') ?? 0) - (val(a, 'p') ?? 0) || a.last.localeCompare(b.last, 'de');
+      });
+      // Tie-aware ranks on the sorted stat (none for the name sort).
+      let prev: number | null | undefined;
+      let rank = 0;
+      visible.forEach((r, i) => {
+        const v = key === 'name' ? i : val(r, key);
+        if (key === 'name' || v !== prev) rank = i + 1;
+        prev = v;
+        const cells = r.tr.querySelectorAll<HTMLElement>('[data-c]');
+        const s = r.s[phase];
+        cells.forEach((c) => {
+          const k = c.dataset.c!;
+          if (k === 'rank') c.textContent = key === 'name' || val(r, key) == null ? '–' : String(rank);
+          else if (k === 'ppg') {
+            const p = s[1] >= min ? s[4] / s[1] : null;
+            c.textContent = p == null ? '–' : nf.format(p);
+          } else c.textContent = String(s[IDX[k]]);
+          c.classList.toggle('big', k === key || (key === 'name' && k === 'p'));
+        });
+      });
+      rows.forEach((r) => (r.tr.hidden = !visible.includes(r)));
+      visible.forEach((r) => tbody.appendChild(r.tr));
+      table.querySelectorAll<HTMLElement>('th[data-sort]').forEach((th) =>
+        th.setAttribute('aria-sort', th.dataset.sort === key ? (dir === 1 ? 'ascending' : 'descending') : 'none'),
+      );
+      document.querySelectorAll<HTMLButtonElement>('[data-phase]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.phase === phase)));
+      const u = new URL(location.href);
+      u.searchParams.set('sort', key);
+      u.searchParams.set('phase', phase);
+      history.replaceState(null, '', u);
+    };
+
+    table.querySelectorAll<HTMLButtonElement>('th[data-sort] button').forEach((b) =>
+      b.addEventListener('click', () => {
+        const k = b.dataset.key as Key;
+        dir = k === key ? ((dir * -1) as 1 | -1) : k === 'name' ? 1 : -1;
+        key = k;
+        render();
+      }),
+    );
+    document.querySelectorAll<HTMLButtonElement>('[data-phase]').forEach((b) =>
+      b.addEventListener('click', () => {
+        phase = b.dataset.phase as Phase;
+        render();
+        find(input.value, false);
+      }),
+    );
+
+    // Search: highlight the first matching player and scroll to the row.
+    const input = document.querySelector<HTMLInputElement>('[data-pt-q]')!;
+    const msg = document.querySelector<HTMLElement>('[data-pt-msg]')!;
+    const norm = (s: string) => s.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    const find = (q: string, scroll = true) => {
+      rows.forEach((r) => r.tr.classList.remove('hit'));
+      const t = norm(q.trim());
+      try {
+        t ? localStorage.setItem(STORE, q) : localStorage.removeItem(STORE);
+      } catch {}
+      if (!t) {
+        msg.textContent = '';
+        return;
+      }
+      const hits = rows.filter((r) => !r.tr.hidden && norm(r.name).includes(t));
+      hits.forEach((r) => r.tr.classList.add('hit'));
+      msg.textContent = hits.length ? '' : table.dataset.lang === 'de' ? 'Kein Treffer' : 'No match';
+      if (hits[0] && scroll) hits[0].tr.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    };
+    input.addEventListener('input', () => find(input.value));
+    render();
+    try {
+      const last = localStorage.getItem(STORE);
+      if (last) {
+        input.value = last;
+        find(last);
+      }
+    } catch {}
+  }
+</script>
+
+<style>
+  .back {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-top: 0.5rem;
+    color: var(--muted);
+  }
+  .tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+    margin: 0.5rem 0 1rem;
+  }
+  .search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex: 1 1 240px;
+  }
+  .search svg {
+    position: absolute;
+    left: 14px;
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: var(--dim);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    pointer-events: none;
+  }
+  .search input {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 1rem 0 2.6rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--panel);
+    color: var(--text);
+    font: inherit;
+  }
+  .search input:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: 1px;
+  }
+  .pt .rk {
+    width: 2.4rem;
+  }
+  .pt .nm a {
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .pt .fn {
+    color: var(--muted);
+    font-size: 0.85em;
+  }
+  .pt .ln {
+    font-weight: 700;
+  }
+  .pt .no {
+    white-space: nowrap;
+    font-size: 0.85rem;
+  }
+  .pt tr.hit td {
+    background: rgba(var(--accent-rgb), 0.22);
+  }
+  .pt tr.hit .sticky-col {
+    background: var(--ours-sticky);
+  }
+  .note {
+    margin-top: 0.75rem;
+  }
+</style>
