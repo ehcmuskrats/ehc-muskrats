@@ -115,13 +115,14 @@ const halls = [...new Set(season.map((g) => hallOf(g.venue)).filter((h): h is st
                         loading="lazy"
                         decoding="async"
                         alt={de
-                          ? 'Hallenplan der neuro.io arena: Halle 1 (Haupthalle) mit Eingang an der Vorderseite; Halle 2 und Halle 3 links davon, mit gemeinsamem Seiteneingang „Halle 2 & 3“ beim Overtime; U1 Kagran rechts unten.'
-                          : 'neuro.io arena site plan: Halle 1 (main hall) with its entrance at the front; Halle 2 and Halle 3 to the left with a shared side entrance "Halle 2 & 3" by the Overtime bar; U1 Kagran bottom right.'}
+                          ? 'Hallenplan der neuro.io arena, Hallen und Eingänge rot markiert: Halle 1 (Haupthalle) mit Eingang an der Vorderseite; Halle 2 und Halle 3 links davon, mit gemeinsamem Seiteneingang „Halle 2 & 3“ beim Overtime; U1 Kagran rechts unten.'
+                          : 'neuro.io arena site plan with the halls and entrances marked in red: Halle 1 (main hall) with its entrance at the front; Halle 2 and Halle 3 to the left with a shared side entrance "Halle 2 & 3" by the Overtime bar; U1 Kagran bottom right.'}
                       />
                     </a>
                     <figcaption class="small dim">
-                      {de ? 'Hallenplan: ' : 'Site plan: '}
+                      {de ? 'Original: ' : 'Original: '}
                       <a href={v.hallPlan.page} target="_blank" rel="noopener">neuro.io arena (neuroarena.at)</a>
+                      {de ? ' · rote Markierungen: EHC Muskrats' : ' · red markings added by EHC Muskrats'}
                     </figcaption>
                   </figure>
                 )}
