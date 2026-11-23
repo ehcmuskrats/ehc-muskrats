@@ -1,6 +1,6 @@
 ---
 // "Which hall and how to find it" for games at the neuro.io arena (Haupthalle, Halle 2, Halle 3).
-// Directions come from the official hall plan on neuroarena.at, which we link to (not copied).
+// Directions come from the official hall plan on neuroarena.at (shown, with credit, on the Spieltag page).
 import { type Lang, href } from '../i18n/index.ts';
 import { hallInfo } from '../config/venues.ts';
 
@@ -20,12 +20,9 @@ const info = hallInfo(venue);
       <div class="hh-body">
         <p class="hh-text">{de ? info.hall.de : info.hall.en}</p>
         <p class="hh-links small">
-          {info.venue.hallPlan && (
-            <a href={info.venue.hallPlan.page} target="_blank" rel="noopener">
-              {de ? 'Hallenplan (neuroarena.at)' : 'Hall plan (neuroarena.at)'} ↗
-            </a>
-          )}
-          <a href={href(lang, 'matchday/')}>{de ? 'Anreise & Infos' : 'Getting there'} →</a>
+          <a href={href(lang, 'matchday/') + (info.venue.hallPlan?.local ? '#hallenplan' : '')}>
+            {de ? 'Hallenplan & Anreise' : 'Site plan & getting there'} →
+          </a>
         </p>
       </div>
     </aside>

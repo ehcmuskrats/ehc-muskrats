@@ -4,7 +4,7 @@
 import Base from '../../layouts/Base.astro';
 import CalendarButton from '../../components/CalendarButton.astro';
 import Team from '../../components/Team.astro';
-import { type Lang, langPaths, useT, href, formatDate } from '../../i18n/index.ts';
+import { type Lang, langPaths, useT, href, url, formatDate } from '../../i18n/index.ts';
 import { ourGames, currentSeasonId, teamName, hasGamePage } from '../../lib/data.ts';
 import { VENUES, venueFor, directionsUrl, hallOf } from '../../config/venues.ts';
 import { isOurTeam } from '../../config/team.ts';
@@ -105,7 +105,27 @@ const halls = [...new Set(season.map((g) => hallOf(g.venue)).filter((h): h is st
                     </li>
                   ))}
                 </ul>
-                {v.hallPlan && (
+                {v.hallPlan?.local && (
+                  <figure class="plan-fig" id="hallenplan">
+                    <a href={url(v.hallPlan.local.src)} target="_blank" rel="noopener" title={de ? 'Plan vergrößern' : 'Open full size'}>
+                      <img
+                        src={url(v.hallPlan.local.src)}
+                        width={v.hallPlan.local.width}
+                        height={v.hallPlan.local.height}
+                        loading="lazy"
+                        decoding="async"
+                        alt={de
+                          ? 'Hallenplan der neuro.io arena: Halle 1 (Haupthalle) mit Eingang an der Vorderseite; Halle 2 und Halle 3 links davon, mit gemeinsamem Seiteneingang „Halle 2 & 3“ beim Overtime; U1 Kagran rechts unten.'
+                          : 'neuro.io arena site plan: Halle 1 (main hall) with its entrance at the front; Halle 2 and Halle 3 to the left with a shared side entrance "Halle 2 & 3" by the Overtime bar; U1 Kagran bottom right.'}
+                      />
+                    </a>
+                    <figcaption class="small dim">
+                      {de ? 'Hallenplan: ' : 'Site plan: '}
+                      <a href={v.hallPlan.page} target="_blank" rel="noopener">neuro.io arena (neuroarena.at)</a>
+                    </figcaption>
+                  </figure>
+                )}
+                {v.hallPlan && !v.hallPlan.local && (
                   <a class="plan" href={v.hallPlan.page} target="_blank" rel="noopener">
                     {de ? 'Offizieller Hallenplan auf neuroarena.at' : 'Official hall plan on neuroarena.at'} ↗
                   </a>
@@ -261,6 +281,21 @@ const halls = [...new Set(season.map((g) => hallOf(g.venue)).filter((h): h is st
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--text);
+  }
+  .plan-fig {
+    margin: 0.9rem 0 0.2rem;
+  }
+  .plan-fig img {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 0 1px var(--line-strong);
+    background: #fff;
+  }
+  .plan-fig figcaption {
+    margin-top: 0.4rem;
   }
   .plan {
     display: inline-flex;

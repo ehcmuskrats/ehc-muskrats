@@ -12,8 +12,8 @@ export interface Venue {
   parking?: { de: string[]; en: string[] };
   /** Your own tips (entrance, hall, changing rooms). One line per entry. Empty = not shown. */
   notes?: { de: string[]; en: string[] };
-  /** Official site/hall plan (linked, not copied). */
-  hallPlan?: { page: string; image: string };
+  /** Official site/hall plan. `local` is our copy (shown with a source credit, cleared with the club); `page` is the source. */
+  hallPlan?: { page: string; image: string; local?: { src: string; width: number; height: number } };
   /** How to find each hall. Matched against the hall part of the WEHV venue ("Haupthalle", "Halle 2"). */
   halls?: { key: string; match: RegExp; label: string; de: string; en: string }[];
 }
@@ -46,6 +46,7 @@ export const VENUES: Venue[] = [
     hallPlan: {
       page: 'https://neuroarena.at/anfahrt-parken.html',
       image: 'https://neuroarena.at/tl_files/Material/Fotos/Halle/HallenPlanGeneral.jpg',
+      local: { src: 'venues/neuroarena-hallenplan.webp', width: 630, height: 832 },
     },
     halls: [
       {
