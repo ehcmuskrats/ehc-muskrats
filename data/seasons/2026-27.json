@@ -11,7 +11,7 @@
   ],
   "muskratsPlays": true,
   "frozen": false,
-  "lastSynced": "2026-11-22T23:57:49.780Z"
+  "lastSynced": "2026-11-23T23:03:18.346Z"
  },
  "games": [
   {
@@ -1071,6 +1071,50 @@
    "hasReport": false
   },
   {
+   "id": "e63cf161-3c8d-447c-8448-341b4fc52abb",
+   "season": "2026-27",
+   "divisionId": 22591,
+   "divisionName": "Grunddurchgang",
+   "name": "Spiel 25",
+   "date": "2027-01-12",
+   "time": null,
+   "timestamp": 1799788800000,
+   "venue": "Wien - neuro.io arena Haupthalle",
+   "home": {
+    "id": 35329,
+    "short": "UNO",
+    "name": "Vienna International Hockey Club",
+    "logo": "logos/35329.png"
+   },
+   "away": {
+    "id": 65662,
+    "short": "DRA",
+    "name": "EHC Donaufeld Dragons",
+    "logo": "logos/65662.png"
+   },
+   "homeScore": null,
+   "awayScore": null,
+   "periods": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ]
+   ],
+   "overtime": false,
+   "shootout": false,
+   "status": "scheduled",
+   "playoff": null,
+   "hasReport": false
+  },
+  {
    "id": "bd545308-4fab-494a-96aa-779900b82c6d",
    "season": "2026-27",
    "divisionId": 22591,
@@ -1179,50 +1223,6 @@
     "short": "CSH",
     "name": "EC Carinthian Seahawks",
     "logo": "logos/35332.png"
-   },
-   "homeScore": null,
-   "awayScore": null,
-   "periods": [
-    [
-     0,
-     0
-    ],
-    [
-     0,
-     0
-    ],
-    [
-     0,
-     0
-    ]
-   ],
-   "overtime": false,
-   "shootout": false,
-   "status": "tbd",
-   "playoff": null,
-   "hasReport": false
-  },
-  {
-   "id": "e63cf161-3c8d-447c-8448-341b4fc52abb",
-   "season": "2026-27",
-   "divisionId": 22591,
-   "divisionName": "Grunddurchgang",
-   "name": null,
-   "date": null,
-   "time": null,
-   "timestamp": null,
-   "venue": null,
-   "home": {
-    "id": 35329,
-    "short": "UNO",
-    "name": "Vienna International Hockey Club",
-    "logo": "logos/35329.png"
-   },
-   "away": {
-    "id": 65662,
-    "short": "DRA",
-    "name": "EHC Donaufeld Dragons",
-    "logo": "logos/65662.png"
    },
    "homeScore": null,
    "awayScore": null,
@@ -6912,7 +6912,7 @@
       "last": "Koskinen",
       "number": 70
      },
-     "teamId": 41346,
+     "teamId": 35299,
      "gp": 1,
      "pim": 0,
      "minors": 0,
@@ -7648,7 +7648,7 @@
       "last": "Koskinen",
       "number": 70
      },
-     "teamId": 41346,
+     "teamId": 35299,
      "gp": 1,
      "pim": 0,
      "minors": 0,
