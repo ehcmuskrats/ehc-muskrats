@@ -1,0 +1,77 @@
+---
+// "Which hall and how to find it" for games at the neuro.io arena (Haupthalle, Halle 2, Halle 3).
+// Directions come from the official hall plan on neuroarena.at, which we link to (not copied).
+import { type Lang, href } from '../i18n/index.ts';
+import { hallInfo } from '../config/venues.ts';
+
+interface Props {
+  lang: Lang;
+  venue: string | null | undefined;
+}
+const { lang, venue } = Astro.props;
+const de = lang === 'de';
+const info = hallInfo(venue);
+---
+
+{
+  info && (
+    <aside class="hall-hint" aria-label={de ? 'So findest du die Halle' : 'How to find the hall'}>
+      <span class="hh-badge">{info.hall.label}</span>
+      <div class="hh-body">
+        <p class="hh-text">{de ? info.hall.de : info.hall.en}</p>
+        <p class="hh-links small">
+          {info.venue.hallPlan && (
+            <a href={info.venue.hallPlan.page} target="_blank" rel="noopener">
+              {de ? 'Hallenplan (neuroarena.at)' : 'Hall plan (neuroarena.at)'} ↗
+            </a>
+          )}
+          <a href={href(lang, 'matchday/')}>{de ? 'Anreise & Infos' : 'Getting there'} →</a>
+        </p>
+      </div>
+    </aside>
+  )
+}
+
+<style>
+  .hall-hint {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    margin: 1rem 0;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius);
+    background: var(--panel);
+    box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), 0.35);
+  }
+  .hh-badge {
+    flex: none;
+    padding: 0.35rem 0.6rem;
+    border-radius: 7px;
+    background: var(--orange);
+    color: var(--on-accent);
+    font: 800 0.95rem/1 var(--display);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .hh-body {
+    min-width: 0;
+  }
+  .hh-text {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+  .hh-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+    margin: 0.2rem 0 0;
+  }
+  .hh-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    color: var(--muted);
+  }
+</style>

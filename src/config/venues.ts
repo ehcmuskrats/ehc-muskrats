@@ -12,6 +12,10 @@ export interface Venue {
   parking?: { de: string[]; en: string[] };
   /** Your own tips (entrance, hall, changing rooms). One line per entry. Empty = not shown. */
   notes?: { de: string[]; en: string[] };
+  /** Official site/hall plan (linked, not copied). */
+  hallPlan?: { page: string; image: string };
+  /** How to find each hall. Matched against the hall part of the WEHV venue ("Haupthalle", "Halle 2"). */
+  halls?: { key: string; match: RegExp; label: string; de: string; en: string }[];
 }
 
 export const VENUES: Venue[] = [
@@ -38,6 +42,34 @@ export const VENUES: Venue[] = [
       ],
     },
     notes: { de: [], en: [] },
+    // From the official hall plan on neuroarena.at ("Anfahrt + Parken").
+    hallPlan: {
+      page: 'https://neuroarena.at/anfahrt-parken.html',
+      image: 'https://neuroarena.at/tl_files/Material/Fotos/Halle/HallenPlanGeneral.jpg',
+    },
+    halls: [
+      {
+        key: 'haupthalle',
+        match: /haupt|halle\s*1\b/i,
+        label: 'Haupthalle',
+        de: 'Die große Halle (Halle 1). Eingang „Halle 1“ an der Vorderseite, Richtung Parkplatz und U1.',
+        en: 'The big arena (Halle 1). Entrance "Halle 1" at the front, facing the car park and the U1.',
+      },
+      {
+        key: 'halle-2',
+        match: /halle\s*2\b/i,
+        label: 'Halle 2',
+        de: 'Nicht der Haupteingang: links am Gebäude vorbei zum Seiteneingang „Halle 2 & 3“ beim Overtime. Halle 2 liegt rechts.',
+        en: 'Not the main entrance: walk round the left side of the building to the side entrance "Halle 2 & 3" by the Overtime bar. Halle 2 is on the right.',
+      },
+      {
+        key: 'halle-3',
+        match: /halle\s*3\b/i,
+        label: 'Halle 3',
+        de: 'Nicht der Haupteingang: links am Gebäude vorbei zum Seiteneingang „Halle 2 & 3“ beim Overtime. Halle 3 liegt links.',
+        en: 'Not the main entrance: walk round the left side of the building to the side entrance "Halle 2 & 3" by the Overtime bar. Halle 3 is on the left.',
+      },
+    ],
   },
   {
     key: 'wiener-stadthalle',
@@ -70,4 +102,13 @@ export function directionsUrl(raw: string | null | undefined): string | null {
   const v = venueFor(raw);
   const dest = v ? `${v.name}, ${v.address}` : raw.replace(/^Wien - /, '') + ', Wien';
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}`;
+}
+
+/** Hall details (label, how to find it, plan) for a WEHV venue string, if we know the hall. */
+export function hallInfo(raw: string | null | undefined) {
+  const v = venueFor(raw);
+  const h = hallOf(raw);
+  if (!v?.halls || !h) return null;
+  const hall = v.halls.find((x) => x.match.test(h));
+  return hall ? { venue: v, hall } : null;
 }

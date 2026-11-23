@@ -5,6 +5,7 @@ import Team from '../../../components/Team.astro';
 import VideoEmbed from '../../../components/VideoEmbed.astro';
 import DataCredit from '../../../components/DataCredit.astro';
 import MatchPreview from '../../../components/MatchPreview.astro';
+import HallHint from '../../../components/HallHint.astro';
 import PlayerName from '../../../components/PlayerName.astro';
 import Abbr from '../../../components/Abbr.astro';
 import { type Lang, LANGS, useT, href, formatDate, formatNumber, mmss } from '../../../i18n/index.ts';
@@ -133,6 +134,8 @@ const sections = game
     </div>
     <div class="band" aria-hidden="true"></div>
   </section>
+
+  <HallHint lang={lang} venue={g.venue} />
 
   {
     sections.length > 0 && (

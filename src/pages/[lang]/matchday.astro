@@ -94,6 +94,24 @@ const halls = [...new Set(season.map((g) => hallOf(g.venue)).filter((h): h is st
                 {halls.join(', ')}. {de ? 'Die Halle steht beim jeweiligen Spiel im Spielplan.' : 'The hall for each game is listed in the schedule.'}
               </p>
             )}
+            {v.halls && v.halls.length > 0 && (
+              <>
+                <p class="eyebrow">{de ? 'Die drei Hallen' : 'The three halls'}</p>
+                <ul class="halls">
+                  {v.halls.map((h) => (
+                    <li>
+                      <span class="hb">{h.label}</span>
+                      <span>{de ? h.de : h.en}</span>
+                    </li>
+                  ))}
+                </ul>
+                {v.hallPlan && (
+                  <a class="plan" href={v.hallPlan.page} target="_blank" rel="noopener">
+                    {de ? 'Offizieller Hallenplan auf neuroarena.at' : 'Official hall plan on neuroarena.at'} ↗
+                  </a>
+                )}
+              </>
+            )}
             {v.notes && v.notes[lang].length > 0 && (
               <ul class="notes">
                 {v.notes[lang].map((n) => (
@@ -217,6 +235,38 @@ const halls = [...new Set(season.map((g) => hallOf(g.venue)).filter((h): h is st
     padding-left: 1.1rem;
     color: var(--muted);
     line-height: 1.6;
+  }
+  .halls {
+    list-style: none;
+    margin: 0.4rem 0 0;
+    padding: 0;
+  }
+  .halls li {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    padding: 0.55rem 0;
+    border-top: 1px solid var(--line);
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+  .halls li:first-child {
+    border-top: 0;
+  }
+  .hb {
+    flex: none;
+    min-width: 6.2rem;
+    font: 800 0.95rem/1.45 var(--display);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .plan {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 600;
   }
   .src {
     margin-top: 1.5rem;
