@@ -844,3 +844,32 @@ th[aria-sort='ascending'] button::after {
     scroll-behavior: auto !important;
   }
 }
+
+/* Table rows that lead somewhere (standings: team page / roster). The team name is the real link;
+   the script in Base.astro makes the rest of the row tappable too. */
+tr[data-row-href] {
+  cursor: pointer;
+}
+tr[data-row-href]:hover td {
+  background-color: rgba(var(--fg-rgb), 0.04);
+}
+tr[data-row-href]:active td {
+  background-color: rgba(var(--fg-rgb), 0.09);
+}
+.tlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 32px;
+  color: var(--text);
+}
+.row-chev {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--dim);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

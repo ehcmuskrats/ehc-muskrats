@@ -241,6 +241,14 @@ const moreActive = secondary.some(([, key]) => key === active);
         }),
       );
 
+      // Tappable table rows: a click anywhere in the row follows its link (the name link itself still works).
+      document.addEventListener('click', (e) => {
+        const el = e.target as HTMLElement;
+        if (el.closest('a, button, input, select, label')) return;
+        const tr = el.closest<HTMLTableRowElement>('tr[data-row-href]');
+        if (tr?.dataset.rowHref) location.href = tr.dataset.rowHref;
+      });
+
       // Sortable tables: <table data-sortable> with <th data-sort="num|text"><button>..</button></th>
       document.querySelectorAll<HTMLTableElement>('table[data-sortable]').forEach((table) => {
         const ths = Array.from(table.querySelectorAll<HTMLTableCellElement>('thead th'));

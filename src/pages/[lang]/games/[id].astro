@@ -14,6 +14,7 @@ import { ourGames, games, side, teamName, highlightFor, columns, resultCode, res
 import { recapLink } from '../../../lib/news.ts';
 import { penaltyLabel } from '../../../config/penalties.ts';
 import { isOurTeam } from '../../../config/team.ts';
+import { rowHref } from '../../../lib/teams.ts';
 import type { Game, GameSummary, PersonName, Goal, Penalty } from '../../../types/models.ts';
 
 export function getStaticPaths() {
@@ -101,9 +102,21 @@ const sections = game
           const won = played && score != null && other != null && score > other;
           return (
             <div class={`tm ${s} ${isOurTeam(team) ? 'us' : ''} ${won ? 'won' : ''}`}>
-              <Team team={team} logoOnly size={58} />
+              {rowHref(team) ? (
+                <a class="tm-logo" href={href(lang, rowHref(team)!)} aria-hidden="true" tabindex="-1">
+                  <Team team={team} logoOnly size={58} />
+                </a>
+              ) : (
+                <Team team={team} logoOnly size={58} />
+              )}
               <span class="code">{team.short || teamName(team).slice(0, 3)}</span>
-              <span class="full">{teamName(team)}</span>
+              {rowHref(team) ? (
+                <a class="full" href={href(lang, rowHref(team)!)}>
+                  {teamName(team)}
+                </a>
+              ) : (
+                <span class="full">{teamName(team)}</span>
+              )}
               <span class="score tnum">{played && score != null ? score : '–'}</span>
             </div>
           );
@@ -453,6 +466,18 @@ const sections = game
 </Base>
 
 <style>
+  a.full {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--line-strong);
+    text-underline-offset: 3px;
+  }
+  a.full:hover {
+    text-decoration-color: currentColor;
+  }
+  .tm-logo {
+    display: inline-flex;
+  }
   /* WCAG 2.2 target size for the small assist links */
   .as :global(a) {
     display: inline-block;

@@ -145,3 +145,8 @@ export function seasonsOf(key: string): SeasonId[] {
 }
 
 export { resultCode };
+
+/** Where a team row in a table goes: our own row to the roster, opponents to their team page. */
+export function rowHref(t: TeamRef): string | null {
+  return isOurTeam(t) ? 'roster/' : teamHref(t);
+}

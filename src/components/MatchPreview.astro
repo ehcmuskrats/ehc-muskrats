@@ -7,7 +7,7 @@ import CalendarButton from './CalendarButton.astro';
 import { type Lang, href, formatDate } from '../i18n/index.ts';
 import { RESULT_FULL } from '../i18n/abbr.ts';
 import { resultClass, teamName } from '../lib/data.ts';
-import { teamKey, form, standing, headToHead, tally, type TeamResult } from '../lib/teams.ts';
+import { teamKey, form, standing, headToHead, tally, rowHref, type TeamResult } from '../lib/teams.ts';
 import { venueFor, hallOf, directionsUrl } from '../config/venues.ts';
 import { isOurTeam } from '../config/team.ts';
 import type { GameSummary } from '../types/models.ts';
@@ -89,7 +89,13 @@ const chip = (r: TeamResult) => r.result;
         <div class:list={['panel', 'side', { us: isOurTeam(x.team) }]}>
           <div class="side-head">
             <Team team={x.team} logoOnly size={34} />
-            <span class="nm">{teamName(x.team)}</span>
+            {rowHref(x.team) ? (
+              <a class="nm" href={href(lang, rowHref(x.team)!)}>
+                {teamName(x.team)}
+              </a>
+            ) : (
+              <span class="nm">{teamName(x.team)}</span>
+            )}
           </div>
           {x.st ? (
             <p class="pos">
@@ -218,6 +224,12 @@ const chip = (r: TeamResult) => r.result;
     align-items: center;
     gap: 0.5rem;
     min-width: 0;
+  }
+  a.nm {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: var(--line-strong);
+    text-underline-offset: 3px;
   }
   .nm {
     font-weight: 700;

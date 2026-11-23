@@ -6,6 +6,7 @@ import { type Lang, t, href } from '../i18n/index.ts';
 import { RESULT_FULL } from '../i18n/abbr.ts';
 import { opponent, ourScore, resultCode, resultClass, side, gamesWithHighlights, hasGamePage } from '../lib/data.ts';
 import Team from './Team.astro';
+import { teamHref } from '../lib/teams.ts';
 interface Props {
   lang: Lang;
   games: GameSummary[];
@@ -35,7 +36,7 @@ const parts = (iso: string) => {
       const played = g.status === 'final' || g.status === 'live';
       const linkable = hasGamePage(g);
       const p = g.date && !noDate ? parts(g.date) : null;
-      const Row = linkable ? 'a' : 'div';
+      const oppHref = teamHref(opp);
       return (
         <li
           data-status={played ? 'played' : 'upcoming'}
@@ -46,7 +47,11 @@ const parts = (iso: string) => {
           data-gf={played && us != null ? String(us) : undefined}
           data-ga={played && them != null ? String(them) : undefined}
         >
-          <Row class={`row ${played ? 'played' : ''}`} href={linkable ? href(lang, `games/${g.id}/`) : undefined}>
+          {/* Stretched link: the whole row opens the game; the opponent is its own link on top (no nested links). */}
+          <div class:list={['row', { played, linkable }]}>
+            {linkable && (
+              <a class="row-link" href={href(lang, `games/${g.id}/`)} aria-label={`${opp.name} · ${g.date ?? ''}`}></a>
+            )}
             <span class="when">
               {p ? (
                 <>
@@ -64,7 +69,13 @@ const parts = (iso: string) => {
                   <span class="po">{roundName(g.playoff.encounter ?? g.playoff.roundLabel, lang)}</span>
                 </span>
               )}
-              <Team team={opp} size={28} />
+              {oppHref ? (
+                <a class="opp-link" href={href(lang, oppHref)}>
+                  <Team team={opp} size={28} />
+                </a>
+              ) : (
+                <Team team={opp} size={28} />
+              )}
               <span class="venue">
                 {g.time && !played ? `${g.time} · ` : ''}
                 {g.venue?.replace(/^Wien - /, '') ?? ''}
@@ -98,7 +109,7 @@ const parts = (iso: string) => {
                 <span class="kick tnum">{g.time ?? '–'}</span>
               )}
             </span>
-          </Row>
+          </div>
         </li>
       );
     })
@@ -132,10 +143,34 @@ const parts = (iso: string) => {
       background 0.15s,
       box-shadow 0.2s;
   }
-  a.row:hover {
-    color: var(--text);
+  .row.linkable:hover {
     background: var(--panel-2);
     box-shadow: var(--glow-blue);
+  }
+  .row.linkable:active {
+    background: var(--panel-hi);
+  }
+  .row-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+  }
+  .row-link:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: -2px;
+  }
+  .opp-link {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    color: var(--text);
+  }
+  .opp-link:hover :global(.name) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
   .when {
     display: flex;

@@ -28,7 +28,7 @@ const bracket = s?.playoffs;
 const gameById = new Map((s?.games ?? []).map((g) => [g.id, g]));
 const ourIds = new Set(ourGames(seasonId).map((g) => g.id));
 void reports;
-import { teamHref } from '../../../lib/teams.ts';
+import { teamHref, rowHref } from '../../../lib/teams.ts';
 import StandingsChart from '../../../components/StandingsChart.astro';
 const regularDiv = s?.standings.find((x) => s.info.divisions.find((d) => d.id === x.divisionId)?.kind === 'regular')?.divisionId ?? null;
 ---
@@ -100,12 +100,13 @@ const regularDiv = s?.standings.find((x) => s.info.divisions.find((d) => d.id ==
             </thead>
             <tbody>
               {st.rows.map((r) => (
-                <tr class={isOurTeam(r.team) ? 'ours' : undefined}>
+                <tr class={isOurTeam(r.team) ? 'ours' : undefined} data-row-href={rowHref(r.team) ? href(lang, rowHref(r.team)!) : undefined}>
                   <td class="num rank">{r.rank}</td>
                   <td class="sticky-col team-col">
-                    {teamHref(r.team) ? (
-                      <a class="tlink" href={href(lang, teamHref(r.team)!)}>
+                    {rowHref(r.team) ? (
+                      <a class="tlink" href={href(lang, rowHref(r.team)!)}>
                         <Team team={r.team} responsive />
+                        <svg class="row-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
                       </a>
                     ) : (
                       <Team team={r.team} responsive />

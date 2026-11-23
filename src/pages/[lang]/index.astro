@@ -53,6 +53,7 @@ const scratches = Array.from({ length: 46 }, () => {
   };
 });
 import CalendarButton from '../../components/CalendarButton.astro';
+import { rowHref } from '../../lib/teams.ts';
 ---
 
 <Base lang={lang} path="" active="nav.home" leagueData>
@@ -261,10 +262,17 @@ import CalendarButton from '../../components/CalendarButton.astro';
               </thead>
               <tbody>
                 {standings.rows.map((r) => (
-                  <tr class={isOurTeam(r.team) ? 'ours' : undefined}>
+                  <tr class={isOurTeam(r.team) ? 'ours' : undefined} data-row-href={rowHref(r.team) ? href(lang, rowHref(r.team)!) : undefined}>
                     <td class="num rank">{r.rank}</td>
                     <td class="team-cell">
-                      <Team team={r.team} />
+                      {rowHref(r.team) ? (
+                        <a class="tlink" href={href(lang, rowHref(r.team)!)}>
+                          <Team team={r.team} />
+                          <svg class="row-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
+                        </a>
+                      ) : (
+                        <Team team={r.team} />
+                      )}
                     </td>
                     <td class="num">{r.gp}</td>
                     <td class="num">{r.gd > 0 ? `+${r.gd}` : r.gd}</td>
