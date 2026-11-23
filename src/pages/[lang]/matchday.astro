@@ -26,10 +26,10 @@ const hallRank = (h: string) => (/haupt/i.test(h) ? 1 : Number(h.match(/\d+/)?.[
 const halls = [...new Set(season.map((g) => hallOf(g.venue)).filter((h): h is string => !!h))].sort((a, b) => hallRank(a) - hallRank(b));
 ---
 
-<Base lang={lang} title={de ? 'Spieltag-Infos' : 'Matchday info'} path="matchday/" active="nav.matchday">
+<Base lang={lang} title={de ? 'Spieltag-Infos' : 'Game Day info'} path="matchday/" active="nav.matchday">
   <header class="page-head">
     <span class="tag">{de ? 'Zuschauen' : 'Watch a game'}</span>
-    <h1>{de ? 'Spieltag-Infos' : 'Matchday info'}</h1>
+    <h1>{de ? 'Spieltag-Infos' : 'Game Day info'}</h1>
   </header>
 
   <section class="facts" aria-label={de ? 'Das Wichtigste' : 'The essentials'}>

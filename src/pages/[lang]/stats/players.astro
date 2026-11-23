@@ -215,7 +215,7 @@ const cols = [
       }
       const hits = rows.filter((r) => !r.tr.hidden && norm(r.name).includes(t));
       hits.forEach((r) => r.tr.classList.add('hit'));
-      msg.textContent = hits.length ? '' : table.dataset.lang === 'de' ? 'Kein Treffer' : 'No match';
+      msg.textContent = hits.length ? '' : table.dataset.lang === 'de' ? 'Kein Treffer' : 'No player found';
       if (hits[0] && scroll) hits[0].tr.scrollIntoView({ block: 'center', behavior: 'smooth' });
     };
     input.addEventListener('input', () => find(input.value));
