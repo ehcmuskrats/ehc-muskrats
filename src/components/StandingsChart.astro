@@ -93,7 +93,7 @@ const show = maxGp >= 2 && list.length >= 3;
         <h2 id={`h-bump-${divisionId}`}>{de ? 'Tabellenverlauf' : 'Table race'}</h2>
       </div>
       <div class="panel race" data-race>
-        <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={de ? 'Punkte über einem Punkt pro Spiel, je Team und Spiel' : 'Points above one point per game, per team and game'}>
+        <svg viewBox={`0 0 ${W} ${H}`} role="group" aria-label={de ? 'Punkte über einem Punkt pro Spiel, je Team und Spiel' : 'Points above one point per game, per team and game'}>
           {yTicks.map((v) => (
             <g>
               <line x1={L} x2={W - R} y1={y(v)} y2={y(v)} class:list={['grid', { zero: v === 0 }]} />
