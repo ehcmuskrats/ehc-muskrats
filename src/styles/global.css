@@ -72,6 +72,9 @@
   --maxw: 1180px;
   --topbar-h: 56px;
   --tabbar-h: 64px;
+  /* Bottom safe area (iPhone home bar), capped: Firefox for Android can report its collapsing toolbar
+     here while scrolling, which made the tab bar grow. 34px is the largest real inset. */
+  --safe-bottom: min(env(safe-area-inset-bottom, 0px), 34px);
 
   --font: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --display: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
@@ -187,7 +190,8 @@ body {
     var(--bg);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
-  padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+  /* Room for the fixed tab bar so the last row is never hidden behind it. */
+  padding-bottom: calc(var(--tabbar-h) + var(--safe-bottom) + 8px);
 }
 @media (min-width: 960px) {
   body {
