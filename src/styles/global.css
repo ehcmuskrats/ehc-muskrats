@@ -873,3 +873,31 @@ tr[data-row-href]:active td {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+/* Game day (set by GameDayBar in the visitor's browser): a light sweeps along the jersey stripes. */
+html.gameday .topbar > .band {
+  position: relative;
+  overflow: hidden;
+}
+html.gameday .topbar > .band::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent);
+  animation: gameday-sweep 3.2s ease-in-out infinite;
+}
+@keyframes gameday-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(400%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.gameday .topbar > .band::after {
+    animation: none;
+    display: none;
+  }
+}

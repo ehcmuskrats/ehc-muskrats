@@ -5,6 +5,7 @@ import { type Lang, useT, href, url, otherLang, formatDate } from '../i18n/index
 import { syncStatus, season as getSeason, currentSeasonId, teamName } from '../lib/data.ts';
 import { teamHref } from '../lib/teams.ts';
 import Team from '../components/Team.astro';
+import GameDayBar from '../components/GameDayBar.astro';
 
 interface Props {
   lang: Lang;
@@ -167,6 +168,7 @@ const moreActive = secondary.some(([, key]) => key === active);
       </div>
       <div class="band" aria-hidden="true"></div>
     </header>
+    <GameDayBar lang={lang} />
 
     <main id="main" class="container" data-pagefind-body>
       <slot />

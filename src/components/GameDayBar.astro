@@ -1,0 +1,202 @@
+---
+// Game-day strip: only on the day of a Muskrats game (Vienna date), from midnight until ~3 h after face-off.
+// The site is built nightly, so the page carries the season's upcoming games and a tiny script decides in the
+// visitor's browser whether today is game day. Also switches on the stripe sweep (html.gameday).
+// Motion is decorative only and turned off for "reduce motion".
+import Team from './Team.astro';
+import { type Lang, href } from '../i18n/index.ts';
+import { ourGames, currentSeasonId, teamName, hasGamePage } from '../lib/data.ts';
+import { hallOf } from '../config/venues.ts';
+import { isOurTeam } from '../config/team.ts';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const de = lang === 'de';
+const soon = ourGames(currentSeasonId)
+  .filter((g) => g.status === 'scheduled' && g.timestamp != null && g.date && g.timestamp > Date.now() - 24 * 3600_000)
+  .sort((a, b) => a.timestamp! - b.timestamp!)
+  .slice(0, 8);
+---
+
+{
+  soon.length > 0 && (
+    <div class="gd-wrap" data-gameday>
+      {soon.map((g) => {
+        const opp = isOurTeam(g.home) ? g.away : g.home;
+        const hall = hallOf(g.venue);
+        const link = hasGamePage(g) ? href(lang, `games/${g.id}/`) : href(lang, 'schedule/');
+        return (
+          <a class="gd" href={link} data-date={g.date} data-ts={g.timestamp} hidden>
+            <span class="gd-tag">Game Day</span>
+            <span class="gd-main">
+              <span class="gd-vs">vs</span>
+              <Team team={opp} logoOnly size={22} />
+              <strong class="gd-opp">{opp.short || teamName(opp)}</strong>
+              <span class="gd-when" data-gd-when>
+                {g.time}
+                {hall && ` · ${hall}`}
+              </span>
+              <span class="gd-live" data-gd-live hidden>
+                {de ? 'Läuft gerade' : 'Playing now'}
+                <span class="gd-more">{de ? ' – Ergebnis morgen früh' : ' – result tomorrow morning'}</span>
+              </span>
+            </span>
+            <span class="gd-go" aria-hidden="true">→</span>
+            <span class="gd-ice" aria-hidden="true">
+              <span class="gd-puck" />
+            </span>
+          </a>
+        );
+      })}
+    </div>
+  )
+}
+
+<script>
+  // Decide "game day" in the visitor's browser, in Vienna time.
+  const root = document.querySelector<HTMLElement>('[data-gameday]');
+  if (root) {
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Vienna' }).format(new Date());
+    const now = Date.now();
+    const bar = Array.from(root.querySelectorAll<HTMLElement>('.gd')).find(
+      (el) => el.dataset.date === today && now < Number(el.dataset.ts) + 3 * 3600_000,
+    );
+    if (bar) {
+      bar.hidden = false;
+      document.documentElement.classList.add('gameday');
+      if (now >= Number(bar.dataset.ts)) {
+        bar.querySelector<HTMLElement>('[data-gd-when]')!.hidden = true;
+        bar.querySelector<HTMLElement>('[data-gd-live]')!.hidden = false;
+        bar.classList.add('is-live');
+      }
+    }
+  }
+</script>
+
+<style>
+  .gd {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-height: 44px;
+    padding: 0 var(--gutter);
+    overflow: hidden;
+    background: var(--panel-2);
+    border-bottom: 1px solid var(--line);
+    color: var(--text);
+  }
+  .gd[hidden] {
+    display: none;
+  }
+  .gd:hover {
+    color: var(--text);
+    background: var(--panel-hi);
+  }
+  .gd-tag {
+    flex: none;
+    padding: 0.3rem 0.55rem 0.22rem;
+    border-radius: 5px;
+    background: var(--orange);
+    color: var(--on-accent);
+    font: 800 0.85rem/1 var(--display);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    animation: gd-pop 2.4s ease-in-out infinite;
+  }
+  .gd-main {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-width: 0;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .gd-vs {
+    color: var(--dim);
+    font: 700 0.8rem/1 var(--display);
+    text-transform: uppercase;
+  }
+  .gd-opp {
+    font: 800 1rem/1 var(--display);
+    letter-spacing: 0.05em;
+  }
+  .gd-when,
+  .gd-live {
+    color: var(--muted);
+  }
+  @media (max-width: 479px) {
+    .gd-more {
+      display: none;
+    }
+  }
+  .is-live .gd-tag {
+    background: var(--loss);
+    color: #fff;
+  }
+  .gd-go {
+    margin-left: auto;
+    font-weight: 700;
+    color: var(--accent-ink);
+  }
+  /* A puck skating along the bottom edge, leaving a short ice trail. */
+  .gd-ice {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 6px;
+    pointer-events: none;
+  }
+  .gd-puck {
+    position: absolute;
+    bottom: 1px;
+    left: -24px;
+    width: 12px;
+    height: 4px;
+    border-radius: 3px;
+    background: var(--text);
+    animation: gd-skate 5.5s cubic-bezier(0.45, 0.05, 0.35, 1) infinite;
+  }
+  .gd-puck::before {
+    content: '';
+    position: absolute;
+    right: 100%;
+    top: 1px;
+    width: 46px;
+    height: 2px;
+    border-radius: 1px;
+    background: linear-gradient(90deg, transparent, rgba(var(--fg-rgb), 0.35));
+  }
+  @keyframes gd-skate {
+    0% {
+      transform: translateX(0);
+    }
+    70%,
+    100% {
+      transform: translateX(calc(100vw + 60px));
+    }
+  }
+  @keyframes gd-pop {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.06);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gd-tag,
+    .gd-puck {
+      animation: none;
+    }
+    .gd-puck {
+      display: none;
+    }
+  }
+</style>
