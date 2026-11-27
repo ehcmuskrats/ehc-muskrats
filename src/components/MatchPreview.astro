@@ -76,11 +76,22 @@ const chip = (r: TeamResult) => r.result;
           </a>
         )
       }
+      {
+        hall && venue?.hallPlan?.local && (
+          <a class="btn btn-ghost" href={href(lang, 'matchday/') + '#hallenplan'}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4zM9 4v14M15 6v14" stroke-linejoin="round" />
+            </svg>
+            {de ? 'Hallenplan' : 'Hall map'}
+          </a>
+        )
+      }
       <CalendarButton lang={lang} game={g} />
     </div>
-    <a class="mdlink" href={href(lang, 'matchday/')}>
-      {de ? 'Zuschauer willkommen, Eintritt frei · Anreise & Infos' : 'Spectators welcome, free entry · Getting there'} →
-    </a>
+    <p class="mdline small">
+      {de ? 'Zuschauer willkommen, Eintritt frei. ' : 'Spectators welcome, free entry. '}
+      <a href={href(lang, 'matchday/')}>{de ? 'Alle Spieltag-Infos' : 'All game day info'} →</a>
+    </p>
   </div>
 
   <div class="cmp">
@@ -200,9 +211,19 @@ const chip = (r: TeamResult) => r.result;
     stroke: currentColor;
     stroke-width: 1.8;
   }
-  .mdlink {
-    font-size: 0.88rem;
+  .mdline {
+    margin: 0;
     color: var(--muted);
+  }
+  .mdline a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--line-strong);
+    text-underline-offset: 3px;
   }
   .cmp {
     display: grid;
