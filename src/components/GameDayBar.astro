@@ -190,6 +190,15 @@ const soon = ourGames(currentSeasonId)
       transform: scale(1.06);
     }
   }
+  /* Desktop: centre the strip's content under the header instead of hugging the left edge. */
+  @media (min-width: 720px) {
+    .gd {
+      justify-content: center;
+    }
+    .gd-go {
+      margin-left: 0.3rem;
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     .gd-tag,
     .gd-puck {
